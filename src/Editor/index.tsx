@@ -1,14 +1,21 @@
 import { EditorProps } from '@cq/tiptap/type';
+import { Box } from '@mui/material';
 import { EditorContent } from '@tiptap/react';
 import React from 'react';
+import './index.css';
 
 const Editor = ({
-  editor
+  editor,
+  height,
 }: EditorProps) => {
 
-  return <>
+  return <Box sx={{
+    '.tiptap': {
+      height,
+    }
+  }}>
     <EditorContent editor={editor} />
-  </>
+  </Box>
 };
 
 export default Editor;

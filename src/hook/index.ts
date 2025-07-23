@@ -5,7 +5,6 @@ import { useEditor, UseEditorOptions } from '@tiptap/react'
 const useTiptap = ({
   content,
   editable,
-  autofocus = 'end',
   immediatelyRender = true,
   ...options
 }: UseTiptapProps & UseEditorOptions) => {
@@ -13,7 +12,6 @@ const useTiptap = ({
     extensions,
     content,
     editable,
-    autofocus,
     immediatelyRender,
     ...options,
   })

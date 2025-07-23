@@ -73,8 +73,24 @@
     "stylelint": "^14.9.1"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@floating-ui/dom": "^1.7.2",
+    "@mui/material": "^7.2.0",
+    "@tiptap/extension-code-block-lowlight": "^3.0.7",
+    "@tiptap/extension-details": "^3.0.7",
+    "@tiptap/extension-emoji": "^3.0.7",
+    "@tiptap/extension-file-handler": "^3.0.7",
+    "@tiptap/extension-image": "^3.0.7",
+    "@tiptap/extension-mathematics": "^3.0.7",
+    "@tiptap/extension-mention": "^3.0.7",
+    "@tiptap/extensions": "^3.0.7",
     "@tiptap/pm": "^3.0.7",
     "@tiptap/react": "^3.0.7",
-    "@tiptap/starter-kit": "^3.0.7"
+    "@tiptap/starter-kit": "^3.0.7",
+    "@tiptap/suggestion": "^3.0.7",
+    "highlight.js": "^11.11.1",
+    "katex": "^0.16.22",
+    "lowlight": "^3.3.0"
   }
 }

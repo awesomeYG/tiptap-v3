@@ -7,4 +7,5 @@ export type UseTiptapProps = {
 
 export type EditorProps = {
   editor: Editor;
+  height?: number | string;
 }
