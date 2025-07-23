@@ -3,7 +3,30 @@ import React from 'react';
 
 const Reader = () => {
   const editor = useTiptap({
+    editable: true,
+    getMentionItems: async ({ query }) => {
+      return new Promise((resolve) => {
+        resolve([
+          'Winona Ryder',
+          'Molly Ringwald',
+          'Ally Sheedy',
+          'Debbie Harry',
+          'Olivia Newton-John',
+          'Elton John',
+          'Michael J. Fox',
+          'Axl Rose',
+          'Emilio Estevez',
+          'Ralph Macchio',
+          'Rob Lowe',
+          'Jennifer Grey',
+        ].filter(item => item.toLowerCase().startsWith(query.toLowerCase()))
+          .slice(0, 5))
+      })
+    },
     content: `<p>
+        What do you all think about the new <span data-type="mention" data-id="Winona Ryder"></span> movie?
+      </p>
+      <p>
         These <span data-type="emoji" data-name="smiley"></span>
         are <span data-type="emoji" data-name="fire"></span>
         some <span data-type="emoji" data-name="smiley_cat"></span>

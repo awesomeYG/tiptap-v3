@@ -1,8 +1,10 @@
+import { MentionExtensionProps } from "@cq/tiptap/type";
 import Mention from "@tiptap/extension-mention";
+import mentionSuggestion from "../suggestion/mention";
 
-export const MentionExtension = Mention.configure({
+export const MentionExtension = (props: MentionExtensionProps) => Mention.configure({
   HTMLAttributes: {
     class: 'mention',
   },
-  // suggestion: mentionSuggestion,
+  suggestion: mentionSuggestion(props),
 });

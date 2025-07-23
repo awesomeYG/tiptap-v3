@@ -1,19 +1,19 @@
-import extensions from '@cq/tiptap/extension'
+import { getExtensions } from '@cq/tiptap/extension'
 import { UseTiptapProps } from '@cq/tiptap/type'
 import { useEditor, UseEditorOptions } from '@tiptap/react'
 
 const useTiptap = ({
-  content,
-  editable,
-  immediatelyRender = true,
+  mentionItems,
+  getMentionItems,
+  exclude,
+  editable = true,
   ...options
 }: UseTiptapProps & UseEditorOptions) => {
+  const extensions = getExtensions({ exclude, mentionItems, getMentionItems })
   const editor = useEditor({
-    extensions,
-    content,
-    editable,
-    immediatelyRender,
     ...options,
+    extensions,
+    editable,
   })
 
   return editor

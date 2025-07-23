@@ -1,4 +1,5 @@
 import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react'
+import './index.css'
 
 export interface MentionListProps {
   items: string[]
@@ -60,6 +61,7 @@ export const MentionList = forwardRef<MentionListRef, MentionListProps>((props, 
       {props.items.length ? (
         props.items.map((item, index) => (
           <button
+            type="button"
             className={index === selectedIndex ? 'is-selected' : ''}
             key={index}
             onClick={() => selectItem(index)}
@@ -68,7 +70,7 @@ export const MentionList = forwardRef<MentionListRef, MentionListProps>((props, 
           </button>
         ))
       ) : (
-        <div className="item">No result</div>
+        <div>No result</div>
       )}
     </div>
   )

@@ -1,4 +1,6 @@
+import { MentionExtensionProps } from '@cq/tiptap/type'
 import { computePosition, flip, shift } from '@floating-ui/dom'
+import { MentionOptions } from '@tiptap/extension-mention'
 import { Editor, posToDOMRect, ReactRenderer } from '@tiptap/react'
 import { SuggestionProps } from '@tiptap/suggestion'
 import { MentionList, MentionListProps, MentionListRef } from '../component/MentionList'
@@ -12,7 +14,7 @@ const updatePosition = (editor: Editor, element: HTMLElement) => {
     placement: 'bottom-start',
     strategy: 'absolute',
     middleware: [shift(), flip()],
-  }).then(({ x, y, strategy }) => {
+  }).then(({ x, y, strategy }: { x: number, y: number, strategy: string }) => {
     element.style.width = 'max-content'
     element.style.position = strategy
     element.style.left = `${x}px`
@@ -20,48 +22,65 @@ const updatePosition = (editor: Editor, element: HTMLElement) => {
   })
 }
 
-export default {
-  items: ({ query }: { query: string }) => {
-    return ['Lea Thompson',
-      'Cyndi Lauper',
-      'Tom Cruise',
-      'Madonna',
-      'Jerry Hall',].filter(item => item.toLowerCase().startsWith(query.toLowerCase()))
-      .slice(0, 5)
-  },
-  render: () => {
-    let reactRenderer: ReactRenderer<MentionListRef, MentionListProps> | null = null
+export const mentionSuggestion = ({ mentionItems, getMentionItems }: MentionExtensionProps): MentionOptions["suggestion"] => {
+  let getItems: ((props: {
+    query: string;
+    editor: Editor;
+  }) => any[] | Promise<any[]>) | undefined
 
-    return {
-      onStart: (props: SuggestionProps<any>) => {
-        if (!props.clientRect || !reactRenderer) return
-        reactRenderer = new ReactRenderer(MentionList, {
-          props,
-          editor: props.editor,
-        })
-        reactRenderer.element.style.position = 'absolute'
-        document.body.appendChild(reactRenderer.element)
-        updatePosition(props.editor, reactRenderer.element)
-      },
-      onUpdate(props: SuggestionProps<any>) {
-        reactRenderer.updateProps(props)
-        if (!props.clientRect) {
-          return
-        }
-        updatePosition(props.editor, reactRenderer.element)
-      },
-      onKeyDown(props) {
-        if (props.event.key === 'Escape') {
-          reactRenderer.destroy()
-          reactRenderer.element.remove()
-          return true
-        }
-        return reactRenderer.ref?.onKeyDown(props)
-      },
-      onExit() {
-        reactRenderer.destroy()
-        reactRenderer.element.remove()
-      },
+  if (mentionItems && mentionItems.length > 0) {
+    getItems = ({ query }: { query: string }) => {
+      return mentionItems.filter(item => item.toLowerCase().startsWith(query.toLowerCase()))
+        .slice(0, 5)
     }
-  },
+  } else if (getMentionItems) {
+    getItems = async ({ query }: { query: string }) => {
+      const items = await getMentionItems?.({ query })
+      return items.filter(item => item.toLowerCase().startsWith(query.toLowerCase()))
+        .slice(0, 5)
+    }
+  }
+
+  return {
+    items: getItems,
+    render: () => {
+      let component: ReactRenderer<MentionListRef, MentionListProps> | null = null
+
+      return {
+        onStart: (props: SuggestionProps<any>) => {
+          component = new ReactRenderer(MentionList, {
+            props,
+            editor: props.editor,
+          })
+          if (!props.clientRect) return
+          const element = component.element as HTMLElement
+          element.style.position = 'absolute'
+          document.body.appendChild(element)
+          updatePosition(props.editor, element)
+        },
+        onUpdate(props: SuggestionProps<any>) {
+          if (!component) return
+          component.updateProps(props)
+          if (!props.clientRect) return
+          updatePosition(props.editor, component.element as HTMLElement)
+        },
+        onKeyDown(props: { event: KeyboardEvent }) {
+          if (!component) return false
+          if (props.event.key === 'Escape') {
+            component.element.remove()
+            component.destroy()
+            return true
+          }
+          return component.ref?.onKeyDown(props) || false
+        },
+        onExit() {
+          if (!component) return
+          component.destroy()
+          component.element.remove()
+        },
+      }
+    },
+  }
 }
+
+export default mentionSuggestion
