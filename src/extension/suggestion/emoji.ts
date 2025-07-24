@@ -31,7 +31,6 @@ export const emojiSuggestion: EmojiOptions["suggestion"] = {
           tags.find(tag => tag.startsWith(query.toLowerCase()))
         )
       })
-      .slice(0, 5)
   },
   render: () => {
     let component: ReactRenderer<EmojiListRef, EmojiListProps> | null = null

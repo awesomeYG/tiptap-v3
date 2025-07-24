@@ -1,3 +1,4 @@
+import { Grid, Paper } from '@mui/material'
 import { EmojiItem } from '@tiptap/extension-emoji'
 import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react'
 
@@ -59,12 +60,41 @@ export const EmojiList = forwardRef<EmojiListRef, EmojiListProps>((props, ref) =
   }, [upHandler, downHandler, enterHandler])
 
   return (
-    <div className="dropdown-menu">
-      {props.items.map((item, index) => (
-        <button className={index === selectedIndex ? 'is-selected' : ''} key={index} onClick={() => selectItem(index)}>
-          {item.fallbackImage ? <img src={item.fallbackImage} /> : item.emoji}:{item.name}:
-        </button>
-      ))}
-    </div>
+    <Paper sx={{
+      position: 'relative',
+      overflowY: 'auto',
+      p: 1,
+      width: 'calc(1.5rem * 10)',
+      maxHeight: 300,
+    }}>
+      <Grid container spacing={0.5}>
+        {props.items.map((item, index) => (
+          <Grid size={1.5} key={index} onClick={() => selectItem(index)} sx={{
+            cursor: 'pointer',
+            lineHeight: 1,
+            fontSize: 14,
+            width: '1.5rem',
+            height: '1.5rem',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: '4px',
+            img: {
+              width: '1rem',
+              height: '1rem',
+            },
+            transition: 'background-color 0.2s ease-in-out',
+            '&:hover': {
+              backgroundColor: 'action.selected',
+            },
+            ...(index === selectedIndex && {
+              backgroundColor: 'action.selected',
+            }),
+          }}>
+            {item.fallbackImage ? <img src={item.fallbackImage} /> : item.emoji}
+          </Grid>
+        ))}
+      </Grid>
+    </Paper>
   )
 })
