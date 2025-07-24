@@ -24,7 +24,6 @@ export const getExtensions = ({
     DetailsExtension,
     DetailsSummaryExtension,
     Dropcursor,
-    EmojiExtension,
     FileHandlerExtension,
     ImageExtension,
     CharacterCount,
@@ -37,6 +36,11 @@ export const getExtensions = ({
   if ((mentionItems && mentionItems.length > 0 || getMentionItems) && !exclude?.includes('mention')) {
     const Mention = MentionExtension({ mentionItems, getMentionItems })
     defaultExtensions.push(Mention)
+  }
+
+  if (!exclude?.includes('emoji')) {
+    const Emoji = EmojiExtension
+    defaultExtensions.push(Emoji)
   }
 
   return defaultExtensions
