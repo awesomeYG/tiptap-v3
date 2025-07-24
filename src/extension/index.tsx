@@ -1,5 +1,5 @@
 
-import { CharacterCount, Dropcursor } from '@tiptap/extensions';
+import { CharacterCount, Dropcursor, Gapcursor } from '@tiptap/extensions';
 import StarterKit from '@tiptap/starter-kit';
 import { GetExtensionsProps } from '../type';
 import {
@@ -10,20 +10,21 @@ import {
   EmojiExtension,
   FileHandlerExtension,
   ImageExtension,
+  MathematicsExtension,
   MentionExtension,
+  TableExtension,
 } from './node';
 
 export const getExtensions = ({
   exclude,
+  editable,
   mentionItems,
   getMentionItems,
 }: GetExtensionsProps) => {
   const defaultExtensions: any = [
     CodeBlockLowlightExtension,
-    DetailsContentExtension,
-    DetailsExtension,
-    DetailsSummaryExtension,
     Dropcursor,
+    Gapcursor,
     FileHandlerExtension,
     ImageExtension,
     CharacterCount,
@@ -33,14 +34,33 @@ export const getExtensions = ({
     }),
   ]
 
-  if ((mentionItems && mentionItems.length > 0 || getMentionItems) && !exclude?.includes('mention')) {
+  if (!exclude?.includes('mention') && (mentionItems && mentionItems.length > 0 || getMentionItems)) {
     const Mention = MentionExtension({ mentionItems, getMentionItems })
     defaultExtensions.push(Mention)
+  }
+
+  if (!exclude?.includes('details')) {
+    const Details = DetailsExtension
+    const DetailsContent = DetailsContentExtension
+    const DetailsSummary = DetailsSummaryExtension
+    defaultExtensions.push(Details)
+    defaultExtensions.push(DetailsContent)
+    defaultExtensions.push(DetailsSummary)
   }
 
   if (!exclude?.includes('emoji')) {
     const Emoji = EmojiExtension
     defaultExtensions.push(Emoji)
+  }
+
+  if (!exclude?.includes('mathematics')) {
+    const Mathematics = MathematicsExtension
+    defaultExtensions.push(Mathematics)
+  }
+
+  if (!exclude?.includes('table')) {
+    const Table = TableExtension({ editable })
+    defaultExtensions.push(Table)
   }
 
   return defaultExtensions

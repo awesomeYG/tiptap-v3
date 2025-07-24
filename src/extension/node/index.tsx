@@ -5,4 +5,5 @@ export * from './FileHandler';
 export * from './Image';
 export * from './Mathematics';
 export * from './Mention';
+export * from './Table';
 

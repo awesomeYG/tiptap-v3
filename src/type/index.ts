@@ -11,9 +11,10 @@ export type MentionExtensionProps = {
   getMentionItems?: ({ query }: { query: string }) => Promise<MentionItems>;
 }
 
-export type ExtensionRelativeProps = {
+export type ExtensionRelativeProps = MentionExtensionProps & {
   exclude?: string[]
-} & MentionExtensionProps
+  editable: boolean
+}
 
 export type UseTiptapProps = {
 } & ExtensionRelativeProps
