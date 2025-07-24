@@ -1,5 +1,5 @@
 
-import { CharacterCount, Dropcursor, Gapcursor } from '@tiptap/extensions';
+import { CharacterCount } from '@tiptap/extensions';
 import StarterKit from '@tiptap/starter-kit';
 import { GetExtensionsProps } from '../type';
 import {
@@ -10,6 +10,7 @@ import {
   EmojiExtension,
   FileHandlerExtension,
   ImageExtension,
+  ListExtension,
   MathematicsExtension,
   MentionExtension,
   TableExtension,
@@ -23,14 +24,15 @@ export const getExtensions = ({
 }: GetExtensionsProps) => {
   const defaultExtensions: any = [
     CodeBlockLowlightExtension,
-    Dropcursor,
-    Gapcursor,
     FileHandlerExtension,
     ImageExtension,
     CharacterCount,
     StarterKit.configure({
       codeBlock: false,
-      dropcursor: false,
+      listItem: false,
+      orderedList: false,
+      bulletList: false,
+      listKeymap: false,
     }),
   ]
 
@@ -61,6 +63,11 @@ export const getExtensions = ({
   if (!exclude?.includes('table')) {
     const Table = TableExtension({ editable })
     defaultExtensions.push(Table)
+  }
+
+  if (!exclude?.includes('list')) {
+    const List = ListExtension
+    defaultExtensions.push(List)
   }
 
   return defaultExtensions
