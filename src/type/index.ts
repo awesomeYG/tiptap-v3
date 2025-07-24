@@ -8,7 +8,7 @@ export type EditorProps = {
 export type MentionItems = string[]
 export type MentionExtensionProps = {
   mentionItems?: MentionItems;
-  getMentionItems?: ({ query }: { query: string }) => Promise<MentionItems>;
+  getMention?: ({ query }: { query: string }) => Promise<MentionItems>;
 }
 
 export type ExtensionRelativeProps = MentionExtensionProps & {

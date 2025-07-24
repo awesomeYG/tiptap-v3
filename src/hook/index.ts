@@ -5,7 +5,7 @@ import { useEditor, UseEditorOptions } from '@tiptap/react'
 
 const useTiptap = ({
   mentionItems,
-  getMentionItems,
+  getMention,
   exclude,
   editable = true,
   ...options
@@ -15,7 +15,7 @@ const useTiptap = ({
     exclude,
     editable,
     mentionItems,
-    getMentionItems
+    getMention
   })
 
   const editor = useEditor({

@@ -4,7 +4,7 @@ import React from 'react';
 const Reader = () => {
   const editor = useTiptap({
     editable: true,
-    getMentionItems: async ({ query }) => {
+    getMention: async ({ query }) => {
       return new Promise((resolve) => {
         resolve([
           'Winona Ryder',

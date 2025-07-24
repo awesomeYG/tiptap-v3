@@ -20,7 +20,7 @@ export const getExtensions = ({
   exclude,
   editable,
   mentionItems,
-  getMentionItems,
+  getMention,
 }: GetExtensionsProps) => {
   const defaultExtensions: any = [
     CodeBlockLowlightExtension,
@@ -36,8 +36,8 @@ export const getExtensions = ({
     }),
   ]
 
-  if (!exclude?.includes('mention') && (mentionItems && mentionItems.length > 0 || getMentionItems)) {
-    const Mention = MentionExtension({ mentionItems, getMentionItems })
+  if (!exclude?.includes('mention') && (mentionItems && mentionItems.length > 0 || getMention)) {
+    const Mention = MentionExtension({ mentionItems, getMention })
     defaultExtensions.push(Mention)
   }
 
