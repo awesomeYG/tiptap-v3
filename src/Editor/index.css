@@ -381,3 +381,20 @@
   cursor: ew-resize;
   cursor: col-resize;
 }
+
+/* youtube */
+.tiptap.ProseMirror div[data-youtube-video] {
+  cursor: move;
+  padding-right: 1.5rem;
+}
+
+.tiptap.ProseMirror div[data-youtube-video] iframe {
+  border: 1px solid var(--mui-palette-divider);
+  padding: 0.5rem;
+  border-radius: var(--mui-shape-borderRadius);
+  display: block;
+  min-height: 200px;
+  min-width: 200px;
+  outline: 0px solid transparent;
+  margin-bottom: 1rem;
+}

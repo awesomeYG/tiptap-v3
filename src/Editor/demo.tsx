@@ -23,7 +23,12 @@ const Reader = () => {
           .slice(0, 5))
       })
     },
-    content: `<ul data-type="taskList">
+    content: `<p>Tiptap now supports YouTube embeds! Awesome!</p>
+      <div data-youtube-video>
+        <iframe src="https://www.youtube.com/watch?v=3lTUAWOgoHs"></iframe>
+      </div>
+      <p>Try adding your own video to this editor!</p>
+      <ul data-type="taskList">
           <li data-type="taskItem" data-checked="true">A list item</li>
           <li data-type="taskItem" data-checked="false">And another one</li>
         </ul>

@@ -2,8 +2,9 @@ import { EditorProps } from '@cq/tiptap/type';
 import { Box } from '@mui/material';
 import { EditorContent } from '@tiptap/react';
 // @ts-ignore
-import { BubbleMenu, FloatingMenu } from '@tiptap/react/menus';
+import { FloatingMenu } from '@tiptap/react/menus';
 import React from 'react';
+import CustomBubbleMenu from '../component/BubbleMenu';
 import './index.css';
 
 const Editor = ({
@@ -17,31 +18,8 @@ const Editor = ({
     }
   }}>
     {editor && (
-      <BubbleMenu className="bubble-menu" editor={editor}>
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleBold().run()}
-          className={editor.isActive('bold') ? 'is-active' : ''}
-        >
-          Bold
-        </button>
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleItalic().run()}
-          className={editor.isActive('italic') ? 'is-active' : ''}
-        >
-          Italic
-        </button>
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleStrike().run()}
-          className={editor.isActive('strike') ? 'is-active' : ''}
-        >
-          Strike
-        </button>
-      </BubbleMenu>
+      <CustomBubbleMenu editor={editor} />
     )}
-
     {editor && (
       <FloatingMenu className="floating-menu" editor={editor}>
         <button

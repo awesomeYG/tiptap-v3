@@ -1,3 +1,4 @@
+import { YoutubeOptions } from '@tiptap/extension-youtube';
 import { Editor } from '@tiptap/react';
 
 export type EditorProps = {
@@ -14,6 +15,7 @@ export type MentionExtensionProps = {
 export type ExtensionRelativeProps = MentionExtensionProps & {
   exclude?: string[]
   editable: boolean
+  youtube?: Partial<YoutubeOptions>
 }
 
 export type UseTiptapProps = {

@@ -1,4 +1,4 @@
-import { Box, Divider, Paper, Stack } from '@mui/material'
+import { Box, Paper, Stack } from '@mui/material'
 import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react'
 
 export interface MentionListProps {
@@ -60,32 +60,30 @@ export const MentionList = forwardRef<MentionListRef, MentionListProps>((props, 
     <Paper sx={{
       position: 'relative',
       overflowY: 'auto',
-      py: 1,
+      p: 0.5,
     }}>
       <Stack>
         {props.items.length ? (
           props.items.map((item, index) => (
-            <>
-              <Box
-                key={index}
-                onClick={() => selectItem(index)}
-                sx={{
-                  px: 2,
-                  py: 1,
-                  fontSize: 14,
-                  cursor: 'pointer',
-                  '&:hover': {
-                    backgroundColor: 'action.selected',
-                  },
-                  ...(index === selectedIndex && {
-                    backgroundColor: 'action.selected',
-                  }),
-                }}
-              >
-                @{item}
-              </Box>
-              {index !== props.items.length - 1 && <Divider />}
-            </>
+            <Box
+              key={index}
+              onClick={() => selectItem(index)}
+              sx={{
+                px: 2,
+                py: 1,
+                fontSize: 14,
+                cursor: 'pointer',
+                borderRadius: 'var(--mui-shape-borderRadius)',
+                '&:hover': {
+                  backgroundColor: 'action.selected',
+                },
+                ...(index === selectedIndex && {
+                  backgroundColor: 'action.selected',
+                }),
+              }}
+            >
+              @{item}
+            </Box>
           ))
         ) : (
           <Box sx={{ px: 2, py: 1, color: 'var(--mui-palette-text-tertiary)' }}>No result</Box>

@@ -1,4 +1,7 @@
 
+import Subscript from '@tiptap/extension-subscript';
+import Superscript from '@tiptap/extension-superscript';
+import Underline from '@tiptap/extension-underline';
 import { CharacterCount } from '@tiptap/extensions';
 import StarterKit from '@tiptap/starter-kit';
 import { GetExtensionsProps } from '../type';
@@ -14,10 +17,12 @@ import {
   MathematicsExtension,
   MentionExtension,
   TableExtension,
+  YoutubeExtension,
 } from './node';
 
 export const getExtensions = ({
   exclude,
+  youtube,
   editable,
   mentionItems,
   getMention,
@@ -27,6 +32,9 @@ export const getExtensions = ({
     FileHandlerExtension,
     ImageExtension,
     CharacterCount,
+    Subscript,
+    Superscript,
+    Underline,
     StarterKit.configure({
       codeBlock: false,
       listItem: false,
@@ -68,6 +76,11 @@ export const getExtensions = ({
   if (!exclude?.includes('list')) {
     const List = ListExtension
     defaultExtensions.push(List)
+  }
+
+  if (!exclude?.includes('youtube')) {
+    const Youtube = YoutubeExtension(youtube)
+    defaultExtensions.push(Youtube)
   }
 
   return defaultExtensions
