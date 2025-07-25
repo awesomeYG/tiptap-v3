@@ -67,18 +67,18 @@ const SelectionText = (props: { editor: Editor }) => {
           onClick={() => editor.chain().focus().toggleUnderline().run()}
           isActive={editor.isActive('underline')}
         />
-        <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center' }} />
+        <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'var(--mui-palette-divider)' }} />
         <ToolItem
           icon={<FontColorIcon />}
           isActive={colorPickerType === 'text'}
-          onClick={() => setColorPickerType('text')}
+          onClick={() => colorPickerType === 'text' ? setColorPickerType('') : setColorPickerType('text')}
         />
         <ToolItem
           icon={<MarkupLineIcon />}
           isActive={colorPickerType === 'bg'}
-          onClick={() => setColorPickerType('bg')}
+          onClick={() => colorPickerType === 'bg' ? setColorPickerType('') : setColorPickerType('bg')}
         />
-        <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center' }} />
+        <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'var(--mui-palette-divider)' }} />
         <ToolItem
           icon={<SubscriptIcon />}
           onClick={() => editor.chain().focus().toggleSubscript().run()}
@@ -89,7 +89,7 @@ const SelectionText = (props: { editor: Editor }) => {
           onClick={() => editor.chain().focus().toggleSuperscript().run()}
           isActive={editor.isActive('superscript')}
         />
-        <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center' }} />
+        <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'var(--mui-palette-divider)' }} />
         <ToolItem
           icon={<CodeLineIcon />}
           onClick={() => editor.chain().focus().toggleCode().run()}

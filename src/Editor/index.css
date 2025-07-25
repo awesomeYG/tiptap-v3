@@ -286,8 +286,8 @@
   border-radius: var(--mui-shape-borderRadius);
   border: 1px solid var(--mui-palette-divider);
   height: auto;
-  margin: 1.5rem 0;
   max-width: 100%;
+  vertical-align: middle;
 }
 
 .tiptap.ProseMirror img.ProseMirror-selectednode {
@@ -373,7 +373,6 @@
 }
 
 .tiptap.ProseMirror .tableWrapper {
-  margin: 1.5rem 0;
   overflow-x: auto;
 }
 

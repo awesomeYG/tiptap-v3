@@ -17,6 +17,7 @@ export type ExtensionRelativeProps = MentionExtensionProps & {
   exclude?: string[]
   editable: boolean
   youtube?: Partial<YoutubeOptions>
+  onUpload?: (file: File) => Promise<string>
 }
 
 export type UseTiptapProps = {

@@ -27,10 +27,10 @@ export const getExtensions = ({
   editable,
   mentionItems,
   getMention,
+  onUpload,
 }: GetExtensionsProps) => {
   const defaultExtensions: any = [
     CodeBlockLowlightExtension,
-    FileHandlerExtension,
     ImageExtension,
     CharacterCount.configure({
       limit: limit ?? null,
@@ -84,6 +84,11 @@ export const getExtensions = ({
   if (!exclude?.includes('youtube')) {
     const Youtube = YoutubeExtension(youtube)
     defaultExtensions.push(Youtube)
+  }
+
+  if (!exclude?.includes('dropcursor')) {
+    const FileHandler = FileHandlerExtension({ onUpload })
+    defaultExtensions.push(FileHandler)
   }
 
   return defaultExtensions

@@ -24,6 +24,19 @@ const Reader = () => {
           .slice(0, 5))
       })
     },
+    onUpload: async (file) => {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          if (file.type.startsWith('image/')) {
+            resolve('https://placehold.co/800x400')
+          } else if (file.type.startsWith('video/')) {
+            resolve('https://www.youtube.com/watch?v=3lTUAWOgoHs')
+          } else {
+            resolve('https://placehold.co/800x400')
+          }
+        }, 2000);
+      })
+    },
     content: `<p>Tiptap now supports YouTube embeds! Awesome!</p>
       <p>Try adding your own video to this editor!</p>
       <ul data-type="taskList">

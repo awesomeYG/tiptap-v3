@@ -4,7 +4,8 @@ import { EditorContent } from '@tiptap/react';
 // @ts-ignore
 import { FloatingMenu } from '@tiptap/react/menus';
 import React from 'react';
-import SelectionText from '../component/BubbleMenu/SelectionText';
+import SelectionText from '../component/CustomBubbleMenu/SelectionText';
+import CustomDragHandle from '../component/CustomDragHandle';
 import './index.css';
 
 const Editor = ({
@@ -45,6 +46,7 @@ const Editor = ({
         </button>
       </FloatingMenu>
     )}
+    <CustomDragHandle editor={editor} />
     <EditorContent editor={editor} />
   </Box>
 };

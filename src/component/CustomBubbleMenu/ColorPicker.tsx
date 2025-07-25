@@ -1,4 +1,4 @@
-import { Box, Button, Stack, TextField } from "@mui/material"
+import { Box, Button, Divider, Stack, TextField } from "@mui/material"
 import { Editor } from "@tiptap/react"
 import React, { useEffect, useState } from "react"
 import { HexAlphaColorPicker } from "react-colorful"
@@ -59,8 +59,9 @@ const ColorPicker = ({ editor, colorPickerType, setColorPickerType, defaultColor
   }, [defaultColor])
 
   return <>
+    <Divider sx={{ my: 0.5, borderColor: 'var(--mui-palette-divider)' }} />
     <Box sx={{
-      backgroundColor: 'var(--mui-palette-background-default)',
+      backgroundColor: 'var(--mui-palette-background-paper)',
       borderRadius: 'var(--mui-shape-borderRadius)',
       p: 0.5,
       mt: 0.5,

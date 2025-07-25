@@ -4,10 +4,20 @@ import { migrateMathStrings } from '@tiptap/extension-mathematics'
 import { useEditor, UseEditorOptions } from '@tiptap/react'
 
 const useTiptap = ({
+  // extension 
+  exclude,
+
+  // mention
   mentionItems,
   getMention,
-  exclude,
+
+  // fn
+  onUpload,
+
+  // editor
   editable = true,
+
+  // other
   ...options
 }: UseTiptapProps & UseEditorOptions) => {
 
@@ -15,7 +25,8 @@ const useTiptap = ({
     exclude,
     editable,
     mentionItems,
-    getMention
+    getMention,
+    onUpload
   })
 
   const editor = useEditor({
