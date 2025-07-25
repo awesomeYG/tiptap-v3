@@ -1,6 +1,7 @@
 
 import Subscript from '@tiptap/extension-subscript';
 import Superscript from '@tiptap/extension-superscript';
+import { TextStyleKit } from '@tiptap/extension-text-style';
 import { CharacterCount } from '@tiptap/extensions';
 import StarterKit from '@tiptap/starter-kit';
 import { GetExtensionsProps } from '../type';
@@ -20,6 +21,7 @@ import {
 } from './node';
 
 export const getExtensions = ({
+  limit,
   exclude,
   youtube,
   editable,
@@ -30,9 +32,12 @@ export const getExtensions = ({
     CodeBlockLowlightExtension,
     FileHandlerExtension,
     ImageExtension,
-    CharacterCount,
+    CharacterCount.configure({
+      limit: limit ?? null,
+    }),
     Subscript,
     Superscript,
+    TextStyleKit,
     StarterKit.configure({
       codeBlock: false,
       listItem: false,

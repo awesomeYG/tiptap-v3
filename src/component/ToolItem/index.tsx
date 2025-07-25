@@ -7,8 +7,8 @@ const ToolItem = ({
   isActive,
 }: {
   icon: React.ReactNode
-  onClick: () => void
-  isActive: boolean
+  onClick?: () => void
+  isActive?: boolean
 }) => {
   return <Stack
     direction={'row'}
@@ -25,7 +25,7 @@ const ToolItem = ({
       },
       svg: {
         color: isActive ? 'var(--mui-palette-primary-main)' : 'var(--mui-palette-text-primary)',
-        fontSize: 16,
+        fontSize: 18,
       }
     }}
     onClick={onClick}

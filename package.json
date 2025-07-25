@@ -89,6 +89,7 @@
     "@tiptap/extension-subscript": "^3.0.7",
     "@tiptap/extension-superscript": "^3.0.7",
     "@tiptap/extension-table": "^3.0.7",
+    "@tiptap/extension-text-style": "^3.0.7",
     "@tiptap/extension-youtube": "^3.0.7",
     "@tiptap/extensions": "^3.0.7",
     "@tiptap/pm": "^3.0.7",
@@ -97,6 +98,7 @@
     "@tiptap/suggestion": "^3.0.7",
     "highlight.js": "^11.11.1",
     "katex": "^0.16.22",
-    "lowlight": "^3.3.0"
+    "lowlight": "^3.3.0",
+    "react-colorful": "^5.6.1"
   }
 }

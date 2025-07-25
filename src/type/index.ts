@@ -13,6 +13,7 @@ export type MentionExtensionProps = {
 }
 
 export type ExtensionRelativeProps = MentionExtensionProps & {
+  limit?: number | null
   exclude?: string[]
   editable: boolean
   youtube?: Partial<YoutubeOptions>

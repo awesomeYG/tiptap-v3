@@ -2,17 +2,23 @@ import { Divider, Paper, Stack } from '@mui/material'
 import { Editor } from '@tiptap/react'
 // @ts-ignore
 import { BubbleMenu } from '@tiptap/react/menus'
-import React from 'react'
-import { BoldIcon, CodeLineIcon, ItalicIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, UnderlineIcon } from '../Icons'
+import React, { useState } from 'react'
+import { BoldIcon, CodeLineIcon, FontColorIcon, ItalicIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, UnderlineIcon } from '../Icons'
+import { MarkupLineIcon } from '../Icons/markup-line-icon'
 import ToolItem from '../ToolItem'
+import ColorPicker from './ColorPicker'
 
-const CustomBubbleMenu = (props: { editor: Editor }) => {
+const SelectionText = (props: { editor: Editor }) => {
   const { editor } = props
+  const [colorPickerType, setColorPickerType] = useState<string>('')
 
   return <BubbleMenu
     editor={editor}
     pluginKey={'bubble-menu'}
-    options={{ placement: 'right', offset: 8 }}
+    options={{
+      placement: 'bottom',
+      offset: 8,
+    }}
     shouldShow={({ editor, from, to }: { editor: Editor, from: number, to: number }) => {
       if (editor.state.selection.empty
         || editor.isActive('image')
@@ -37,9 +43,10 @@ const CustomBubbleMenu = (props: { editor: Editor }) => {
   >
     <Paper sx={{
       p: 0.5,
+      width: 304,
       maxHeight: 300,
     }}>
-      <Stack direction={'row'} alignItems={'center'}>
+      <Stack direction={'row'} alignItems={'center'} justifyContent={'space-between'}>
         <ToolItem
           icon={<BoldIcon />}
           onClick={() => editor.chain().focus().toggleBold().run()}
@@ -62,6 +69,17 @@ const CustomBubbleMenu = (props: { editor: Editor }) => {
         />
         <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center' }} />
         <ToolItem
+          icon={<FontColorIcon />}
+          isActive={colorPickerType === 'text'}
+          onClick={() => setColorPickerType('text')}
+        />
+        <ToolItem
+          icon={<MarkupLineIcon />}
+          isActive={colorPickerType === 'bg'}
+          onClick={() => setColorPickerType('bg')}
+        />
+        <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center' }} />
+        <ToolItem
           icon={<SubscriptIcon />}
           onClick={() => editor.chain().focus().toggleSubscript().run()}
           isActive={editor.isActive('subscript')}
@@ -78,8 +96,14 @@ const CustomBubbleMenu = (props: { editor: Editor }) => {
           isActive={editor.isActive('code')}
         />
       </Stack>
+      {colorPickerType && <ColorPicker
+        editor={editor}
+        defaultColor={colorPickerType === 'text' ? '#000000' : '#FFFFFF'}
+        colorPickerType={colorPickerType}
+        setColorPickerType={setColorPickerType}
+      />}
     </Paper>
   </BubbleMenu>
 }
 
-export default CustomBubbleMenu
+export default SelectionText

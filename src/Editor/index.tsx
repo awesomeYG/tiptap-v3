@@ -4,7 +4,7 @@ import { EditorContent } from '@tiptap/react';
 // @ts-ignore
 import { FloatingMenu } from '@tiptap/react/menus';
 import React from 'react';
-import CustomBubbleMenu from '../component/BubbleMenu';
+import SelectionText from '../component/BubbleMenu/SelectionText';
 import './index.css';
 
 const Editor = ({
@@ -18,7 +18,7 @@ const Editor = ({
     }
   }}>
     {editor && (
-      <CustomBubbleMenu editor={editor} />
+      <SelectionText editor={editor} />
     )}
     {editor && (
       <FloatingMenu className="floating-menu" editor={editor}>

@@ -4,6 +4,7 @@ import React from 'react';
 const Reader = () => {
   const editor = useTiptap({
     editable: true,
+    limit: 100,
     getMention: async ({ query }) => {
       return new Promise((resolve) => {
         resolve([
@@ -24,9 +25,6 @@ const Reader = () => {
       })
     },
     content: `<p>Tiptap now supports YouTube embeds! Awesome!</p>
-      <div data-youtube-video>
-        <iframe src="https://www.youtube.com/watch?v=3lTUAWOgoHs"></iframe>
-      </div>
       <p>Try adding your own video to this editor!</p>
       <ul data-type="taskList">
           <li data-type="taskItem" data-checked="true">A list item</li>
@@ -46,6 +44,9 @@ const Reader = () => {
             </tr>
           </tbody>
         </table>
+      <div data-youtube-video>
+        <iframe src="https://www.youtube.com/watch?v=3lTUAWOgoHs"></iframe>
+      </div>
         <h1>
         This editor supports <span data-type="inline-math" data-latex="\\LaTeX"></span> math expressions. And it even supports converting old $\\sub(3*5=15)$ calculations.
       </h1>
