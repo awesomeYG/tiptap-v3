@@ -1,7 +1,6 @@
 
 import Subscript from '@tiptap/extension-subscript';
 import Superscript from '@tiptap/extension-superscript';
-import Underline from '@tiptap/extension-underline';
 import { CharacterCount } from '@tiptap/extensions';
 import StarterKit from '@tiptap/starter-kit';
 import { GetExtensionsProps } from '../type';
@@ -34,7 +33,6 @@ export const getExtensions = ({
     CharacterCount,
     Subscript,
     Superscript,
-    Underline,
     StarterKit.configure({
       codeBlock: false,
       listItem: false,

@@ -1,4 +1,4 @@
-import { Paper, Stack } from '@mui/material'
+import { Divider, Paper, Stack } from '@mui/material'
 import { Editor } from '@tiptap/react'
 // @ts-ignore
 import { BubbleMenu } from '@tiptap/react/menus'
@@ -11,8 +11,9 @@ const CustomBubbleMenu = (props: { editor: Editor }) => {
 
   return <BubbleMenu
     editor={editor}
-    autoPlacement
-    shouldShow={({ editor }: { editor: Editor }) => {
+    pluginKey={'bubble-menu'}
+    options={{ placement: 'right', offset: 8 }}
+    shouldShow={({ editor, from, to }: { editor: Editor, from: number, to: number }) => {
       if (editor.state.selection.empty
         || editor.isActive('image')
         || editor.isActive('link')
@@ -22,27 +23,23 @@ const CustomBubbleMenu = (props: { editor: Editor }) => {
       ) {
         return false
       }
-      return true
-      // let isTextOnly = true
-      // editor.state.doc.nodesBetween(from, to, (node) => {
-      //   console.log(node)
-      //   if (node.type.name !== 'text' && node.type.name !== 'paragraph' && node.type.name !== 'doc') {
-      //     if (!node.isText && !node.isTextblock) {
-      //       isTextOnly = false
-      //       return false
-      //     }
-      //   }
-      // })
-      // return isTextOnly
+      let isTextOnly = true
+      editor.state.doc.nodesBetween(from, to, (node) => {
+        if (node.type.name !== 'text' && node.type.name !== 'paragraph' && node.type.name !== 'doc') {
+          if (!node.isText && !node.isTextblock) {
+            isTextOnly = false
+            return false
+          }
+        }
+      })
+      return isTextOnly
     }}
-    pluginKey={'bubble-menu'}
-    options={{ placement: 'right', offset: 8 }}
   >
     <Paper sx={{
       p: 0.5,
       maxHeight: 300,
     }}>
-      <Stack direction={'row'} alignItems={'center'} gap={0.5}>
+      <Stack direction={'row'} alignItems={'center'}>
         <ToolItem
           icon={<BoldIcon />}
           onClick={() => editor.chain().focus().toggleBold().run()}
@@ -59,6 +56,12 @@ const CustomBubbleMenu = (props: { editor: Editor }) => {
           isActive={editor.isActive('strike')}
         />
         <ToolItem
+          icon={<UnderlineIcon />}
+          onClick={() => editor.chain().focus().toggleUnderline().run()}
+          isActive={editor.isActive('underline')}
+        />
+        <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center' }} />
+        <ToolItem
           icon={<SubscriptIcon />}
           onClick={() => editor.chain().focus().toggleSubscript().run()}
           isActive={editor.isActive('subscript')}
@@ -68,15 +71,11 @@ const CustomBubbleMenu = (props: { editor: Editor }) => {
           onClick={() => editor.chain().focus().toggleSuperscript().run()}
           isActive={editor.isActive('superscript')}
         />
+        <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center' }} />
         <ToolItem
           icon={<CodeLineIcon />}
           onClick={() => editor.chain().focus().toggleCode().run()}
           isActive={editor.isActive('code')}
-        />
-        <ToolItem
-          icon={<UnderlineIcon />}
-          onClick={() => editor.chain().focus().toggleUnderline().run()}
-          isActive={editor.isActive('underline')}
         />
       </Stack>
     </Paper>

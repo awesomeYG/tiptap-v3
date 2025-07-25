@@ -56,9 +56,6 @@ importers:
       '@tiptap/extension-table':
         specifier: ^3.0.7
         version: 3.0.7(@tiptap/core@3.0.7(@tiptap/pm@3.0.7))(@tiptap/pm@3.0.7)
-      '@tiptap/extension-underline':
-        specifier: ^3.0.7
-        version: 3.0.7(@tiptap/core@3.0.7(@tiptap/pm@3.0.7))
       '@tiptap/extension-youtube':
         specifier: ^3.0.7
         version: 3.0.7(@tiptap/core@3.0.7(@tiptap/pm@3.0.7))

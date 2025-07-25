@@ -28,6 +28,12 @@ const useTiptap = ({
         options.onCreate({ editor: currentEditor })
       }
     },
+    onSelectionUpdate: (props) => {
+      console.log(props.editor.$nodes)
+      if (options.onSelectionUpdate) {
+        options.onSelectionUpdate(props)
+      }
+    }
   })
 
   return editor

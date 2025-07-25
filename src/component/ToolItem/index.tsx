@@ -14,18 +14,18 @@ const ToolItem = ({
     direction={'row'}
     alignItems={'center'}
     justifyContent={'center'}
-    gap={0.5}
     sx={{
       width: '1.5rem',
       height: '1.5rem',
       cursor: 'pointer',
+      p: '0.25rem',
       borderRadius: 'var(--mui-shape-borderRadius)',
       '&:hover': {
         backgroundColor: 'action.selected',
       },
       svg: {
         color: isActive ? 'var(--mui-palette-primary-main)' : 'var(--mui-palette-text-primary)',
-        fontSize: 18,
+        fontSize: 16,
       }
     }}
     onClick={onClick}
