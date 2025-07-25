@@ -1,4 +1,5 @@
 
+import InvisibleCharacters from '@tiptap/extension-invisible-characters';
 import Subscript from '@tiptap/extension-subscript';
 import Superscript from '@tiptap/extension-superscript';
 import { TextStyleKit } from '@tiptap/extension-text-style';
@@ -39,7 +40,7 @@ export const getExtensions = ({
       dropcursor: {
         color: 'var(--mui-palette-primary-main)',
         width: 2,
-      }
+      },
     }),
     CodeBlockLowlightExtension,
     ImageExtension,
@@ -90,9 +91,13 @@ export const getExtensions = ({
     defaultExtensions.push(Youtube)
   }
 
-  if (!exclude?.includes('dropcursor')) {
+  if (!exclude?.includes('fileHandler')) {
     const FileHandler = FileHandlerExtension({ onUpload })
     defaultExtensions.push(FileHandler)
+  }
+
+  if (!exclude?.includes('invisibleCharacters') && editable) {
+    defaultExtensions.push(InvisibleCharacters)
   }
 
   return defaultExtensions
