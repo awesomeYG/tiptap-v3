@@ -30,6 +30,17 @@ export const getExtensions = ({
   onUpload,
 }: GetExtensionsProps) => {
   const defaultExtensions: any = [
+    StarterKit.configure({
+      codeBlock: false,
+      listItem: false,
+      orderedList: false,
+      bulletList: false,
+      listKeymap: false,
+      dropcursor: {
+        color: 'var(--mui-palette-primary-main)',
+        width: 2,
+      }
+    }),
     CodeBlockLowlightExtension,
     ImageExtension,
     CharacterCount.configure({
@@ -38,13 +49,6 @@ export const getExtensions = ({
     Subscript,
     Superscript,
     TextStyleKit,
-    StarterKit.configure({
-      codeBlock: false,
-      listItem: false,
-      orderedList: false,
-      bulletList: false,
-      listKeymap: false,
-    }),
   ]
 
   if (!exclude?.includes('mention') && (mentionItems && mentionItems.length > 0 || getMention)) {

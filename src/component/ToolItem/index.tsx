@@ -3,10 +3,12 @@ import React from "react"
 
 const ToolItem = ({
   icon,
+  size = 'medium',
   onClick,
   isActive,
 }: {
   icon: React.ReactNode
+  size?: 'medium' | 'small'
   onClick?: () => void
   isActive?: boolean
 }) => {
@@ -15,8 +17,7 @@ const ToolItem = ({
     alignItems={'center'}
     justifyContent={'center'}
     sx={{
-      width: '1.5rem',
-      height: '1.5rem',
+      width: size === 'small' ? '1.25rem' : '1.5rem',
       cursor: 'pointer',
       p: '0.25rem',
       borderRadius: 'var(--mui-shape-borderRadius)',
@@ -25,7 +26,7 @@ const ToolItem = ({
       },
       svg: {
         color: isActive ? 'var(--mui-palette-primary-main)' : 'var(--mui-palette-text-primary)',
-        fontSize: 18,
+        fontSize: size === 'small' ? '1rem' : '1.125rem',
       }
     }}
     onClick={onClick}
