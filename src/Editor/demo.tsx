@@ -37,7 +37,9 @@ const Reader = () => {
         }, 2000);
       })
     },
-    content: `<p>Tiptap now supports YouTube embeds! Awesome!</p>
+    content: `<video controls></video>
+    <video src="https://www.youtube.com/watch?v=3lTUAWOgoHs" controls></video>
+    <p>Tiptap now supports YouTube embeds! Awesome!</p>
       <p>Try adding your own video to this editor!</p>
       <ul data-type="taskList">
           <li data-type="taskItem" data-checked="true">A list item</li>
@@ -208,6 +210,15 @@ Nothing is impossible, the word itself says “I’m possible!”
     borderRadius: '10px',
     padding: '10px',
   }}>
+    <button type='button' onClick={() => {
+      editor.commands.setVideo({
+        src: '',
+        width: 600,
+        height: 480,
+        controls: true,
+        autoplay: false,
+      })
+    }}>添加视频</button>
     <div style={{
       backgroundColor: '#fff',
     }}>

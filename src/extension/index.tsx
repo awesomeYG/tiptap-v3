@@ -19,6 +19,7 @@ import {
   MathematicsExtension,
   MentionExtension,
   TableExtension,
+  VideoExtension,
   YoutubeExtension,
 } from './node';
 
@@ -88,6 +89,11 @@ export const getExtensions = ({
   if (!exclude?.includes('list')) {
     const List = ListExtension
     defaultExtensions.push(List)
+  }
+
+  if (!exclude?.includes('video')) {
+    const Video = VideoExtension
+    defaultExtensions.push(Video)
   }
 
   if (!exclude?.includes('youtube')) {

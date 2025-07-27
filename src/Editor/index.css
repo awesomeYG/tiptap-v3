@@ -389,7 +389,7 @@
 
 .tiptap.ProseMirror div[data-youtube-video] iframe {
   border: 1px solid var(--mui-palette-divider);
-  padding: 0.5rem;
+  padding: 0.25rem;
   border-radius: var(--mui-shape-borderRadius);
   display: block;
   min-height: 200px;

@@ -84,3 +84,11 @@
   background-color: var(--mui-palette-text-disabled);
   border-color: var(--mui-palette-text-disabled);
 }
+
+.tiptap.ProseMirror .react-renderer {
+  margin-bottom: 1rem;
+}
+
+.tiptap.ProseMirror .video-wrapper {
+  line-height: 0;
+}

@@ -7,5 +7,6 @@ export * from './ListKit';
 export * from './Mathematics';
 export * from './Mention';
 export * from './Table';
+export * from './Video';
 export * from './Youtube';
 
