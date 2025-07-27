@@ -3,6 +3,7 @@ import InvisibleCharacters from '@tiptap/extension-invisible-characters';
 import Subscript from '@tiptap/extension-subscript';
 import Superscript from '@tiptap/extension-superscript';
 import { TextStyleKit } from '@tiptap/extension-text-style';
+import UniqueID from '@tiptap/extension-unique-id';
 import { CharacterCount } from '@tiptap/extensions';
 import StarterKit from '@tiptap/starter-kit';
 import { GetExtensionsProps } from '../type';
@@ -50,6 +51,9 @@ export const getExtensions = ({
     Subscript,
     Superscript,
     TextStyleKit,
+    UniqueID.configure({
+      types: ['heading']
+    }),
   ]
 
   if (!exclude?.includes('mention') && (mentionItems && mentionItems.length > 0 || getMention)) {
