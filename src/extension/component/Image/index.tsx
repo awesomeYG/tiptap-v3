@@ -114,12 +114,8 @@ const ImageViewWrapper: React.FC<NodeViewProps & ImageViewWrapperProps> = ({
             opacity: 1
           }
         }}
-        onMouseEnter={() => {
-          setIsHovering(true)
-        }}
-        onMouseLeave={() => {
-          setIsHovering(false)
-        }}
+        onMouseEnter={() => setIsHovering(true)}
+        onMouseLeave={() => setIsHovering(false)}
       >
         <img
           ref={imageRef}
@@ -155,7 +151,7 @@ const ImageViewWrapper: React.FC<NodeViewProps & ImageViewWrapperProps> = ({
             }}
           />
         )}
-        {isHovering && (<Box
+        {isHovering && <Box
           className="image-controls"
           sx={{
             position: 'absolute',
@@ -189,7 +185,7 @@ const ImageViewWrapper: React.FC<NodeViewProps & ImageViewWrapperProps> = ({
               <DeleteLineIcon sx={{ fontSize: 18 }} />
             </IconButton>
           </Tooltip>
-        </Box>)}
+        </Box>}
       </Box>
     </NodeViewWrapper>
   )
