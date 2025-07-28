@@ -17,6 +17,7 @@ export type ExtensionRelativeProps = MentionExtensionProps & {
   exclude?: string[]
   editable: boolean
   youtube?: Partial<YoutubeOptions>
+  onError?: (error: Error) => void
   onUpload?: (file: File) => Promise<string>
 }
 

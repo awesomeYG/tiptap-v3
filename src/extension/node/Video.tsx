@@ -21,7 +21,12 @@ declare module '@tiptap/core' {
   }
 }
 
-export const VideoExtension = (props: { onUpload?: (file: File) => Promise<string> }) => Node.create({
+export type VideoExtensionProps = {
+  onUpload?: (file: File) => Promise<string>
+  onError?: (error: Error) => void
+}
+
+export const VideoExtension = (props: VideoExtensionProps) => Node.create({
   name: 'video',
   group: 'block',
   atom: true,
@@ -165,7 +170,7 @@ export const VideoExtension = (props: { onUpload?: (file: File) => Promise<strin
   },
 
   addNodeView() {
-    return ReactNodeViewRenderer((renderProps) => VideoViewWrapper({ ...renderProps, onUpload: props.onUpload }))
+    return ReactNodeViewRenderer((renderProps) => VideoViewWrapper({ ...renderProps, onUpload: props.onUpload, onError: props.onError }))
   },
 })
 

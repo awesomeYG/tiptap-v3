@@ -89,6 +89,17 @@
   margin-bottom: 1rem;
 }
 
-.tiptap.ProseMirror .video-wrapper {
+.tiptap.ProseMirror .react-renderer.node-image {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 0.25rem;
+}
+
+.tiptap.ProseMirror .video-wrapper,
+.tiptap.ProseMirror .image-wrapper {
   line-height: 0;
+}
+
+.tiptap.ProseMirror .image-wrapper img {
+  vertical-align: middle;
 }

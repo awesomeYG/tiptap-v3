@@ -17,12 +17,19 @@ interface VideoAttributes {
   class: string
 }
 
-const VideoViewWrapper: React.FC<NodeViewProps & { onUpload?: (file: File) => Promise<string> }> = ({
+export type VideoViewWrapperProps = {
+  onUpload?: (file: File) => Promise<string>
+  onError?: (error: Error) => void
+}
+
+const VideoViewWrapper: React.FC<NodeViewProps & VideoViewWrapperProps> = ({
+  editor,
   node,
   updateAttributes,
   deleteNode,
   selected,
-  onUpload
+  onUpload,
+  onError
 }) => {
   const attrs = node.attrs as VideoAttributes
   const [isEditing, setIsEditing] = useState(false)
@@ -67,7 +74,7 @@ const VideoViewWrapper: React.FC<NodeViewProps & { onUpload?: (file: File) => Pr
           })
         }
       } catch (error) {
-        console.error(error)
+        onError?.(error as Error)
       } finally {
         setUploading(false)
       }
@@ -111,11 +118,11 @@ const VideoViewWrapper: React.FC<NodeViewProps & { onUpload?: (file: File) => Pr
     setIsEditing(false)
   }
 
-  const toggleAttribute = (attr: keyof VideoAttributes) => {
-    updateAttributes({
-      [attr]: !attrs[attr]
-    })
-  }
+  // const toggleAttribute = (attr: keyof VideoAttributes) => {
+  //   updateAttributes({
+  //     [attr]: !attrs[attr]
+  //   })
+  // }
 
   // 拖拽处理函数
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -158,7 +165,7 @@ const VideoViewWrapper: React.FC<NodeViewProps & { onUpload?: (file: File) => Pr
     }
   }, [isDragging, dragStartX, dragStartWidth, isEditing, editWidth, attrs.width, updateAttributes])
 
-  if (!attrs.src && !isEditing) { // 默认插入状态
+  if (!attrs.src && !isEditing && !editor.isEditable) { // 默认插入状态
     return (
       <NodeViewWrapper
         className={`video-wrapper ${selected ? 'ProseMirror-selectednode' : ''}`}
@@ -189,7 +196,7 @@ const VideoViewWrapper: React.FC<NodeViewProps & { onUpload?: (file: File) => Pr
           }}
         >
           <MovieLineIcon sx={{ fontSize: 18 }} />
-          <Box sx={{ fontSize: 14 }}>嵌入或复制链接</Box>
+          <Box sx={{ fontSize: 14 }}>嵌入或复制视频链接</Box>
         </Stack>
         <Popover
           id={id}
@@ -357,8 +364,14 @@ const VideoViewWrapper: React.FC<NodeViewProps & { onUpload?: (file: File) => Pr
             opacity: 1
           }
         }}
-        onMouseEnter={() => setIsHovering(true)}
-        onMouseLeave={() => setIsHovering(false)}
+        onMouseEnter={() => {
+          if (!editor.isEditable) return
+          setIsHovering(true)
+        }}
+        onMouseLeave={() => {
+          if (!editor.isEditable) return
+          setIsHovering(false)
+        }}
       >
         <video
           ref={videoRef}
@@ -375,11 +388,10 @@ const VideoViewWrapper: React.FC<NodeViewProps & { onUpload?: (file: File) => Pr
             display: 'block'
           }}
           onError={(e) => {
-            console.error('Video load error:', e)
+            onError?.(e as unknown as Error)
           }}
         />
-
-        {(isHovering || isDragging) && (
+        {(isHovering || isDragging) && editor.isEditable && (
           <Box
             onMouseDown={handleMouseDown}
             sx={{
@@ -400,8 +412,7 @@ const VideoViewWrapper: React.FC<NodeViewProps & { onUpload?: (file: File) => Pr
             }}
           />
         )}
-
-        {/* {selected && (
+        {/* {selected && editor.isEditable && (
           <Box
             className="video-controls"
             sx={{

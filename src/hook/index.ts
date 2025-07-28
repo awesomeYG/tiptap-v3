@@ -12,6 +12,7 @@ const useTiptap = ({
   getMention,
 
   // fn
+  onError,
   onUpload,
 
   // editor
@@ -26,7 +27,8 @@ const useTiptap = ({
     editable,
     mentionItems,
     getMention,
-    onUpload
+    onUpload,
+    onError
   })
 
   const editor = useEditor({
@@ -34,16 +36,21 @@ const useTiptap = ({
     extensions,
     ...options,
     onCreate: ({ editor: currentEditor }) => {
-      migrateMathStrings(currentEditor)
       if (options.onCreate) {
         options.onCreate({ editor: currentEditor })
       }
+      migrateMathStrings(currentEditor)
     },
     onSelectionUpdate: (props) => {
-      console.log(props.editor.$nodes)
       if (options.onSelectionUpdate) {
         options.onSelectionUpdate(props)
       }
+    },
+    onContentError: (props) => {
+      if (options.onContentError) {
+        options.onContentError(props)
+      }
+      onError?.(props.error)
     }
   })
 

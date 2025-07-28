@@ -5,6 +5,7 @@ const Reader = () => {
   const editor = useTiptap({
     editable: true,
     limit: 100,
+    exclude: ['invisibleCharacters'],
     getMention: async ({ query }) => {
       return new Promise((resolve) => {
         resolve([
@@ -38,6 +39,9 @@ const Reader = () => {
       })
     },
     content: `
+        <p>This is a basic example of implementing images. Drag to re-order.</p>
+        <img width="300" src="https://placehold.co/800x400" />
+        <img width="300" src="https://placehold.co/800x400/6A00F5/white" />
     <p>Tiptap now supports YouTube embeds! Awesome!</p>
     <video src="http://vjs.zencdn.net/v/oceans.mp4" controls></video>
       <p>Try adding your own video to this editor!</p>
@@ -112,9 +116,6 @@ const Reader = () => {
         <p>
           Lists would be nothing without list items.
         </p>
-        <p>This is a basic example of implementing images. Drag to re-order.</p>
-        <img src="https://placehold.co/800x400" />
-        <img src="https://placehold.co/800x400/6A00F5/white" />
         <p>This is a paragraph.</p>
         <hr>
         <p>And this is another paragraph.</p>
@@ -214,7 +215,15 @@ Nothing is impossible, the word itself says “I’m possible!”
       borderBottom: '1px solid #eee',
       padding: '0 0 10px 0',
       marginBottom: '20px',
+      display: 'flex',
+      gap: '10px',
     }}>
+      <button type='button' onClick={() => {
+        editor.setEditable(true)
+      }}>编辑</button>
+      <button type='button' onClick={() => {
+        editor.setEditable(false)
+      }}>预览</button>
       <button type='button' onClick={() => {
         editor.commands.setVideo({
           src: '',
@@ -223,6 +232,12 @@ Nothing is impossible, the word itself says “I’m possible!”
           autoplay: false,
         })
       }}>添加视频</button>
+      <button type='button' onClick={() => {
+        editor.commands.setImage({
+          src: '',
+          width: 760,
+        })
+      }}>添加图片</button>
     </div>
     <div style={{
       backgroundColor: '#fff',

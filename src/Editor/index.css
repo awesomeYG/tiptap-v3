@@ -280,20 +280,6 @@
   background-color: var(--mui-palette-divider);
 }
 
-/* image */
-.tiptap.ProseMirror img {
-  padding: 0.25rem;
-  border-radius: var(--mui-shape-borderRadius);
-  border: 1px solid var(--mui-palette-divider);
-  height: auto;
-  max-width: 100%;
-  vertical-align: middle;
-}
-
-.tiptap.ProseMirror img.ProseMirror-selectednode {
-  border: 1px solid var(--mui-palette-primary-main);
-}
-
 /* mathematics */
 .tiptap.ProseMirror .tiptap-mathematics-render {
   padding: 0 0.25rem;

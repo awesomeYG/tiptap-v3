@@ -31,6 +31,7 @@ export const getExtensions = ({
   mentionItems,
   getMention,
   onUpload,
+  onError,
 }: GetExtensionsProps) => {
   const defaultExtensions: any = [
     StarterKit.configure({
@@ -45,7 +46,6 @@ export const getExtensions = ({
       },
     }),
     CodeBlockLowlightExtension,
-    ImageExtension,
     CharacterCount.configure({
       limit: limit ?? null,
     }),
@@ -92,8 +92,13 @@ export const getExtensions = ({
   }
 
   if (!exclude?.includes('video')) {
-    const Video = VideoExtension({ onUpload })
+    const Video = VideoExtension({ onUpload, onError })
     defaultExtensions.push(Video)
+  }
+
+  if (!exclude?.includes('image')) {
+    const Image = ImageExtension({ onUpload, onError })
+    defaultExtensions.push(Image)
   }
 
   if (!exclude?.includes('youtube')) {
