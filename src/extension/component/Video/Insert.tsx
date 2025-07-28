@@ -1,7 +1,8 @@
+import { FloatingPopover } from "@cq/tiptap/component/FloatingPopover"
 import { MovieLineIcon } from "@cq/tiptap/component/Icons"
 import { UploadIcon } from "@cq/tiptap/component/Icons/upload-icon"
 import { EditorFnProps } from "@cq/tiptap/type"
-import { Box, Button, CircularProgress, Popover, Stack, Tab, Tabs, TextField } from "@mui/material"
+import { Box, Button, CircularProgress, Stack, Tab, Tabs, TextField } from "@mui/material"
 import { NodeViewWrapper } from "@tiptap/react"
 import React, { useState } from "react"
 import { VideoAttributes } from "."
@@ -74,9 +75,6 @@ const InsertVideo = ({
     handleClosePopover()
   }
 
-  const open = Boolean(anchorEl)
-  const id = open ? 'video-show-popover' : undefined
-
   return <NodeViewWrapper
     className={`video-wrapper ${selected ? 'ProseMirror-selectednode' : ''}`}
     data-drag-handle
@@ -85,7 +83,6 @@ const InsertVideo = ({
       direction={'row'}
       alignItems={'center'}
       gap={2}
-      aria-describedby={id}
       onClick={!uploading ? handleShowPopover : undefined}
       sx={{
         border: '1px dashed',
@@ -130,15 +127,11 @@ const InsertVideo = ({
         {uploadProgress}%
       </Box>}
     </Stack>
-    <Popover
-      id={id}
-      open={open}
+    <FloatingPopover
+      open={Boolean(anchorEl)}
       anchorEl={anchorEl}
       onClose={handleClosePopover}
-      anchorOrigin={{
-        vertical: 'bottom',
-        horizontal: 'left',
-      }}
+      placement="bottom"
     >
       <Box sx={{ width: 300, borderBottom: '1px solid', borderColor: 'divider' }}>
         <Tabs value={insertType} onChange={handleChangeInsertType}>
@@ -175,7 +168,7 @@ const InsertVideo = ({
           嵌入视频
         </Button>
       </Stack>}
-    </Popover>
+    </FloatingPopover>
   </NodeViewWrapper>
 }
 

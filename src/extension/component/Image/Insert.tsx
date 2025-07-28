@@ -1,6 +1,7 @@
+import { FloatingPopover } from "@cq/tiptap/component/FloatingPopover"
 import { ImageLineIcon } from "@cq/tiptap/component/Icons"
 import { EditorFnProps } from "@cq/tiptap/type"
-import { Box, Button, CircularProgress, Popover, Stack, Tab, Tabs, TextField } from "@mui/material"
+import { Box, Button, CircularProgress, Stack, Tab, Tabs, TextField } from "@mui/material"
 import { NodeViewWrapper } from "@tiptap/react"
 import React, { useState } from "react"
 import { ImageAttributes } from "."
@@ -61,9 +62,6 @@ const InsertImage = ({
     handleClosePopover()
   }
 
-  const open = Boolean(anchorEl)
-  const id = open ? 'image-show-popover' : undefined
-
   return (
     <NodeViewWrapper
       className={`image-wrapper ${selected ? 'ProseMirror-selectednode' : ''}`}
@@ -73,7 +71,6 @@ const InsertImage = ({
         direction={'row'}
         alignItems={'center'}
         gap={2}
-        aria-describedby={id}
         onClick={!uploading ? handleShowPopover : undefined}
         sx={{
           border: '1px dashed',
@@ -119,15 +116,11 @@ const InsertImage = ({
           {uploadProgress}%
         </Box>}
       </Stack>
-      <Popover
-        id={id}
-        open={open}
+      <FloatingPopover
+        open={Boolean(anchorEl)}
         anchorEl={anchorEl}
         onClose={handleClosePopover}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
+        placement="bottom"
       >
         <Box sx={{ width: 350, borderBottom: '1px solid', borderColor: 'divider' }}>
           <Tabs value={insertType} onChange={handleChangeInsertType}>
@@ -174,7 +167,7 @@ const InsertImage = ({
             </Button>
           </Stack>
         )}
-      </Popover>
+      </FloatingPopover>
     </NodeViewWrapper>
   )
 }

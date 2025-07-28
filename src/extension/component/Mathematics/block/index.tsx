@@ -1,6 +1,7 @@
+import { FloatingPopover } from "@cq/tiptap/component/FloatingPopover"
 import { FormulaIcon } from "@cq/tiptap/component/Icons"
 import { EditorFnProps } from "@cq/tiptap/type"
-import { Box, Button, Popover, Stack, TextField } from "@mui/material"
+import { Box, Button, Stack, TextField } from "@mui/material"
 import { NodeViewProps, NodeViewWrapper } from "@tiptap/react"
 import katex from "katex"
 import React, { useEffect, useRef, useState } from "react"
@@ -22,9 +23,6 @@ export const MathematicsBlockViewWrapper: React.FC<NodeViewProps & EditorFnProps
 
   const [editLatex, setEditLatex] = useState(attrs.latex || '')
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null)
-
-  const open = Boolean(anchorEl)
-  const id = open ? 'insert-block-math-popover' : undefined
 
   const handleShowPopover = (event: React.MouseEvent<HTMLDivElement>) => {
     setEditLatex(attrs.latex || '')
@@ -65,23 +63,22 @@ export const MathematicsBlockViewWrapper: React.FC<NodeViewProps & EditorFnProps
     >
       {!attrs.latex ? (
         <Box
-          aria-describedby={id}
           onClick={handleShowPopover}
           sx={{
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
-            gap: 1,
-            border: '2px dashed',
+            gap: 2,
+            border: '1px dashed',
             borderColor: 'divider',
-            borderRadius: 1,
-            py: 3,
+            borderRadius: 'var(--mui-shape-borderRadius)',
             px: 2,
+            py: 1.5,
+            fontSize: '0.875rem',
+            color: 'text.secondary',
             bgcolor: 'action.default',
             cursor: 'pointer',
             '&:hover': {
-              bgcolor: 'action.hover',
-              borderColor: 'primary.main'
+              bgcolor: 'action.hover'
             },
             '&:active': {
               bgcolor: 'action.selected',
@@ -99,15 +96,16 @@ export const MathematicsBlockViewWrapper: React.FC<NodeViewProps & EditorFnProps
           sx={{
             display: 'block',
             textAlign: 'center',
-            py: 2,
-            px: 1,
-            borderRadius: 1,
+            py: 1.5,
+            px: 2,
+            borderRadius: 'var(--mui-shape-borderRadius)',
             bgcolor: 'transparent',
             cursor: 'pointer',
-            border: '1px solid transparent',
+            '.katex-display': {
+              m: 0,
+            },
             '&:hover': {
-              bgcolor: 'action.hover',
-              borderColor: 'divider'
+              bgcolor: 'action.hover'
             },
             transition: 'background-color 0.2s ease, border-color 0.2s ease',
           }}
@@ -116,21 +114,13 @@ export const MathematicsBlockViewWrapper: React.FC<NodeViewProps & EditorFnProps
           <div ref={mathRef} />
         </Box>
       )}
-      <Popover
-        id={id}
-        open={open}
+      <FloatingPopover
+        open={Boolean(anchorEl)}
         anchorEl={anchorEl}
         onClose={handleClosePopover}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'center',
-        }}
+        placement="bottom"
       >
-        <Stack gap={2} sx={{ p: 3, width: 480 }}>
+        <Stack gap={2} sx={{ p: 2, width: 360 }}>
           <TextField
             fullWidth
             multiline
@@ -139,29 +129,18 @@ export const MathematicsBlockViewWrapper: React.FC<NodeViewProps & EditorFnProps
             value={editLatex}
             onChange={(e) => setEditLatex(e.target.value)}
             placeholder="输入 LaTeX 公式，例如：\int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi}"
-            label="LaTeX 数学公式"
-            autoFocus
           />
-          <Stack direction="row" gap={1}>
-            <Button
-              variant="outlined"
-              size="small"
-              onClick={handleClosePopover}
-            >
-              取消
-            </Button>
-            <Button
-              variant="contained"
-              size="small"
-              onClick={handleInsertFormula}
-              disabled={!editLatex.trim()}
-              sx={{ flex: 1 }}
-            >
-              插入公式
-            </Button>
-          </Stack>
+          <Button
+            variant="contained"
+            size="small"
+            fullWidth
+            onClick={handleInsertFormula}
+            disabled={!editLatex.trim()}
+          >
+            插入公式
+          </Button>
         </Stack>
-      </Popover>
+      </FloatingPopover>
     </NodeViewWrapper>
   )
 }

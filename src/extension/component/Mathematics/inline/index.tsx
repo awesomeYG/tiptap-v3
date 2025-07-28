@@ -1,6 +1,7 @@
+import { FloatingPopover } from "@cq/tiptap/component/FloatingPopover"
 import { FormulaIcon } from "@cq/tiptap/component/Icons"
 import { EditorFnProps } from "@cq/tiptap/type"
-import { Box, Button, Popover, Stack, TextField } from "@mui/material"
+import { Box, Button, Stack, TextField } from "@mui/material"
 import { NodeViewProps, NodeViewWrapper } from "@tiptap/react"
 import katex from 'katex'
 import React, { useEffect, useRef, useState } from "react"
@@ -22,9 +23,6 @@ export const MathematicsInlineViewWrapper: React.FC<NodeViewProps & EditorFnProp
 
   const [editLatex, setEditLatex] = useState(attrs.latex || '')
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null)
-
-  const open = Boolean(anchorEl)
-  const id = open ? 'insert-inline-math-popover' : undefined
 
   const handleShowPopover = (event: React.MouseEvent<HTMLDivElement>) => {
     setEditLatex(attrs.latex || '')
@@ -66,7 +64,6 @@ export const MathematicsInlineViewWrapper: React.FC<NodeViewProps & EditorFnProp
     >
       {!attrs.latex ? <Box
         component="span"
-        aria-describedby={id}
         onClick={handleShowPopover}
         sx={{
           display: 'inline-flex',
@@ -74,7 +71,7 @@ export const MathematicsInlineViewWrapper: React.FC<NodeViewProps & EditorFnProp
           gap: 0.5,
           border: '1px dashed',
           borderColor: 'divider',
-          borderRadius: 0.5,
+          borderRadius: 'var(--mui-shape-borderRadius)',
           px: 1,
           py: 0.5,
           fontSize: '0.875rem',
@@ -87,6 +84,7 @@ export const MathematicsInlineViewWrapper: React.FC<NodeViewProps & EditorFnProp
           '&:active': {
             bgcolor: 'action.selected',
           },
+          transition: 'background-color 0.2s ease',
         }}
       >
         <FormulaIcon sx={{ fontSize: 14, flexShrink: 0 }} />
@@ -112,15 +110,11 @@ export const MathematicsInlineViewWrapper: React.FC<NodeViewProps & EditorFnProp
       >
         <Box component="span" ref={mathRef} />
       </Box>}
-      <Popover
-        id={id}
-        open={open}
+      <FloatingPopover
+        open={Boolean(anchorEl)}
         anchorEl={anchorEl}
         onClose={handleClosePopover}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
+        placement="bottom"
       >
         <Stack gap={2} sx={{ p: 2, width: 360 }}>
           <TextField
@@ -131,7 +125,6 @@ export const MathematicsInlineViewWrapper: React.FC<NodeViewProps & EditorFnProp
             value={editLatex}
             onChange={(e) => setEditLatex(e.target.value)}
             placeholder="输入 LaTeX 公式，例如：x^2 + y^2 = z^2"
-            autoFocus
           />
           <Button
             variant="contained"
@@ -143,7 +136,7 @@ export const MathematicsInlineViewWrapper: React.FC<NodeViewProps & EditorFnProp
             插入公式
           </Button>
         </Stack>
-      </Popover>
+      </FloatingPopover>
     </NodeViewWrapper>
   )
 }

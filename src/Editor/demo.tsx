@@ -3,7 +3,7 @@ import React from 'react';
 
 const Reader = () => {
   const editor = useTiptap({
-    editable: true,
+    editable: false,
     limit: 100,
     exclude: ['invisibleCharacters'],
     getMention: async ({ query }) => {

@@ -33,7 +33,7 @@ const CropImage = ({
   const [isUploading, setIsUploading] = useState(false)
   const imgRef = useRef<HTMLImageElement>(null)
 
-  const onImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
+  const onImageLoad = () => {
     setCrop({
       unit: '%',
       width: 100,
