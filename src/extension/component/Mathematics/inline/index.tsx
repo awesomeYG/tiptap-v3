@@ -1,0 +1,151 @@
+import { FormulaIcon } from "@cq/tiptap/component/Icons"
+import { EditorFnProps } from "@cq/tiptap/type"
+import { Box, Button, Popover, Stack, TextField } from "@mui/material"
+import { NodeViewProps, NodeViewWrapper } from "@tiptap/react"
+import katex from 'katex'
+import React, { useEffect, useRef, useState } from "react"
+import ReadonlyInlineMath from "./Readonly"
+
+export type InlineMathAttributes = {
+  latex: string
+}
+
+export const MathematicsInlineViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
+  editor,
+  node,
+  updateAttributes,
+  selected,
+  onError,
+}) => {
+  const attrs = node.attrs as InlineMathAttributes
+  const mathRef = useRef<HTMLSpanElement>(null)
+
+  const [editLatex, setEditLatex] = useState(attrs.latex || '')
+  const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null)
+
+  const open = Boolean(anchorEl)
+  const id = open ? 'insert-inline-math-popover' : undefined
+
+  const handleShowPopover = (event: React.MouseEvent<HTMLDivElement>) => {
+    setEditLatex(attrs.latex || '')
+    setAnchorEl(event.currentTarget)
+  }
+  const handleClosePopover = () => setAnchorEl(null)
+  const handleInsertFormula = () => {
+    if (!editLatex.trim()) return
+    updateAttributes({
+      latex: editLatex.trim(),
+    })
+    handleClosePopover()
+  }
+
+  useEffect(() => {
+    if (mathRef.current && attrs.latex) {
+      try {
+        katex.render(attrs.latex, mathRef.current, {
+          throwOnError: false,
+          displayMode: false,
+          errorColor: 'error.main',
+          output: 'html'
+        })
+      } catch (error) {
+        onError?.(error as Error)
+      }
+    }
+  }, [attrs.latex])
+
+  if (!editor.isEditable) {
+    return <ReadonlyInlineMath mathRef={mathRef} attrs={attrs} selected={selected} />
+  }
+
+  return (
+    <NodeViewWrapper
+      className={`mathematics-inline-wrapper ${selected ? 'ProseMirror-selectednode' : ''}`}
+      data-drag-handle
+      as="span"
+    >
+      {!attrs.latex ? <Box
+        component="span"
+        aria-describedby={id}
+        onClick={handleShowPopover}
+        sx={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: 0.5,
+          border: '1px dashed',
+          borderColor: 'divider',
+          borderRadius: 0.5,
+          px: 1,
+          py: 0.5,
+          fontSize: '0.875rem',
+          color: 'text.secondary',
+          bgcolor: 'action.default',
+          cursor: 'pointer',
+          '&:hover': {
+            bgcolor: 'action.hover'
+          },
+          '&:active': {
+            bgcolor: 'action.selected',
+          },
+        }}
+      >
+        <FormulaIcon sx={{ fontSize: 14, flexShrink: 0 }} />
+        <Box component="span" sx={{ fontSize: '0.75rem' }}>
+          添加内联公式
+        </Box>
+      </Box> : <Box
+        component="span"
+        sx={{
+          display: 'inline-block',
+          cursor: 'pointer',
+          position: 'relative',
+          px: 0.5,
+          py: 0.25,
+          borderRadius: 0.5,
+          bgcolor: 'transparent',
+          '&:hover': {
+            bgcolor: 'action.hover'
+          },
+          transition: 'background-color 0.2s ease',
+        }}
+        onClick={handleShowPopover}
+      >
+        <Box component="span" ref={mathRef} />
+      </Box>}
+      <Popover
+        id={id}
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleClosePopover}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+      >
+        <Stack gap={2} sx={{ p: 2, width: 360 }}>
+          <TextField
+            fullWidth
+            multiline
+            rows={3}
+            size="small"
+            value={editLatex}
+            onChange={(e) => setEditLatex(e.target.value)}
+            placeholder="输入 LaTeX 公式，例如：x^2 + y^2 = z^2"
+            autoFocus
+          />
+          <Button
+            variant="contained"
+            size="small"
+            fullWidth
+            onClick={handleInsertFormula}
+            disabled={!editLatex.trim()}
+          >
+            插入公式
+          </Button>
+        </Stack>
+      </Popover>
+    </NodeViewWrapper>
+  )
+}
+
+export default MathematicsInlineViewWrapper

@@ -29,13 +29,11 @@ const Reader = () => {
       return new Promise((resolve) => {
         let progress = 0;
         const interval = setInterval(() => {
-          progress += Math.random() * 15; // 随机增长，模拟真实上传
+          progress += Math.random() * 15;
           if (progress >= 100) {
             progress = 100;
             onProgress?.({ progress: progress / 100 });
             clearInterval(interval);
-
-            // 上传完成后返回相应的 URL
             setTimeout(() => {
               if (file.type.startsWith('image/')) {
                 resolve('https://placehold.co/800x400')
@@ -48,37 +46,11 @@ const Reader = () => {
           } else {
             onProgress?.({ progress: progress / 100 });
           }
-        }, 100); // 每100ms更新一次进度
+        }, 100);
       })
     },
     content: `
-        <p>This is a basic example of implementing images. Drag to re-order.</p>
-        <img width="300" src="https://placehold.co/800x400" />
-        <img width="300" src="https://placehold.co/800x400/6A00F5/white" />
-    <p>Tiptap now supports YouTube embeds! Awesome!</p>
-    <video src="http://vjs.zencdn.net/v/oceans.mp4" controls></video>
-      <p>Try adding your own video to this editor!</p>
-      <ul data-type="taskList">
-          <li data-type="taskItem" data-checked="true">A list item</li>
-          <li data-type="taskItem" data-checked="false">And another one</li>
-        </ul>
-        <table>
-          <tbody>
-            <tr>
-              <th>Name</th>
-              <th colspan="3">Description</th>
-            </tr>
-            <tr>
-              <td>Cyndi Lauper</td>
-              <td>Singer</td>
-              <td>Songwriter</td>
-              <td>Actress</td>
-            </tr>
-          </tbody>
-        </table>
-      <div data-youtube-video>
-        <iframe src="https://www.youtube.com/watch?v=3lTUAWOgoHs"></iframe>
-      </div>
+    <br/>
         <h1>
         This editor supports <span data-type="inline-math" data-latex="\\LaTeX"></span> math expressions. And it even supports converting old $\\sub(3*5=15)$ calculations.
       </h1>
@@ -110,6 +82,34 @@ const Reader = () => {
       </ul>
       <p>The math extension also supports block level math nodes:</p>
       <div data-type="block-math" data-latex="\\int_a^b x^2 dx"></div>
+      <img width="300" src="" />
+        <p>This is a basic example of implementing images. Drag to re-order.</p>
+        <img width="300" src="https://placehold.co/800x400" />
+        <img width="300" src="https://placehold.co/800x400/6A00F5/white" />
+    <p>Tiptap now supports YouTube embeds! Awesome!</p>
+    <video src="http://vjs.zencdn.net/v/oceans.mp4" controls></video>
+      <p>Try adding your own video to this editor!</p>
+      <ul data-type="taskList">
+          <li data-type="taskItem" data-checked="true">A list item</li>
+          <li data-type="taskItem" data-checked="false">And another one</li>
+        </ul>
+        <table>
+          <tbody>
+            <tr>
+              <th>Name</th>
+              <th colspan="3">Description</th>
+            </tr>
+            <tr>
+              <td>Cyndi Lauper</td>
+              <td>Singer</td>
+              <td>Songwriter</td>
+              <td>Actress</td>
+            </tr>
+          </tbody>
+        </table>
+      <div data-youtube-video>
+        <iframe src="https://www.youtube.com/watch?v=3lTUAWOgoHs"></iframe>
+      </div>
       <p>
           I like lists. Let’s add one:
         </p>
@@ -244,13 +244,23 @@ Nothing is impossible, the word itself says “I’m possible!”
           controls: true,
           autoplay: false,
         })
-      }}>添加视频</button>
+      }}>视频</button>
       <button type='button' onClick={() => {
         editor.commands.setImage({
           src: '',
           width: 760,
         })
-      }}>添加图片</button>
+      }}>图片</button>
+      <button type='button' onClick={() => {
+        editor.commands.setInlineMath({
+          latex: '',
+        })
+      }}>行内公式</button>
+      <button type='button' onClick={() => {
+        editor.commands.setBlockMath({
+          latex: '',
+        })
+      }}>块级公式</button>
     </div>
     <div style={{
       backgroundColor: '#fff',

@@ -1,13 +1,76 @@
-import { Mathematics } from "@tiptap/extension-mathematics";
+import { EditorFnProps } from "@cq/tiptap/type";
+import { BlockMath, InlineMath } from "@tiptap/extension-mathematics";
+import { ReactNodeViewRenderer } from "@tiptap/react";
+import React from "react";
+import { MathematicsBlockViewWrapper, MathematicsInlineViewWrapper } from "../component/Mathematics";
 
-export const MathematicsExtension = Mathematics.configure({
-  inlineOptions: {
-    // optional options for the inline math node
+declare module '@tiptap/core' {
+  interface Commands<ReturnType> {
+    CustomInlineMath: {
+      /**
+       * Insert a inline math node with LaTeX string.
+       * @param options - Options for inserting inline math.
+       * @returns ReturnType
+       */
+      setInlineMath: (options: { latex: string }) => ReturnType
+    }
+    CustomBlockMath: {
+      /**
+       * Insert a block math node with LaTeX string.
+       * @param options - Options for inserting block math.
+       * @returns ReturnType
+       */
+      setBlockMath: (options: { latex: string }) => ReturnType
+    }
+  }
+}
+
+const CustomInlineMath = (options: EditorFnProps) => InlineMath.extend({
+  addCommands() {
+    return {
+      setInlineMath: (options) => ({ commands }) => {
+        return commands.insertContent({
+          type: this.name,
+          attrs: {
+            latex: options.latex,
+          },
+        })
+      }
+    }
   },
-  blockOptions: {
-    // optional options for the block math node
+  addNodeView() {
+    return ReactNodeViewRenderer((renderProps) => <MathematicsInlineViewWrapper {...renderProps} {...options} />)
   },
+})
+
+const CustomBlockMath = (options: EditorFnProps) => BlockMath.extend({
+  addCommands() {
+    return {
+      setBlockMath: (options) => ({ commands }) => {
+        return commands.insertContent({
+          type: this.name,
+          attrs: {
+            latex: options.latex,
+          },
+        })
+      }
+    }
+  },
+  addNodeView() {
+    return ReactNodeViewRenderer((renderProps) => <MathematicsBlockViewWrapper {...renderProps} {...options} />)
+  },
+})
+
+export const CustomInlineMathExtension = (options: EditorFnProps) => CustomInlineMath(options).configure({
   katexOptions: {
-    // optional options for the KaTeX renderer
+    throwOnError: false,
+    displayMode: false,
   },
-});
+})
+
+export const CustomBlockMathExtension = (options: EditorFnProps) => CustomBlockMath(options).configure({
+  katexOptions: {
+    throwOnError: false,
+    displayMode: true,
+  },
+})

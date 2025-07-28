@@ -9,6 +9,8 @@ import StarterKit from '@tiptap/starter-kit';
 import { GetExtensionsProps } from '../type';
 import {
   CodeBlockLowlightExtension,
+  CustomBlockMathExtension,
+  CustomInlineMathExtension,
   DetailsContentExtension,
   DetailsExtension,
   DetailsSummaryExtension,
@@ -16,11 +18,10 @@ import {
   FileHandlerExtension,
   ImageExtension,
   ListExtension,
-  MathematicsExtension,
   MentionExtension,
   TableExtension,
   VideoExtension,
-  YoutubeExtension,
+  YoutubeExtension
 } from './node';
 
 export const getExtensions = ({
@@ -77,8 +78,10 @@ export const getExtensions = ({
   }
 
   if (!exclude?.includes('mathematics')) {
-    const Mathematics = MathematicsExtension
-    defaultExtensions.push(Mathematics)
+    const CustomInlineMath = CustomInlineMathExtension({ onError })
+    const CustomBlockMath = CustomBlockMathExtension({ onError })
+    defaultExtensions.push(CustomInlineMath)
+    defaultExtensions.push(CustomBlockMath)
   }
 
   if (!exclude?.includes('table')) {
