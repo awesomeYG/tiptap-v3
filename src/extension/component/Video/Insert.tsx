@@ -23,6 +23,7 @@ const InsertVideo = ({
   const [insertType, setInsertType] = useState<'upload' | 'link'>(onUpload ? 'upload' : 'link')
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null)
   const [uploading, setUploading] = useState(false)
+  const [uploadProgress, setUploadProgress] = useState(0)
 
   const handleShowPopover = (event: React.MouseEvent<HTMLDivElement>) => setAnchorEl(event.currentTarget)
   const handleClosePopover = () => setAnchorEl(null)
@@ -32,8 +33,12 @@ const InsertVideo = ({
     const file = event.target.files?.[0]
     if (file) {
       setUploading(true)
+      setUploadProgress(0)
+      handleClosePopover()
       try {
-        const url = await onUpload?.(file)
+        const url = await onUpload?.(file, (event) => {
+          setUploadProgress(Math.round(event.progress * 100))
+        })
         if (url) {
           setEditSrc(url)
           updateAttributes({
@@ -50,6 +55,7 @@ const InsertVideo = ({
         onError?.(error as Error)
       } finally {
         setUploading(false)
+        setUploadProgress(0)
       }
     }
   }
@@ -80,7 +86,7 @@ const InsertVideo = ({
       alignItems={'center'}
       gap={2}
       aria-describedby={id}
-      onClick={handleShowPopover}
+      onClick={!uploading ? handleShowPopover : undefined}
       sx={{
         border: '1px dashed',
         borderColor: 'divider',
@@ -88,19 +94,41 @@ const InsertVideo = ({
         px: 2,
         py: 1.5,
         textAlign: 'center',
-        cursor: 'pointer',
         color: 'text.secondary',
         bgcolor: 'action.default',
-        "&:hover": {
-          bgcolor: 'action.hover'
-        },
-        "&:active": {
-          bgcolor: 'action.selected',
-        }
+        position: 'relative',
+        overflow: 'hidden',
+        ...(!uploading ? {
+          cursor: 'pointer',
+          '&:hover': {
+            bgcolor: 'action.hover'
+          },
+          '&:active': {
+            bgcolor: 'action.selected',
+          },
+        } : {
+          "&::before": {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            height: '100%',
+            width: `${uploadProgress}%`,
+            bgcolor: 'primary.main',
+            opacity: 0.1,
+            transition: 'width 0.3s ease',
+            zIndex: 0,
+          }
+        }),
       }}
     >
-      <MovieLineIcon sx={{ fontSize: 18 }} />
-      <Box sx={{ fontSize: 14 }}>嵌入或复制视频链接</Box>
+      <MovieLineIcon sx={{ fontSize: 18, position: 'relative', zIndex: 1, flexShrink: 0 }} />
+      <Box sx={{ fontSize: 14, position: 'relative', zIndex: 1, flexGrow: 1, textAlign: 'left' }}>
+        {uploading ? '图片上传中...' : '嵌入或复制视频链接'}
+      </Box>
+      {uploading && <Box sx={{ fontSize: 12, fontWeight: 'bold', color: 'primary.main', position: 'relative', zIndex: 1, flexShrink: 0 }}>
+        {uploadProgress}%
+      </Box>}
     </Stack>
     <Popover
       id={id}

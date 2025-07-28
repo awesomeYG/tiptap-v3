@@ -25,17 +25,30 @@ const Reader = () => {
           .slice(0, 5))
       })
     },
-    onUpload: async (file) => {
+    onUpload: async (file, onProgress) => {
       return new Promise((resolve) => {
-        setTimeout(() => {
-          if (file.type.startsWith('image/')) {
-            resolve('https://placehold.co/800x400')
-          } else if (file.type.startsWith('video/')) {
-            resolve('http://vjs.zencdn.net/v/oceans.mp4')
+        let progress = 0;
+        const interval = setInterval(() => {
+          progress += Math.random() * 15; // 随机增长，模拟真实上传
+          if (progress >= 100) {
+            progress = 100;
+            onProgress?.({ progress: progress / 100 });
+            clearInterval(interval);
+
+            // 上传完成后返回相应的 URL
+            setTimeout(() => {
+              if (file.type.startsWith('image/')) {
+                resolve('https://placehold.co/800x400')
+              } else if (file.type.startsWith('video/')) {
+                resolve('http://vjs.zencdn.net/v/oceans.mp4')
+              } else {
+                resolve('https://placehold.co/800x400')
+              }
+            }, 200);
           } else {
-            resolve('https://placehold.co/800x400')
+            onProgress?.({ progress: progress / 100 });
           }
-        }, 2000);
+        }, 100); // 每100ms更新一次进度
       })
     },
     content: `
