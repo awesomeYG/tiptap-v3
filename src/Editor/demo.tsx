@@ -30,16 +30,16 @@ const Reader = () => {
           if (file.type.startsWith('image/')) {
             resolve('https://placehold.co/800x400')
           } else if (file.type.startsWith('video/')) {
-            resolve('https://www.youtube.com/watch?v=3lTUAWOgoHs')
+            resolve('http://vjs.zencdn.net/v/oceans.mp4')
           } else {
             resolve('https://placehold.co/800x400')
           }
         }, 2000);
       })
     },
-    content: `<video controls></video>
-    <video src="https://www.youtube.com/watch?v=3lTUAWOgoHs" controls></video>
+    content: `
     <p>Tiptap now supports YouTube embeds! Awesome!</p>
+    <video src="http://vjs.zencdn.net/v/oceans.mp4" controls></video>
       <p>Try adding your own video to this editor!</p>
       <ul data-type="taskList">
           <li data-type="taskItem" data-checked="true">A list item</li>
@@ -210,15 +210,20 @@ Nothing is impossible, the word itself says “I’m possible!”
     borderRadius: '10px',
     padding: '10px',
   }}>
-    <button type='button' onClick={() => {
-      editor.commands.setVideo({
-        src: '',
-        width: 600,
-        height: 480,
-        controls: true,
-        autoplay: false,
-      })
-    }}>添加视频</button>
+    <div style={{
+      borderBottom: '1px solid #eee',
+      padding: '0 0 10px 0',
+      marginBottom: '20px',
+    }}>
+      <button type='button' onClick={() => {
+        editor.commands.setVideo({
+          src: '',
+          width: 760,
+          controls: true,
+          autoplay: false,
+        })
+      }}>添加视频</button>
+    </div>
     <div style={{
       backgroundColor: '#fff',
     }}>

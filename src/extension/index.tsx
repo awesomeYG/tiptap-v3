@@ -92,7 +92,7 @@ export const getExtensions = ({
   }
 
   if (!exclude?.includes('video')) {
-    const Video = VideoExtension
+    const Video = VideoExtension({ onUpload })
     defaultExtensions.push(Video)
   }
 

@@ -11,7 +11,6 @@ declare module '@tiptap/core' {
       setVideo: (options: {
         src: string
         width?: number
-        height?: number
         controls?: boolean
         autoplay?: boolean
         loop?: boolean
@@ -22,7 +21,7 @@ declare module '@tiptap/core' {
   }
 }
 
-export const VideoExtension = Node.create({
+export const VideoExtension = (props: { onUpload?: (file: File) => Promise<string> }) => Node.create({
   name: 'video',
   group: 'block',
   atom: true,
@@ -82,23 +81,13 @@ export const VideoExtension = Node.create({
         },
       },
       width: {
-        default: 600,
+        default: 760,
         parseHTML: element => {
           const width = element.getAttribute('width')
-          return width ? parseInt(width, 10) : 600
+          return width ? parseInt(width, 10) : 760
         },
         renderHTML: attributes => {
           return { width: attributes.width }
-        },
-      },
-      height: {
-        default: 480,
-        parseHTML: element => {
-          const height = element.getAttribute('height')
-          return height ? parseInt(height, 10) : 480
-        },
-        renderHTML: attributes => {
-          return { height: attributes.height }
         },
       },
     }
@@ -121,8 +110,7 @@ export const VideoExtension = Node.create({
             loop: dom.hasAttribute('loop'),
             muted: dom.hasAttribute('muted'),
             poster: dom.getAttribute('poster'),
-            width: dom.getAttribute('width') ? parseInt(dom.getAttribute('width')!, 10) : 600,
-            height: dom.getAttribute('height') ? parseInt(dom.getAttribute('height')!, 10) : 480,
+            width: dom.getAttribute('width') ? parseInt(dom.getAttribute('width')!, 10) : 760,
           }
         },
       }
@@ -139,13 +127,11 @@ export const VideoExtension = Node.create({
         // if (!options.src) {
         //   return false
         // }
-
         return commands.insertContent({
           type: this.name,
           attrs: {
             src: options.src,
-            width: options.width || 600,
-            height: options.height || 480,
+            width: options.width || 760,
             controls: options.controls !== false,
             autoplay: options.autoplay || false,
             loop: options.loop || false,
@@ -179,7 +165,7 @@ export const VideoExtension = Node.create({
   },
 
   addNodeView() {
-    return ReactNodeViewRenderer(VideoViewWrapper)
+    return ReactNodeViewRenderer((renderProps) => VideoViewWrapper({ ...renderProps, onUpload: props.onUpload }))
   },
 })
 
