@@ -1,17 +1,16 @@
 import { MovieLineIcon } from "@cq/tiptap/component/Icons"
 import { UploadIcon } from "@cq/tiptap/component/Icons/upload-icon"
+import { EditorFnProps } from "@cq/tiptap/type"
 import { Box, Button, CircularProgress, Popover, Stack, Tab, Tabs, TextField } from "@mui/material"
 import { NodeViewWrapper } from "@tiptap/react"
 import React, { useState } from "react"
 import { VideoAttributes } from "."
 
-interface InsertVideoProps {
+type InsertVideoProps = {
   selected: boolean
   attrs: VideoAttributes
   updateAttributes: (attrs: VideoAttributes) => void
-  onUpload?: (file: File) => Promise<string>
-  onError?: (error: Error) => void
-}
+} & EditorFnProps
 
 const InsertVideo = ({
   selected,

@@ -1,4 +1,5 @@
 import { DeleteLineIcon } from "@cq/tiptap/component/Icons/delete-line-icon"
+import { EditorFnProps } from "@cq/tiptap/type"
 import { Box, IconButton, Tooltip } from "@mui/material"
 import { NodeViewProps, NodeViewWrapper } from '@tiptap/react'
 import React, { useEffect, useRef, useState } from "react"
@@ -15,12 +16,7 @@ export interface VideoAttributes {
   poster: string | null
 }
 
-export type VideoViewWrapperProps = {
-  onUpload?: (file: File) => Promise<string>
-  onError?: (error: Error) => void
-}
-
-const VideoViewWrapper: React.FC<NodeViewProps & VideoViewWrapperProps> = ({
+const VideoViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
   editor,
   node,
   updateAttributes,

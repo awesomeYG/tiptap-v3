@@ -1,9 +1,20 @@
 import { YoutubeOptions } from '@tiptap/extension-youtube';
 import { Editor } from '@tiptap/react';
 
+export type UploadFunction = (
+  file: File,
+  onProgress?: (event: { progress: number }) => void,
+  abortSignal?: AbortSignal
+) => Promise<string>
+
 export type EditorProps = {
   editor: Editor;
   height?: number | string;
+}
+
+export type EditorFnProps = {
+  onError?: (error: Error) => void
+  onUpload?: UploadFunction
 }
 
 export type MentionItems = string[]
@@ -12,13 +23,11 @@ export type MentionExtensionProps = {
   getMention?: ({ query }: { query: string }) => Promise<MentionItems>;
 }
 
-export type ExtensionRelativeProps = MentionExtensionProps & {
+export type ExtensionRelativeProps = MentionExtensionProps & EditorFnProps & {
   limit?: number | null
   exclude?: string[]
   editable: boolean
   youtube?: Partial<YoutubeOptions>
-  onError?: (error: Error) => void
-  onUpload?: (file: File) => Promise<string>
 }
 
 export type UseTiptapProps = {

@@ -1,4 +1,5 @@
 import { ImageLineIcon } from "@cq/tiptap/component/Icons"
+import { UploadFunction } from "@cq/tiptap/type"
 import { Box, Button, CircularProgress, Popover, Stack, Tab, Tabs, TextField } from "@mui/material"
 import { NodeViewWrapper } from "@tiptap/react"
 import React, { useState } from "react"
@@ -8,7 +9,7 @@ interface InsertImageProps {
   selected: boolean
   attrs: ImageAttributes
   updateAttributes: (attrs: ImageAttributes) => void
-  onUpload?: (file: File) => Promise<string>
+  onUpload?: UploadFunction
 }
 
 const InsertImage = ({

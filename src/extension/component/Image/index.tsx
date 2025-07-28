@@ -1,5 +1,6 @@
 import { CustomSizeIcon } from "@cq/tiptap/component/Icons"
 import { DeleteLineIcon } from "@cq/tiptap/component/Icons/delete-line-icon"
+import { EditorFnProps } from "@cq/tiptap/type"
 import { Box, IconButton, Tooltip } from "@mui/material"
 import { NodeViewProps, NodeViewWrapper } from "@tiptap/react"
 import React, { useEffect, useRef, useState } from "react"
@@ -12,12 +13,7 @@ export interface ImageAttributes {
   width: number
 }
 
-export type ImageViewWrapperProps = {
-  onUpload?: (file: File) => Promise<string>
-  onError?: (error: Error) => void
-}
-
-const ImageViewWrapper: React.FC<NodeViewProps & ImageViewWrapperProps> = ({
+const ImageViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
   editor,
   node,
   updateAttributes,

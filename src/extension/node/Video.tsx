@@ -1,3 +1,4 @@
+import { EditorFnProps } from '@cq/tiptap/type'
 import { mergeAttributes, Node } from '@tiptap/core'
 import { ReactNodeViewRenderer } from '@tiptap/react'
 import VideoViewWrapper from '../component/Video'
@@ -21,10 +22,7 @@ declare module '@tiptap/core' {
   }
 }
 
-export type VideoExtensionProps = {
-  onUpload?: (file: File) => Promise<string>
-  onError?: (error: Error) => void
-}
+export type VideoExtensionProps = EditorFnProps
 
 export const VideoExtension = (props: VideoExtensionProps) => Node.create({
   name: 'video',

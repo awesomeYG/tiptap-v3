@@ -1,18 +1,18 @@
+import { EditorFnProps } from "@cq/tiptap/type"
 import { Box, Button, Stack } from "@mui/material"
 import { NodeViewWrapper } from "@tiptap/react"
 import React, { useRef, useState } from "react"
 import ReactCrop, { Crop, PixelCrop } from 'react-image-crop'
-import 'react-image-crop/dist/ReactCrop.css'
 import { ImageAttributes } from "."
 
-interface CropImageProps {
+import 'react-image-crop/dist/ReactCrop.css'
+
+type CropImageProps = {
   selected: boolean
   attrs: ImageAttributes
   onConfirm: (imageUrl: string) => void
   onCancel: () => void
-  onUpload?: (file: File) => Promise<string>
-  onError?: (error: Error) => void
-}
+} & EditorFnProps
 
 const CropImage = ({
   selected,
