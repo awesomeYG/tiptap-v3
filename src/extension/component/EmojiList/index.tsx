@@ -64,7 +64,7 @@ export const EmojiList = forwardRef<EmojiListRef, EmojiListProps>((props, ref) =
       position: 'relative',
       overflowY: 'auto',
       p: 1,
-      width: 'calc(1.5rem * 10)',
+      maxWidth: 300,
       maxHeight: 300,
     }}>
       <Grid container spacing={0.5}>
@@ -73,15 +73,15 @@ export const EmojiList = forwardRef<EmojiListRef, EmojiListProps>((props, ref) =
             cursor: 'pointer',
             lineHeight: 1,
             fontSize: 14,
-            width: '1.5rem',
-            height: '1.5rem',
+            width: '2rem',
+            height: '2rem',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
             borderRadius: '4px',
             img: {
-              width: '1rem',
-              height: '1rem',
+              width: '1.25rem',
+              height: '1.25rem',
             },
             transition: 'background-color 0.2s ease-in-out',
             '&:hover': {
