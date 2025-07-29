@@ -2,6 +2,7 @@
 import InvisibleCharacters from '@tiptap/extension-invisible-characters';
 import Subscript from '@tiptap/extension-subscript';
 import Superscript from '@tiptap/extension-superscript';
+import TextAlign from '@tiptap/extension-text-align';
 import { TextStyleKit } from '@tiptap/extension-text-style';
 import UniqueID from '@tiptap/extension-unique-id';
 import { CharacterCount } from '@tiptap/extensions';
@@ -45,6 +46,9 @@ export const getExtensions = ({
         color: 'var(--mui-palette-primary-main)',
         width: 2,
       },
+    }),
+    TextAlign.configure({
+      types: ['heading', 'paragraph'],
     }),
     CodeBlockLowlightExtension,
     CharacterCount.configure({

@@ -1,8 +1,8 @@
-import { Editor, useTiptap } from '@cq/tiptap';
+import { Editor, EditorToolbar, useTiptap } from '@cq/tiptap';
 import React from 'react';
 
 const Reader = () => {
-  const editor = useTiptap({
+  const { editor } = useTiptap({
     editable: true,
     limit: 100,
     exclude: ['invisibleCharacters'],
@@ -50,6 +50,9 @@ const Reader = () => {
       })
     },
     content: `
+    \`\`\`javascript
+    const a = 1;
+    \`\`\`
     <code>
     <pre>$\\LaTeX$</pre>
   </code>
@@ -267,6 +270,7 @@ Nothing is impossible, the word itself says “I’m possible!”
         })
       }}>代码块</button>
     </div>
+    <EditorToolbar editor={editor} />
     <div style={{
       backgroundColor: '#fff',
     }}>

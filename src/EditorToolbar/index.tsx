@@ -1,0 +1,164 @@
+import { Box, Divider, Stack } from '@mui/material'
+import { Editor } from '@tiptap/react'
+import React, { useEffect, useState } from 'react'
+import { ArrowGoBackLineIcon, ArrowGoForwardLineIcon, BoldIcon, ItalicIcon, QuoteTextIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, UnderlineIcon } from '../component/Icons'
+import { EditorAlignSelect, EditorHeading, EditorListSelect, ToolbarItem } from '../component/Toolbar'
+
+interface EditorToolbarProps {
+  editor: Editor
+}
+
+const EditorToolbar = ({
+  editor,
+}: EditorToolbarProps) => {
+  const [active, setActive] = useState({
+    undo: false,
+    redo: false,
+    quote: false,
+    bold: false,
+    italic: false,
+    strike: false,
+    underline: false,
+    superscript: false,
+    subscript: false,
+  })
+
+  const updateSelection = () => {
+    setActive({
+      undo: editor.can().undo(),
+      redo: editor.can().redo(),
+      quote: editor.isActive('blockquote'),
+      bold: editor.isActive('bold'),
+      italic: editor.isActive('italic'),
+      strike: editor.isActive('strike'),
+      underline: editor.isActive('underline'),
+      superscript: editor.isActive('superscript'),
+      subscript: editor.isActive('subscript'),
+    })
+  }
+
+  useEffect(() => {
+    editor.on('selectionUpdate', updateSelection);
+    editor.on('transaction', updateSelection);
+    return () => {
+      editor.off('selectionUpdate', updateSelection);
+      editor.off('transaction', updateSelection);
+    };
+  }, [editor]);
+
+  return <Box className='editor-toolbar'>
+    <Stack
+      direction='row'
+      alignItems='center'
+      justifyContent='center'
+      flexWrap={'wrap'}
+      sx={{
+        height: '44px',
+        '.MuiButton-root': {
+          minWidth: '36px',
+          p: 1,
+          color: 'text.primary',
+          '&.tool-active': {
+            bgcolor: 'background.paper0',
+            color: 'primary.main',
+          },
+          '&[disabled]': {
+            color: 'text.disabled',
+          }
+        },
+        '.MuiSelect-root': {
+          minWidth: '36px',
+          bgcolor: 'background.paper',
+          '.MuiSelect-select': {
+            p: '0 !important',
+          },
+          input: {
+            display: 'none',
+          },
+          '&.tool-active': {
+            bgcolor: 'background.paper0',
+            color: 'primary.main',
+            button: {
+              color: 'primary.main',
+            }
+          },
+          '.MuiOutlinedInput-notchedOutline': {
+            borderWidth: '0px !important',
+          }
+        }
+      }}
+    >
+      <ToolbarItem
+        tip={'撤销'}
+        shortcutKey={['ctrl', 'Z']}
+        icon={<ArrowGoBackLineIcon sx={{ fontSize: '1rem' }} />}
+        onClick={() => editor.chain().focus().undo().run()}
+        disabled={!active.undo}
+      />
+      <ToolbarItem
+        tip={'重做'}
+        shortcutKey={['ctrl', 'Y']}
+        icon={<ArrowGoForwardLineIcon sx={{ fontSize: '1rem' }} />}
+        onClick={() => editor.chain().focus().redo().run()}
+        disabled={!active.redo}
+      />
+      <Divider orientation="vertical" flexItem sx={{ mx: 0.5, height: 20, alignSelf: 'center' }} />
+      <EditorHeading editor={editor} />
+      <EditorListSelect editor={editor} />
+      <EditorAlignSelect editor={editor} />
+      <ToolbarItem
+        tip={'引用'}
+        shortcutKey={['ctrl', 'shift', 'B']}
+        icon={<QuoteTextIcon sx={{ fontSize: '1rem' }} />}
+        onClick={() => editor.chain().focus().toggleBlockquote().run()}
+        className={active.quote ? "tool-active" : ""}
+      />
+      <Divider orientation="vertical" flexItem sx={{ mx: 0.5, height: 20, alignSelf: 'center' }} />
+      <ToolbarItem
+        tip={'加粗'}
+        shortcutKey={['ctrl', 'B']}
+        icon={<BoldIcon sx={{ fontSize: '1rem' }} />}
+        onClick={() => editor.chain().focus().toggleBold().run()}
+        className={active.bold ? "tool-active" : ""}
+      />
+      <ToolbarItem
+        tip={'斜体'}
+        shortcutKey={['ctrl', 'I']}
+        icon={<ItalicIcon sx={{ fontSize: '1rem' }} />}
+        onClick={() => editor.chain().focus().toggleItalic().run()}
+        className={active.italic ? "tool-active" : ""}
+      />
+      <ToolbarItem
+        tip={'删除线'}
+        shortcutKey={['ctrl', 'shift', 'S']}
+        icon={<StrikethroughIcon sx={{ fontSize: '1rem' }} />}
+        onClick={() => editor.chain().focus().toggleStrike().run()}
+        className={active.strike ? "tool-active" : ""}
+      />
+      <Divider orientation="vertical" flexItem sx={{ mx: 0.5, height: 20, alignSelf: 'center' }} />
+      <ToolbarItem
+        tip={'下划线'}
+        shortcutKey={['ctrl', 'U']}
+        icon={<UnderlineIcon sx={{ fontSize: '1rem' }} />}
+        onClick={() => editor.chain().focus().toggleUnderline().run()}
+        className={active.underline ? "tool-active" : ""}
+      /><Divider orientation="vertical" flexItem sx={{ mx: 0.5, height: 20, alignSelf: 'center' }} />
+      <ToolbarItem
+        tip={'上标'}
+        shortcutKey={['ctrl', '.']}
+        icon={<SuperscriptIcon sx={{ fontSize: '1rem' }} />}
+        onClick={() => editor.chain().focus().toggleSuperscript().run()}
+        className={active.superscript ? "tool-active" : ""}
+      />
+      <ToolbarItem
+        tip={'下标'}
+        shortcutKey={['ctrl', ',']}
+        icon={<SubscriptIcon sx={{ fontSize: '1rem' }} />}
+        onClick={() => editor.chain().focus().toggleSubscript().run()}
+        className={active.subscript ? "tool-active" : ""}
+      />
+    </Stack>
+  </Box>
+}
+
+export default EditorToolbar
