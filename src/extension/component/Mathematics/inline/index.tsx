@@ -1,5 +1,5 @@
 import { FloatingPopover } from "@cq/tiptap/component/FloatingPopover"
-import { FormulaIcon } from "@cq/tiptap/component/Icons"
+import { SquareRootIcon } from "@cq/tiptap/component/Icons"
 import { EditorFnProps } from "@cq/tiptap/type"
 import { Box, Button, Stack, TextField } from "@mui/material"
 import { NodeViewProps, NodeViewWrapper } from "@tiptap/react"
@@ -87,7 +87,7 @@ export const MathematicsInlineViewWrapper: React.FC<NodeViewProps & EditorFnProp
           transition: 'background-color 0.2s ease',
         }}
       >
-        <FormulaIcon sx={{ fontSize: 18, flexShrink: 0 }} />
+        <SquareRootIcon sx={{ fontSize: 18, flexShrink: 0 }} />
         <Box component="span">
           添加数学公式
         </Box>

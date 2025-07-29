@@ -2,7 +2,7 @@ import { Box, Divider, Stack } from '@mui/material'
 import { Editor } from '@tiptap/react'
 import React, { useEffect, useState } from 'react'
 import { ArrowGoBackLineIcon, ArrowGoForwardLineIcon, BoldIcon, ImageAddLineIcon, ItalicIcon, MenuFold2FillIcon, MovieLineIcon, QuoteTextIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, UnderlineIcon } from '../component/Icons'
-import { EditorAlignSelect, EditorHeading, EditorListSelect, ToolbarItem } from '../component/Toolbar'
+import { EditorAlignSelect, EditorHeading, EditorListSelect, EditorMath, ToolbarItem } from '../component/Toolbar'
 
 interface EditorToolbarProps {
   editor: Editor
@@ -22,6 +22,8 @@ const EditorToolbar = ({
     superscript: false,
     subscript: false,
     details: false,
+    image: false,
+    video: false,
   })
 
   const updateSelection = () => {
@@ -36,6 +38,8 @@ const EditorToolbar = ({
       superscript: editor.isActive('superscript'),
       subscript: editor.isActive('subscript'),
       details: editor.isActive('details'),
+      image: editor.isActive('image'),
+      video: editor.isActive('video'),
     })
   }
 
@@ -167,20 +171,21 @@ const EditorToolbar = ({
         onClick={() => editor.chain().focus().setDetails().run()}
         className={active.details ? "tool-active" : ""}
       />
+      <EditorMath editor={editor} />
       <Divider orientation="vertical" flexItem sx={{ mx: 0.5, height: 20, alignSelf: 'center' }} />
       <ToolbarItem
         tip={'图片'}
         shortcutKey={[]}
         icon={<ImageAddLineIcon sx={{ fontSize: '1rem' }} />}
         onClick={() => editor.commands.setImage({ src: '', width: 760 })}
-        className={active.details ? "tool-active" : ""}
+        className={active.image ? "tool-active" : ""}
       />
       <ToolbarItem
         tip={'视频'}
         shortcutKey={[]}
         icon={<MovieLineIcon sx={{ fontSize: '1rem' }} />}
         onClick={() => editor.commands.setVideo({ src: '', width: 760, controls: true, autoplay: false })}
-        className={active.details ? "tool-active" : ""}
+        className={active.video ? "tool-active" : ""}
       />
     </Stack>
   </Box>

@@ -1,5 +1,5 @@
 import { FloatingPopover } from "@cq/tiptap/component/FloatingPopover"
-import { FormulaIcon } from "@cq/tiptap/component/Icons"
+import { FunctionsIcon } from "@cq/tiptap/component/Icons"
 import { EditorFnProps } from "@cq/tiptap/type"
 import { Box, Button, Stack, TextField } from "@mui/material"
 import { NodeViewProps, NodeViewWrapper } from "@tiptap/react"
@@ -86,7 +86,7 @@ export const MathematicsBlockViewWrapper: React.FC<NodeViewProps & EditorFnProps
             transition: 'all 0.2s ease',
           }}
         >
-          <FormulaIcon sx={{ fontSize: 18, color: 'text.secondary' }} />
+          <FunctionsIcon sx={{ fontSize: 18, color: 'text.secondary' }} />
           <Box sx={{ fontSize: '0.875rem', color: 'text.secondary' }}>
             添加数学公式
           </Box>
