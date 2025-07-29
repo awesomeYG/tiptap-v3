@@ -1,7 +1,7 @@
 import { Box, Divider, Stack } from '@mui/material'
 import { Editor } from '@tiptap/react'
 import React, { useEffect, useState } from 'react'
-import { ArrowGoBackLineIcon, ArrowGoForwardLineIcon, BoldIcon, ItalicIcon, QuoteTextIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, UnderlineIcon } from '../component/Icons'
+import { ArrowGoBackLineIcon, ArrowGoForwardLineIcon, BoldIcon, ItalicIcon, MenuFold2FillIcon, QuoteTextIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, UnderlineIcon } from '../component/Icons'
 import { EditorAlignSelect, EditorHeading, EditorListSelect, ToolbarItem } from '../component/Toolbar'
 
 interface EditorToolbarProps {
@@ -135,14 +135,14 @@ const EditorToolbar = ({
         onClick={() => editor.chain().focus().toggleStrike().run()}
         className={active.strike ? "tool-active" : ""}
       />
-      <Divider orientation="vertical" flexItem sx={{ mx: 0.5, height: 20, alignSelf: 'center' }} />
       <ToolbarItem
         tip={'下划线'}
         shortcutKey={['ctrl', 'U']}
         icon={<UnderlineIcon sx={{ fontSize: '1rem' }} />}
         onClick={() => editor.chain().focus().toggleUnderline().run()}
         className={active.underline ? "tool-active" : ""}
-      /><Divider orientation="vertical" flexItem sx={{ mx: 0.5, height: 20, alignSelf: 'center' }} />
+      />
+      <Divider orientation="vertical" flexItem sx={{ mx: 0.5, height: 20, alignSelf: 'center' }} />
       <ToolbarItem
         tip={'上标'}
         shortcutKey={['ctrl', '.']}
@@ -155,6 +155,14 @@ const EditorToolbar = ({
         shortcutKey={['ctrl', ',']}
         icon={<SubscriptIcon sx={{ fontSize: '1rem' }} />}
         onClick={() => editor.chain().focus().toggleSubscript().run()}
+        className={active.subscript ? "tool-active" : ""}
+      />
+      <Divider orientation="vertical" flexItem sx={{ mx: 0.5, height: 20, alignSelf: 'center' }} />
+      <ToolbarItem
+        tip={'折叠列表'}
+        shortcutKey={[]}
+        icon={<MenuFold2FillIcon sx={{ fontSize: '1rem' }} />}
+        onClick={() => editor.chain().focus().setDetails().run()}
         className={active.subscript ? "tool-active" : ""}
       />
     </Stack>

@@ -58,6 +58,7 @@ export { ListOrdered2Icon } from './list-ordered-2-icon';
 export { ListUnorderedIcon } from './list-unordered-icon';
 export { MarkdownLineIcon } from './markdown-line-icon';
 export { MarkupLineIcon } from './markup-line-icon';
+export { MenuFold2FillIcon } from './menu-fold-2-fill-icon';
 export { MergeCellsHorizontalIcon } from './merge-cells-horizontal-icon';
 export { MergeCellsVerticalIcon } from './merge-cells-vertical-icon';
 export { MindMapIcon } from './mind-map-icon';
