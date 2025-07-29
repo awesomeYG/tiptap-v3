@@ -117,8 +117,7 @@
 
 /* code */
 .tiptap.ProseMirror pre {
-  margin: 1rem 0;
-  padding: 1rem 1.5rem;
+  position: relative;
   border-radius: var(--mui-shape-borderRadius);
   background-color: var(--mui-palette-background-paper);
 }

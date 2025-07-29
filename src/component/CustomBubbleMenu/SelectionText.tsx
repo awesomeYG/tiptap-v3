@@ -1,10 +1,9 @@
 import { Divider, Paper, Stack } from '@mui/material'
 import { Editor } from '@tiptap/react'
 // @ts-ignore
+import { BoldIcon, CodeLineIcon, FontColorIcon, ItalicIcon, MarkupLineIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, UnderlineIcon } from '@cq/tiptap/component/Icons'
 import { BubbleMenu } from '@tiptap/react/menus'
 import React, { useState } from 'react'
-import { BoldIcon, CodeLineIcon, FontColorIcon, ItalicIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, UnderlineIcon } from '../Icons'
-import { MarkupLineIcon } from '../Icons/markup-line-icon'
 import ToolItem from '../ToolItem'
 import ColorPicker from './ColorPicker'
 

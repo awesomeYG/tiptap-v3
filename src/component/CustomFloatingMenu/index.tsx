@@ -2,9 +2,8 @@ import { Divider, Paper, Stack } from "@mui/material";
 import { Editor } from "@tiptap/react";
 import React from "react";
 // @ts-ignore
+import { CodeBoxLineIcon, H1Icon, H2Icon, H3Icon, ListCheck3Icon, ListOrdered2Icon, ListUnorderedIcon, QuoteTextIcon, Table2Icon } from "@cq/tiptap/component/Icons";
 import { FloatingMenu } from "@tiptap/react/menus";
-import { CodeBoxLineIcon, H1Icon, H2Icon, H3Icon, ListCheck3Icon, ListOrdered2Icon, ListUnorderedIcon, Table2Icon } from "../Icons";
-import { QuoteTextIcon } from "../Icons/quote-text-icon";
 import ToolItem from "../ToolItem";
 
 const CustomFloatingMenu = (props: { editor: Editor }) => {

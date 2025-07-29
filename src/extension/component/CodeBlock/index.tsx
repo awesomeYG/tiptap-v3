@@ -1,0 +1,252 @@
+import { ArrowDownSLineIcon, CopyIcon, TitleIcon } from '@cq/tiptap/component/Icons';
+import { languages } from '@cq/tiptap/contants/highlight';
+import { Box, MenuItem, Select, Stack, TextField } from '@mui/material';
+import { NodeViewContent, NodeViewProps, NodeViewWrapper } from '@tiptap/react';
+import React, { useCallback, useRef, useState } from 'react';
+import ReadonlyCodeBlock from './Readonly';
+
+interface CodeBlockViewProps extends NodeViewProps {
+  // 添加任何额外的 props
+}
+
+interface CodeBlockAttributes {
+  language?: string;
+  title?: string;
+}
+
+const CodeBlockView: React.FC<CodeBlockViewProps> = (props) => {
+  const {
+    node,
+    updateAttributes,
+    selected,
+    editor,
+  } = props;
+  const [showTitleInput, setShowTitleInput] = useState(false);
+  const [copyText, setCopyText] = useState('复制');
+  const [titleValue, setTitleValue] = useState(node.attrs.title || '');
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  const attrs = node.attrs as CodeBlockAttributes;
+
+  const handleLanguageChange = useCallback((language: string) => {
+    updateAttributes({ language });
+  }, [updateAttributes]);
+
+  const handleCopy = useCallback(async (event: React.MouseEvent<HTMLDivElement>) => {
+    event.stopPropagation();
+    if (contentRef.current) {
+      const codeText = contentRef.current.textContent || '';
+      try {
+        await navigator.clipboard.writeText(codeText);
+        setCopyText('复制成功');
+        setTimeout(() => {
+          setCopyText('复制');
+        }, 2000);
+      } catch (err) {
+        console.error('复制失败:', err);
+      }
+    }
+  }, []);
+
+  const handleTitleToggle = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
+    event.stopPropagation();
+    setShowTitleInput(!showTitleInput);
+  }, [showTitleInput]);
+
+  const handleTitleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    setTitleValue(event.target.value);
+  }, []);
+
+  const handleTitleSubmit = useCallback(() => {
+    updateAttributes({ title: titleValue });
+    setShowTitleInput(false);
+  }, [titleValue, updateAttributes]);
+
+  const handleTitleKeyDown = useCallback((event: React.KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      handleTitleSubmit();
+    } else if (event.key === 'Escape') {
+      setTitleValue(attrs.title || '');
+      setShowTitleInput(false);
+    }
+  }, [handleTitleSubmit, attrs.title]);
+
+  if (!editor.isEditable) {
+    return <ReadonlyCodeBlock {...props} />;
+  }
+
+  return (
+    <NodeViewWrapper
+      className={`codeblock-wrapper ${selected ? 'ProseMirror-selectednode' : ''}`}
+      data-drag-handle
+    >
+      <Box
+        component="pre"
+        sx={{
+          p: '1.75rem 1rem 0.75rem',
+          m: 0,
+          borderRadius: 1,
+          backgroundColor: 'var(--mui-palette-background-paper)',
+          overflow: 'hidden',
+        }}
+      >
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="space-between"
+          className="codeblock-toolbar"
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            px: 0.5,
+            pt: 0.5,
+            zIndex: 10,
+          }}
+        >
+          <Select
+            value={attrs.language || 'plaintext'}
+            onChange={(e) => handleLanguageChange(e.target.value)}
+            size="small"
+            variant="outlined"
+            sx={{
+              px: 0,
+              height: '1.25rem',
+              fontSize: '0.75rem',
+              '&:hover': {
+                bgcolor: 'action.hover',
+              },
+              '&:focus': {
+                bgcolor: 'action.selected',
+              },
+              '.MuiSelect-select': {
+                p: 0,
+                pl: 1,
+              },
+              '& .MuiOutlinedInput-notchedOutline': {
+                border: 'none',
+              },
+            }}
+            IconComponent={({ className, ...rest }) => {
+              return <ArrowDownSLineIcon
+                className={className}
+                {...rest}
+                sx={{ fontSize: '1rem', color: 'text.secondary' }}
+              />
+            }}
+            MenuProps={{
+              PaperProps: {
+                style: {
+                  maxHeight: 360,
+                },
+              },
+            }}
+          >
+            {languages.map((lang) => (
+              <MenuItem key={lang.value} value={lang.value} sx={{ fontSize: '0.75rem' }}>
+                {lang.label}
+              </MenuItem>
+            ))}
+          </Select>
+          <Stack direction="row" sx={{ userSelect: 'none' }}>
+            <Stack direction="row" alignItems="center" gap={0.5}
+              onClick={handleCopy}
+              sx={{
+                px: 1,
+                py: 0.5,
+                borderRadius: 'var(--mui-shape-borderRadius)',
+                cursor: 'pointer',
+                '&:hover': {
+                  bgcolor: 'action.hover',
+                },
+              }}>
+              <CopyIcon sx={{ fontSize: '0.875rem', color: 'text.secondary' }} />
+              <Box sx={{ fontSize: '0.75rem', lineHeight: 1 }}>
+                {copyText}
+              </Box>
+            </Stack>
+            <Stack direction="row" alignItems="center" gap={0.5}
+              onClick={handleTitleToggle}
+              sx={{
+                px: 1,
+                py: 0.5,
+                borderRadius: 'var(--mui-shape-borderRadius)',
+                cursor: 'pointer',
+                '&:hover': {
+                  bgcolor: 'action.hover',
+                },
+              }}>
+              <TitleIcon sx={{ fontSize: '0.875rem', color: 'text.secondary' }} />
+              <Box sx={{ fontSize: '0.75rem', lineHeight: 1 }}>
+                标题
+              </Box>
+            </Stack>
+          </Stack>
+        </Stack>
+        <NodeViewContent
+          ref={contentRef}
+          style={{
+            margin: 0,
+            fontSize: '0.875rem',
+            lineHeight: '1.5',
+            whiteSpace: 'pre-wrap',
+            wordBreak: 'break-word',
+          }}
+        />
+      </Box>
+      {showTitleInput && (
+        <Box sx={{
+          pl: 1,
+          pt: 0.5,
+          height: '1rem',
+        }}>
+          <TextField
+            fullWidth
+            size="small"
+            placeholder="输入代码块标题..."
+            value={titleValue}
+            onChange={handleTitleChange}
+            onKeyDown={handleTitleKeyDown}
+            onBlur={handleTitleSubmit}
+            autoFocus
+            sx={{
+              '& .MuiInputBase-input': {
+                p: 0,
+                height: '1rem',
+                lineHeight: 1,
+                fontSize: '0.875rem',
+                color: 'text.secondary',
+              },
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  border: 'none',
+                  top: 0,
+                  p: 0,
+                },
+              },
+            }}
+          />
+        </Box>
+      )}
+      {attrs.title && !showTitleInput && (
+        <Box
+          sx={{
+            pl: 1,
+            pt: 0.5,
+            height: '1rem',
+            lineHeight: 1,
+            fontSize: '0.875rem',
+            color: 'text.secondary',
+            letterSpacing: '0.01rem',
+          }}
+          onClick={handleTitleToggle}
+        >
+          {attrs.title}
+        </Box>
+      )}
+    </NodeViewWrapper>
+  );
+};
+
+export default CodeBlockView;

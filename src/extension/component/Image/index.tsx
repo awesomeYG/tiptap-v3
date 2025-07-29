@@ -1,5 +1,4 @@
-import { CustomSizeIcon } from "@cq/tiptap/component/Icons"
-import { DeleteLineIcon } from "@cq/tiptap/component/Icons/delete-line-icon"
+import { CustomSizeIcon, DeleteLineIcon } from "@cq/tiptap/component/Icons"
 import { EditorFnProps } from "@cq/tiptap/type"
 import { Box, IconButton, Tooltip } from "@mui/material"
 import { NodeViewProps, NodeViewWrapper } from "@tiptap/react"

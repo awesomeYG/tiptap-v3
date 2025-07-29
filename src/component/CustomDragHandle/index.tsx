@@ -1,8 +1,8 @@
+import { DraggableIcon } from "@cq/tiptap/component/Icons";
 import { Box } from "@mui/material";
 import DragHandle from "@tiptap/extension-drag-handle-react";
 import { Editor } from "@tiptap/react";
 import React from "react";
-import { DraggableIcon } from "../Icons";
 
 const CustomDragHandle = ({ editor }: { editor: Editor }) => {
   return <DragHandle editor={editor}>
