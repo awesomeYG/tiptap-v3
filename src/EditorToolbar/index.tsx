@@ -2,7 +2,7 @@ import { Box, Divider, Stack } from '@mui/material'
 import { Editor } from '@tiptap/react'
 import React, { useEffect, useState } from 'react'
 import { ArrowGoBackLineIcon, ArrowGoForwardLineIcon, BoldIcon, ImageAddLineIcon, ItalicIcon, MenuFold2FillIcon, MovieLineIcon, QuoteTextIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, UnderlineIcon } from '../component/Icons'
-import { EditorAlignSelect, EditorHeading, EditorListSelect, EditorMath, ToolbarItem } from '../component/Toolbar'
+import { EditorAlignSelect, EditorHeading, EditorListSelect, EditorMath, EditorMore, ToolbarItem } from '../component/Toolbar'
 
 interface EditorToolbarProps {
   editor: Editor
@@ -187,6 +187,7 @@ const EditorToolbar = ({
         onClick={() => editor.commands.setVideo({ src: '', width: 760, controls: true, autoplay: false })}
         className={active.video ? "tool-active" : ""}
       />
+      <EditorMore editor={editor} />
     </Stack>
   </Box>
 }

@@ -2,19 +2,15 @@ import { ArrowDownSLineIcon, CopyIcon, TitleIcon } from '@cq/tiptap/component/Ic
 import { languages } from '@cq/tiptap/contants/highlight';
 import { Box, MenuItem, Select, Stack, TextField } from '@mui/material';
 import { NodeViewContent, NodeViewProps, NodeViewWrapper } from '@tiptap/react';
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import ReadonlyCodeBlock from './Readonly';
-
-interface CodeBlockViewProps extends NodeViewProps {
-  // 添加任何额外的 props
-}
 
 interface CodeBlockAttributes {
   language?: string;
   title?: string;
 }
 
-const CodeBlockView: React.FC<CodeBlockViewProps> = (props) => {
+const CodeBlockView: React.FC<NodeViewProps> = (props) => {
   const {
     node,
     updateAttributes,
@@ -24,7 +20,6 @@ const CodeBlockView: React.FC<CodeBlockViewProps> = (props) => {
   const [showTitleInput, setShowTitleInput] = useState(false);
   const [copyText, setCopyText] = useState('复制');
   const [titleValue, setTitleValue] = useState(node.attrs.title || '');
-  const contentRef = useRef<HTMLDivElement>(null);
 
   const attrs = node.attrs as CodeBlockAttributes;
 
@@ -33,22 +28,22 @@ const CodeBlockView: React.FC<CodeBlockViewProps> = (props) => {
   }, [updateAttributes]);
 
   const handleCopy = useCallback(async (event: React.MouseEvent<HTMLDivElement>) => {
+    event.preventDefault();
     event.stopPropagation();
-    if (contentRef.current) {
-      const codeText = contentRef.current.textContent || '';
-      try {
-        await navigator.clipboard.writeText(codeText);
-        setCopyText('复制成功');
-        setTimeout(() => {
-          setCopyText('复制');
-        }, 2000);
-      } catch (err) {
-        console.error('复制失败:', err);
-      }
+    const codeText = node.textContent || '';
+    try {
+      await navigator.clipboard.writeText(codeText);
+      setCopyText('复制成功');
+      setTimeout(() => {
+        setCopyText('复制');
+      }, 2000);
+    } catch (err) {
+      console.error('复制失败:', err);
     }
-  }, []);
+  }, [node]);
 
   const handleTitleToggle = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
+    event.preventDefault();
     event.stopPropagation();
     setShowTitleInput(!showTitleInput);
   }, [showTitleInput]);
@@ -185,7 +180,6 @@ const CodeBlockView: React.FC<CodeBlockViewProps> = (props) => {
           </Stack>
         </Stack>
         <NodeViewContent
-          ref={contentRef}
           style={{
             margin: 0,
             fontSize: '0.875rem',

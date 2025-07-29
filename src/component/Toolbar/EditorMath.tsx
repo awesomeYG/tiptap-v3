@@ -12,7 +12,7 @@ interface EditorMathProps {
 const EditorMath = ({ editor }: EditorMathProps) => {
   const [selectedValue, setSelectedValue] = useState<string>("inline-math");
 
-  const AlignOptions = [
+  const MathOptions = [
     { id: 'inline-math', icon: <SquareRootIcon sx={{ fontSize: '1rem' }} />, label: '行内公式', shortcutKey: ['ctrl', 'shift', 'L'] },
     { id: 'block-math', icon: <FunctionsIcon sx={{ fontSize: '1rem' }} />, label: '块级公式', shortcutKey: ['ctrl', 'shift', 'E'] },
   ];
@@ -58,7 +58,7 @@ const EditorMath = ({ editor }: EditorMathProps) => {
       return <ToolbarItem
         tip={'对齐'}
         icon={<Stack direction={'row'} alignItems={'center'} justifyContent='center' sx={{ mr: 0.5 }}>
-          {AlignOptions.find(it => it.id === value)?.icon || <FormulaIcon sx={{ fontSize: '1rem' }} />}
+          {MathOptions.find(it => it.id === value)?.icon || <FormulaIcon sx={{ fontSize: '1rem' }} />}
         </Stack>}
       />;
     }}
@@ -87,7 +87,7 @@ const EditorMath = ({ editor }: EditorMathProps) => {
       <FormulaIcon sx={{ fontSize: '1rem' }} />
       <Box sx={{ ml: 1 }}>无</Box>
     </MenuItem>
-    {AlignOptions.map(it => (
+    {MathOptions.map(it => (
       <MenuItem key={it.id} value={it.id}>
         <Tooltip arrow title={getShortcutKeyText(it.shortcutKey || [])} placement="right">
           <Stack direction={'row'} alignItems={'center'} justifyContent='center' gap={1}>

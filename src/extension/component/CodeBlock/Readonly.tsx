@@ -1,7 +1,7 @@
 import { CopyIcon } from '@cq/tiptap/component/Icons';
 import { Box, Stack } from '@mui/material';
-import { NodeViewContent, NodeViewProps, NodeViewWrapper } from "@tiptap/react";
-import React, { useCallback, useRef, useState } from "react";
+import { NodeViewContent, NodeViewProps, NodeViewWrapper } from '@tiptap/react';
+import React, { useCallback, useState } from 'react';
 
 interface CodeBlockAttributes {
   language?: string;
@@ -15,24 +15,21 @@ const ReadonlyCodeBlock: React.FC<NodeViewProps> = ({
   const [copyText, setCopyText] = useState('复制');
   const [isHovering, setIsHovering] = useState(false);
 
-  const contentRef = useRef<HTMLDivElement>(null);
   const attrs = node.attrs as CodeBlockAttributes;
 
   const handleCopy = useCallback(async (event: React.MouseEvent<HTMLDivElement>) => {
     event.stopPropagation();
-    if (contentRef.current) {
-      const codeText = contentRef.current.textContent || '';
-      try {
-        await navigator.clipboard.writeText(codeText);
-        setCopyText('复制成功');
-        setTimeout(() => {
-          setCopyText('复制');
-        }, 2000);
-      } catch (err) {
-        console.error('复制失败:', err);
-      }
+    const codeText = node.textContent || '';
+    try {
+      await navigator.clipboard.writeText(codeText);
+      setCopyText('复制成功');
+      setTimeout(() => {
+        setCopyText('复制');
+      }, 2000);
+    } catch (err) {
+      console.error('复制失败:', err);
     }
-  }, []);
+  }, [node]);
 
   return (
     <NodeViewWrapper
@@ -84,7 +81,6 @@ const ReadonlyCodeBlock: React.FC<NodeViewProps> = ({
           </Stack>
         </Stack>}
         <NodeViewContent
-          ref={contentRef}
           style={{
             margin: 0,
             fontSize: '0.875rem',

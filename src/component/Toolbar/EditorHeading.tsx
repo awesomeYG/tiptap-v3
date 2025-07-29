@@ -50,7 +50,7 @@ const EditorHeading = ({ editor }: EditorHeadingProps) => {
     renderValue={(value) => {
       return <ToolItem
         tip={'标题'}
-        icon={HeadingOptions.find(it => it.id == value)?.icon || <HeadingIcon sx={{ fontSize: '1rem' }} />}
+        icon={HeadingOptions.find(it => it.id === value)?.icon || <HeadingIcon sx={{ fontSize: '1rem' }} />}
       />
     }}
     IconComponent={({ className, ...rest }) => {
