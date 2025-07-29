@@ -44,6 +44,7 @@ export { H4Icon } from './h-4-icon';
 export { H5Icon } from './h-5-icon';
 export { H6Icon } from './h-6-icon';
 export { HeadingIcon } from './heading-icon';
+export { ImageAddLineIcon } from './image-add-line-icon';
 export { ImageLineIcon } from './image-line-icon';
 export { ImportLineIcon } from './import-line-icon';
 export { InsertColumnLeftIcon } from './insert-column-left-icon';

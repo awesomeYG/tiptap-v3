@@ -1,7 +1,7 @@
 import { Box, Divider, Stack } from '@mui/material'
 import { Editor } from '@tiptap/react'
 import React, { useEffect, useState } from 'react'
-import { ArrowGoBackLineIcon, ArrowGoForwardLineIcon, BoldIcon, ItalicIcon, MenuFold2FillIcon, QuoteTextIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, UnderlineIcon } from '../component/Icons'
+import { ArrowGoBackLineIcon, ArrowGoForwardLineIcon, BoldIcon, ImageAddLineIcon, ItalicIcon, MenuFold2FillIcon, MovieLineIcon, QuoteTextIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, UnderlineIcon } from '../component/Icons'
 import { EditorAlignSelect, EditorHeading, EditorListSelect, ToolbarItem } from '../component/Toolbar'
 
 interface EditorToolbarProps {
@@ -21,6 +21,7 @@ const EditorToolbar = ({
     underline: false,
     superscript: false,
     subscript: false,
+    details: false,
   })
 
   const updateSelection = () => {
@@ -34,6 +35,7 @@ const EditorToolbar = ({
       underline: editor.isActive('underline'),
       superscript: editor.isActive('superscript'),
       subscript: editor.isActive('subscript'),
+      details: editor.isActive('details'),
     })
   }
 
@@ -163,7 +165,22 @@ const EditorToolbar = ({
         shortcutKey={[]}
         icon={<MenuFold2FillIcon sx={{ fontSize: '1rem' }} />}
         onClick={() => editor.chain().focus().setDetails().run()}
-        className={active.subscript ? "tool-active" : ""}
+        className={active.details ? "tool-active" : ""}
+      />
+      <Divider orientation="vertical" flexItem sx={{ mx: 0.5, height: 20, alignSelf: 'center' }} />
+      <ToolbarItem
+        tip={'图片'}
+        shortcutKey={[]}
+        icon={<ImageAddLineIcon sx={{ fontSize: '1rem' }} />}
+        onClick={() => editor.commands.setImage({ src: '', width: 760 })}
+        className={active.details ? "tool-active" : ""}
+      />
+      <ToolbarItem
+        tip={'视频'}
+        shortcutKey={[]}
+        icon={<MovieLineIcon sx={{ fontSize: '1rem' }} />}
+        onClick={() => editor.commands.setVideo({ src: '', width: 760, controls: true, autoplay: false })}
+        className={active.details ? "tool-active" : ""}
       />
     </Stack>
   </Box>
