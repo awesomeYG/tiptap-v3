@@ -145,7 +145,7 @@
 .tiptap.ProseMirror .cq-details {
   display: flex;
   gap: 0.25rem;
-  margin: 1.5rem 0;
+  margin: 0 0 1rem;
   border: 1px solid var(--mui-palette-divider);
   border-radius: var(--mui-shape-borderRadius);
   padding: 0.5rem;

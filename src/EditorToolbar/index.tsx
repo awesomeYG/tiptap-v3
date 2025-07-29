@@ -1,7 +1,7 @@
 import { Box, Divider, Stack } from '@mui/material'
 import { Editor } from '@tiptap/react'
 import React, { useEffect, useState } from 'react'
-import { ArrowGoBackLineIcon, ArrowGoForwardLineIcon, BoldIcon, ItalicIcon, MenuFold2FillIcon, QuoteTextIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, UnderlineIcon } from '../component/Icons'
+import { ArrowGoBackLineIcon, ArrowGoForwardLineIcon, BoldIcon, ItalicIcon, MenuFold2FillIcon, QuoteTextIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, Table2Icon, UnderlineIcon } from '../component/Icons'
 import { EditorAlignSelect, EditorHeading, EditorInsert, EditorListSelect, EditorMath, EditorMore, ToolbarItem } from '../component/Toolbar'
 
 interface EditorToolbarProps {
@@ -22,6 +22,7 @@ const EditorToolbar = ({
     superscript: false,
     subscript: false,
     details: false,
+    table: false,
   })
 
   const updateSelection = () => {
@@ -36,6 +37,7 @@ const EditorToolbar = ({
       superscript: editor.isActive('superscript'),
       subscript: editor.isActive('subscript'),
       details: editor.isActive('details'),
+      table: editor.isActive('table'),
     })
   }
 
@@ -160,6 +162,17 @@ const EditorToolbar = ({
         className={active.subscript ? "tool-active" : ""}
       />
       <Divider orientation="vertical" flexItem sx={{ mx: 0.5, height: 20, alignSelf: 'center' }} />
+      <ToolbarItem
+        tip={'表格'}
+        shortcutKey={[]}
+        icon={<Table2Icon sx={{ fontSize: '1rem' }} />}
+        onClick={() => editor.commands.insertTable({
+          rows: 3,
+          cols: 3,
+          withHeaderRow: true,
+        })}
+        className={active.table ? "tool-active" : ""}
+      />
       <ToolbarItem
         tip={'折叠块'}
         shortcutKey={[]}

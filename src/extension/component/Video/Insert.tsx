@@ -90,6 +90,7 @@ const InsertVideo = ({
         borderRadius: 'var(--mui-shape-borderRadius)',
         px: 2,
         py: 1.5,
+        minWidth: 200,
         textAlign: 'center',
         color: 'text.secondary',
         bgcolor: 'action.default',
