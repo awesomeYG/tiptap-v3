@@ -68,13 +68,13 @@ export const MathematicsInlineViewWrapper: React.FC<NodeViewProps & EditorFnProp
         sx={{
           display: 'inline-flex',
           alignItems: 'center',
-          gap: 0.5,
+          gap: 2,
           border: '1px dashed',
           borderColor: 'divider',
           borderRadius: 'var(--mui-shape-borderRadius)',
-          px: 1,
-          py: 0.5,
-          fontSize: '0.875rem',
+          px: 2,
+          py: 1.5,
+          fontSize: 14,
           color: 'text.secondary',
           bgcolor: 'action.default',
           cursor: 'pointer',
@@ -87,9 +87,9 @@ export const MathematicsInlineViewWrapper: React.FC<NodeViewProps & EditorFnProp
           transition: 'background-color 0.2s ease',
         }}
       >
-        <FormulaIcon sx={{ fontSize: 14, flexShrink: 0 }} />
-        <Box component="span" sx={{ fontSize: '0.75rem' }}>
-          添加内联公式
+        <FormulaIcon sx={{ fontSize: 18, flexShrink: 0 }} />
+        <Box component="span">
+          添加数学公式
         </Box>
       </Box> : <Box
         component="span"
