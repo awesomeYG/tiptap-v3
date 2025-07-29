@@ -1,6 +1,16 @@
 import Details, { DetailsContent, DetailsSummary } from "@tiptap/extension-details";
 
-export const DetailsExtension = Details.configure({
+const CustomDetails = Details.extend({
+  addKeyboardShortcuts() {
+    return {
+      'Shift-D': () => {
+        return this.editor.chain().focus().setDetails().run()
+      }
+    }
+  },
+})
+
+export const DetailsExtension = CustomDetails.configure({
   persist: true,
   openClassName: 'cq-details-open',
   HTMLAttributes: {

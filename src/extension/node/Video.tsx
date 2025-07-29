@@ -30,6 +30,14 @@ export const VideoExtension = (props: VideoExtensionProps) => Node.create({
   atom: true,
   draggable: true,
 
+  addKeyboardShortcuts() {
+    return {
+      'Shift-V': () => {
+        return this.editor.commands.setVideo({ src: '', width: 760, controls: true, autoplay: false })
+      }
+    }
+  },
+
   addAttributes() {
     return {
       class: {

@@ -26,6 +26,19 @@ declare module '@tiptap/core' {
 }
 
 const CustomInlineMath = (options: EditorFnProps) => InlineMath.extend({
+  addKeyboardShortcuts() {
+    return {
+      'Shift-M': () => {
+        return this.editor.commands.insertContent({
+          type: this.name,
+          attrs: {
+            latex: ''
+          },
+        })
+      }
+    }
+  },
+
   addCommands() {
     return {
       setInlineMath: (options) => ({ commands }) => {
@@ -44,6 +57,18 @@ const CustomInlineMath = (options: EditorFnProps) => InlineMath.extend({
 })
 
 const CustomBlockMath = (options: EditorFnProps) => BlockMath.extend({
+  addKeyboardShortcuts() {
+    return {
+      'Mod-Shift-M': () => {
+        return this.editor.commands.insertContent({
+          type: this.name,
+          attrs: {
+            latex: '',
+          },
+        })
+      }
+    }
+  },
   addCommands() {
     return {
       setBlockMath: (options) => ({ commands }) => {

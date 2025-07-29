@@ -56,7 +56,7 @@ const EditorMath = ({ editor }: EditorMathProps) => {
     onChange={handleChange}
     renderValue={(value) => {
       return <ToolbarItem
-        tip={'对齐'}
+        tip={'LaTeX 数学公式'}
         icon={<Stack direction={'row'} alignItems={'center'} justifyContent='center' sx={{ mr: 0.5 }}>
           {MathOptions.find(it => it.id === value)?.icon || <FormulaIcon sx={{ fontSize: '1rem' }} />}
         </Stack>}

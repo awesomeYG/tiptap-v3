@@ -59,7 +59,7 @@ const ReadonlyCodeBlock: React.FC<NodeViewProps> = ({
             right: 0,
             px: 0.5,
             pt: 0.5,
-            zIndex: 10,
+            zIndex: 1,
           }}
         >
           <Stack direction="row" alignItems="center" gap={0.5}

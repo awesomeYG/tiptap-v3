@@ -5,7 +5,7 @@ import { EditorContent } from '@tiptap/react';
 import React from 'react';
 import SelectionText from '../component/CustomBubbleMenu/SelectionText';
 import CustomDragHandle from '../component/CustomDragHandle';
-import CustomFloatingMenu from '../component/CustomFloatingMenu';
+// import CustomFloatingMenu from '../component/CustomFloatingMenu';
 import './index.css';
 
 const Editor = ({
@@ -18,10 +18,8 @@ const Editor = ({
       height,
     }
   }}>
-    {editor && (
-      <SelectionText editor={editor} />
-    )}
-    {editor && <CustomFloatingMenu editor={editor} />}
+    {editor && <SelectionText editor={editor} />}
+    {/* {editor && <CustomFloatingMenu editor={editor} />} */}
     <CustomDragHandle editor={editor} />
     <EditorContent editor={editor} />
   </Box>

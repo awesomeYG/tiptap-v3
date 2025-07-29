@@ -9,8 +9,7 @@ export interface EditorMoreProps {
   editor: Editor
 }
 
-const EditorMore = ({ editor }: EditorMoreProps) => {
-  console.log(editor);
+const EditorMore = () => {
   const [showDialog, setShowDialog] = useState('');
 
   const options = [

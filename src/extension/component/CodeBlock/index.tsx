@@ -97,7 +97,7 @@ const CodeBlockView: React.FC<NodeViewProps> = (props) => {
             right: 0,
             px: 0.5,
             pt: 0.5,
-            zIndex: 10,
+            zIndex: 1,
           }}
         >
           <Select

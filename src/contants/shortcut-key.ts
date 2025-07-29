@@ -18,6 +18,17 @@ export const SHORTCUT_KEYS = {
       { label: '换行', value: 'Add a line break', keys: ['ctrl', 'enter'] },
     ],
   },
+
+  'Insert': {
+    label: '插入',
+    keys: [
+      { label: '折叠块', value: 'Details', keys: ['shift', 'D'] },
+      { label: '图片', value: 'Image', keys: ['shift', 'I'] },
+      { label: '视频', value: 'Video', keys: ['shift', 'V'] },
+      { label: '行内数学公式', value: 'Inline Math', keys: ['shift', 'M'] },
+      { label: '块级数学公式', value: 'Block Math', keys: ['ctrl', 'shift', 'M'] },
+    ],
+  },
   'Text Formatting': {
     label: '文本格式',
     keys: [
@@ -39,7 +50,6 @@ export const SHORTCUT_KEYS = {
       { label: '标题 4', value: 'Heading 4', keys: ['ctrl', 'alt', '4'] },
       { label: '标题 5', value: 'Heading 5', keys: ['ctrl', 'alt', '5'] },
       { label: '标题 6', value: 'Heading 6', keys: ['ctrl', 'alt', '6'] },
-      { label: '折叠列表', value: 'Details', keys: ['ctrl', 'shift', 'D'] },
       { label: '有序列表', value: 'Ordered list', keys: ['ctrl', 'shift', '7'] },
       { label: '无序列表', value: 'Bullet list', keys: ['ctrl', 'shift', '8'] },
       { label: '任务列表', value: 'Task list', keys: ['ctrl', 'shift', '9'] },
