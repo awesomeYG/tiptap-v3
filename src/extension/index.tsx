@@ -37,6 +37,7 @@ export const getExtensions = ({
 }: GetExtensionsProps) => {
   const defaultExtensions: any = [
     StarterKit.configure({
+      // link: false,
       codeBlock: false,
       listItem: false,
       orderedList: false,
@@ -121,6 +122,10 @@ export const getExtensions = ({
   if (!exclude?.includes('invisibleCharacters') && editable) {
     defaultExtensions.push(InvisibleCharacters)
   }
+
+  // if (!exclude?.includes('link')) {
+  //   defaultExtensions.push(LinkExtension)
+  // }
 
   return defaultExtensions
 }

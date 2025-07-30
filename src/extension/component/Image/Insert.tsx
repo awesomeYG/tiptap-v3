@@ -62,7 +62,7 @@ const InsertImage = ({
     handleClosePopover()
   }
 
-  return (
+  return <>
     <NodeViewWrapper
       className={`image-wrapper ${selected ? 'ProseMirror-selectednode' : ''}`}
       data-drag-handle
@@ -108,68 +108,68 @@ const InsertImage = ({
           }),
         }}
       >
-        <ImageLineIcon sx={{ fontSize: 18, position: 'relative', zIndex: 1, flexShrink: 0 }} />
-        <Box sx={{ fontSize: 14, position: 'relative', zIndex: 1, flexGrow: 1, textAlign: 'left' }}>
+        <ImageLineIcon sx={{ fontSize: '1.125rem', position: 'relative', zIndex: 1, flexShrink: 0 }} />
+        <Box sx={{ fontSize: '0.875rem', position: 'relative', zIndex: 1, flexGrow: 1, textAlign: 'left' }}>
           {uploading ? '图片上传中...' : '嵌入或复制图片链接'}
         </Box>
         {uploading && <Box sx={{ fontSize: 12, fontWeight: 'bold', color: 'primary.main', position: 'relative', zIndex: 1, flexShrink: 0 }}>
           {uploadProgress}%
         </Box>}
       </Stack>
-      <FloatingPopover
-        open={Boolean(anchorEl)}
-        anchorEl={anchorEl}
-        onClose={handleClosePopover}
-        placement="bottom"
-      >
-        <Box sx={{ width: 350, borderBottom: '1px solid', borderColor: 'divider' }}>
-          <Tabs value={insertType} onChange={handleChangeInsertType}>
-            <Tab label="上传" value="upload" />
-            <Tab label="嵌入链接" value="link" />
-          </Tabs>
-        </Box>
-        {insertType === 'upload' ? (
-          <Stack alignItems={'center'} gap={2} sx={{ p: 2 }}>
-            <Button
-              variant="contained"
-              component="label"
-              disabled={!onUpload || uploading}
-              fullWidth
-              startIcon={uploading ? <CircularProgress size={20} /> : <ImageLineIcon sx={{ fontSize: 18 }} />}
-            >
-              <input
-                type="file"
-                hidden
-                multiple={false}
-                accept="image/*"
-                onChange={handleUploadImage}
-              />
-              {uploading ? '图片上传中...' : '选择图片文件'}
-            </Button>
-          </Stack>
-        ) : (
-          <Stack gap={2} sx={{ p: 2 }}>
-            <TextField
-              fullWidth
-              size="small"
-              value={editSrc}
-              onChange={(e) => setEditSrc(e.target.value)}
-              placeholder="输入图片的 URL"
-              label="图片链接"
-            />
-            <Button
-              variant="contained"
-              fullWidth
-              onClick={handleInsertLink}
-              disabled={!editSrc.trim()}
-            >
-              嵌入图片
-            </Button>
-          </Stack>
-        )}
-      </FloatingPopover>
     </NodeViewWrapper>
-  )
+    <FloatingPopover
+      open={Boolean(anchorEl)}
+      anchorEl={anchorEl}
+      onClose={handleClosePopover}
+      placement="bottom"
+    >
+      <Box sx={{ width: 350, borderBottom: '1px solid', borderColor: 'divider' }}>
+        <Tabs value={insertType} onChange={handleChangeInsertType}>
+          <Tab label="上传" value="upload" />
+          <Tab label="嵌入链接" value="link" />
+        </Tabs>
+      </Box>
+      {insertType === 'upload' ? (
+        <Stack alignItems={'center'} gap={2} sx={{ p: 2 }}>
+          <Button
+            variant="contained"
+            component="label"
+            disabled={!onUpload || uploading}
+            fullWidth
+            startIcon={uploading ? <CircularProgress size={20} /> : <ImageLineIcon sx={{ fontSize: 18 }} />}
+          >
+            <input
+              type="file"
+              hidden
+              multiple={false}
+              accept="image/*"
+              onChange={handleUploadImage}
+            />
+            {uploading ? '图片上传中...' : '选择图片文件'}
+          </Button>
+        </Stack>
+      ) : (
+        <Stack gap={2} sx={{ p: 2 }}>
+          <TextField
+            fullWidth
+            size="small"
+            value={editSrc}
+            onChange={(e) => setEditSrc(e.target.value)}
+            placeholder="输入图片的 URL"
+            label="图片链接"
+          />
+          <Button
+            variant="contained"
+            fullWidth
+            onClick={handleInsertLink}
+            disabled={!editSrc.trim()}
+          >
+            嵌入图片
+          </Button>
+        </Stack>
+      )}
+    </FloatingPopover>
+  </>
 }
 
 export default InsertImage
