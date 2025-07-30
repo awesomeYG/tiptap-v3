@@ -52,7 +52,7 @@ export const SHORTCUT_KEYS = {
       { label: '标题 6', value: 'Heading 6', keys: ['ctrl', 'alt', '6'] },
       { label: '有序列表', value: 'Ordered list', keys: ['ctrl', 'shift', '7'] },
       { label: '无序列表', value: 'Bullet list', keys: ['ctrl', 'shift', '8'] },
-      { label: '任务列表', value: 'Task list', keys: ['ctrl', 'shift', '9'] },
+      { label: '待办列表', value: 'Task list', keys: ['ctrl', 'shift', '9'] },
       { label: '引用块', value: 'Blockquote', keys: ['ctrl', 'shift', 'B'] },
       { label: '左对齐', value: 'Left align', keys: ['ctrl', 'shift', 'L'] },
       { label: '居中对齐', value: 'Center align', keys: ['ctrl', 'shift', 'E'] },

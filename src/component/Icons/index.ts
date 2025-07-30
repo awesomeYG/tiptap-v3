@@ -26,6 +26,7 @@ export { CustomSizeIcon } from './custom-size-icon';
 export { DeleteColumnIcon } from './delete-column-icon';
 export { DeleteLineIcon } from './delete-line-icon';
 export { DeleteRowIcon } from './delete-row-icon';
+export { DoubleQuotesLIcon } from './double-quotes-l-icon';
 export { DraggableIcon } from './draggable-icon';
 export { ExportLineIcon } from './export-line-icon';
 export { FileUploadLineIcon } from './file-upload-line-icon';

@@ -15,7 +15,7 @@ const EditorListSelect = ({ editor }: EditorListSelectProps) => {
   const ListOptions = [
     { id: 'orderedList', icon: <ListOrdered2Icon sx={{ fontSize: '1rem' }} />, label: '有序列表', shortcutKey: ['ctrl', 'shift', '7'] },
     { id: 'bulletList', icon: <ListUnorderedIcon sx={{ fontSize: '1rem' }} />, label: '无序列表', shortcutKey: ['ctrl', 'shift', '8'] },
-    { id: 'taskList', icon: <ListCheck3Icon sx={{ fontSize: '1rem' }} />, label: '任务列表', shortcutKey: ['ctrl', 'shift', '9'] },
+    { id: 'taskList', icon: <ListCheck3Icon sx={{ fontSize: '1rem' }} />, label: '待办列表', shortcutKey: ['ctrl', 'shift', '9'] },
   ];
 
   const updateSelection = () => {

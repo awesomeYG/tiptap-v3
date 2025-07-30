@@ -86,6 +86,7 @@
     "@tiptap/extension-file-handler": "^3.0.7",
     "@tiptap/extension-image": "^3.0.7",
     "@tiptap/extension-invisible-characters": "^3.0.7",
+    "@tiptap/extension-link": "^3.0.7",
     "@tiptap/extension-list": "^3.0.7",
     "@tiptap/extension-mathematics": "^3.0.7",
     "@tiptap/extension-mention": "^3.0.7",
