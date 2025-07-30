@@ -137,9 +137,26 @@ export const LinkViewWrapper: React.FC<MarkViewRendererProps> = (props) => {
   //   return <ReadonlyLink attrs={attrs} />
   // }
 
-  return <>
-    {/* <MarkViewContent /> */}
-  </>
+  // 简单的测试实现，显示 attrs 数据确实可以获取到
+  return (
+    <a
+      href={attrs.href}
+      target={attrs.target || '_blank'}
+      className={attrs.class || ''}
+      title={attrs.title || ''}
+      data-type={attrs.type || 'link'}
+      style={{
+        color: 'blue',
+        textDecoration: 'underline',
+        background: attrs.type === 'card' ? '#f0f0f0' : 'transparent',
+        padding: attrs.type === 'card' ? '4px' : '0'
+      }}
+    >
+      {/* 显示调试信息 */}
+      {attrs.title || attrs.href}
+      {attrs.type === 'card' && ' [Card Style]'}
+    </a>
+  )
 
   // 卡片风格
   // if (attrs.type === 'card') {

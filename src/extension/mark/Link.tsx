@@ -1,6 +1,4 @@
 import { Link } from "@tiptap/extension-link";
-import { ReactMarkViewRenderer } from "@tiptap/react";
-import { LinkViewWrapper } from "../component/Link";
 
 const customLink = Link.extend({
   addAttributes() {
@@ -37,18 +35,11 @@ const customLink = Link.extend({
       }
     }
   },
-  addMarkView() {
-    return ReactMarkViewRenderer(LinkViewWrapper, {
-      as: 'a',
-      attrs: {
-        href: this.options.HTMLAttributes.href || '',
-        target: this.options.HTMLAttributes.target || '',
-        class: this.options.HTMLAttributes.class || '',
-        'data-title': this.options.HTMLAttributes['data-title'] || '',
-        'data-type': this.options.HTMLAttributes['data-type'] || 'link',
-      }
-    })
-  }
+  // addMarkView() {
+  //   return ReactMarkViewRenderer(LinkViewWrapper, {
+  //     as: 'a',
+  //   })
+  // }
 })
 
 export const LinkExtension = customLink.configure({

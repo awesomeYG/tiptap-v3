@@ -18,6 +18,7 @@ import {
   EmojiExtension,
   FileHandlerExtension,
   ImageExtension,
+  LinkExtension,
   ListExtension,
   MentionExtension,
   TableExtension,
@@ -37,7 +38,7 @@ export const getExtensions = ({
 }: GetExtensionsProps) => {
   const defaultExtensions: any = [
     StarterKit.configure({
-      // link: false,
+      link: false,
       codeBlock: false,
       listItem: false,
       orderedList: false,
@@ -123,9 +124,9 @@ export const getExtensions = ({
     defaultExtensions.push(InvisibleCharacters)
   }
 
-  // if (!exclude?.includes('link')) {
-  //   defaultExtensions.push(LinkExtension)
-  // }
+  if (!exclude?.includes('link')) {
+    defaultExtensions.push(LinkExtension)
+  }
 
   return defaultExtensions
 }

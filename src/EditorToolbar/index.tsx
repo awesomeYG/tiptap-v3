@@ -1,7 +1,7 @@
 import { Box, Divider, Stack } from '@mui/material'
 import { Editor } from '@tiptap/react'
 import React, { useEffect, useState } from 'react'
-import { ArrowGoBackLineIcon, ArrowGoForwardLineIcon, BoldIcon, DoubleQuotesLIcon, ItalicIcon, MenuFold2FillIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, Table2Icon, UnderlineIcon } from '../component/Icons'
+import { ArrowGoBackLineIcon, ArrowGoForwardLineIcon, BoldIcon, DoubleQuotesLIcon, ItalicIcon, LinkIcon, MenuFold2FillIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, Table2Icon, UnderlineIcon } from '../component/Icons'
 import { EditorAlignSelect, EditorCode, EditorHeading, EditorInsert, EditorListSelect, EditorMath, EditorMore, ToolbarItem } from '../component/Toolbar'
 
 interface EditorToolbarProps {
@@ -149,13 +149,13 @@ const EditorToolbar = ({
         className={active.underline ? "tool-active" : ""}
       />
       <Divider orientation="vertical" flexItem sx={{ mx: 0.5, height: 20, alignSelf: 'center' }} />
-      {/* <ToolbarItem
+      <ToolbarItem
         tip={'链接'}
         shortcutKey={['ctrl', 'k']}
         icon={<LinkIcon sx={{ fontSize: '1rem' }} />}
-        onClick={() => editor.chain().focus().setLink({ href: '' }).run()}
+        onClick={() => editor.chain().focus().setALink({ href: '' }).run()}
         className={active.link ? "tool-active" : ""}
-      /> */}
+      />
       <ToolbarItem
         tip={'上标'}
         shortcutKey={['ctrl', '.']}
