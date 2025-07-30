@@ -3,7 +3,7 @@ import { Box, MenuItem, Select, Stack, Tooltip } from "@mui/material";
 import { Editor } from "@tiptap/react";
 import React, { useEffect, useState } from "react";
 import { ArrowDownSLineIcon, ListCheck3Icon, ListOrdered2Icon, ListUnorderedIcon } from "../Icons";
-import ToolbarItem from "./Item";
+import ToolItem from "./Item";
 
 interface EditorListSelectProps {
   editor: Editor;
@@ -21,29 +21,28 @@ const EditorListSelect = ({ editor }: EditorListSelectProps) => {
   const updateSelection = () => {
     if (editor.isActive('orderedList')) {
       setSelectedValue('orderedList');
-    } else if (editor.isActive('taskList')) {
-      setSelectedValue('taskList');
     } else if (editor.isActive('bulletList')) {
       setSelectedValue('bulletList');
+    } else if (editor.isActive('taskList')) {
+      setSelectedValue('taskList');
     } else {
       setSelectedValue('none');
     }
   };
 
-  const handleChange = (value: string) => {
-    if (editor.isActive('orderedList') && value === 'orderedList') {
+  const handleListAction = (listType: string) => {
+    if (listType === 'orderedList') {
       editor.chain().focus().toggleOrderedList().run();
-    } else if (editor.isActive('taskList') && value === 'taskList') {
+    } else if (listType === 'taskList') {
       editor.chain().focus().toggleTaskList().run();
-    } else if (editor.isActive('bulletList') && value === 'bulletList') {
-      editor.chain().focus().toggleBulletList().run();
-    } else if (value === 'orderedList') {
-      editor.chain().focus().toggleOrderedList().run();
-    } else if (value === 'taskList') {
-      editor.chain().focus().toggleTaskList().run();
-    } else if (value === 'bulletList') {
+    } else if (listType === 'bulletList') {
       editor.chain().focus().toggleBulletList().run();
     }
+  };
+
+  const handleChange = (e: { target: { value: string } }) => {
+    const value = e.target.value;
+    setSelectedValue(value);
   };
 
   useEffect(() => {
@@ -59,11 +58,11 @@ const EditorListSelect = ({ editor }: EditorListSelectProps) => {
   return <Select
     value={selectedValue}
     className={['orderedList', 'taskList', 'bulletList'].includes(selectedValue) ? "tool-active" : ""}
-    onChange={(e) => handleChange(e.target.value)}
+    onChange={handleChange}
     renderValue={(value) => {
-      return <ToolbarItem
+      return <ToolItem
         tip={'列表'}
-        icon={<Stack direction={'row'} alignItems={'center'} justifyContent='center' sx={{ mr: 0.5 }}>
+        icon={<Stack direction={'row'} alignItems={'center'} sx={{ mr: 0.5, width: '1.5rem' }}>
           {ListOptions.find(it => it.id === value)?.icon || <ListUnorderedIcon sx={{ fontSize: '1rem' }} />}
         </Stack>}
       />;
@@ -73,7 +72,7 @@ const EditorListSelect = ({ editor }: EditorListSelectProps) => {
         <ArrowDownSLineIcon
           sx={{
             position: 'absolute',
-            right: -2,
+            right: 2,
             flexSelf: 'center',
             fontSize: '1rem',
             flexShrink: 0,
@@ -94,7 +93,14 @@ const EditorListSelect = ({ editor }: EditorListSelectProps) => {
       <Box sx={{ ml: 1 }}>无</Box>
     </MenuItem>
     {ListOptions.map(it => (
-      <MenuItem key={it.id} value={it.id}>
+      <MenuItem
+        key={it.id}
+        value={it.id}
+        onClick={(e) => {
+          e.stopPropagation();
+          handleListAction(it.id);
+        }}
+      >
         <Tooltip arrow title={getShortcutKeyText(it.shortcutKey)} placement="right">
           <Stack direction={'row'} alignItems={'center'} justifyContent='center' gap={1}>
             {it.icon}

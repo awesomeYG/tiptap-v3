@@ -2,45 +2,47 @@ import { getShortcutKeyText } from "@cq/tiptap/util/shortcutKey";
 import { Box, MenuItem, Select, Stack, Tooltip } from "@mui/material";
 import { Editor } from "@tiptap/react";
 import React, { useEffect, useState } from "react";
-import { ArrowDownSLineIcon, ImageLineIcon, MovieLineIcon, UploadIcon } from "../../Icons";
-import ToolbarItem from "../Item";
+import { ArrowDownSLineIcon, CodeBoxLineIcon, CodeLineIcon, CodeSSlashLineIcon } from "../Icons";
+import ToolbarItem from "./Item";
 
-interface EditorInsertProps {
+interface EditorCodeProps {
   editor: Editor;
 }
 
-const EditorInsert = ({ editor }: EditorInsertProps) => {
+const EditorCode = ({ editor }: EditorCodeProps) => {
   const [selectedValue, setSelectedValue] = useState<string>("none");
 
-  const InsertOptions = [
-    { id: 'image', icon: <ImageLineIcon sx={{ fontSize: '1rem' }} />, label: '图片', shortcutKey: ['shift', 'I'] },
-    { id: 'video', icon: <MovieLineIcon sx={{ fontSize: '1rem' }} />, label: '视频', shortcutKey: ['shift', 'V'] },
+  const AlignOptions = [
+    { id: 'code', icon: <CodeLineIcon sx={{ fontSize: '1rem' }} />, label: '代码', shortcutKey: ['ctrl', 'shift', 'L'] },
+    { id: 'codeBlock', icon: <CodeBoxLineIcon sx={{ fontSize: '1rem' }} />, label: '代码块', shortcutKey: ['ctrl', 'shift', 'E'] },
   ];
 
   const updateSelection = () => {
-    if (editor.isActive('image')) {
-      setSelectedValue('image');
-    } else if (editor.isActive('video')) {
-      setSelectedValue('video');
+    if (editor.isActive('code')) {
+      setSelectedValue('code');
+    } else if (editor.isActive('codeBlock')) {
+      setSelectedValue('codeBlock');
     } else {
       setSelectedValue('none');
     }
   };
 
+  const handleCodeAction = (codeType: string) => {
+    if (codeType === 'code') {
+      editor.chain().focus().toggleCode().run();
+    } else if (codeType === 'codeBlock') {
+      editor.chain().focus().toggleCodeBlock().run();
+    }
+  };
+
   const handleChange = (e: { target: { value: string } }) => {
     const value = e.target.value;
-    if (value === 'image') {
-      editor.commands.setImage({ src: '', width: 760 });
-    } else if (value === 'video') {
-      editor.commands.setVideo({ src: '', width: 760, controls: true, autoplay: false });
-    }
     setSelectedValue(value);
   };
 
   useEffect(() => {
     editor.on('selectionUpdate', updateSelection);
     editor.on('transaction', updateSelection);
-
     return () => {
       editor.off('selectionUpdate', updateSelection);
       editor.off('transaction', updateSelection);
@@ -49,13 +51,13 @@ const EditorInsert = ({ editor }: EditorInsertProps) => {
 
   return <Select
     value={selectedValue}
-    className={['image', 'video'].includes(selectedValue) ? "tool-active" : ""}
+    className={['code', 'codeBlock'].includes(selectedValue) ? "tool-active" : ""}
     onChange={handleChange}
     renderValue={(value) => {
       return <ToolbarItem
-        tip={'插入'}
+        tip={'代码'}
         icon={<Stack direction={'row'} alignItems={'center'} sx={{ mr: 0.5, width: '1.5rem' }}>
-          {InsertOptions.find(it => it.id === value)?.icon || <UploadIcon sx={{ fontSize: '1rem' }} />}
+          {AlignOptions.find(it => it.id === value)?.icon || <CodeSSlashLineIcon sx={{ fontSize: '1rem' }} />}
         </Stack>}
       />;
     }}
@@ -81,11 +83,14 @@ const EditorInsert = ({ editor }: EditorInsertProps) => {
     }}
   >
     <MenuItem key={'none'} value={'none'} sx={{ display: 'none' }}>
-      <UploadIcon sx={{ fontSize: '1rem' }} />
+      <CodeSSlashLineIcon sx={{ fontSize: '1rem' }} />
       <Box sx={{ ml: 1 }}>无</Box>
     </MenuItem>
-    {InsertOptions.map(it => (
-      <MenuItem key={it.id} value={it.id}>
+    {AlignOptions.map(it => (
+      <MenuItem key={it.id} value={it.id} onClick={(e) => {
+        e.stopPropagation();
+        handleCodeAction(it.id);
+      }}>
         <Tooltip arrow title={getShortcutKeyText(it.shortcutKey || [])} placement="right">
           <Stack direction={'row'} alignItems={'center'} justifyContent='center' gap={1}>
             {it.icon}
@@ -95,6 +100,6 @@ const EditorInsert = ({ editor }: EditorInsertProps) => {
       </MenuItem>
     ))}
   </Select>
-}
+};
 
-export default EditorInsert;
+export default EditorCode;

@@ -26,6 +26,17 @@ const EditorHeading = ({ editor }: EditorHeadingProps) => {
     setSelectedValue(level);
   }
 
+  const handleChange = (e: { target: { value: string } }) => {
+    const value = e.target.value;
+    setSelectedValue(value);
+    if (value !== 'paragraph') {
+      const level = parseInt(value) as 1 | 2 | 3 | 4 | 5 | 6;
+      editor.chain().focus().toggleHeading({ level }).run();
+    } else {
+      editor.chain().focus().setParagraph().run();
+    }
+  }
+
   useEffect(() => {
     editor.on('selectionUpdate', updateSelection);
     editor.on('transaction', updateSelection);
@@ -37,31 +48,26 @@ const EditorHeading = ({ editor }: EditorHeadingProps) => {
 
   return <Select
     value={selectedValue}
-    className={editor.isActive('heading') ? "tool-active" : ""}
-    onChange={(e) => {
-      const value = e.target.value;
-      if (value !== 'paragraph') {
-        const level = parseInt(value) as 1 | 2 | 3 | 4 | 5 | 6;
-        editor.chain().focus().toggleHeading({ level }).run();
-      } else {
-        editor.chain().focus().setParagraph().run();
-      }
-    }}
+    className={['1', '2', '3', '4', '5', '6'].includes(String(selectedValue)) ? "tool-active" : ""}
+    onChange={handleChange}
     renderValue={(value) => {
       return <ToolItem
         tip={'标题'}
-        icon={HeadingOptions.find(it => it.id === value)?.icon || <HeadingIcon sx={{ fontSize: '1rem' }} />}
+        icon={<Stack direction={'row'} alignItems={'center'} sx={{ mr: 0.5, width: '1.5rem' }}>
+          {HeadingOptions.find(it => it.id === String(value))?.icon || <HeadingIcon sx={{ fontSize: '1rem' }} />}
+        </Stack>}
       />
     }}
     IconComponent={({ className, ...rest }) => {
       return <ArrowDownSLineIcon
         sx={{
           position: 'absolute',
-          right: -2,
+          right: 2,
+          flexSelf: 'center',
           fontSize: '1rem',
-          color: 'text.disabled',
           flexShrink: 0,
           mr: 0,
+          color: 'text.disabled',
           transform: className?.includes('MuiSelect-iconOpen') ? 'rotate(-180deg)' : 'none',
           transition: 'transform 0.3s',
           cursor: 'pointer',

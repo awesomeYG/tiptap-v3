@@ -33,9 +33,12 @@ const EditorAlignSelect = ({ editor }: EditorAlignSelectProps) => {
     }
   };
 
+  const handleAlignAction = (alignType: string) => {
+    editor.chain().focus().toggleTextAlign(alignType).run();
+  };
+
   const handleChange = (e: { target: { value: string } }) => {
     const value = e.target.value;
-    editor.chain().focus().setTextAlign(value).run();
     setSelectedValue(value);
   };
 
@@ -56,7 +59,7 @@ const EditorAlignSelect = ({ editor }: EditorAlignSelectProps) => {
     renderValue={(value) => {
       return <ToolbarItem
         tip={'对齐方式'}
-        icon={<Stack direction={'row'} alignItems={'center'} justifyContent='center' sx={{ mr: 0.5 }}>
+        icon={<Stack direction={'row'} alignItems={'center'} sx={{ mr: 0.5, width: '1.5rem' }}>
           {AlignOptions.find(it => it.id === value)?.icon || <AlignLeftIcon sx={{ fontSize: '1rem' }} />}
         </Stack>}
       />;
@@ -66,7 +69,7 @@ const EditorAlignSelect = ({ editor }: EditorAlignSelectProps) => {
         <ArrowDownSLineIcon
           sx={{
             position: 'absolute',
-            right: -2,
+            right: 2,
             flexSelf: 'center',
             fontSize: '1rem',
             flexShrink: 0,
@@ -87,7 +90,10 @@ const EditorAlignSelect = ({ editor }: EditorAlignSelectProps) => {
       <Box sx={{ ml: 1 }}>无</Box>
     </MenuItem>
     {AlignOptions.map(it => (
-      <MenuItem key={it.id} value={it.id}>
+      <MenuItem key={it.id} value={it.id} onClick={(e) => {
+        e.stopPropagation();
+        handleAlignAction(it.id);
+      }}>
         <Tooltip arrow title={getShortcutKeyText(it.shortcutKey || [])} placement="right">
           <Stack direction={'row'} alignItems={'center'} justifyContent='center' gap={1}>
             {it.icon}

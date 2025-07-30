@@ -57,7 +57,7 @@ const EditorMath = ({ editor }: EditorMathProps) => {
     renderValue={(value) => {
       return <ToolbarItem
         tip={'LaTeX 数学公式'}
-        icon={<Stack direction={'row'} alignItems={'center'} justifyContent='center' sx={{ mr: 0.5 }}>
+        icon={<Stack direction={'row'} alignItems={'center'} sx={{ mr: 0.5, width: '1.5rem' }}>
           {MathOptions.find(it => it.id === value)?.icon || <FormulaIcon sx={{ fontSize: '1rem' }} />}
         </Stack>}
       />;
@@ -67,7 +67,7 @@ const EditorMath = ({ editor }: EditorMathProps) => {
         <ArrowDownSLineIcon
           sx={{
             position: 'absolute',
-            right: -2,
+            right: 2,
             flexSelf: 'center',
             fontSize: '1rem',
             flexShrink: 0,

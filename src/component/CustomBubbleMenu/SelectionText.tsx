@@ -15,7 +15,7 @@ const SelectionText = (props: { editor: Editor }) => {
     editor={editor}
     pluginKey={'bubble-menu'}
     options={{
-      placement: 'bottom',
+      placement: 'top',
       offset: 8,
     }}
     shouldShow={({ editor, from, to }: { editor: Editor, from: number, to: number }) => {

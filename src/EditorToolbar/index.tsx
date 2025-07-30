@@ -2,7 +2,7 @@ import { Box, Divider, Stack } from '@mui/material'
 import { Editor } from '@tiptap/react'
 import React, { useEffect, useState } from 'react'
 import { ArrowGoBackLineIcon, ArrowGoForwardLineIcon, BoldIcon, ItalicIcon, MenuFold2FillIcon, QuoteTextIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, Table2Icon, UnderlineIcon } from '../component/Icons'
-import { EditorAlignSelect, EditorHeading, EditorInsert, EditorListSelect, EditorMath, EditorMore, ToolbarItem } from '../component/Toolbar'
+import { EditorAlignSelect, EditorCode, EditorHeading, EditorInsert, EditorListSelect, EditorMath, EditorMore, ToolbarItem } from '../component/Toolbar'
 
 interface EditorToolbarProps {
   editor: Editor
@@ -163,6 +163,15 @@ const EditorToolbar = ({
       />
       <Divider orientation="vertical" flexItem sx={{ mx: 0.5, height: 20, alignSelf: 'center' }} />
       <ToolbarItem
+        tip={'折叠块'}
+        shortcutKey={[]}
+        icon={<MenuFold2FillIcon sx={{ fontSize: '1rem' }} />}
+        onClick={() => editor.chain().focus().setDetails().run()}
+        className={active.details ? "tool-active" : ""}
+      />
+      <EditorCode editor={editor} />
+      <EditorMath editor={editor} />
+      <ToolbarItem
         tip={'表格'}
         shortcutKey={[]}
         icon={<Table2Icon sx={{ fontSize: '1rem' }} />}
@@ -173,14 +182,6 @@ const EditorToolbar = ({
         })}
         className={active.table ? "tool-active" : ""}
       />
-      <ToolbarItem
-        tip={'折叠块'}
-        shortcutKey={[]}
-        icon={<MenuFold2FillIcon sx={{ fontSize: '1rem' }} />}
-        onClick={() => editor.chain().focus().setDetails().run()}
-        className={active.details ? "tool-active" : ""}
-      />
-      <EditorMath editor={editor} />
       <Divider orientation="vertical" flexItem sx={{ mx: 0.5, height: 20, alignSelf: 'center' }} />
       <EditorInsert editor={editor} />
       <EditorMore />

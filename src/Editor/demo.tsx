@@ -225,52 +225,14 @@ Nothing is impossible, the word itself says “I’m possible!”
   return <div style={{
     border: '1px solid #eee',
     borderRadius: '10px',
-    padding: '10px',
+    padding: '0 10px 10px',
   }}>
     <div style={{
       borderBottom: '1px solid #eee',
-      padding: '0 0 10px 0',
-      marginBottom: '20px',
-      display: 'flex',
-      gap: '10px',
+      marginBottom: '30px',
     }}>
-      <button type='button' onClick={() => {
-        editor.setEditable(true)
-      }}>编辑</button>
-      <button type='button' onClick={() => {
-        editor.setEditable(false)
-      }}>预览</button>
-      <button type='button' onClick={() => {
-        editor.commands.setVideo({
-          src: '',
-          width: 760,
-          controls: true,
-          autoplay: false,
-        })
-      }}>视频</button>
-      <button type='button' onClick={() => {
-        editor.commands.setImage({
-          src: '',
-          width: 760,
-        })
-      }}>图片</button>
-      <button type='button' onClick={() => {
-        editor.commands.setInlineMath({
-          latex: '',
-        })
-      }}>行内公式</button>
-      <button type='button' onClick={() => {
-        editor.commands.setBlockMath({
-          latex: '',
-        })
-      }}>块级公式</button>
-      <button type='button' onClick={() => {
-        editor.commands.setCodeBlock({
-          language: '',
-        })
-      }}>代码块</button>
+      <EditorToolbar editor={editor} />
     </div>
-    <EditorToolbar editor={editor} />
     <div style={{
       backgroundColor: '#fff',
     }}>

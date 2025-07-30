@@ -1,6 +1,5 @@
 import { FloatingPopover } from "@cq/tiptap/component/FloatingPopover"
-import { MovieLineIcon } from "@cq/tiptap/component/Icons"
-import { UploadIcon } from "@cq/tiptap/component/Icons/upload-icon"
+import { MovieLineIcon, UploadCloud2LineIcon } from "@cq/tiptap/component/Icons"
 import { EditorFnProps } from "@cq/tiptap/type"
 import { Box, Button, CircularProgress, Stack, Tab, Tabs, TextField } from "@mui/material"
 import { NodeViewWrapper } from "@tiptap/react"
@@ -146,7 +145,7 @@ const InsertVideo = ({
           component="label"
           disabled={!onUpload || uploading}
           fullWidth
-          startIcon={uploading ? <CircularProgress size={20} /> : <UploadIcon sx={{ fontSize: 18 }} />}
+          startIcon={uploading ? <CircularProgress size={20} /> : <UploadCloud2LineIcon sx={{ fontSize: 18 }} />}
         >
           <input
             type="file"
