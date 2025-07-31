@@ -2,7 +2,7 @@ import { Box, Divider, Stack } from '@mui/material'
 import { Editor } from '@tiptap/react'
 import React, { useEffect, useState } from 'react'
 import { ArrowGoBackLineIcon, ArrowGoForwardLineIcon, BoldIcon, DoubleQuotesLIcon, ItalicIcon, LinkIcon, MenuFold2FillIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, Table2Icon, UnderlineIcon } from '../component/Icons'
-import { EditorAlignSelect, EditorCode, EditorFontSize, EditorHeading, EditorInsert, EditorListSelect, EditorMath, EditorMore, ToolbarItem } from '../component/Toolbar'
+import { EditorAlignSelect, EditorCode, EditorFontColor, EditorFontSize, EditorHeading, EditorInsert, EditorListSelect, EditorMath, EditorMore, ToolbarItem } from '../component/Toolbar'
 
 interface EditorToolbarProps {
   editor: Editor
@@ -113,6 +113,7 @@ const EditorToolbar = ({
       <EditorFontSize editor={editor} />
       <EditorListSelect editor={editor} />
       <EditorAlignSelect editor={editor} />
+      <EditorFontColor editor={editor} />
       <ToolbarItem
         tip={'引用块'}
         shortcutKey={['ctrl', 'shift', 'B']}
@@ -149,6 +150,7 @@ const EditorToolbar = ({
         onClick={() => editor.chain().focus().toggleUnderline().run()}
         className={active.underline ? "tool-active" : ""}
       />
+      <EditorFontColor editor={editor} />
       <Divider orientation="vertical" flexItem sx={{ mx: 0.5, height: 20, alignSelf: 'center' }} />
       <ToolbarItem
         tip={'链接'}
