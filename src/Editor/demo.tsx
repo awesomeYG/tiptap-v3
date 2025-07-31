@@ -50,7 +50,7 @@ const Reader = () => {
       })
     },
     content: `
-    放假啊收到了开发 <a href="https://github.com">github</a> 飞机上岛咖啡就离开
+    放假啊收到了开发<a href="https://github.com">github</a>飞机上岛咖啡就离开
     <hr/>
     \`\`\`javascript
     const a = 1;

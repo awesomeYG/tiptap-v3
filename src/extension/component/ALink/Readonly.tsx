@@ -61,7 +61,7 @@ const ReadonlyLink = ({ attrs, selected }: ReadonlyLinkProps) => {
           <Box sx={{ fontSize: '0.875rem', fontWeight: 'bold' }}>{attrs.title || attrs.href}</Box>
           <Box sx={{ fontSize: '0.75rem', color: 'text.secondary' }}>{attrs.href}</Box>
         </Stack>
-      </Stack> : <Box component={'span'} sx={{ display: 'inline-flex', alignItems: 'baseline', gap: 0.25 }}>
+      </Stack> : <Box component={'span'} sx={{ display: 'inline-flex', alignItems: 'baseline', gap: 0.5 }}>
         {attrs.type === 'icon' && <Avatar sx={{ width: '0.875rem', height: '0.875rem', alignSelf: 'center', bgcolor: 'transparent' }} src={favicon}>
           <LinkIcon sx={{
             fontSize: '0.875rem',

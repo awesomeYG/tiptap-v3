@@ -91,10 +91,14 @@
 }
 
 .tiptap.ProseMirror .react-renderer.node-image,
-.tiptap.ProseMirror .react-renderer.node-inlineMath,
-.tiptap.ProseMirror .react-renderer.node-alink {
+.tiptap.ProseMirror .react-renderer.node-inlineMath {
   display: inline-block;
   vertical-align: middle;
+  margin: 0 0.25rem;
+}
+
+.tiptap.ProseMirror .react-renderer.node-alink {
+  display: inline-block;
   margin: 0 0.25rem;
 }
 
@@ -104,8 +108,7 @@
 }
 
 .tiptap.ProseMirror p :first-child:is(.react-renderer.node-image),
-.tiptap.ProseMirror p :first-child:is(.react-renderer.node-inlineMath),
-.tiptap.ProseMirror p :first-child:is(.react-renderer.node-alink) {
+.tiptap.ProseMirror p :first-child:is(.react-renderer.node-inlineMath) {
   margin-left: 0;
 }
 
