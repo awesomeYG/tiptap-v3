@@ -12,20 +12,14 @@ const CustomDetails = Details.extend({
 
 export const DetailsExtension = CustomDetails.configure({
   persist: true,
-  openClassName: 'cq-details-open',
+  openClassName: 'is-open',
   HTMLAttributes: {
     class: 'cq-details',
   },
 });
 
 export const DetailsSummaryExtension = DetailsSummary.configure({
-  HTMLAttributes: {
-    class: 'cq-details-summary',
-  },
 });
 
 export const DetailsContentExtension = DetailsContent.configure({
-  HTMLAttributes: {
-    class: 'cq-details-content',
-  },
 });

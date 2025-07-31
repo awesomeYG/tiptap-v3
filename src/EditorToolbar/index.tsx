@@ -181,7 +181,13 @@ const EditorToolbar = ({
         tip={'折叠块'}
         shortcutKey={[]}
         icon={<MenuFold2FillIcon sx={{ fontSize: '1rem' }} />}
-        onClick={() => editor.chain().focus().setDetails().run()}
+        onClick={() => {
+          if (!active.details) {
+            editor.chain().focus().setDetails().run()
+          } else {
+            editor.chain().focus().unsetDetails().run()
+          }
+        }}
         className={active.details ? "tool-active" : ""}
       />
       <EditorCode editor={editor} />

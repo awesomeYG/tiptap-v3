@@ -179,7 +179,7 @@
   content: '\25B6';
 }
 
-.tiptap.ProseMirror .cq-details.cq-details-open>button::before {
+.tiptap.ProseMirror .cq-details.is-open>button::before {
   transform: rotate(90deg);
 }
 
