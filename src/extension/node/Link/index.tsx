@@ -1,5 +1,11 @@
-import { mergeAttributes, Node } from '@tiptap/core'
-import { registerCustomProtocol, reset } from 'linkifyjs'
+import { mergeAttributes, Node, nodePasteRule, type PasteRuleMatch } from '@tiptap/core'
+import type { Plugin } from '@tiptap/pm/state'
+import { ReactNodeViewRenderer } from '@tiptap/react'
+import { find, registerCustomProtocol, reset } from 'linkifyjs'
+import ALinkViewWrapper from '../../component/ALink'
+import { autolink } from './helpers/autolink'
+import { clickHandler } from './helpers/clickHandler'
+import { pasteHandler } from './helpers/pasteHandler'
 import { UNICODE_WHITESPACE_REGEX_GLOBAL } from './helpers/whitespace'
 
 export interface LinkProtocolOptions {
@@ -187,16 +193,11 @@ const LinkNode = Node.create<LinkOptions>({
   name: 'alink',
   group: 'inline',
   inline: true,
-  content: 'inline*',
-  atom: true,
-  selectable: true,
   draggable: true,
-  allowGapCursor: true,
-  priority: 1000,
+  selectable: true,
 
   onCreate() {
     if (this.options.validate && !this.options.shouldAutoLink) {
-      // Copy the validate function to the shouldAutoLink option
       this.options.shouldAutoLink = this.options.validate
       console.warn('The `validate` option is deprecated. Rename to the `shouldAutoLink` option instead.')
     }
@@ -224,7 +225,7 @@ const LinkNode = Node.create<LinkOptions>({
       HTMLAttributes: {
         target: '_blank',
         class: null,
-        type: 'link',
+        type: 'icon',
       },
       isAllowedUri: (url, ctx) => !!isAllowedUri(url, ctx.protocols),
       validate: url => !!url,
@@ -292,7 +293,7 @@ const LinkNode = Node.create<LinkOptions>({
       type: {
         default: this.options.HTMLAttributes.type,
         parseHTML: (element) => {
-          return element.getAttribute('data-type') || 'link'
+          return element.getAttribute('data-type') || 'icon'
         },
         renderHTML: (attributes) => {
           return {
@@ -305,8 +306,11 @@ const LinkNode = Node.create<LinkOptions>({
 
   addCommands() {
     return {
-      setALink: (options) => ({ chain }) => {
-        return chain().setNode(this.name, options).run()
+      setALink: (options) => ({ commands }) => {
+        return commands.insertContent({
+          type: this.name,
+          attrs: options,
+        })
       },
       toggleALink: (options) => ({ chain }) => {
         return chain().toggleNode(this.name, 'a', options).run()
@@ -317,34 +321,14 @@ const LinkNode = Node.create<LinkOptions>({
     }
   },
 
-  // parseHTML() {
-  //   return [
-  //     {
-  //       tag: 'a[href]',
-  //       getAttrs: (node) => {
-  //         return {
-  //           href: node.getAttribute('href') ,
-  //           target: node.getAttribute('target') || '_blank',
-  //           rel: node.getAttribute('rel') ,
-  //           class: node.getAttribute('class') ,
-  //           title: node.getAttribute('data-title') ,
-  //           type: node.getAttribute('data-type') || 'link',
-  //         }
-  //       },
-  //     },
-  //   ]
-  // },
-
   parseHTML() {
     return [
       {
-        tag: 'a[href]',
+        tag: 'a',
         getAttrs: dom => {
           const href = (dom as HTMLElement).getAttribute('href')
-
-          // prevent XSS attacks
           if (
-            !href ||
+            href &&
             !this.options.isAllowedUri(href, {
               defaultValidate: url => !!isAllowedUri(url, this.options.protocols),
               protocols: this.options.protocols,
@@ -353,14 +337,20 @@ const LinkNode = Node.create<LinkOptions>({
           ) {
             return false
           }
-          return null
+          return {
+            href,
+            rel: (dom as HTMLElement).getAttribute('rel'),
+            class: (dom as HTMLElement).getAttribute('class'),
+            target: (dom as HTMLElement).getAttribute('target') || '_blank',
+            title: (dom as HTMLElement).getAttribute('data-title') || (dom as HTMLElement).textContent,
+            type: (dom as HTMLElement).getAttribute('data-type') || 'icon',
+          }
         },
       },
     ]
   },
 
   renderHTML({ HTMLAttributes }) {
-    // prevent XSS attacks
     if (
       !this.options.isAllowedUri(HTMLAttributes.href, {
         defaultValidate: href => !!isAllowedUri(href, this.options.protocols),
@@ -368,18 +358,104 @@ const LinkNode = Node.create<LinkOptions>({
         defaultProtocol: this.options.defaultProtocol,
       })
     ) {
-      // strip out the href
       return ['a', mergeAttributes(this.options.HTMLAttributes, { ...HTMLAttributes, href: '' }), 0]
     }
 
     return ['a', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes), 0]
   },
 
-  // addNodeView() {
-  //   return ReactNodeViewRenderer(LinkViewWrapper)
-  // },
+  addPasteRules() {
+    return [
+      nodePasteRule({
+        find: text => {
+          const foundLinks: PasteRuleMatch[] = []
+          if (text) {
+            const { protocols, defaultProtocol } = this.options
+            const links = find(text).filter(
+              item =>
+                item.isLink &&
+                this.options.isAllowedUri(item.value, {
+                  defaultValidate: href => !!isAllowedUri(href, protocols),
+                  protocols,
+                  defaultProtocol,
+                }),
+            )
+            if (links.length) {
+              links.forEach(link =>
+                foundLinks.push({
+                  text: link.value,
+                  data: {
+                    href: link.href,
+                  },
+                  index: link.start,
+                }),
+              )
+            }
+          }
+          return foundLinks
+        },
+        type: this.type,
+        getAttributes: match => {
+          return {
+            href: match.data?.href,
+          }
+        },
+      }),
+    ]
+  },
+
+  addProseMirrorPlugins() {
+    const plugins: Plugin[] = []
+    const { protocols, defaultProtocol } = this.options
+    if (this.options.autolink) {
+      plugins.push(
+        autolink({
+          type: this.type,
+          defaultProtocol: this.options.defaultProtocol,
+          validate: url =>
+            this.options.isAllowedUri(url, {
+              defaultValidate: href => !!isAllowedUri(href, protocols),
+              protocols,
+              defaultProtocol,
+            }),
+          shouldAutoLink: this.options.shouldAutoLink,
+        }),
+      )
+    }
+    if (this.options.openOnClick === true) {
+      plugins.push(
+        clickHandler({
+          type: this.type,
+          editor: this.editor,
+          enableClickSelection: this.options.enableClickSelection,
+        }),
+      )
+    }
+    if (this.options.linkOnPaste) {
+      plugins.push(
+        pasteHandler({
+          editor: this.editor,
+          defaultProtocol: this.options.defaultProtocol,
+          type: this.type,
+        }),
+      )
+    }
+    return plugins
+  },
+
+  addNodeView() {
+    return ReactNodeViewRenderer(ALinkViewWrapper)
+  },
 })
 
-export const LinkExtension = LinkNode.extend({
-
+export const ALinkExtension = LinkNode.configure({
+  autolink: true,
+  openOnClick: false,
+  linkOnPaste: true,
+  enableClickSelection: true,
+  HTMLAttributes: {
+    target: '_blank',
+    class: null,
+    type: 'icon',
+  },
 })

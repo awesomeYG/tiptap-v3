@@ -50,6 +50,8 @@ const Reader = () => {
       })
     },
     content: `
+    <a href="https://github.com">github</a>
+    <hr/>
     \`\`\`javascript
     const a = 1;
     \`\`\`

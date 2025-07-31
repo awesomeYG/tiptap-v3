@@ -86,7 +86,7 @@ export const MathematicsBlockViewWrapper: React.FC<NodeViewProps & EditorFnProps
             transition: 'all 0.2s ease',
           }}
         >
-          <FunctionsIcon sx={{ fontSize: 18, color: 'text.secondary' }} />
+          <FunctionsIcon sx={{ fontSize: '1rem', color: 'text.secondary' }} />
           <Box sx={{ fontSize: '0.875rem', color: 'text.secondary' }}>
             添加数学公式
           </Box>

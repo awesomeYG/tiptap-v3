@@ -108,7 +108,7 @@ const InsertImage = ({
           }),
         }}
       >
-        <ImageLineIcon sx={{ fontSize: '1.125rem', position: 'relative', zIndex: 1, flexShrink: 0 }} />
+        <ImageLineIcon sx={{ fontSize: '1rem', position: 'relative', zIndex: 1, flexShrink: 0 }} />
         <Box sx={{ fontSize: '0.875rem', position: 'relative', zIndex: 1, flexGrow: 1, textAlign: 'left' }}>
           {uploading ? '图片上传中...' : '嵌入或复制图片链接'}
         </Box>

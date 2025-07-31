@@ -87,7 +87,7 @@ export const MathematicsInlineViewWrapper: React.FC<NodeViewProps & EditorFnProp
           transition: 'background-color 0.2s ease',
         }}
       >
-        <SquareRootIcon sx={{ fontSize: 18, flexShrink: 0 }} />
+        <SquareRootIcon sx={{ fontSize: '1rem', flexShrink: 0 }} />
         <Box component="span">
           添加数学公式
         </Box>

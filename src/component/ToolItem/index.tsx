@@ -1,4 +1,4 @@
-import { Stack } from "@mui/material"
+import { Box, Stack, Tooltip } from "@mui/material"
 import React from "react"
 
 const ToolItem = ({
@@ -6,33 +6,41 @@ const ToolItem = ({
   size = 'medium',
   onClick,
   isActive,
+  text,
+  tip,
 }: {
   icon: React.ReactNode
   size?: 'medium' | 'small'
-  onClick?: () => void
+  onClick?: (e: React.MouseEvent<HTMLDivElement>) => void
   isActive?: boolean
+  text?: string
+  tip?: string
 }) => {
-  return <Stack
-    direction={'row'}
-    alignItems={'center'}
-    justifyContent={'center'}
-    sx={{
-      width: size === 'small' ? '1.25rem' : '1.5rem',
-      cursor: 'pointer',
-      p: '0.25rem',
-      borderRadius: 'var(--mui-shape-borderRadius)',
-      '&:hover': {
-        backgroundColor: 'action.selected',
-      },
-      svg: {
-        color: isActive ? 'var(--mui-palette-primary-main)' : 'var(--mui-palette-text-primary)',
-        fontSize: size === 'small' ? '1rem' : '1.125rem',
-      }
-    }}
-    onClick={onClick}
-  >
-    {icon}
-  </Stack>
+  return <Tooltip arrow title={tip ?? null}>
+    <Stack
+      direction={'row'}
+      alignItems={'center'}
+      justifyContent={'center'}
+      sx={{
+        minWidth: size === 'small' ? '1.5rem' : '1.75rem',
+        height: size === 'small' ? '1.5rem' : '1.75rem',
+        cursor: 'pointer',
+        p: '0.25rem',
+        borderRadius: 'var(--mui-shape-borderRadius)',
+        '&:hover': {
+          backgroundColor: 'action.selected',
+        },
+        svg: {
+          color: isActive ? 'primary.main' : 'text.primary',
+          fontSize: '1rem',
+        }
+      }}
+      onClick={onClick}
+    >
+      {icon}
+      {text && <Box component={'span'} sx={{ fontSize: '0.875rem', ml: 0.5 }}>{text}</Box>}
+    </Stack>
+  </Tooltip>
 }
 
 export default ToolItem

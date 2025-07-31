@@ -153,7 +153,13 @@ const EditorToolbar = ({
         tip={'链接'}
         shortcutKey={['ctrl', 'k']}
         icon={<LinkIcon sx={{ fontSize: '1rem' }} />}
-        onClick={() => editor.chain().focus().setALink({ href: '' }).run()}
+        onClick={() => {
+          const selection = editor.state.selection
+          const start = selection.from
+          const end = selection.to
+          const text = editor.state.doc.textBetween(start, end, '')
+          editor.chain().focus().setALink({ href: '', title: text }).run()
+        }}
         className={active.link ? "tool-active" : ""}
       />
       <ToolbarItem
