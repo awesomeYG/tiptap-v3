@@ -69,9 +69,7 @@ const EditorFontColor = ({ editor }: EditorFontColorProps) => {
   }, [editor]);
 
   return <>
-    <Stack sx={{
-      position: 'relative'
-    }}>
+    <Stack sx={{ position: 'relative' }}>
       <ToolbarItem
         tip={'文字颜色'}
         icon={<FontColorIcon sx={{ fontSize: '1rem', pr: '0.75rem' }} />}

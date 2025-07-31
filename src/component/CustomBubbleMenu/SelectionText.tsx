@@ -1,4 +1,4 @@
-import { Divider, Paper, Stack } from '@mui/material'
+import { Box, Divider, Paper, Stack } from '@mui/material'
 import { Editor } from '@tiptap/react'
 // @ts-ignore
 import { BoldIcon, CodeLineIcon, FontColorIcon, ItalicIcon, MarkupLineIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, UnderlineIcon } from '@cq/tiptap/component/Icons'
@@ -42,8 +42,6 @@ const SelectionText = (props: { editor: Editor }) => {
   >
     <Paper sx={{
       p: 0.5,
-      width: 304,
-      maxHeight: 300,
     }}>
       <Stack direction={'row'} alignItems={'center'} justifyContent={'space-between'}>
         <ToolItem
@@ -67,11 +65,26 @@ const SelectionText = (props: { editor: Editor }) => {
           isActive={editor.isActive('underline')}
         />
         <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'var(--mui-palette-divider)' }} />
-        <ToolItem
-          icon={<FontColorIcon />}
-          isActive={colorPickerType === 'text'}
-          onClick={() => colorPickerType === 'text' ? setColorPickerType('') : setColorPickerType('text')}
-        />
+        <Stack sx={{ position: 'relative' }}>
+          <ToolItem
+            icon={<FontColorIcon />}
+            isActive={colorPickerType === 'text'}
+            onClick={() => colorPickerType === 'text' ? setColorPickerType('') : setColorPickerType('text')}
+          />
+          <Box sx={{
+            width: '0.8rem',
+            height: '2px',
+            borderRadius: '2px',
+            position: 'absolute',
+            left: 'calc(var(--mui-spacing-unit) + 0.1rem)',
+            bottom: 'calc(var(--mui-spacing-unit) + 1px)',
+            p: '0px !important',
+            minWidth: '0px !important',
+            zIndex: 1,
+            bgcolor: editor.getAttributes('textStyle').color,
+          }}>
+          </Box>
+        </Stack>
         <ToolItem
           icon={<MarkupLineIcon />}
           isActive={colorPickerType === 'bg'}

@@ -3,7 +3,6 @@ import { Theme } from "@emotion/react";
 import { Box, Button, Stack, SxProps, Tooltip } from "@mui/material";
 import React from "react";
 
-
 interface ToolbarItemProps {
   tip: string;
   shortcutKey?: string[];
