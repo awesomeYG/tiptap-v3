@@ -193,6 +193,7 @@ const LinkNode = Node.create<LinkOptions>({
   name: 'alink',
   group: 'inline',
   inline: true,
+  atom: true,
   draggable: true,
   selectable: true,
 

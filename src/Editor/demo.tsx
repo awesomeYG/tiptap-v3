@@ -3,7 +3,7 @@ import React from 'react';
 
 const Reader = () => {
   const { editor } = useTiptap({
-    editable: true,
+    editable: false,
     limit: 100,
     exclude: ['invisibleCharacters'],
     getMention: async ({ query }) => {
@@ -50,7 +50,7 @@ const Reader = () => {
       })
     },
     content: `
-    <a href="https://github.com">github</a>
+    放假啊收到了开发 <a href="https://github.com">github</a> 飞机上岛咖啡就离开
     <hr/>
     \`\`\`javascript
     const a = 1;

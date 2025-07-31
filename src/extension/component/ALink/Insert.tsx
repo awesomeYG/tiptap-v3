@@ -43,41 +43,39 @@ const InsertLink = ({ updateAttributes, deleteNode, selected, attrs }: InsertLin
     }
   }, [])
 
-  return <>
-    <NodeViewWrapper
-      className={`link-wrapper ${attrs.class} ${selected ? 'ProseMirror-selectednode' : ''}`}
-      data-drag-handle
-      as={'span'}
-    >
-      <Box
-        id="insert-link-box"
-        component="span"
-        onClick={handleShowPopover}
-        sx={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: 2,
-          border: '1px dashed',
-          borderColor: 'divider',
-          borderRadius: 'var(--mui-shape-borderRadius)',
-          px: 2,
-          py: 1.5,
-          fontSize: 14,
-          color: 'text.secondary',
-          bgcolor: 'action.default',
-          cursor: 'pointer',
-          '&:hover': {
-            bgcolor: 'action.hover'
-          },
-          '&:active': {
-            bgcolor: 'action.selected',
-          },
-          transition: 'background-color 0.2s ease',
-        }}>
-        <LinkIcon sx={{ fontSize: '1rem', flexShrink: 0 }} />
-        <Box component={'span'}>添加{title ? `“${title}”` : ''}链接</Box>
-      </Box>
-    </NodeViewWrapper>
+  return <NodeViewWrapper
+    className={`link-wrapper ${attrs.class} ${selected ? 'ProseMirror-selectednode' : ''}`}
+    data-drag-handle
+    as={'span'}
+  >
+    <Box
+      id="insert-link-box"
+      component="span"
+      onClick={handleShowPopover}
+      sx={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: 2,
+        border: '1px dashed',
+        borderColor: 'divider',
+        borderRadius: 'var(--mui-shape-borderRadius)',
+        px: 2,
+        py: 1.5,
+        fontSize: 14,
+        color: 'text.secondary',
+        bgcolor: 'action.default',
+        cursor: 'pointer',
+        '&:hover': {
+          bgcolor: 'action.hover'
+        },
+        '&:active': {
+          bgcolor: 'action.selected',
+        },
+        transition: 'background-color 0.2s ease',
+      }}>
+      <LinkIcon sx={{ fontSize: '1rem', flexShrink: 0 }} />
+      <Box component={'span'}>添加{title ? `“${title}”` : ''}链接</Box>
+    </Box>
     <FloatingPopover
       open={Boolean(anchorEl)}
       anchorEl={anchorEl}
@@ -155,7 +153,7 @@ const InsertLink = ({ updateAttributes, deleteNode, selected, attrs }: InsertLin
         </Stack>
       </Stack>
     </FloatingPopover>
-  </>
+  </NodeViewWrapper>
 }
 
 export default InsertLink

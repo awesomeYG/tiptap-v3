@@ -27,8 +27,9 @@ const ToolItem = ({
         cursor: 'pointer',
         p: '0.25rem',
         borderRadius: 'var(--mui-shape-borderRadius)',
+        bgcolor: isActive ? 'action.selected' : 'transparent',
         '&:hover': {
-          backgroundColor: 'action.selected',
+          bgcolor: 'action.selected',
         },
         svg: {
           color: isActive ? 'primary.main' : 'text.primary',

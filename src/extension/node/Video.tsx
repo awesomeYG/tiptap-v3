@@ -28,6 +28,7 @@ export const VideoExtension = (props: VideoExtensionProps) => Node.create({
   name: 'video',
   group: 'block',
   atom: true,
+  selectable: true,
   draggable: true,
 
   addKeyboardShortcuts() {
