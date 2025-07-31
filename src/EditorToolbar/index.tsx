@@ -2,7 +2,7 @@ import { Box, Divider, Stack } from '@mui/material'
 import { Editor } from '@tiptap/react'
 import React, { useEffect, useState } from 'react'
 import { ArrowGoBackLineIcon, ArrowGoForwardLineIcon, BoldIcon, DoubleQuotesLIcon, ItalicIcon, LinkIcon, MenuFold2FillIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, Table2Icon, UnderlineIcon } from '../component/Icons'
-import { EditorAlignSelect, EditorCode, EditorFontColor, EditorFontSize, EditorHeading, EditorInsert, EditorListSelect, EditorMath, EditorMore, ToolbarItem } from '../component/Toolbar'
+import { EditorAlignSelect, EditorCode, EditorFontBgColor, EditorFontColor, EditorFontSize, EditorHeading, EditorInsert, EditorListSelect, EditorMath, EditorMore, ToolbarItem } from '../component/Toolbar'
 
 interface EditorToolbarProps {
   editor: Editor
@@ -113,7 +113,6 @@ const EditorToolbar = ({
       <EditorFontSize editor={editor} />
       <EditorListSelect editor={editor} />
       <EditorAlignSelect editor={editor} />
-      <EditorFontColor editor={editor} />
       <ToolbarItem
         tip={'引用块'}
         shortcutKey={['ctrl', 'shift', 'B']}
@@ -151,20 +150,8 @@ const EditorToolbar = ({
         className={active.underline ? "tool-active" : ""}
       />
       <EditorFontColor editor={editor} />
+      <EditorFontBgColor editor={editor} />
       <Divider orientation="vertical" flexItem sx={{ mx: 0.5, height: 20, alignSelf: 'center' }} />
-      <ToolbarItem
-        tip={'链接'}
-        shortcutKey={['ctrl', 'k']}
-        icon={<LinkIcon sx={{ fontSize: '1rem' }} />}
-        onClick={() => {
-          const selection = editor.state.selection
-          const start = selection.from
-          const end = selection.to
-          const text = editor.state.doc.textBetween(start, end, '')
-          editor.chain().focus().setALink({ href: '', title: text }).run()
-        }}
-        className={active.link ? "tool-active" : ""}
-      />
       <ToolbarItem
         tip={'上标'}
         shortcutKey={['ctrl', '.']}
@@ -180,6 +167,19 @@ const EditorToolbar = ({
         className={active.subscript ? "tool-active" : ""}
       />
       <Divider orientation="vertical" flexItem sx={{ mx: 0.5, height: 20, alignSelf: 'center' }} />
+      <ToolbarItem
+        tip={'链接'}
+        shortcutKey={['ctrl', 'k']}
+        icon={<LinkIcon sx={{ fontSize: '1rem' }} />}
+        onClick={() => {
+          const selection = editor.state.selection
+          const start = selection.from
+          const end = selection.to
+          const text = editor.state.doc.textBetween(start, end, '')
+          editor.chain().focus().setALink({ href: '', title: text }).run()
+        }}
+        className={active.link ? "tool-active" : ""}
+      />
       <ToolbarItem
         tip={'折叠块'}
         shortcutKey={[]}

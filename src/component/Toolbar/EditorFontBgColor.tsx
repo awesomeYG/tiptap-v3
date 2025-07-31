@@ -3,28 +3,29 @@ import { Editor } from "@tiptap/react";
 import React, { useEffect, useState } from "react";
 import { HexAlphaColorPicker } from "react-colorful";
 import FloatingPopover from "../FloatingPopover";
-import { ArrowDownSLineIcon, FontColorIcon } from "../Icons";
+import { ArrowDownSLineIcon, MarkupLineIcon } from "../Icons";
 import ToolbarItem from "./Item";
 
-interface EditorFontColorProps {
+interface EditorFontBgColorProps {
   editor: Editor
 }
 
-const EditorFontColor = ({ editor }: EditorFontColorProps) => {
+const EditorFontBgColor = ({ editor }: EditorFontBgColorProps) => {
   const theme = useTheme()
-  const defaultColor = theme.palette.text.primary
+  const defaultColor = theme.palette.background.default
 
-  const THEME_TEXT_COLOR = [
-    theme.palette.primary.main,
-    theme.palette.success.main,
-    theme.palette.warning.main,
-    theme.palette.error.main,
-    '#D8A47F',
-    '#73B5F0',
-    '#CDDFA0',
-    theme.palette.text.primary,
-    theme.palette.text.secondary,
-    theme.palette.common.white,
+  const THEME_TEXT_BG_COLOR = [
+    '#e7bdff',
+    '#FFE0B2',
+    '#F8BBD0',
+    '#FFCDD2',
+    '#FFECB3',
+    '#FFCCBC',
+    '#B3E5FC',
+    '#C8E6C9',
+    '#B2EBF2',
+    '#BBDEFB',
+    '#DCEDC8',
   ]
 
   const [color, setColor] = useState<string>(defaultColor);
@@ -43,7 +44,7 @@ const EditorFontColor = ({ editor }: EditorFontColorProps) => {
 
   const updateColor = () => {
     const attrs = editor.getAttributes('textStyle');
-    setCustomColor(attrs.color || defaultColor);
+    setCustomColor(attrs.backgroundColor || defaultColor);
   }
 
   const checkModifyColor = (color: string) => {
@@ -73,11 +74,11 @@ const EditorFontColor = ({ editor }: EditorFontColorProps) => {
       position: 'relative'
     }}>
       <ToolbarItem
-        tip={'文字颜色'}
-        icon={<FontColorIcon sx={{ fontSize: '1rem', pr: '0.75rem' }} />}
+        tip={'文字背景颜色'}
+        icon={<MarkupLineIcon sx={{ fontSize: '1rem', pr: '0.75rem' }} />}
         sx={{ position: 'relative' }}
         onClick={() => {
-          editor.chain().focus().setColor(color).run()
+          editor.chain().focus().setBackgroundColor(color).run()
           handleClosePopover()
         }}
       />
@@ -121,7 +122,7 @@ const EditorFontColor = ({ editor }: EditorFontColorProps) => {
     >
       <Box sx={{
         p: 0.5,
-        width: `calc(1.5rem * ${THEME_TEXT_COLOR.length} + var(--mui-spacing-unit) * (${THEME_TEXT_COLOR.length} - 1))`,
+        width: `calc(1.5rem * ${THEME_TEXT_BG_COLOR.length} + var(--mui-spacing-unit) * (${THEME_TEXT_BG_COLOR.length} - 1))`,
         fontSize: '0.875rem',
       }}>
         <Stack direction={'row'} alignItems={'center'} gap={1} sx={{ mb: 1 }}>
@@ -129,31 +130,28 @@ const EditorFontColor = ({ editor }: EditorFontColorProps) => {
             width: '1.5rem',
             height: '1.5rem',
             border: '1px solid',
-            borderRadius: 'var(--mui-shape-borderRadius)',
-            bgcolor: defaultColor,
             borderColor: 'divider',
             boxSizing: 'border-box',
+            borderRadius: 'var(--mui-shape-borderRadius)',
+            bgcolor: defaultColor,
             cursor: 'pointer',
           }} onClick={() => {
-            editor.chain().focus().setColor('').run()
+            editor.chain().focus().setBackgroundColor('').run()
             handleClosePopover()
           }} />
           <Box>标准颜色</Box>
         </Stack>
         <Stack direction={'row'} flexWrap={'wrap'} gap={1}>
-          {THEME_TEXT_COLOR.map((c) => (
+          {THEME_TEXT_BG_COLOR.map((c) => (
             <Box key={c} sx={{
               width: '1.5rem',
               height: '1.5rem',
               cursor: 'pointer',
-              border: '1px solid',
-              borderColor: 'divider',
-              boxSizing: 'border-box',
               borderRadius: 'var(--mui-shape-borderRadius)',
               bgcolor: c,
             }} onClick={() => {
               setColor(c)
-              editor.chain().focus().setColor(c).run()
+              editor.chain().focus().setBackgroundColor(c).run()
               handleClosePopover()
             }} />
           ))}
@@ -180,7 +178,7 @@ const EditorFontColor = ({ editor }: EditorFontColorProps) => {
                 if (!checkModifyColor(customColor)) {
                   setCustomColor(defaultColor)
                 }
-                editor.chain().focus().setColor(customColor).run()
+                editor.chain().focus().setBackgroundColor(customColor).run()
                 setModifyColor(false)
               }}
               slotProps={{
@@ -200,7 +198,8 @@ const EditorFontColor = ({ editor }: EditorFontColorProps) => {
               disabled={!checkModifyColor(customColor)}
               sx={{ p: '0px !important' }}
               onClick={() => {
-                editor.chain().focus().setColor(customColor).run()
+                setColor(customColor)
+                editor.chain().focus().setBackgroundColor(customColor).run()
                 setModifyColor(false)
                 handleClosePopover()
               }}
@@ -214,4 +213,4 @@ const EditorFontColor = ({ editor }: EditorFontColorProps) => {
   </>
 };
 
-export default EditorFontColor;
+export default EditorFontBgColor;

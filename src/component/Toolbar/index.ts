@@ -1,5 +1,6 @@
 export { default as EditorAlignSelect } from './EditorAlignSelect'
 export { default as EditorCode } from './EditorCode'
+export { default as EditorFontBgColor } from './EditorFontBgColor'
 export { default as EditorFontColor } from './EditorFontColor'
 export { default as EditorFontSize } from './EditorFontSize'
 export { default as EditorHeading } from './EditorHeading'
