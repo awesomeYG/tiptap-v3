@@ -3,7 +3,7 @@ import React from 'react';
 
 const Reader = () => {
   const { editor } = useTiptap({
-    editable: false,
+    editable: true,
     limit: 100,
     exclude: ['invisibleCharacters'],
     getMention: async ({ query }) => {
@@ -50,6 +50,7 @@ const Reader = () => {
       })
     },
     content: `
+    <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. </div>
     <div data-tag="attachment" data-title="test.pdf" data-type="icon" data-size="100KB" data-url="https://placehold.co/800x400"></div>
     <div data-tag="attachment" data-title="test.pdf" data-type="block" data-size="100KB" data-url="https://placehold.co/800x400"></div>
     <div data-tag="attachment" data-title="" data-type="icon" data-size="0" data-url=""></div>

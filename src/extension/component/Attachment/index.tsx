@@ -1,6 +1,6 @@
 import { FloatingPopover } from "@cq/tiptap/component";
 import { Attachment2Icon, CarouselViewIcon, DeleteLineIcon, DownloadLineIcon, EditBoxLineIcon, ScrollToBottomLineIcon } from "@cq/tiptap/component/Icons";
-import ToolItem from "@cq/tiptap/component/ToolItem";
+import { ToolbarItem } from "@cq/tiptap/component/Toolbar";
 import { EditorFnProps } from "@cq/tiptap/type";
 import { Box, Button, Divider, Stack, TextField } from "@mui/material";
 import { NodeViewProps, NodeViewWrapper } from "@tiptap/react";
@@ -160,12 +160,12 @@ const AttachmentViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
         placement="top"
       >
         <Stack direction={'row'} alignItems={'center'} sx={{ p: 0.5 }}>
-          <ToolItem
+          <ToolbarItem
             icon={<DownloadLineIcon />}
             tip='下载'
             onClick={handleDownload}
           />
-          <ToolItem
+          <ToolbarItem
             icon={<EditBoxLineIcon />}
             tip='编辑'
             onClick={() => {
@@ -173,13 +173,13 @@ const AttachmentViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
               handleShowPopover()
             }}
           />
-          <ToolItem
+          <ToolbarItem
             icon={<DeleteLineIcon />}
             tip='删除'
             onClick={handleDeleteAttachment}
           />
           <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'var(--mui-palette-divider)' }} />
-          <ToolItem
+          <ToolbarItem
             icon={<ScrollToBottomLineIcon sx={{ transform: 'rotate(90deg)' }} />}
             tip='图标文字链接'
             isActive={attrs.type === 'icon'}
@@ -187,7 +187,7 @@ const AttachmentViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
               type: 'icon',
             })}
           />
-          <ToolItem
+          <ToolbarItem
             icon={<CarouselViewIcon sx={{ transform: 'rotate(90deg)' }} />}
             tip='摘要卡片'
             isActive={attrs.type === 'block'}

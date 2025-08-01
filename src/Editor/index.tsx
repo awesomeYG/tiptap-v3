@@ -18,8 +18,7 @@ const Editor = ({
       height,
     }
   }}>
-    {editor && <SelectionText editor={editor} />}
-    {/* {editor && <CustomFloatingMenu editor={editor} />} */}
+    <SelectionText editor={editor} />
     <CustomDragHandle editor={editor} />
     <EditorContent editor={editor} />
   </Box>

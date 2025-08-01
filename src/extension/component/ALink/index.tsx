@@ -1,6 +1,6 @@
 import { FloatingPopover } from "@cq/tiptap/component"
 import { CarouselViewIcon, CopyIcon, EditBoxLineIcon, LinkIcon, LinkUnlinkIcon, ScrollToBottomLineIcon, ShareBoxLineIcon, TextIcon } from "@cq/tiptap/component/Icons"
-import ToolItem from "@cq/tiptap/component/ToolItem"
+import { ToolbarItem } from "@cq/tiptap/component/Toolbar"
 import { Avatar, Box, Button, Divider, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Stack, TextField } from "@mui/material"
 import { NodeViewProps, NodeViewWrapper } from "@tiptap/react"
 import React, { useCallback, useEffect, useState } from "react"
@@ -165,13 +165,13 @@ const ALinkViewWrapper: React.FC<NodeViewProps> = ({
       placement="top"
     >
       <Stack direction={'row'} alignItems={'center'} sx={{ p: 0.5 }}>
-        <ToolItem
+        <ToolbarItem
           icon={<ShareBoxLineIcon />}
           text='打开'
           onClick={() => window.open(attrs.href, '_blank')}
         />
         <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'var(--mui-palette-divider)' }} />
-        <ToolItem
+        <ToolbarItem
           icon={<EditBoxLineIcon />}
           tip='编辑'
           onClick={() => {
@@ -179,32 +179,32 @@ const ALinkViewWrapper: React.FC<NodeViewProps> = ({
             handleShowPopover()
           }}
         />
-        <ToolItem
+        <ToolbarItem
           icon={<CopyIcon />}
           tip='复制'
           onClick={handleCopyLink}
         />
-        <ToolItem
+        <ToolbarItem
           icon={<LinkUnlinkIcon />}
           tip='取消链接'
           onClick={handleDeleteLink}
         />
         <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'var(--mui-palette-divider)' }} />
-        <ToolItem
+        <ToolbarItem
           icon={<TextIcon />}
           tip='文字链接'
           onClick={() => updateAttributes({
             type: 'text',
           })}
         />
-        <ToolItem
+        <ToolbarItem
           icon={<ScrollToBottomLineIcon sx={{ transform: 'rotate(90deg)' }} />}
           tip='图标文字链接'
           onClick={() => updateAttributes({
             type: 'icon',
           })}
         />
-        <ToolItem
+        <ToolbarItem
           icon={<CarouselViewIcon sx={{ transform: 'rotate(90deg)' }} />}
           tip='摘要卡片'
           onClick={() => updateAttributes({

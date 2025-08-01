@@ -17,10 +17,10 @@ const ToolbarItem = React.forwardRef<HTMLButtonElement, ToolbarItemProps>(
     const shortcutKeyText = getShortcutKeyText(shortcutKey || []);
     return (
       <Tooltip title={
-        <Stack alignItems="center">
+        tip ? <Stack alignItems="center">
           <Box>{tip}</Box>
           {shortcutKeyText && <Box sx={{ fontSize: 12 }}>{shortcutKeyText}</Box>}
-        </Stack>
+        </Stack> : null
       } arrow>
         <Box>
           <Button

@@ -1,21 +1,79 @@
-import { Box, Divider, Paper, Stack } from '@mui/material'
+import { BoldIcon, FontFamilyIcon, ItalicIcon, StrikethroughIcon, UnderlineIcon } from '@cq/tiptap/component/Icons'
+import { Box, Button, Divider, Paper, Stack, useTheme } from '@mui/material'
 import { Editor } from '@tiptap/react'
-// @ts-ignore
-import { BoldIcon, CodeLineIcon, FontColorIcon, ItalicIcon, MarkupLineIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, UnderlineIcon } from '@cq/tiptap/component/Icons'
 import { BubbleMenu } from '@tiptap/react/menus'
-import React, { useState } from 'react'
-import ToolItem from '../ToolItem'
-import ColorPicker from './ColorPicker'
+import React, { useEffect, useState } from 'react'
+import { ToolbarItem } from '../Toolbar'
 
 const SelectionText = (props: { editor: Editor }) => {
+  const theme = useTheme()
+
+  const THEME_TEXT_COLOR = [
+    theme.palette.primary.main,
+    theme.palette.success.main,
+    theme.palette.warning.main,
+    theme.palette.error.main,
+    '#D8A47F',
+    '#73B5F0',
+    '#CDDFA0',
+    theme.palette.text.primary,
+    theme.palette.text.secondary,
+    theme.palette.text.disabled,
+    theme.palette.common.white,
+  ]
+
+  const THEME_TEXT_BG_COLOR = [
+    '#e7bdff',
+    '#FFE0B2',
+    '#F8BBD0',
+    '#FFCDD2',
+    '#FFECB3',
+    '#FFCCBC',
+    '#B3E5FC',
+    '#C8E6C9',
+    '#B2EBF2',
+    '#BBDEFB',
+    '#DCEDC8',
+  ]
+
   const { editor } = props
-  const [colorPickerType, setColorPickerType] = useState<string>('')
+  const [active, setActive] = useState({
+    quote: false,
+    bold: false,
+    italic: false,
+    strike: false,
+    underline: false,
+  })
+  const [showColorPicker, setShowColorPicker] = useState(false)
+
+  const updateSelection = () => {
+    setActive({
+      quote: editor.isActive('blockquote'),
+      bold: editor.isActive('bold'),
+      italic: editor.isActive('italic'),
+      strike: editor.isActive('strike'),
+      underline: editor.isActive('underline'),
+    })
+  }
+
+  useEffect(() => {
+    editor.on('selectionUpdate', updateSelection);
+    editor.on('transaction', updateSelection);
+    return () => {
+      editor.off('selectionUpdate', updateSelection);
+      editor.off('transaction', updateSelection);
+    };
+  }, [editor]);
+
+  if (!editor.isEditable) {
+    return null
+  }
 
   return <BubbleMenu
     editor={editor}
     pluginKey={'bubble-menu'}
     options={{
-      placement: 'top',
+      placement: 'bottom',
       offset: 8,
     }}
     shouldShow={({ editor, from, to }: { editor: Editor, from: number, to: number }) => {
@@ -42,78 +100,93 @@ const SelectionText = (props: { editor: Editor }) => {
   >
     <Paper sx={{
       p: 0.5,
+      '.MuiButton-root': {
+        minWidth: '36px',
+        p: 1,
+        color: 'text.primary',
+        '&.tool-active': {
+          bgcolor: 'background.paper0',
+          color: 'primary.main',
+        },
+        '&[disabled]': {
+          color: 'text.disabled',
+        }
+      },
     }}>
       <Stack direction={'row'} alignItems={'center'} justifyContent={'space-between'}>
-        <ToolItem
-          icon={<BoldIcon />}
+        <ToolbarItem
+          icon={<BoldIcon sx={{ fontSize: '1rem' }} />}
           onClick={() => editor.chain().focus().toggleBold().run()}
-          isActive={editor.isActive('bold')}
+          className={active.bold ? "tool-active" : ""}
         />
-        <ToolItem
-          icon={<ItalicIcon />}
+        <ToolbarItem
+          icon={<ItalicIcon sx={{ fontSize: '1rem' }} />}
           onClick={() => editor.chain().focus().toggleItalic().run()}
-          isActive={editor.isActive('italic')}
+          className={active.italic ? "tool-active" : ""}
         />
-        <ToolItem
-          icon={<StrikethroughIcon />}
+        <ToolbarItem
+          icon={<StrikethroughIcon sx={{ fontSize: '1rem' }} />}
           onClick={() => editor.chain().focus().toggleStrike().run()}
-          isActive={editor.isActive('strike')}
+          className={active.strike ? "tool-active" : ""}
         />
-        <ToolItem
-          icon={<UnderlineIcon />}
+        <ToolbarItem
+          icon={<UnderlineIcon sx={{ fontSize: '1rem' }} />}
           onClick={() => editor.chain().focus().toggleUnderline().run()}
-          isActive={editor.isActive('underline')}
+          className={active.underline ? "tool-active" : ""}
         />
         <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'var(--mui-palette-divider)' }} />
-        <Stack sx={{ position: 'relative' }}>
-          <ToolItem
-            icon={<FontColorIcon />}
-            isActive={colorPickerType === 'text'}
-            onClick={() => colorPickerType === 'text' ? setColorPickerType('') : setColorPickerType('text')}
-          />
-          <Box sx={{
-            width: '0.8rem',
-            height: '2px',
-            borderRadius: '2px',
-            position: 'absolute',
-            left: 'calc(var(--mui-spacing-unit) + 0.1rem)',
-            bottom: 'calc(var(--mui-spacing-unit) + 1px)',
-            p: '0px !important',
-            minWidth: '0px !important',
-            zIndex: 1,
-            bgcolor: editor.getAttributes('textStyle').color,
-          }}>
-          </Box>
-        </Stack>
-        <ToolItem
-          icon={<MarkupLineIcon />}
-          isActive={colorPickerType === 'bg'}
-          onClick={() => colorPickerType === 'bg' ? setColorPickerType('') : setColorPickerType('bg')}
-        />
-        <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'var(--mui-palette-divider)' }} />
-        <ToolItem
-          icon={<SubscriptIcon />}
-          onClick={() => editor.chain().focus().toggleSubscript().run()}
-          isActive={editor.isActive('subscript')}
-        />
-        <ToolItem
-          icon={<SuperscriptIcon />}
-          onClick={() => editor.chain().focus().toggleSuperscript().run()}
-          isActive={editor.isActive('superscript')}
-        />
-        <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'var(--mui-palette-divider)' }} />
-        <ToolItem
-          icon={<CodeLineIcon />}
-          onClick={() => editor.chain().focus().toggleCode().run()}
-          isActive={editor.isActive('code')}
+        <ToolbarItem
+          icon={<FontFamilyIcon sx={{ fontSize: '1rem' }} />}
+          onClick={() => setShowColorPicker(!showColorPicker)}
         />
       </Stack>
-      {colorPickerType && <ColorPicker
-        editor={editor}
-        defaultColor={colorPickerType === 'text' ? '#000000' : '#FFFFFF'}
-        colorPickerType={colorPickerType}
-        setColorPickerType={setColorPickerType}
-      />}
+      {showColorPicker && <Box sx={{
+        mt: 0.5,
+        pt: 0.5,
+        borderTop: '1px solid',
+        borderColor: 'divider',
+        boxSizing: 'border-box',
+      }}>
+        <Box sx={{ fontSize: 14, mb: 0.5, color: 'text.secondary' }}>文字颜色</Box>
+        <Stack direction={'row'} flexWrap={'wrap'} gap={0.5} sx={{ width: 'calc(36px * 5 + 9px)' }}>
+          {THEME_TEXT_COLOR.map((c) => (
+            <Box key={c} sx={{
+              width: '1.5rem',
+              height: '1.5rem',
+              cursor: 'pointer',
+              border: '1px solid',
+              borderColor: 'divider',
+              boxSizing: 'border-box',
+              borderRadius: 'var(--mui-shape-borderRadius)',
+              bgcolor: c,
+            }} onClick={() => {
+              editor.chain().focus().setColor(c).run()
+            }} />
+          ))}
+        </Stack>
+        <Box sx={{ fontSize: 14, mb: 0.5, mt: 1, color: 'text.secondary' }}>背景颜色</Box>
+        <Stack direction={'row'} flexWrap={'wrap'} gap={0.5} sx={{ width: 'calc(36px * 5 + 9px)' }}>
+          {THEME_TEXT_BG_COLOR.map((c) => (
+            <Box key={c} sx={{
+              width: '1.5rem',
+              height: '1.5rem',
+              cursor: 'pointer',
+              border: '1px solid',
+              borderColor: 'divider',
+              boxSizing: 'border-box',
+              borderRadius: 'var(--mui-shape-borderRadius)',
+              bgcolor: c,
+            }} onClick={() => {
+              editor.chain().focus().setBackgroundColor(c).run()
+            }} />
+          ))}
+        </Stack>
+        <Button fullWidth size='small' sx={{ mt: 1, color: 'initial' }}
+          onClick={() => {
+            editor.chain().focus().setColor(theme.palette.text.primary).setBackgroundColor(theme.palette.background.paper).run()
+          }}
+        >恢复默认</Button>
+      </Box>}
     </Paper>
   </BubbleMenu>
 }

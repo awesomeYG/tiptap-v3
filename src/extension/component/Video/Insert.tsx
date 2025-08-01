@@ -114,16 +114,15 @@ const InsertVideo = ({
             bgcolor: 'primary.main',
             opacity: 0.1,
             transition: 'width 0.3s ease',
-            zIndex: 0,
           }
         }),
       }}
     >
-      <MovieLineIcon sx={{ fontSize: '1rem', position: 'relative', zIndex: 1, flexShrink: 0 }} />
-      <Box sx={{ fontSize: '0.875rem', position: 'relative', zIndex: 1, flexGrow: 1, textAlign: 'left' }}>
+      <MovieLineIcon sx={{ fontSize: '1rem', position: 'relative', flexShrink: 0 }} />
+      <Box sx={{ fontSize: '0.875rem', position: 'relative', flexGrow: 1, textAlign: 'left' }}>
         {uploading ? '图片上传中...' : '嵌入或复制视频链接'}
       </Box>
-      {uploading && <Box sx={{ fontSize: 12, fontWeight: 'bold', color: 'primary.main', position: 'relative', zIndex: 1, flexShrink: 0 }}>
+      {uploading && <Box sx={{ fontSize: 12, fontWeight: 'bold', color: 'primary.main', position: 'relative', flexShrink: 0 }}>
         {uploadProgress}%
       </Box>}
     </Stack>
