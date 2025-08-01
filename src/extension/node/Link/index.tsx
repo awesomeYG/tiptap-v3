@@ -444,6 +444,14 @@ const LinkNode = Node.create<LinkOptions>({
     return plugins
   },
 
+  addKeyboardShortcuts() {
+    return {
+      'Shift-L': () => {
+        return this.editor.commands.setALink({ href: '', type: 'icon' })
+      }
+    }
+  },
+
   addNodeView() {
     return ReactNodeViewRenderer(ALinkViewWrapper)
   },

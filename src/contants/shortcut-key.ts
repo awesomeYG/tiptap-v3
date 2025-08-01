@@ -23,8 +23,10 @@ export const SHORTCUT_KEYS = {
     label: '插入',
     keys: [
       { label: '折叠块', value: 'Details', keys: ['shift', 'D'] },
+      { label: '链接', value: 'Link', keys: ['shift', 'L'] },
       { label: '图片', value: 'Image', keys: ['shift', 'I'] },
       { label: '视频', value: 'Video', keys: ['shift', 'V'] },
+      { label: '附件', value: 'Attachment', keys: ['shift', 'A'] },
       { label: '行内数学公式', value: 'Inline Math', keys: ['shift', 'M'] },
       { label: '块级数学公式', value: 'Block Math', keys: ['ctrl', 'shift', 'M'] },
     ],

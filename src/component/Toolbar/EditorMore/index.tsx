@@ -13,7 +13,7 @@ const EditorMore = () => {
   const [showDialog, setShowDialog] = useState('');
 
   const options = [
-    { id: 'notification', icon: <Notification3LineIcon sx={{ fontSize: '1rem' }} />, label: '快捷键' },
+    { id: 'notification', icon: <Notification3LineIcon sx={{ fontSize: '1rem' }} />, label: '查看快捷键' },
   ];
 
   const handleChange = (e: { target: { value: string } }) => {

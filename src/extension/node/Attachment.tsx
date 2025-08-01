@@ -108,6 +108,21 @@ export const AttachmentExtension = (props: EditorFnProps) => Node.create({
     return ['div', { 'data-tag': 'attachment', ...mergeAttributes(this.options.HTMLAttributes, HTMLAttributes) }, 0]
   },
 
+
+
+  addKeyboardShortcuts() {
+    return {
+      'Shift-A': () => {
+        return this.editor.commands.setAttachment({
+          url: '',
+          title: '',
+          size: '0',
+          type: 'icon',
+        })
+      }
+    }
+  },
+
   addCommands() {
     return {
       setAttachment: (options) => ({ commands }) => {
