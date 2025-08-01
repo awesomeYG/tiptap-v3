@@ -8,6 +8,7 @@ export { default as EditorInsert } from './EditorInsert'
 export { default as EditorListSelect } from './EditorListSelect'
 export { default as EditorMath } from './EditorMath'
 export { default as EditorMore } from './EditorMore'
+export { default as EditorScript } from './EditorScript'
 
 export { default as ToolbarItem } from './Item'
 

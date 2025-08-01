@@ -1,8 +1,8 @@
 import { Box, Divider, Stack } from '@mui/material'
 import { Editor } from '@tiptap/react'
 import React, { useEffect, useState } from 'react'
-import { ArrowGoBackLineIcon, ArrowGoForwardLineIcon, BoldIcon, DoubleQuotesLIcon, ItalicIcon, LinkIcon, MenuFold2FillIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, Table2Icon, UnderlineIcon } from '../component/Icons'
-import { EditorAlignSelect, EditorCode, EditorFontBgColor, EditorFontColor, EditorFontSize, EditorHeading, EditorInsert, EditorListSelect, EditorMath, EditorMore, ToolbarItem } from '../component/Toolbar'
+import { ArrowGoBackLineIcon, ArrowGoForwardLineIcon, BoldIcon, DoubleQuotesLIcon, ItalicIcon, LinkIcon, MenuFold2FillIcon, StrikethroughIcon, Table2Icon, UnderlineIcon } from '../component/Icons'
+import { EditorAlignSelect, EditorCode, EditorFontBgColor, EditorFontColor, EditorFontSize, EditorHeading, EditorInsert, EditorListSelect, EditorMath, EditorMore, EditorScript, ToolbarItem } from '../component/Toolbar'
 
 interface EditorToolbarProps {
   editor: Editor
@@ -149,23 +149,10 @@ const EditorToolbar = ({
         onClick={() => editor.chain().focus().toggleUnderline().run()}
         className={active.underline ? "tool-active" : ""}
       />
+      <Divider orientation="vertical" flexItem sx={{ mx: 0.5, height: 20, alignSelf: 'center' }} />
+      <EditorScript editor={editor} />
       <EditorFontColor editor={editor} />
       <EditorFontBgColor editor={editor} />
-      <Divider orientation="vertical" flexItem sx={{ mx: 0.5, height: 20, alignSelf: 'center' }} />
-      <ToolbarItem
-        tip={'上标'}
-        shortcutKey={['ctrl', '.']}
-        icon={<SuperscriptIcon sx={{ fontSize: '1rem' }} />}
-        onClick={() => editor.chain().focus().toggleSuperscript().run()}
-        className={active.superscript ? "tool-active" : ""}
-      />
-      <ToolbarItem
-        tip={'下标'}
-        shortcutKey={['ctrl', ',']}
-        icon={<SubscriptIcon sx={{ fontSize: '1rem' }} />}
-        onClick={() => editor.chain().focus().toggleSubscript().run()}
-        className={active.subscript ? "tool-active" : ""}
-      />
       <Divider orientation="vertical" flexItem sx={{ mx: 0.5, height: 20, alignSelf: 'center' }} />
       <ToolbarItem
         tip={'链接'}
