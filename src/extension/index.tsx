@@ -23,6 +23,7 @@ import {
   ListExtension,
   MentionExtension,
   TableExtension,
+  UploadProgressExtension,
   VideoExtension,
   YoutubeExtension
 } from './node';
@@ -119,6 +120,8 @@ export const getExtensions = ({
   if (!exclude?.includes('fileHandler')) {
     const FileHandler = FileHandlerExtension({ onUpload })
     defaultExtensions.push(FileHandler)
+    const UploadProgress = UploadProgressExtension
+    defaultExtensions.push(UploadProgress)
   }
 
   if (!exclude?.includes('invisibleCharacters') && editable) {
@@ -129,7 +132,7 @@ export const getExtensions = ({
     defaultExtensions.push(ALinkExtension)
   }
 
-  if (!exclude?.includes('attachment')) {
+  if (!exclude?.includes('attachment') && onUpload) {
     const Attachment = AttachmentExtension({ onUpload, onError })
     defaultExtensions.push(Attachment)
   }
