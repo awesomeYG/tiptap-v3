@@ -159,14 +159,29 @@ const AttachmentViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
         onClose={handleCloseOperationPopover}
         placement="top"
       >
-        <Stack direction={'row'} alignItems={'center'} sx={{ p: 0.5 }}>
+        <Stack direction={'row'} alignItems={'center'} sx={{
+          p: 0.5,
+          '.MuiButton-root': {
+            minWidth: '36px',
+            p: 1,
+            color: 'text.primary',
+            '&.tool-active': {
+              bgcolor: 'background.paper0',
+              color: 'primary.main',
+            },
+            '&[disabled]': {
+              color: 'text.disabled',
+            }
+          },
+        }}>
           <ToolbarItem
-            icon={<DownloadLineIcon />}
-            tip='下载'
+            icon={<DownloadLineIcon sx={{ fontSize: '1rem' }} />}
+            text='下载'
             onClick={handleDownload}
           />
+          <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'var(--mui-palette-divider)' }} />
           <ToolbarItem
-            icon={<EditBoxLineIcon />}
+            icon={<EditBoxLineIcon sx={{ fontSize: '1rem' }} />}
             tip='编辑'
             onClick={() => {
               handleCloseOperationPopover()
@@ -174,23 +189,23 @@ const AttachmentViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
             }}
           />
           <ToolbarItem
-            icon={<DeleteLineIcon />}
+            icon={<DeleteLineIcon sx={{ fontSize: '1rem' }} />}
             tip='删除'
             onClick={handleDeleteAttachment}
           />
           <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'var(--mui-palette-divider)' }} />
           <ToolbarItem
-            icon={<ScrollToBottomLineIcon sx={{ transform: 'rotate(90deg)' }} />}
+            icon={<ScrollToBottomLineIcon sx={{ transform: 'rotate(90deg)', fontSize: '1rem' }} />}
             tip='图标文字链接'
-            isActive={attrs.type === 'icon'}
+            className={type === 'icon' ? 'tool-active' : ''}
             onClick={() => updateAttributes({
               type: 'icon',
             })}
           />
           <ToolbarItem
-            icon={<CarouselViewIcon sx={{ transform: 'rotate(90deg)' }} />}
+            icon={<CarouselViewIcon sx={{ transform: 'rotate(90deg)', fontSize: '1rem' }} />}
             tip='摘要卡片'
-            isActive={attrs.type === 'block'}
+            className={type === 'block' ? 'tool-active' : ''}
             onClick={() => updateAttributes({
               type: 'block',
             })}
@@ -207,7 +222,7 @@ const AttachmentViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
           p: 2, width: 320,
           '.MuiFormControlLabel-label': {
             fontSize: '0.875rem'
-          }
+          },
         }}>
           <Stack direction={'row'} gap={2} alignItems={'center'}>
             <Box sx={{ fontSize: '0.875rem', color: 'text.secondary', flexShrink: 0 }}>标题</Box>

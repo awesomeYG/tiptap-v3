@@ -164,15 +164,29 @@ const ALinkViewWrapper: React.FC<NodeViewProps> = ({
       onClose={handleCloseOperationPopover}
       placement="top"
     >
-      <Stack direction={'row'} alignItems={'center'} sx={{ p: 0.5 }}>
+      <Stack direction={'row'} alignItems={'center'} sx={{
+        p: 0.5,
+        '.MuiButton-root': {
+          minWidth: '36px',
+          p: 1,
+          color: 'text.primary',
+          '&.tool-active': {
+            bgcolor: 'background.paper0',
+            color: 'primary.main',
+          },
+          '&[disabled]': {
+            color: 'text.disabled',
+          }
+        },
+      }}>
         <ToolbarItem
-          icon={<ShareBoxLineIcon />}
+          icon={<ShareBoxLineIcon sx={{ fontSize: '1rem' }} />}
           text='打开'
           onClick={() => window.open(attrs.href, '_blank')}
         />
         <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'var(--mui-palette-divider)' }} />
         <ToolbarItem
-          icon={<EditBoxLineIcon />}
+          icon={<EditBoxLineIcon sx={{ fontSize: '1rem' }} />}
           tip='编辑'
           onClick={() => {
             handleCloseOperationPopover()
@@ -180,36 +194,39 @@ const ALinkViewWrapper: React.FC<NodeViewProps> = ({
           }}
         />
         <ToolbarItem
-          icon={<CopyIcon />}
+          icon={<CopyIcon sx={{ fontSize: '1rem' }} />}
           tip='复制'
           onClick={handleCopyLink}
         />
         <ToolbarItem
-          icon={<LinkUnlinkIcon />}
+          icon={<LinkUnlinkIcon sx={{ fontSize: '1rem' }} />}
           tip='取消链接'
           onClick={handleDeleteLink}
         />
         <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'var(--mui-palette-divider)' }} />
         <ToolbarItem
-          icon={<TextIcon />}
+          icon={<TextIcon sx={{ fontSize: '1rem' }} />}
           tip='文字链接'
           onClick={() => updateAttributes({
             type: 'text',
           })}
+          className={type === 'text' ? 'tool-active' : ''}
         />
         <ToolbarItem
-          icon={<ScrollToBottomLineIcon sx={{ transform: 'rotate(90deg)' }} />}
+          icon={<ScrollToBottomLineIcon sx={{ transform: 'rotate(90deg)', fontSize: '1rem' }} />}
           tip='图标文字链接'
           onClick={() => updateAttributes({
             type: 'icon',
           })}
+          className={type === 'icon' ? 'tool-active' : ''}
         />
         <ToolbarItem
-          icon={<CarouselViewIcon sx={{ transform: 'rotate(90deg)' }} />}
+          icon={<CarouselViewIcon sx={{ transform: 'rotate(90deg)', fontSize: '1rem' }} />}
           tip='摘要卡片'
           onClick={() => updateAttributes({
             type: 'block',
           })}
+          className={type === 'block' ? 'tool-active' : ''}
         />
       </Stack>
     </FloatingPopover>

@@ -13,7 +13,7 @@ interface ToolbarItemProps {
 }
 
 const ToolbarItem = React.forwardRef<HTMLButtonElement, ToolbarItemProps>(
-  ({ tip, shortcutKey, icon, sx, onClick, ...rest }, ref) => {
+  ({ tip, shortcutKey, icon, sx, text, onClick, ...rest }, ref) => {
     const shortcutKeyText = getShortcutKeyText(shortcutKey || []);
     return (
       <Tooltip title={
@@ -29,7 +29,7 @@ const ToolbarItem = React.forwardRef<HTMLButtonElement, ToolbarItemProps>(
             sx={{ ...sx, textTransform: 'none' }}
             {...rest}
           >
-            {icon}
+            {icon} {text && <Box component='span' sx={{ pl: 1, lineHeight: 1 }}>{text}</Box>}
           </Button>
         </Box>
       </Tooltip>
