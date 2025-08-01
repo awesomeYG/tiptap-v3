@@ -136,9 +136,6 @@ export const VideoExtension = (props: VideoExtensionProps) => Node.create({
   addCommands() {
     return {
       setVideo: (options) => ({ commands }) => {
-        // if (!options.src) {
-        //   return false
-        // }
         return commands.insertContent({
           type: this.name,
           attrs: {

@@ -3,7 +3,7 @@ import React from 'react';
 
 const Reader = () => {
   const { editor } = useTiptap({
-    editable: true,
+    editable: false,
     limit: 100,
     exclude: ['invisibleCharacters'],
     getMention: async ({ query }) => {
@@ -29,7 +29,7 @@ const Reader = () => {
       return new Promise((resolve) => {
         let progress = 0;
         const interval = setInterval(() => {
-          progress += Math.random() * 15;
+          progress += Math.random() * 25;
           if (progress >= 100) {
             progress = 100;
             onProgress?.({ progress: progress / 100 });
@@ -50,6 +50,8 @@ const Reader = () => {
       })
     },
     content: `
+    <div data-tag="attachment" data-title="test.pdf" data-type="icon" data-size="100KB" data-url="https://placehold.co/800x400"></div>
+    <div data-tag="attachment" data-title="" data-type="icon" data-size="0" data-url=""></div>
     放假啊收到了开发<a href="https://github.com">github</a>飞机上岛咖啡就离开
     <hr/>
     \`\`\`javascript

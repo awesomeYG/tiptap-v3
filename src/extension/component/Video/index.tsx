@@ -65,6 +65,10 @@ const VideoViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
     }
   }, [isDragging])
 
+  if (!attrs.src && !editor.isEditable) {
+    return null
+  }
+
   if (!editor.isEditable) {
     return <ReadonlyVideo selected={selected} attrs={attrs} onError={onError} />
   }

@@ -19,7 +19,6 @@ export interface ALinkAttributes {
 const ALinkViewWrapper: React.FC<NodeViewProps> = ({
   editor,
   node,
-  getPos,
   updateAttributes,
   deleteNode,
   selected,
@@ -31,7 +30,6 @@ const ALinkViewWrapper: React.FC<NodeViewProps> = ({
   const [opraAnchorEl, setOpraAnchorEl] = useState<HTMLDivElement | null>(null)
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null)
 
-  // 同步属性变化
   useEffect(() => {
     setTitle(attrs.title)
     setHref(attrs.href)
@@ -75,6 +73,10 @@ const ALinkViewWrapper: React.FC<NodeViewProps> = ({
   }, [attrs.href]);
 
   const favicon = attrs.href ? new URL(attrs.href).origin + '/favicon.ico' : ''
+
+  if (!attrs.href && !editor.isEditable) {
+    return null
+  }
 
   if (!editor.isEditable) {
     return <ReadonlyLink attrs={attrs} selected={selected} />

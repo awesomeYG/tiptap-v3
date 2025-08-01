@@ -69,6 +69,10 @@ const ImageViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
     }
   }, [isDragging])
 
+  if (!attrs.src && !editor.isEditable) {
+    return null
+  }
+
   if (!editor.isEditable) {
     return <ReadonlyImage selected={selected} attrs={attrs} />
   }

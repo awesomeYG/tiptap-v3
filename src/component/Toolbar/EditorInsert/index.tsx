@@ -2,7 +2,7 @@ import { getShortcutKeyText } from "@cq/tiptap/util/shortcutKey";
 import { Box, MenuItem, Select, Stack, Tooltip } from "@mui/material";
 import { Editor } from "@tiptap/react";
 import React, { useEffect, useState } from "react";
-import { ArrowDownSLineIcon, ImageLineIcon, MovieLineIcon, UploadIcon } from "../../Icons";
+import { ArrowDownSLineIcon, AttachmentLineIcon, ImageLineIcon, MovieLineIcon, UploadIcon } from "../../Icons";
 import ToolbarItem from "../Item";
 
 interface EditorInsertProps {
@@ -15,6 +15,7 @@ const EditorInsert = ({ editor }: EditorInsertProps) => {
   const InsertOptions = [
     { id: 'image', icon: <ImageLineIcon sx={{ fontSize: '1rem' }} />, label: '图片', shortcutKey: ['shift', 'I'] },
     { id: 'video', icon: <MovieLineIcon sx={{ fontSize: '1rem' }} />, label: '视频', shortcutKey: ['shift', 'V'] },
+    { id: 'attachment', icon: <AttachmentLineIcon sx={{ fontSize: '1rem' }} />, label: '附件', shortcutKey: ['shift', 'F'] },
   ];
 
   const updateSelection = () => {
@@ -22,6 +23,8 @@ const EditorInsert = ({ editor }: EditorInsertProps) => {
       setSelectedValue('image');
     } else if (editor.isActive('video')) {
       setSelectedValue('video');
+    } else if (editor.isActive('attachment')) {
+      setSelectedValue('attachment');
     } else {
       setSelectedValue('none');
     }
@@ -33,6 +36,8 @@ const EditorInsert = ({ editor }: EditorInsertProps) => {
       editor.commands.setImage({ src: '', width: 760 });
     } else if (value === 'video') {
       editor.commands.setVideo({ src: '', width: 760, controls: true, autoplay: false });
+    } else if (value === 'attachment') {
+      editor.commands.setAttachment({ url: '', title: '', type: 'icon', size: '0' });
     }
     setSelectedValue(value);
   };

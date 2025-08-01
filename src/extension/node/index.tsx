@@ -1,3 +1,4 @@
+export * from './Attachment';
 export * from './CodeBlockLowlight';
 export * from './Details';
 export * from './Emoji';

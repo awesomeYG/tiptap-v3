@@ -10,6 +10,7 @@ import StarterKit from '@tiptap/starter-kit';
 import { GetExtensionsProps } from '../type';
 import {
   ALinkExtension,
+  AttachmentExtension,
   CodeBlockLowlightExtension,
   CustomBlockMathExtension,
   CustomInlineMathExtension,
@@ -126,6 +127,11 @@ export const getExtensions = ({
 
   if (!exclude?.includes('link')) {
     defaultExtensions.push(ALinkExtension)
+  }
+
+  if (!exclude?.includes('attachment')) {
+    const Attachment = AttachmentExtension({ onUpload, onError })
+    defaultExtensions.push(Attachment)
   }
 
   return defaultExtensions
