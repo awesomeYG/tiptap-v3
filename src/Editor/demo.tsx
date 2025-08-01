@@ -51,6 +51,7 @@ const Reader = () => {
     },
     content: `
     <div data-tag="attachment" data-title="test.pdf" data-type="icon" data-size="100KB" data-url="https://placehold.co/800x400"></div>
+    <div data-tag="attachment" data-title="test.pdf" data-type="block" data-size="100KB" data-url="https://placehold.co/800x400"></div>
     <div data-tag="attachment" data-title="" data-type="icon" data-size="0" data-url=""></div>
     放假啊收到了开发<a href="https://github.com">github</a>飞机上岛咖啡就离开
     <hr/>

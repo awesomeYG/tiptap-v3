@@ -6,6 +6,7 @@ import { Box, Button, Divider, Stack, TextField } from "@mui/material";
 import { NodeViewProps, NodeViewWrapper } from "@tiptap/react";
 import React, { useEffect, useState } from "react";
 import InsertAttachment from "./Insert";
+import ReadonlyAttachment from "./Readonly";
 
 export interface AttachmentAttributes {
   url: string
@@ -86,6 +87,10 @@ const AttachmentViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
       onUpload={onUpload}
       onError={onError}
     />
+  }
+
+  if (!editor.isEditable) {
+    return <ReadonlyAttachment attrs={attrs} />
   }
 
   return (
