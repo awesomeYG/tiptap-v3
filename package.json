@@ -1,7 +1,8 @@
 {
   "name": "@cq/tiptap",
   "version": "0.0.1",
-  "description": "A react library developed with dumi",
+  "description": "基于 Tiptap 二次开发的编辑器组件",
+  "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -21,6 +22,23 @@
   "authors": [
     "ky.kyy@qq.com"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KuaiYu95/tiptap-v3.git"
+  },
+  "bugs": {
+    "url": "https://github.com/KuaiYu95/tiptap-v3/issues"
+  },
+  "keywords": [
+    "react",
+    "tiptap",
+    "editor"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "homepage": "https://github.com/KuaiYu95/tiptap-v3#readme",
   "license": "MIT",
   "files": [
     "dist"
@@ -46,9 +64,6 @@
       "eslint --fix",
       "prettier --parser=typescript --write"
     ]
-  },
-  "publishConfig": {
-    "access": "public"
   },
   "peerDependencies": {
     "react": ">=16.9.0",
