@@ -283,7 +283,6 @@
 .tiptap.ProseMirror table {
   border-collapse: collapse;
   margin: calc(var(--mui-spacing-unit) * 2) 0;
-  overflow: hidden;
   table-layout: fixed;
 }
 

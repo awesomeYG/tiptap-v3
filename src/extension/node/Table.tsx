@@ -1,4 +1,6 @@
+import { Extension } from '@tiptap/core';
 import { Table, TableCell, TableHeader, TableRow } from '@tiptap/extension-table';
+import { createTableContextMenuPlugin } from '../component/Table/TableContextMenuPlugin';
 
 export const TableExtension = ({ editable }: { editable: boolean }) => [
   Table.configure({
@@ -21,7 +23,7 @@ export const TableExtension = ({ editable }: { editable: boolean }) => [
   TableCell.extend({
     addAttributes() {
       return {
-        ...this.parent?.(),
+        ...(this.parent ? this.parent() : {}),
         bgcolor: {
           default: 'transparent',
           parseHTML: (element: HTMLElement) => {
@@ -74,6 +76,16 @@ export const TableExtension = ({ editable }: { editable: boolean }) => [
           },
         },
       };
+    },
+  }),
+  // 表格右键菜单插件
+  Extension.create({
+    name: 'tableContextMenu',
+
+    addProseMirrorPlugins() {
+      return editable ? [
+        createTableContextMenuPlugin(this.editor),
+      ] : [];
     },
   })
 ]

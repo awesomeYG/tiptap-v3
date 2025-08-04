@@ -4,16 +4,17 @@ import { Box, Button, Stack, SxProps, Tooltip } from "@mui/material";
 import React from "react";
 
 interface ToolbarItemProps {
-  tip: string;
+  tip?: string;
+  text?: string;
   shortcutKey?: string[];
   sx?: SxProps<Theme>;
-  icon: React.ReactNode;
+  icon?: React.ReactNode;
+  className?: string;
   onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
-  [key: string]: any;
 }
 
 const ToolbarItem = React.forwardRef<HTMLButtonElement, ToolbarItemProps>(
-  ({ tip, shortcutKey, icon, sx, text, onClick, ...rest }, ref) => {
+  ({ tip, shortcutKey, icon, sx, text, onClick, className, ...rest }, ref) => {
     const shortcutKeyText = getShortcutKeyText(shortcutKey || []);
     return (
       <Tooltip title={
@@ -26,7 +27,21 @@ const ToolbarItem = React.forwardRef<HTMLButtonElement, ToolbarItemProps>(
           <Button
             ref={ref}
             onClick={onClick}
-            sx={{ ...sx, textTransform: 'none' }}
+            className={className}
+            sx={{
+              minWidth: '36px',
+              p: 1,
+              color: 'text.primary',
+              '&.tool-active': {
+                bgcolor: 'background.paper0',
+                color: 'primary.main',
+              },
+              '&[disabled]': {
+                color: 'text.disabled',
+              },
+              textTransform: 'none',
+              ...sx,
+            }}
             {...rest}
           >
             {icon} {text && <Box component='span' sx={{ pl: 1, lineHeight: 1 }}>{text}</Box>}

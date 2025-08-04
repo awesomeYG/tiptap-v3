@@ -100,18 +100,6 @@ const SelectionText = (props: { editor: Editor }) => {
   >
     <Paper sx={{
       p: 0.5,
-      '.MuiButton-root': {
-        minWidth: '36px',
-        p: 1,
-        color: 'text.primary',
-        '&.tool-active': {
-          bgcolor: 'background.paper0',
-          color: 'primary.main',
-        },
-        '&[disabled]': {
-          color: 'text.disabled',
-        }
-      },
     }}>
       <Stack direction={'row'} alignItems={'center'} justifyContent={'space-between'}>
         <ToolbarItem

@@ -63,7 +63,7 @@ const ALinkViewWrapper: React.FC<NodeViewProps> = ({
     editor.commands.insertContent(attrs.title)
   }
 
-  const handleCopyLink = useCallback(async (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleCopyLink = useCallback(async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     try {
       await navigator.clipboard.writeText(attrs.href);
@@ -166,18 +166,6 @@ const ALinkViewWrapper: React.FC<NodeViewProps> = ({
     >
       <Stack direction={'row'} alignItems={'center'} sx={{
         p: 0.5,
-        '.MuiButton-root': {
-          minWidth: '36px',
-          p: 1,
-          color: 'text.primary',
-          '&.tool-active': {
-            bgcolor: 'background.paper0',
-            color: 'primary.main',
-          },
-          '&[disabled]': {
-            color: 'text.disabled',
-          }
-        },
       }}>
         <ToolbarItem
           icon={<ShareBoxLineIcon sx={{ fontSize: '1rem' }} />}

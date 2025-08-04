@@ -161,18 +161,6 @@ const AttachmentViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
       >
         <Stack direction={'row'} alignItems={'center'} sx={{
           p: 0.5,
-          '.MuiButton-root': {
-            minWidth: '36px',
-            p: 1,
-            color: 'text.primary',
-            '&.tool-active': {
-              bgcolor: 'background.paper0',
-              color: 'primary.main',
-            },
-            '&[disabled]': {
-              color: 'text.disabled',
-            }
-          },
         }}>
           <ToolbarItem
             icon={<DownloadLineIcon sx={{ fontSize: '1rem' }} />}

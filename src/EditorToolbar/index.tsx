@@ -60,18 +60,6 @@ const EditorToolbar = ({
       flexWrap={'wrap'}
       sx={{
         height: '44px',
-        '.MuiButton-root': {
-          minWidth: '36px',
-          p: 1,
-          color: 'text.primary',
-          '&.tool-active': {
-            bgcolor: 'background.paper0',
-            color: 'primary.main',
-          },
-          '&[disabled]': {
-            color: 'text.disabled',
-          }
-        },
         '.MuiSelect-root': {
           minWidth: '36px',
           bgcolor: 'background.paper',
