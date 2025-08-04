@@ -10,11 +10,12 @@ const useTiptap = ({
 
   // mention
   mentionItems,
-  getMention,
+  onMentionFilter,
 
   // fn
   onError,
   onUpload,
+  onTocUpdate,
 
   // editor
   editable = true,
@@ -27,9 +28,10 @@ const useTiptap = ({
     exclude,
     editable,
     mentionItems,
-    getMention,
+    onMentionFilter,
     onUpload,
-    onError
+    onError,
+    onTocUpdate,
   })
 
   const editor = useEditor({

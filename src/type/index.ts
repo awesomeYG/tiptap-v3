@@ -12,15 +12,28 @@ export type EditorProps = {
   height?: number | string;
 }
 
+export type TocItem = {
+  id: string;
+  isActive: boolean;
+  isScrolledOver: boolean;
+  itemIndex: number;
+  level: number;
+  originalLevel: number;
+  pos: number;
+  textContent: string;
+}
+export type TocList = TocItem[]
+
 export type EditorFnProps = {
   onError?: (error: Error) => void
   onUpload?: UploadFunction
+  onTocUpdate?: (toc: TocList) => void
 }
 
 export type MentionItems = string[]
 export type MentionExtensionProps = {
   mentionItems?: MentionItems;
-  getMention?: ({ query }: { query: string }) => Promise<MentionItems>;
+  onMentionFilter?: ({ query }: { query: string }) => Promise<MentionItems>;
 }
 
 export type ExtensionRelativeProps = MentionExtensionProps & EditorFnProps & {
@@ -30,7 +43,6 @@ export type ExtensionRelativeProps = MentionExtensionProps & EditorFnProps & {
   youtube?: Partial<YoutubeOptions>
 }
 
-export type UseTiptapProps = {
-} & ExtensionRelativeProps
+export type UseTiptapProps = ExtensionRelativeProps
 
 export type GetExtensionsProps = ExtensionRelativeProps

@@ -22,7 +22,7 @@ const updatePosition = (editor: Editor, element: HTMLElement) => {
   })
 }
 
-export const mentionSuggestion = ({ mentionItems, getMention }: MentionExtensionProps): MentionOptions["suggestion"] => {
+export const mentionSuggestion = ({ mentionItems, onMentionFilter }: MentionExtensionProps): MentionOptions["suggestion"] => {
   let getItems: ((props: {
     query: string;
     editor: Editor;
@@ -33,9 +33,9 @@ export const mentionSuggestion = ({ mentionItems, getMention }: MentionExtension
       return mentionItems.filter(item => item.toLowerCase().startsWith(query.toLowerCase()))
         .slice(0, 5)
     }
-  } else if (getMention) {
+  } else if (onMentionFilter) {
     getItems = async ({ query }: { query: string }) => {
-      const items = await getMention?.({ query })
+      const items = await onMentionFilter?.({ query })
       return items.filter(item => item.toLowerCase().startsWith(query.toLowerCase()))
         .slice(0, 5)
     }

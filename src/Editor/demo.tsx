@@ -6,7 +6,10 @@ const Reader = () => {
     editable: true,
     limit: 100,
     exclude: ['invisibleCharacters'],
-    getMention: async ({ query }) => {
+    onTocUpdate: (toc) => {
+      console.log(toc)
+    },
+    onMentionFilter: async ({ query }) => {
       return new Promise((resolve) => {
         resolve([
           'Winona Ryder',

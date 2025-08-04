@@ -27,6 +27,7 @@ import {
   VideoExtension,
   YoutubeExtension
 } from './node';
+import TableOfContentsExtension from './node/TableOfContents';
 
 export const getExtensions = ({
   limit,
@@ -34,9 +35,10 @@ export const getExtensions = ({
   youtube,
   editable,
   mentionItems,
-  getMention,
+  onMentionFilter,
   onUpload,
   onError,
+  onTocUpdate,
 }: GetExtensionsProps) => {
   const defaultExtensions: any = [
     StarterKit.configure({
@@ -66,8 +68,8 @@ export const getExtensions = ({
     }),
   ]
 
-  if (!exclude?.includes('mention') && (mentionItems && mentionItems.length > 0 || getMention)) {
-    const Mention = MentionExtension({ mentionItems, getMention })
+  if (!exclude?.includes('mention') && (mentionItems && mentionItems.length > 0 || onMentionFilter)) {
+    const Mention = MentionExtension({ mentionItems, onMentionFilter })
     defaultExtensions.push(Mention)
   }
 
@@ -135,6 +137,11 @@ export const getExtensions = ({
   if (!exclude?.includes('attachment')) {
     const Attachment = AttachmentExtension({ onUpload, onError })
     defaultExtensions.push(Attachment)
+  }
+
+  if (!exclude?.includes('tableOfContents')) {
+    const TableOfContents = TableOfContentsExtension({ onTocUpdate })
+    defaultExtensions.push(TableOfContents)
   }
 
   return defaultExtensions
