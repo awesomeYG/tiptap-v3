@@ -1,10 +1,10 @@
 
-import { Attachment2Icon } from "@cq/tiptap/component/Icons"
-import { EditorFnProps } from "@cq/tiptap/type"
-import { insertNodeAfterPosition } from "@cq/tiptap/util"
 import { Box, CircularProgress } from "@mui/material"
 import { Editor } from "@tiptap/core"
 import { NodeViewWrapper } from "@tiptap/react"
+import { Attachment2Icon } from "@yu-cq/tiptap/component/Icons"
+import { EditorFnProps } from "@yu-cq/tiptap/type"
+import { insertNodeAfterPosition } from "@yu-cq/tiptap/util"
 import React, { useEffect, useRef, useState } from "react"
 import { AttachmentAttributes } from "."
 

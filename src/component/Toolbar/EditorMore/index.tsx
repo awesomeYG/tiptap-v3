@@ -1,7 +1,7 @@
-import { MoreLineIcon, Notification3LineIcon } from "@cq/tiptap/component/Icons";
-import ToolbarItem from "@cq/tiptap/component/Toolbar/Item";
 import { Box, MenuItem, Select, Stack } from "@mui/material";
 import { Editor } from "@tiptap/core";
+import { MoreLineIcon, Notification3LineIcon } from "@yu-cq/tiptap/component/Icons";
+import ToolbarItem from "@yu-cq/tiptap/component/Toolbar/Item";
 import React, { useState } from "react";
 import NotificationDialog from "./NotificationDialog";
 

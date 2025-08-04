@@ -1,6 +1,6 @@
-import { EditorFnProps } from "@cq/tiptap/type"
 import { Box, Button, Stack } from "@mui/material"
 import { NodeViewWrapper } from "@tiptap/react"
+import { EditorFnProps } from "@yu-cq/tiptap/type"
 import React, { useRef, useState } from "react"
 import ReactCrop, { Crop, PixelCrop } from 'react-image-crop'
 import { ImageAttributes } from "."

@@ -1,7 +1,7 @@
-# @cq/tiptap
+# @yu-cq/tiptap
 
-[![NPM version](https://img.shields.io/npm/v/@cq/tiptap.svg?style=flat)](https://npmjs.org/package/@cq/tiptap)
-[![NPM downloads](http://img.shields.io/npm/dm/@cq/tiptap.svg?style=flat)](https://npmjs.org/package/@cq/tiptap)
+[![NPM version](https://img.shields.io/npm/v/@yu-cq/tiptap.svg?style=flat)](https://npmjs.org/package/@yu-cq/tiptap)
+[![NPM downloads](http://img.shields.io/npm/dm/@yu-cq/tiptap.svg?style=flat)](https://npmjs.org/package/@yu-cq/tiptap)
 
 A react library developed with dumi
 

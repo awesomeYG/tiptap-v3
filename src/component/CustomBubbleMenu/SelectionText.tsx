@@ -1,7 +1,7 @@
-import { BoldIcon, FontFamilyIcon, ItalicIcon, StrikethroughIcon, UnderlineIcon } from '@cq/tiptap/component/Icons'
 import { Box, Button, Divider, Paper, Stack, useTheme } from '@mui/material'
 import { Editor } from '@tiptap/react'
 import { BubbleMenu } from '@tiptap/react/menus'
+import { BoldIcon, FontFamilyIcon, ItalicIcon, StrikethroughIcon, UnderlineIcon } from '@yu-cq/tiptap/component/Icons'
 import React, { useEffect, useState } from 'react'
 import { ToolbarItem } from '../Toolbar'
 

@@ -1,6 +1,6 @@
-import { Attachment2Icon } from "@cq/tiptap/component/Icons"
 import { Box, Stack } from "@mui/material"
 import { NodeViewProps, NodeViewWrapper } from "@tiptap/react"
+import { Attachment2Icon } from "@yu-cq/tiptap/component/Icons"
 import React from "react"
 import { AttachmentAttributes } from "."
 

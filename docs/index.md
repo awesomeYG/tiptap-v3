@@ -19,4 +19,4 @@ features:
     description: Put ! description here
 ---
 
-@cq/tiptap
+@yu-cq/tiptap

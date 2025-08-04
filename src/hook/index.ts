@@ -1,8 +1,8 @@
-import { getExtensions } from '@cq/tiptap/extension'
-import { UseTiptapProps } from '@cq/tiptap/type'
 import { migrateMathStrings } from '@tiptap/extension-mathematics'
 import { useEditor, UseEditorOptions } from '@tiptap/react'
 import { renderToMarkdown } from '@tiptap/static-renderer/pm/markdown'
+import { getExtensions } from '@yu-cq/tiptap/extension'
+import { UseTiptapProps } from '@yu-cq/tiptap/type'
 
 const useTiptap = ({
   // extension 

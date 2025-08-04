@@ -1,6 +1,6 @@
-import { getShortcutKeyText } from "@cq/tiptap/util/shortcutKey";
 import { Box, MenuItem, Select, Stack, Tooltip } from "@mui/material";
 import { Editor } from "@tiptap/react";
+import { getShortcutKeyText } from "@yu-cq/tiptap/util/shortcutKey";
 import React, { useEffect, useState } from "react";
 import { ArrowDownSLineIcon, FormulaIcon, FunctionsIcon, SquareRootIcon } from "../Icons";
 import ToolbarItem from "./Item";

@@ -1,6 +1,6 @@
-import { EditorProps } from '@cq/tiptap/type';
 import { Box } from '@mui/material';
 import { EditorContent } from '@tiptap/react';
+import { EditorProps } from '@yu-cq/tiptap/type';
 // @ts-ignore
 import React from 'react';
 import SelectionText from '../component/CustomBubbleMenu/SelectionText';

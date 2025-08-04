@@ -1,4 +1,4 @@
-import { Editor, EditorToolbar, useTiptap } from '@cq/tiptap';
+import { Editor, EditorToolbar, useTiptap } from '@yu-cq/tiptap';
 import React from 'react';
 
 const Reader = () => {

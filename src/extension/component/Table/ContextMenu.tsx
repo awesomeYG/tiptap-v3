@@ -1,4 +1,3 @@
-import { ToolbarItem } from '@cq/tiptap/component/Toolbar';
 import {
   Divider,
   MenuItem,
@@ -7,6 +6,7 @@ import {
   Typography
 } from '@mui/material';
 import { Editor } from '@tiptap/core';
+import { ToolbarItem } from '@yu-cq/tiptap/component/Toolbar';
 import React from 'react';
 import {
   BoldIcon,

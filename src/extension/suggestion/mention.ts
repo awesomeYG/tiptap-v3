@@ -1,8 +1,8 @@
-import { MentionExtensionProps } from '@cq/tiptap/type'
 import { computePosition, flip, shift } from '@floating-ui/dom'
 import { MentionOptions } from '@tiptap/extension-mention'
 import { Editor, posToDOMRect, ReactRenderer } from '@tiptap/react'
 import { SuggestionProps } from '@tiptap/suggestion'
+import { MentionExtensionProps } from '@yu-cq/tiptap/type'
 import { MentionList, MentionListProps, MentionListRef } from '../component/MentionList'
 
 const updatePosition = (editor: Editor, element: HTMLElement) => {

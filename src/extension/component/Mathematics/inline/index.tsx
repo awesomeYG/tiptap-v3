@@ -1,8 +1,8 @@
-import { FloatingPopover } from "@cq/tiptap/component/FloatingPopover"
-import { SquareRootIcon } from "@cq/tiptap/component/Icons"
-import { EditorFnProps } from "@cq/tiptap/type"
 import { Box, Button, Stack, TextField } from "@mui/material"
 import { NodeViewProps, NodeViewWrapper } from "@tiptap/react"
+import { FloatingPopover } from "@yu-cq/tiptap/component/FloatingPopover"
+import { SquareRootIcon } from "@yu-cq/tiptap/component/Icons"
+import { EditorFnProps } from "@yu-cq/tiptap/type"
 import katex from 'katex'
 import React, { useEffect, useRef, useState } from "react"
 import ReadonlyInlineMath from "./Readonly"

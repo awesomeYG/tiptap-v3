@@ -1,6 +1,6 @@
-import { LinkIcon } from "@cq/tiptap/component/Icons"
 import { Avatar, Box, Stack } from "@mui/material"
 import { NodeViewProps, NodeViewWrapper } from "@tiptap/react"
+import { LinkIcon } from "@yu-cq/tiptap/component/Icons"
 import React from "react"
 import { ALinkAttributes } from "."
 

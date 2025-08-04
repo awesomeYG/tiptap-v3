@@ -1,5 +1,5 @@
-import { LinkIcon } from "@cq/tiptap/component/Icons"
 import { Avatar, Box, Link, Stack } from "@mui/material"
+import { LinkIcon } from "@yu-cq/tiptap/component/Icons"
 import React from "react"
 import { LinkAttributes } from "."
 

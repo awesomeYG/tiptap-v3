@@ -1,7 +1,7 @@
-import { ArrowDownSLineIcon, CopyIcon, TitleIcon } from '@cq/tiptap/component/Icons';
-import { languages } from '@cq/tiptap/contants/highlight';
 import { Box, MenuItem, Select, Stack, TextField } from '@mui/material';
 import { NodeViewContent, NodeViewProps, NodeViewWrapper } from '@tiptap/react';
+import { ArrowDownSLineIcon, CopyIcon, TitleIcon } from '@yu-cq/tiptap/component/Icons';
+import { languages } from '@yu-cq/tiptap/contants/highlight';
 import React, { useCallback, useState } from 'react';
 import ReadonlyCodeBlock from './Readonly';
 

@@ -1,6 +1,6 @@
-import { EditorFnProps } from "@cq/tiptap/type";
 import { BlockMath, InlineMath } from "@tiptap/extension-mathematics";
 import { ReactNodeViewRenderer } from "@tiptap/react";
+import { EditorFnProps } from "@yu-cq/tiptap/type";
 import React from "react";
 import { MathematicsBlockViewWrapper, MathematicsInlineViewWrapper } from "../component/Mathematics";
 

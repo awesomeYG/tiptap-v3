@@ -1,7 +1,7 @@
-import FloatingPopover from "@cq/tiptap/component/FloatingPopover"
-import { LinkIcon } from "@cq/tiptap/component/Icons"
 import { Box, Button, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Stack, TextField } from "@mui/material"
 import { MarkViewContent } from "@tiptap/react"
+import FloatingPopover from "@yu-cq/tiptap/component/FloatingPopover"
+import { LinkIcon } from "@yu-cq/tiptap/component/Icons"
 import React, { useRef, useState } from "react"
 import { LinkAttributes } from "."
 
