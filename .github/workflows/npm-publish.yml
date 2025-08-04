@@ -1,0 +1,53 @@
+name: 发布 NPM 包
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: 设置 Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+          registry-url: 'https://registry.npmjs.org/'
+
+      - name: 设置 .npmrc
+        run: |
+          echo "registry=https://registry.npmjs.org/" > .npmrc
+
+      - name: 安装 pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: 获取 pnpm 存储路径
+        id: pnpm-store
+        run: echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - name: 缓存 pnpm 依赖
+        uses: actions/cache@v3
+        id: pnpm-cache
+        with:
+          path: |
+            ${{ steps.pnpm-store.outputs.STORE_PATH }}
+            node_modules
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+
+      - name: 安装依赖
+        run: pnpm install --no-frozen-lockfile
+
+      - name: 构建
+        run: pnpm run build
+
+      - name: 发布到 NPM
+        run: pnpm publish --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

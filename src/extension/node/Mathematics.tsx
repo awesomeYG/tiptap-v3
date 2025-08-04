@@ -41,7 +41,7 @@ const CustomInlineMath = (options: EditorFnProps) => InlineMath.extend({
 
   addCommands() {
     return {
-      setInlineMath: (options) => ({ commands }) => {
+      setInlineMath: (options: { latex: string }) => ({ commands }: any) => {
         return commands.insertContent({
           type: this.name,
           attrs: {
@@ -71,7 +71,7 @@ const CustomBlockMath = (options: EditorFnProps) => BlockMath.extend({
   },
   addCommands() {
     return {
-      setBlockMath: (options) => ({ commands }) => {
+      setBlockMath: (options: { latex: string }) => ({ commands }: any) => {
         return commands.insertContent({
           type: this.name,
           attrs: {

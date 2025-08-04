@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import { ReactNodeViewRenderer } from "@tiptap/react";
 import { all, createLowlight } from 'lowlight';

@@ -13,26 +13,6 @@ const customImage = (props: ImageExtensionProps) => Image.extend({
       }
     }
   },
-  addAttributes() {
-    return {
-      ...this.parent?.(),
-      width: {
-        default: 760,
-        parseHTML: element => {
-          const width = element.getAttribute('width');
-          return width ? parseInt(width, 10) : 760;
-        },
-        renderHTML: attributes => {
-          if (!attributes.width) {
-            return {};
-          }
-          return {
-            width: attributes.width,
-          };
-        },
-      },
-    };
-  },
   addNodeView() {
     return ReactNodeViewRenderer((renderProps) => ImageViewWrapper({ ...renderProps, onUpload: props.onUpload, onError: props.onError }))
   },

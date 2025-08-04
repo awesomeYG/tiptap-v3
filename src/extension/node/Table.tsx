@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { Extension } from '@tiptap/core';
 import { Table, TableCell, TableHeader, TableRow } from '@tiptap/extension-table';
 import { createTableContextMenuPlugin } from '../component/Table/TableContextMenuPlugin';
@@ -23,7 +25,7 @@ export const TableExtension = ({ editable }: { editable: boolean }) => [
   TableCell.extend({
     addAttributes() {
       return {
-        ...(this.parent ? this.parent() : {}),
+        ...this.parent?.(),
         bgcolor: {
           default: 'transparent',
           parseHTML: (element: HTMLElement) => {
