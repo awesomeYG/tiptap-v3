@@ -279,32 +279,6 @@
   background-color: var(--mui-palette-divider);
 }
 
-/* mathematics */
-/* .tiptap.ProseMirror .tiptap-mathematics-render {
-  padding: 0 0.25rem;
-  border-radius: var(--mui-shape-borderRadius);
-}
-
-.tiptap.ProseMirror .tiptap-mathematics-render--editable {
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.tiptap.ProseMirror .tiptap-mathematics-render--editable:hover {
-  background-color: color-mix(in srgb, var(--mui-palette-primary-main) 10%, transparent);
-}
-
-.tiptap.ProseMirror [data-type="inline-math"] {
-  display: inline-block;
-}
-
-.tiptap.ProseMirror [data-type="block-math"] {
-  display: block;
-  margin: 1rem 0;
-  padding: 1rem;
-  text-align: center;
-} */
-
 /* table */
 .tiptap.ProseMirror table {
   border-collapse: collapse;
@@ -335,7 +309,7 @@
 
 /* 表格选择状态 */
 .tiptap.ProseMirror table .selectedCell:after {
-  background-color: color-mix(in srgb, var(--mui-palette-primary-main) 10%, transparent);
+  background-color: color-mix(in srgb, var(--mui-palette-text-primary) 5%, transparent);
   content: '';
   left: 0;
   right: 0;

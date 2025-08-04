@@ -50,6 +50,30 @@ const Reader = () => {
       })
     },
     content: `
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Description</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td data-background-color="#f00">Cyndi Lauper</td>
+          <td style="font-size: 10px;">Singer</td>
+          <td>Songwriter</td>
+          <td>Actress</td>
+        </tr>
+        <tr>
+          <td>Cyndi Lauper</td>
+          <td>Singer</td>
+          <td>Songwriter</td>
+          <td>Actress</td>
+        </tr>
+      </tbody>
+    </table>
     # Markdown 语法示例大全
 
 ## 标题示例

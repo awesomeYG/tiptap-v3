@@ -94,7 +94,7 @@ export const getExtensions = ({
 
   if (!exclude?.includes('table')) {
     const Table = TableExtension({ editable })
-    defaultExtensions.push(Table)
+    defaultExtensions.push(...Table)
   }
 
   if (!exclude?.includes('list')) {
@@ -132,7 +132,7 @@ export const getExtensions = ({
     defaultExtensions.push(ALinkExtension)
   }
 
-  if (!exclude?.includes('attachment') && onUpload) {
+  if (!exclude?.includes('attachment')) {
     const Attachment = AttachmentExtension({ onUpload, onError })
     defaultExtensions.push(Attachment)
   }
