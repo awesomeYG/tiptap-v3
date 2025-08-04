@@ -13,8 +13,8 @@ const EditorMath = ({ editor }: EditorMathProps) => {
   const [selectedValue, setSelectedValue] = useState<string>("inline-math");
 
   const MathOptions = [
-    { id: 'inline-math', icon: <SquareRootIcon sx={{ fontSize: '1rem' }} />, label: '行内公式', shortcutKey: ['ctrl', 'shift', 'L'] },
-    { id: 'block-math', icon: <FunctionsIcon sx={{ fontSize: '1rem' }} />, label: '块级公式', shortcutKey: ['ctrl', 'shift', 'E'] },
+    { id: 'inline-math', icon: <SquareRootIcon sx={{ fontSize: '1rem' }} />, label: '行内公式', shortcutKey: ['ctrl', '5'] },
+    { id: 'block-math', icon: <FunctionsIcon sx={{ fontSize: '1rem' }} />, label: '块级公式', shortcutKey: ['ctrl', '6'] },
   ];
 
   const updateSelection = () => {

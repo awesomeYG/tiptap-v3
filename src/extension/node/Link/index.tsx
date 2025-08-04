@@ -446,7 +446,7 @@ const LinkNode = Node.create<LinkOptions>({
 
   addKeyboardShortcuts() {
     return {
-      'Shift-L': () => {
+      'Mod-1': () => {
         return this.editor.commands.setALink({ href: '', type: 'icon' })
       }
     }

@@ -13,8 +13,8 @@ const EditorCode = ({ editor }: EditorCodeProps) => {
   const [selectedValue, setSelectedValue] = useState<string>("none");
 
   const AlignOptions = [
-    { id: 'code', icon: <CodeLineIcon sx={{ fontSize: '1rem' }} />, label: '代码', shortcutKey: ['ctrl', 'shift', 'L'] },
-    { id: 'codeBlock', icon: <CodeBoxLineIcon sx={{ fontSize: '1rem' }} />, label: '代码块', shortcutKey: ['ctrl', 'shift', 'E'] },
+    { id: 'code', icon: <CodeLineIcon sx={{ fontSize: '1rem' }} />, label: '代码', shortcutKey: ['ctrl', 'E'] },
+    { id: 'codeBlock', icon: <CodeBoxLineIcon sx={{ fontSize: '1rem' }} />, label: '代码块', shortcutKey: ['ctrl', 'alt', 'C'] },
   ];
 
   const updateSelection = () => {

@@ -122,7 +122,7 @@ const TableContextMenu: React.FC<TableContextMenuProps> = ({
         />
       </Stack>
       <Divider />
-      <MenuList sx={{ py: 1, minWidth: 180 }}>
+      <MenuList sx={{ py: 1 }}>
         {menuItems.map((item, index) => (
           item.show ? <MenuItem
             key={index}

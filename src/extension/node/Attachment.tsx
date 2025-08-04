@@ -112,7 +112,7 @@ export const AttachmentExtension = (props: EditorFnProps) => Node.create({
 
   addKeyboardShortcuts() {
     return {
-      'Shift-A': () => {
+      'Mod-4': () => {
         return this.editor.commands.setAttachment({
           url: '',
           title: '',

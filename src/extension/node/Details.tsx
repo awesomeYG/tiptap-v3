@@ -3,7 +3,7 @@ import Details, { DetailsContent, DetailsSummary } from "@tiptap/extension-detai
 const CustomDetails = Details.extend({
   addKeyboardShortcuts() {
     return {
-      'Shift-D': () => {
+      'Mod-7': () => {
         return this.editor.chain().focus().setDetails().run()
       }
     }

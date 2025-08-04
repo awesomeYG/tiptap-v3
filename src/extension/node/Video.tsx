@@ -33,7 +33,7 @@ export const VideoExtension = (props: VideoExtensionProps) => Node.create({
 
   addKeyboardShortcuts() {
     return {
-      'Shift-V': () => {
+      'Mod-3': () => {
         return this.editor.commands.setVideo({ src: '', width: 760, controls: true, autoplay: false })
       }
     }

@@ -8,7 +8,7 @@ export type ImageExtensionProps = EditorFnProps
 const customImage = (props: ImageExtensionProps) => Image.extend({
   addKeyboardShortcuts() {
     return {
-      'Shift-I': () => {
+      'Mod-2': () => {
         return this.editor.commands.setImage({ src: '', width: 760 })
       }
     }

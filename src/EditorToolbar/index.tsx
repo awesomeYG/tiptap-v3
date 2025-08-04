@@ -144,7 +144,7 @@ const EditorToolbar = ({
       <Divider orientation="vertical" flexItem sx={{ mx: 0.5, height: 20, alignSelf: 'center' }} />
       <ToolbarItem
         tip={'链接'}
-        shortcutKey={['ctrl', 'k']}
+        shortcutKey={['ctrl', '1']}
         icon={<LinkIcon sx={{ fontSize: '1rem' }} />}
         onClick={() => {
           const selection = editor.state.selection
@@ -157,7 +157,7 @@ const EditorToolbar = ({
       />
       <ToolbarItem
         tip={'折叠块'}
-        shortcutKey={[]}
+        shortcutKey={['ctrl', '7']}
         icon={<MenuFold2FillIcon sx={{ fontSize: '1rem' }} />}
         onClick={() => {
           if (!active.details) {

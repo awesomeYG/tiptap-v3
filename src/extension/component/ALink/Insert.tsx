@@ -1,15 +1,17 @@
 import { FloatingPopover } from "@cq/tiptap/component"
 import { LinkIcon } from "@cq/tiptap/component/Icons"
 import { Box, Button, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Stack, TextField } from "@mui/material"
+import { Editor } from "@tiptap/core"
 import { NodeViewProps, NodeViewWrapper } from "@tiptap/react"
 import React, { useEffect, useState } from "react"
 import { ALinkAttributes } from "."
 
 interface InsertLinkProps extends Partial<NodeViewProps> {
   attrs: ALinkAttributes
+  editor: Editor
 }
 
-const InsertLink = ({ updateAttributes, deleteNode, selected, attrs }: InsertLinkProps) => {
+const InsertLink = ({ updateAttributes, deleteNode, selected, attrs, editor }: InsertLinkProps) => {
   const [title, setTitle] = useState(attrs.title)
   const [href, setHref] = useState(attrs.href)
   const [type, setType] = useState(attrs.type || 'icon')
@@ -30,6 +32,7 @@ const InsertLink = ({ updateAttributes, deleteNode, selected, attrs }: InsertLin
 
   const handleDeleteLink = () => {
     deleteNode?.()
+    editor.commands.insertContent(attrs.title)
   }
 
   useEffect(() => {

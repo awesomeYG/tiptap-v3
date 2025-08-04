@@ -83,7 +83,13 @@ const ALinkViewWrapper: React.FC<NodeViewProps> = ({
   }
 
   if (!attrs.href) {
-    return <InsertLink updateAttributes={updateAttributes} deleteNode={deleteNode} selected={selected} attrs={attrs} />
+    return <InsertLink
+      updateAttributes={updateAttributes}
+      deleteNode={deleteNode}
+      selected={selected}
+      attrs={attrs}
+      editor={editor}
+    />
   }
 
   return <NodeViewWrapper

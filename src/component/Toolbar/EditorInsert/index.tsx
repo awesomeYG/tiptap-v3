@@ -13,9 +13,9 @@ const EditorInsert = ({ editor }: EditorInsertProps) => {
   const [selectedValue, setSelectedValue] = useState<string>("none");
 
   const InsertOptions = [
-    { id: 'image', icon: <ImageLineIcon sx={{ fontSize: '1rem' }} />, label: '图片', shortcutKey: ['shift', 'I'] },
-    { id: 'video', icon: <MovieLineIcon sx={{ fontSize: '1rem' }} />, label: '视频', shortcutKey: ['shift', 'V'] },
-    { id: 'attachment', icon: <AttachmentLineIcon sx={{ fontSize: '1rem' }} />, label: '附件', shortcutKey: ['shift', 'F'] },
+    { id: 'image', icon: <ImageLineIcon sx={{ fontSize: '1rem' }} />, label: '图片', shortcutKey: ['ctrl', '2'] },
+    { id: 'video', icon: <MovieLineIcon sx={{ fontSize: '1rem' }} />, label: '视频', shortcutKey: ['ctrl', '3'] },
+    { id: 'attachment', icon: <AttachmentLineIcon sx={{ fontSize: '1rem' }} />, label: '附件', shortcutKey: ['ctrl', '4'] },
   ];
 
   const updateSelection = () => {
