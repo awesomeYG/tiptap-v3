@@ -10,11 +10,12 @@ interface ToolbarItemProps {
   sx?: SxProps<Theme>;
   icon?: React.ReactNode;
   className?: string;
+  disabled?: boolean;
   onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
 
 const ToolbarItem = React.forwardRef<HTMLButtonElement, ToolbarItemProps>(
-  ({ tip, shortcutKey, icon, sx, text, onClick, className, ...rest }, ref) => {
+  ({ tip, shortcutKey, icon, sx, text, onClick, className, disabled, ...rest }, ref) => {
     const shortcutKeyText = getShortcutKeyText(shortcutKey || []);
     return (
       <Tooltip title={
@@ -28,6 +29,7 @@ const ToolbarItem = React.forwardRef<HTMLButtonElement, ToolbarItemProps>(
             ref={ref}
             onClick={onClick}
             className={className}
+            disabled={disabled}
             sx={{
               minWidth: '36px',
               p: 1,
