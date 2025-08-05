@@ -283,7 +283,7 @@ export const createTableContextMenuPlugin = (editor: Editor) => {
         },
       },
     },
-    view(editorView: EditorView) {
+    view() {
       return {
         destroy() {
           destroyMenuContainer();

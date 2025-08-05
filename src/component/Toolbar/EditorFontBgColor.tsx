@@ -73,8 +73,8 @@ const EditorFontBgColor = ({ editor }: EditorFontBgColorProps) => {
     <Stack sx={{ position: 'relative' }}>
       <ToolbarItem
         tip={'文字背景颜色'}
-        icon={<MarkupLineIcon sx={{ fontSize: '1rem', pr: '0.75rem' }} />}
-        sx={{ position: 'relative' }}
+        icon={<MarkupLineIcon sx={{ fontSize: '1rem' }} />}
+        sx={{ position: 'relative', minWidth: '44px', justifyContent: 'flex-start' }}
         onClick={() => {
           editor.chain().focus().setBackgroundColor(color).run()
           handleClosePopover()

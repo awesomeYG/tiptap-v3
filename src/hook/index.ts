@@ -2,7 +2,7 @@ import { migrateMathStrings } from '@tiptap/extension-mathematics'
 import { useEditor, UseEditorOptions } from '@tiptap/react'
 import { renderToMarkdown } from '@tiptap/static-renderer/pm/markdown'
 import { getExtensions } from '@yu-cq/tiptap/extension'
-import { UseTiptapProps } from '@yu-cq/tiptap/type'
+import { UseTiptapProps, UseTiptapReturn } from '@yu-cq/tiptap/type'
 
 const useTiptap = ({
   // extension 
@@ -22,7 +22,7 @@ const useTiptap = ({
 
   // other
   ...options
-}: UseTiptapProps & UseEditorOptions) => {
+}: UseTiptapProps & UseEditorOptions): UseTiptapReturn => {
 
   const extensions = getExtensions({
     exclude,

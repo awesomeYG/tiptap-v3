@@ -167,7 +167,7 @@ const AttachmentViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
             text='下载'
             onClick={handleDownload}
           />
-          <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'var(--mui-palette-divider)' }} />
+          <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'divider' }} />
           <ToolbarItem
             icon={<EditBoxLineIcon sx={{ fontSize: '1rem' }} />}
             tip='编辑'
@@ -181,7 +181,7 @@ const AttachmentViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
             tip='删除'
             onClick={handleDeleteAttachment}
           />
-          <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'var(--mui-palette-divider)' }} />
+          <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'divider' }} />
           <ToolbarItem
             icon={<ScrollToBottomLineIcon sx={{ transform: 'rotate(90deg)', fontSize: '1rem' }} />}
             tip='图标文字链接'

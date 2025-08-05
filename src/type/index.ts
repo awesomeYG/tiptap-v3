@@ -46,3 +46,11 @@ export type ExtensionRelativeProps = MentionExtensionProps & EditorFnProps & {
 export type UseTiptapProps = ExtensionRelativeProps
 
 export type GetExtensionsProps = ExtensionRelativeProps
+
+export type UseTiptapReturn = {
+  editor: Editor
+  getText: () => string
+  getHTML: () => string
+  getJSON: () => any
+  getMarkdownByJSON: () => string
+}

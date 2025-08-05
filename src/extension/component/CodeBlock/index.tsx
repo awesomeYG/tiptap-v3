@@ -81,7 +81,7 @@ const CodeBlockView: React.FC<NodeViewProps> = (props) => {
           p: '1.75rem 1rem 0.75rem',
           m: 0,
           borderRadius: 1,
-          backgroundColor: 'var(--mui-palette-background-paper)',
+          bgcolor: 'background.paper',
           overflow: 'hidden',
         }}
       >
@@ -115,9 +115,10 @@ const CodeBlockView: React.FC<NodeViewProps> = (props) => {
               '&:focus': {
                 bgcolor: 'action.selected',
               },
-              '.MuiSelect-select': {
+              '&.MuiOutlinedInput-root .MuiSelect-select': {
                 p: 0,
                 pl: 1,
+                pr: 'calc(var(--mui-spacing-unit) * 3) !important',
               },
               '& .MuiOutlinedInput-notchedOutline': {
                 border: 'none',
@@ -138,6 +139,9 @@ const CodeBlockView: React.FC<NodeViewProps> = (props) => {
               },
             }}
           >
+            {!languages.find(it => it.value === attrs.language) && <MenuItem value={attrs.language} sx={{ fontSize: '0.75rem' }}>
+              {attrs.language}
+            </MenuItem>}
             {languages.map((lang) => (
               <MenuItem key={lang.value} value={lang.value} sx={{ fontSize: '0.75rem' }}>
                 {lang.label}

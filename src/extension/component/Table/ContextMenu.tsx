@@ -1,9 +1,9 @@
 import {
+  Box,
   Divider,
   MenuItem,
   MenuList,
-  Stack,
-  Typography
+  Stack
 } from '@mui/material';
 import { Editor } from '@tiptap/core';
 import { ToolbarItem } from '@yu-cq/tiptap/component/Toolbar';
@@ -122,7 +122,7 @@ const TableContextMenu: React.FC<TableContextMenuProps> = ({
         />
       </Stack>
       <Divider />
-      <MenuList sx={{ py: 1 }}>
+      <MenuList sx={{ p: 0.5 }}>
         {menuItems.map((item, index) => (
           item.show ? <MenuItem
             key={index}
@@ -131,6 +131,7 @@ const TableContextMenu: React.FC<TableContextMenuProps> = ({
               py: 1,
               px: 2,
               fontSize: '0.875rem',
+              borderRadius: 'var(--mui-shape-borderRadius)',
               '&:hover': {
                 backgroundColor: 'action.hover'
               }
@@ -138,7 +139,7 @@ const TableContextMenu: React.FC<TableContextMenuProps> = ({
           >
             <Stack direction="row" alignItems="center" gap={1.5}>
               {item.icon}
-              <Typography variant="body2">{item.label}</Typography>
+              <Box>{item.label}</Box>
             </Stack>
           </MenuItem> : null
         ))}

@@ -39,7 +39,7 @@
 //           onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
 //           isActive={editor.isActive('heading', { level: 3 })}
 //         />
-//         <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'var(--mui-palette-divider)' }} />
+//         <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'divider' }} />
 //         <ToolItem
 //           icon={<ListCheck3Icon />}
 //           size='small'
@@ -58,7 +58,7 @@
 //           onClick={() => editor.chain().focus().toggleOrderedList().run()}
 //           isActive={editor.isActive('orderedList')}
 //         />
-//         <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'var(--mui-palette-divider)' }} />
+//         <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'divider' }} />
 //         <ToolItem
 //           icon={<QuoteTextIcon />}
 //           size='small'

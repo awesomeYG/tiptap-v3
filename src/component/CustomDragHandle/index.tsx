@@ -15,17 +15,17 @@ const CustomDragHandle = ({ editor }: { editor: Editor }) => {
       alignItems: 'center',
       justifyContent: 'center',
       mr: 1,
-      color: 'var(--mui-palette-text-tertiary)',
+      color: 'text.tertiary',
       cursor: 'grab',
-      borderColor: 'var(--mui-palette-divider)',
-      backgroundColor: 'var(--mui-palette-background-paper)',
+      borderColor: 'divider',
+      bgcolor: 'background.paper',
       transition: 'all 0.2s ease-in-out',
       '&:hover': {
-        color: 'var(--mui-palette-text-secondary)',
-        backgroundColor: 'var(--mui-palette-divider)',
+        color: 'text.secondary',
+        bgcolor: 'divider',
       },
       '&:active': {
-        color: 'var(--mui-palette-text-primary)',
+        color: 'text.primary',
         cursor: 'grabbing',
       },
     }}>

@@ -122,12 +122,16 @@ const InsertImage = ({
       onClose={handleClosePopover}
       placement="bottom"
     >
-      <Box sx={{ width: 350, borderBottom: '1px solid', borderColor: 'divider' }}>
-        <Tabs value={insertType} onChange={handleChangeInsertType}>
+      <Stack direction={'row'} alignItems={'center'} justifyContent={'center'} sx={{ width: 300, borderBottom: '1px solid', borderColor: 'divider' }}>
+        <Tabs value={insertType} onChange={handleChangeInsertType} sx={{
+          borderRadius: '0 !important',
+          height: 'auto !important',
+          padding: '0 !important',
+        }}>
           <Tab label="上传" value="upload" />
           <Tab label="嵌入链接" value="link" />
         </Tabs>
-      </Box>
+      </Stack>
       {insertType === 'upload' ? (
         <Stack alignItems={'center'} gap={2} sx={{ p: 2 }}>
           <Button

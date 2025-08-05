@@ -99,7 +99,7 @@ export const MathematicsInlineViewWrapper: React.FC<NodeViewProps & EditorFnProp
           position: 'relative',
           px: 0.5,
           py: 0.25,
-          borderRadius: 0.5,
+          borderRadius: 'var(--mui-shape-borderRadius)',
           bgcolor: 'transparent',
           '&:hover': {
             bgcolor: 'action.hover'

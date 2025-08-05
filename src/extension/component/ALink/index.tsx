@@ -178,7 +178,7 @@ const ALinkViewWrapper: React.FC<NodeViewProps> = ({
           text='打开'
           onClick={() => window.open(attrs.href, '_blank')}
         />
-        <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'var(--mui-palette-divider)' }} />
+        <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'divider' }} />
         <ToolbarItem
           icon={<EditBoxLineIcon sx={{ fontSize: '1rem' }} />}
           tip='编辑'
@@ -197,7 +197,7 @@ const ALinkViewWrapper: React.FC<NodeViewProps> = ({
           tip='取消链接'
           onClick={handleDeleteLink}
         />
-        <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'var(--mui-palette-divider)' }} />
+        <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'divider' }} />
         <ToolbarItem
           icon={<TextIcon sx={{ fontSize: '1rem' }} />}
           tip='文字链接'

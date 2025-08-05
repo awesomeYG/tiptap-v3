@@ -34,6 +34,7 @@ const ToolbarItem = React.forwardRef<HTMLButtonElement, ToolbarItemProps>(
               minWidth: '36px',
               p: 1,
               color: 'text.primary',
+              borderRadius: 'var(--mui-shape-borderRadius)',
               '&.tool-active': {
                 bgcolor: 'background.paper0',
                 color: 'primary.main',
@@ -46,7 +47,10 @@ const ToolbarItem = React.forwardRef<HTMLButtonElement, ToolbarItemProps>(
             }}
             {...rest}
           >
-            {icon} {text && <Box component='span' sx={{ pl: 1, lineHeight: 1 }}>{text}</Box>}
+            <Stack direction={'row'} alignItems={'center'} gap={1} sx={{ lineHeight: 1 }}>
+              {icon}
+              {text && <Box component='span'>{text}</Box>}
+            </Stack>
           </Button>
         </Box>
       </Tooltip>

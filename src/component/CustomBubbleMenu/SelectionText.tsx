@@ -100,6 +100,7 @@ const SelectionText = (props: { editor: Editor }) => {
   >
     <Paper sx={{
       p: 0.5,
+      borderRadius: 'var(--mui-shape-borderRadius)',
     }}>
       <Stack direction={'row'} alignItems={'center'} justifyContent={'space-between'}>
         <ToolbarItem
@@ -122,7 +123,7 @@ const SelectionText = (props: { editor: Editor }) => {
           onClick={() => editor.chain().focus().toggleUnderline().run()}
           className={active.underline ? "tool-active" : ""}
         />
-        <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'var(--mui-palette-divider)' }} />
+        <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'divider' }} />
         <ToolbarItem
           icon={<FontFamilyIcon sx={{ fontSize: '1rem' }} />}
           onClick={() => setShowColorPicker(!showColorPicker)}

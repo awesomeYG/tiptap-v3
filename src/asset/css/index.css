@@ -2,7 +2,7 @@
 @import 'katex/dist/katex.min.css';
 
 :root {
-  --mui-palette-primary-main: #6E73FE;
+  --mui-palette-primary-main: #ff0000;
   --mui-palette-primary-light: #42a5f5;
   --mui-palette-common-white: #ffffff;
   --mui-palette-common-black: #000000;
@@ -19,7 +19,7 @@
   --mui-palette-success-main: #00DF98;
   --mui-palette-divider: #ECEEF1;
 
-  --mui-shape-borderRadius: 0.25rem;
+  --mui-shape-borderRadius: 10px;
   --mui-spacing-unit: 8px;
 
   --mui-transitions-duration-short: 250ms;

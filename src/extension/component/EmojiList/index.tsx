@@ -64,28 +64,29 @@ export const EmojiList = forwardRef<EmojiListRef, EmojiListProps>((props, ref) =
       position: 'relative',
       overflowY: 'auto',
       p: 1,
+      borderRadius: 'var(--mui-shape-borderRadius)',
       maxWidth: 300,
       maxHeight: 300,
     }}>
-      <Grid container spacing={0.5}>
+      <Grid container spacing={1}>
         {props.items.map((item, index) => (
-          <Grid size={1.5} key={index} onClick={() => selectItem(index)} sx={{
+          <Grid size={1} key={index} onClick={() => selectItem(index)} sx={{
             cursor: 'pointer',
             lineHeight: 1,
-            fontSize: 14,
+            fontSize: '1rem',
             width: '2rem',
             height: '2rem',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            borderRadius: '4px',
+            borderRadius: 'var(--mui-shape-borderRadius)',
             img: {
               width: '1.25rem',
               height: '1.25rem',
             },
             transition: 'background-color 0.2s ease-in-out',
             '&:hover': {
-              backgroundColor: 'action.selected',
+              backgroundColor: 'action.hover',
             },
             ...(index === selectedIndex && {
               backgroundColor: 'action.selected',

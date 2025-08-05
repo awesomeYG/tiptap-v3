@@ -44,7 +44,7 @@ const ReadonlyCodeBlock: React.FC<NodeViewProps> = ({
           p: '0.75rem 1rem',
           m: 0,
           borderRadius: 1,
-          backgroundColor: 'var(--mui-palette-background-paper)',
+          bgcolor: 'background.paper',
           overflow: 'hidden',
           position: 'relative',
         }}

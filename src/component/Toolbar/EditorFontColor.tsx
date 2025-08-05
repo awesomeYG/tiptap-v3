@@ -72,8 +72,8 @@ const EditorFontColor = ({ editor }: EditorFontColorProps) => {
     <Stack sx={{ position: 'relative' }}>
       <ToolbarItem
         tip={'文字颜色'}
-        icon={<FontColorIcon sx={{ fontSize: '1rem', pr: '0.75rem' }} />}
-        sx={{ position: 'relative' }}
+        icon={<FontColorIcon sx={{ fontSize: '1rem' }} />}
+        sx={{ position: 'relative', minWidth: '44px', justifyContent: 'flex-start' }}
         onClick={() => {
           editor.chain().focus().setColor(color).run()
           handleClosePopover()
