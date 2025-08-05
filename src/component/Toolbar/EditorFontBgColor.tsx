@@ -12,7 +12,7 @@ interface EditorFontBgColorProps {
 
 const EditorFontBgColor = ({ editor }: EditorFontBgColorProps) => {
   const theme = useTheme()
-  const defaultColor = theme.palette.background.default
+  const defaultColor = theme.palette.background.paper
 
   const THEME_TEXT_BG_COLOR = [
     '#e7bdff',

@@ -1,4 +1,4 @@
-import { Editor, EditorToolbar, useTiptap } from '@yu-cq/tiptap';
+import { Editor, EditorThemeProvider, EditorToolbar, useTiptap } from '@yu-cq/tiptap';
 import React from 'react';
 
 const Reader = () => {
@@ -457,23 +457,25 @@ Nothing is impossible, the word itself says “I’m possible!”
 <p>Audrey Hepburn</p>`
   });
 
-  return <div style={{
-    border: '1px solid #eee',
-    borderRadius: '10px',
-    padding: '0 10px 10px',
-  }}>
+  return <EditorThemeProvider>
     <div style={{
-      borderBottom: '1px solid #eee',
-      marginBottom: '30px',
+      border: '1px solid #eee',
+      borderRadius: '10px',
+      padding: '0 10px 10px',
     }}>
-      <EditorToolbar editor={editor} />
-    </div>
-    <div style={{
-      backgroundColor: '#fff',
-    }}>
-      <Editor editor={editor} />
-    </div>
-  </div>;
+      <div style={{
+        borderBottom: '1px solid #eee',
+        marginBottom: '30px',
+      }}>
+        <EditorToolbar editor={editor} />
+      </div>
+      <div style={{
+        backgroundColor: '#fff',
+      }}>
+        <Editor editor={editor} />
+      </div>
+    </div>;
+  </EditorThemeProvider>
 };
 
 export default Reader; 

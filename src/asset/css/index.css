@@ -2,23 +2,6 @@
 @import 'katex/dist/katex.min.css';
 
 :root {
-  --mui-palette-primary-main: #ff0000;
-  --mui-palette-primary-light: #42a5f5;
-  --mui-palette-common-white: #ffffff;
-  --mui-palette-common-black: #000000;
-  --mui-palette-text-primary: #21222D;
-  --mui-palette-text-secondary: rgba(33, 34, 45, 0.7);
-  --mui-palette-text-auxiliary: rgba(33, 34, 45, 0.5);
-  --mui-palette-text-tertiary: var(--mui-palette-text-auxiliary);
-  --mui-palette-text-disabled: rgba(33, 34, 45, 0.3);
-  --mui-palette-background-default: #ffffff;
-  --mui-palette-background-paper: #F8F9FA;
-  --mui-palette-warning-main: #ed6c02;
-  --mui-palette-warning-light: #ff9800;
-  --mui-palette-error-main: #F64E54;
-  --mui-palette-success-main: #00DF98;
-  --mui-palette-divider: #ECEEF1;
-
   --mui-shape-borderRadius: 10px;
   --mui-spacing-unit: 8px;
 

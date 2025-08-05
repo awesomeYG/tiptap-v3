@@ -81,7 +81,7 @@ const CodeBlockView: React.FC<NodeViewProps> = (props) => {
           p: '1.75rem 1rem 0.75rem',
           m: 0,
           borderRadius: 1,
-          bgcolor: 'background.paper',
+          bgcolor: 'background.paper2',
           overflow: 'hidden',
         }}
       >
