@@ -37,7 +37,7 @@ const hasMultipleCellSelection = (editor: Editor) => {
 
 const isClickedCellInSelection = (editor: Editor, clickedElement: Element) => {
   const { selection } = editor.state;
-  if (selection.constructor.name !== 'CellSelection') {
+  if (selection.constructor.name !== '_CellSelection') {
     return false;
   }
   try {
@@ -97,6 +97,7 @@ const isInTableCell = (element: Element): boolean => {
   const editorElement = cell.closest('.tiptap');
   return !!editorElement;
 };
+
 const getTableCell = (element: Element): Element | null => {
   const cell = element.closest('td, th');
   if (!cell) return null;
@@ -117,7 +118,6 @@ export const createTableContextMenuPlugin = (editor: Editor) => {
   let root: any = null;
   let savedSelection: any = null;
   let commandExecuted = false;
-  let rightClickTarget: Element | null = null;
   let preventSelectionLoss = false;
 
   const createMenuContainer = () => {
@@ -141,6 +141,18 @@ export const createTableContextMenuPlugin = (editor: Editor) => {
       document.body.removeChild(menuContainer);
       menuContainer = null;
     }
+  };
+
+  const hideContextMenu = () => {
+    if (root) {
+      root.render(null);
+    }
+    if (savedSelection && !commandExecuted && !preventSelectionLoss) {
+      restoreSelection(editor, savedSelection);
+    }
+    savedSelection = null;
+    commandExecuted = false;
+    preventSelectionLoss = false;
   };
 
   const showContextMenu = (anchorEl: HTMLElement, hasMultipleSelection: boolean) => {
@@ -172,19 +184,6 @@ export const createTableContextMenuPlugin = (editor: Editor) => {
     );
   };
 
-  const hideContextMenu = () => {
-    if (root) {
-      root.render(null);
-    }
-    if (savedSelection && !commandExecuted && !preventSelectionLoss) {
-      restoreSelection(editor, savedSelection);
-    }
-    savedSelection = null;
-    commandExecuted = false;
-    preventSelectionLoss = false;
-    rightClickTarget = null;
-  };
-
   return new Plugin<TableContextMenuPluginState>({
     key: TableContextMenuPluginKey,
     state: {
@@ -206,7 +205,6 @@ export const createTableContextMenuPlugin = (editor: Editor) => {
           if (!isInTableCell(target)) {
             hideContextMenu();
             preventSelectionLoss = false;
-            rightClickTarget = null;
             return false;
           }
           event.preventDefault();
@@ -214,7 +212,6 @@ export const createTableContextMenuPlugin = (editor: Editor) => {
           const cellElement = getTableCell(target);
           if (!cellElement) {
             preventSelectionLoss = false;
-            rightClickTarget = null;
             return false;
           }
           if (preventSelectionLoss && savedSelection) {
@@ -227,13 +224,11 @@ export const createTableContextMenuPlugin = (editor: Editor) => {
           const hasMultipleSelection = savedSelection ? true : hasMultipleCellSelection(editor);
           showContextMenu(cellElement as HTMLElement, hasMultipleSelection);
           preventSelectionLoss = false;
-          rightClickTarget = null;
           return true;
         },
         mousedown: (view: EditorView, event: MouseEvent) => {
           const target = event.target as Element;
           if (event.button === 2) {
-            rightClickTarget = target;
             if (isInTableCell(target)) {
               const cellElement = getTableCell(target);
               if (cellElement) {
@@ -264,7 +259,6 @@ export const createTableContextMenuPlugin = (editor: Editor) => {
             setTimeout(() => {
               if (preventSelectionLoss) {
                 preventSelectionLoss = false;
-                rightClickTarget = null;
                 if (savedSelection && !commandExecuted) {
                   restoreSelection(editor, savedSelection);
                   savedSelection = null;

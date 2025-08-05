@@ -474,7 +474,7 @@ Nothing is impossible, the word itself says “I’m possible!”
       }}>
         <Editor editor={editor} />
       </div>
-    </div>;
+    </div>
   </EditorThemeProvider>
 };
 
