@@ -1,4 +1,5 @@
-import { Grid, Paper } from '@mui/material'
+import { Paper } from '@mui/material'
+import Grid from '@mui/material/Grid2'
 import { EmojiItem } from '@tiptap/extension-emoji'
 import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react'
 
