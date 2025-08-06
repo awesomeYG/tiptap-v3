@@ -53,6 +53,7 @@ const dark = {
     auxiliary: "rgba(255,255,255,0.5)",
     disabled: "rgba(255,255,255,0.26)",
     slave: "rgba(255,255,255,0.05)",
+    inverse: '#000000',
     inverseAuxiliary: "rgba(0,0,0,0.5)",
     inverseDisabled: "rgba(0,0,0,0.15)",
   },
@@ -62,12 +63,9 @@ const dark = {
     paper: "#18181b",
     paper2: "#27272a",
     default: "rgba(255,255,255,0.6)",
-    disabled: "rgba(15,15,15,0.8)",
     chip: "rgba(145,147,171,0.16)",
     circle: "#3B476A",
-    focus: '#542996'
   },
-  common: {},
   shadows: "transparent",
   table: {
     head: {
@@ -75,7 +73,6 @@ const dark = {
       color: "#fff",
     },
     row: {
-      backgroundColor: 'transparent',
       hoverColor: "rgba(48, 58, 70, 0.4)",
     },
     cell: {

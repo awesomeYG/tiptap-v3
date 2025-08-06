@@ -35,6 +35,9 @@ export const theme = <T extends string = 'dark' | 'light'>({
   const color: any = colors ? colors[mode] : mode === 'light' ? light : dark;
   const themeOptions = {
     cssVariables: true,
+    shape: {
+      borderRadius: 10,
+    },
     palette: customTheme.palette ? customTheme.palette(color, mode) : themePalette(color, mode),
     shadows: shadows(color),
     typography: themeTypography(),

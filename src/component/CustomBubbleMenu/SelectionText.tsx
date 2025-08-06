@@ -131,7 +131,7 @@ const SelectionText = (props: { editor: Editor }) => {
       </Stack>
       {showColorPicker && <Box sx={{
         mt: 0.5,
-        pt: 0.5,
+        p: 1.5,
         borderTop: '1px solid',
         borderColor: 'divider',
         boxSizing: 'border-box',
@@ -144,7 +144,7 @@ const SelectionText = (props: { editor: Editor }) => {
               height: '1.5rem',
               cursor: 'pointer',
               border: '1px solid',
-              borderColor: 'divider',
+              borderColor: c === theme.palette.common.white ? 'divider' : c,
               boxSizing: 'border-box',
               borderRadius: 'var(--mui-shape-borderRadius)',
               bgcolor: c,
@@ -153,7 +153,7 @@ const SelectionText = (props: { editor: Editor }) => {
             }} />
           ))}
         </Stack>
-        <Box sx={{ fontSize: 14, mb: 0.5, mt: 1, color: 'text.secondary' }}>背景颜色</Box>
+        <Box sx={{ fontSize: 14, mb: 0.5, mt: 2, color: 'text.secondary' }}>背景颜色</Box>
         <Stack direction={'row'} flexWrap={'wrap'} gap={0.5} sx={{ width: 'calc(36px * 5 + 9px)' }}>
           {THEME_TEXT_BG_COLOR.map((c) => (
             <Box key={c} sx={{
@@ -161,7 +161,7 @@ const SelectionText = (props: { editor: Editor }) => {
               height: '1.5rem',
               cursor: 'pointer',
               border: '1px solid',
-              borderColor: 'divider',
+              borderColor: c === theme.palette.common.white ? 'divider' : c,
               boxSizing: 'border-box',
               borderRadius: 'var(--mui-shape-borderRadius)',
               bgcolor: c,
@@ -170,7 +170,7 @@ const SelectionText = (props: { editor: Editor }) => {
             }} />
           ))}
         </Stack>
-        <Button fullWidth size='small' sx={{ mt: 1, color: 'initial' }}
+        <Button fullWidth variant='contained' sx={{ mt: 2 }}
           onClick={() => {
             editor.chain().focus().setColor(theme.palette.text.primary).setBackgroundColor(theme.palette.background.paper).run()
           }}

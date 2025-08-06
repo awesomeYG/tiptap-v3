@@ -132,7 +132,6 @@ export const MathematicsBlockViewWrapper: React.FC<NodeViewProps & EditorFnProps
           />
           <Button
             variant="contained"
-            size="small"
             fullWidth
             onClick={handleInsertFormula}
             disabled={!editLatex.trim()}
