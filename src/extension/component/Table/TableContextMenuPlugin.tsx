@@ -55,14 +55,17 @@ const isClickedCellInSelection = (editor: Editor, clickedElement: Element) => {
       return false;
     }
     const cellSelection = selection as any;
-    if (cellSelection.$anchorCell && cellSelection.$headCell) {
-      const anchorPos = cellSelection.$anchorCell.pos;
-      const headPos = cellSelection.$headCell.pos;
-      const minPos = Math.min(anchorPos, headPos);
-      const maxPos = Math.max(anchorPos, headPos);
-      return domPosition >= minPos && domPosition <= maxPos;
-    }
-    return domPosition >= selection.from && domPosition <= selection.to;
+    // 使用范围判断不精确，直接使用ranges判断
+    const ranges = cellSelection.ranges.map((it: any) => it.$from.pos);
+    return ranges.includes(domPosition);
+    // if (cellSelection.$anchorCell && cellSelection.$headCell) {
+    //   const anchorPos = cellSelection.$anchorCell.pos;
+    //   const headPos = cellSelection.$headCell.pos;
+    //   const minPos = Math.min(anchorPos, headPos);
+    //   const maxPos = Math.max(anchorPos, headPos);
+    //   return domPosition >= minPos && domPosition <= maxPos;
+    // }
+    // return domPosition >= selection.from && domPosition <= selection.to;
   } catch (error) {
     console.warn('Error checking if clicked cell is in selection:', error);
     return false;
