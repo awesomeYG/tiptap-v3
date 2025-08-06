@@ -161,7 +161,6 @@ export default function componentStyleOverrides(color: ThemeColor) {
         root: {
           background: color.background.paper,
           lineHeight: 1.5,
-          height: color.table.cell.height,
           fontSize: "14px",
           paddingTop: "16px !important",
           paddingBottom: "16px !important",
@@ -186,7 +185,6 @@ export default function componentStyleOverrides(color: ThemeColor) {
           backgroundColor: color.background.paper2,
           color: color.table.head.color,
           fontSize: "12px",
-          height: color.table.head.height,
           paddingTop: '0 !important',
           paddingBottom: '0 !important',
           borderSpacing: '12px',

@@ -1,5 +1,5 @@
-import { type Color } from './color'
-export default function shadows(color: Color) {
+import { type ThemeColor } from './color'
+export default function shadows(color: ThemeColor) {
   return [
     `0px 12px 24px -4px ${color.shadows},0px 0px 2px 0px ${color.shadows}`,
     `0px 12px 24px -4px ${color.shadows},0px 0px 2px 0px ${color.shadows}`,
