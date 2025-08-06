@@ -6,16 +6,18 @@ export const TableOfContentsExtension = ({ onTocUpdate }: { onTocUpdate?: (toc: 
   return TableOfContents.configure({
     getIndex: getHierarchicalIndexes,
     onUpdate(toc) {
-      onTocUpdate?.(toc.map(content => ({
-        id: content.id,
-        isActive: content.isActive,
-        isScrolledOver: content.isScrolledOver,
-        itemIndex: content.itemIndex,
-        level: content.level,
-        originalLevel: content.originalLevel,
-        pos: content.pos,
-        textContent: content.textContent,
-      })))
+      setTimeout(() => {
+        onTocUpdate?.(toc.map(content => ({
+          id: content.id,
+          isActive: content.isActive,
+          isScrolledOver: content.isScrolledOver,
+          itemIndex: content.itemIndex,
+          level: content.level,
+          originalLevel: content.originalLevel,
+          pos: content.pos,
+          textContent: content.textContent,
+        })))
+      }, 0)
     }
   })
 }

@@ -1,7 +1,10 @@
-import { Editor, EditorThemeProvider, EditorToolbar, useTiptap } from '@yu-cq/tiptap';
+import { Editor, EditorThemeProvider, EditorToolbar, TocList, useTiptap } from '@yu-cq/tiptap';
 import React from 'react';
 
 const Reader = () => {
+  const handleTocUpdate = (toc: TocList) => {
+    console.log(toc)
+  }
   const { editor } = useTiptap({
     editable: true,
     limit: 100,
@@ -10,9 +13,7 @@ const Reader = () => {
       console.log(editor.getJSON())
       console.log('保存功能触发！内容:', editor.getHTML());
     },
-    onTocUpdate: (toc) => {
-      console.log(toc)
-    },
+    onTocUpdate: handleTocUpdate,
     onMentionFilter: async ({ query }) => {
       return new Promise((resolve) => {
         resolve([
