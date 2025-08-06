@@ -80,7 +80,7 @@ const CodeBlockView: React.FC<NodeViewProps> = (props) => {
         sx={{
           p: '1.75rem 1rem 0.75rem',
           m: 0,
-          borderRadius: 1,
+          borderRadius: showTitleInput ? 'var(--mui-shape-borderRadius) var(--mui-shape-borderRadius) 0 0 !important' : 'var(--mui-shape-borderRadius)',
           bgcolor: 'background.paper2',
           overflow: 'hidden',
         }}
@@ -139,7 +139,7 @@ const CodeBlockView: React.FC<NodeViewProps> = (props) => {
               },
             }}
           >
-            {!languages.find(it => it.value === attrs.language) && <MenuItem value={attrs.language} sx={{ fontSize: '0.75rem' }}>
+            {attrs.language && !languages.find(it => it.value === attrs.language) && <MenuItem value={attrs.language} sx={{ fontSize: '0.75rem' }}>
               {attrs.language}
             </MenuItem>}
             {languages.map((lang) => (
@@ -195,9 +195,14 @@ const CodeBlockView: React.FC<NodeViewProps> = (props) => {
       </Box>
       {showTitleInput && (
         <Box sx={{
-          pl: 1,
-          pt: 0.5,
-          height: '1rem',
+          px: 1,
+          pt: 0.25,
+          pb: 0.5,
+          borderRadius: '0 0 4px 4px',
+          bgcolor: 'background.paper2',
+          borderTop: '1px solid var(--mui-palette-divider)',
+          boxSizing: 'border-box',
+          letterSpacing: '0.01rem',
         }}>
           <TextField
             fullWidth
@@ -230,10 +235,8 @@ const CodeBlockView: React.FC<NodeViewProps> = (props) => {
       {attrs.title && !showTitleInput && (
         <Box
           sx={{
-            pl: 1,
-            pt: 0.5,
-            height: '1rem',
-            lineHeight: 1,
+            px: 1,
+            py: 0.5,
             fontSize: '0.875rem',
             color: 'text.secondary',
             letterSpacing: '0.01rem',

@@ -27,7 +27,7 @@
   padding-bottom: 0.375rem;
   margin: 1rem 0;
   color: var(--mui-palette-text-tertiary);
-  background-color: var(--mui-palette-background-paper);
+  background-color: var(--mui-palette-background-paper2);
 }
 
 .tiptap.ProseMirror blockquote::before,
@@ -125,7 +125,7 @@
 .tiptap.ProseMirror pre {
   position: relative;
   border-radius: var(--mui-shape-borderRadius);
-  background-color: var(--mui-palette-background-paper);
+  background-color: var(--mui-palette-background-paper2);
 }
 
 .tiptap.ProseMirror code {
@@ -135,7 +135,7 @@
   display: inline-block;
   word-break: break-all;
   color: var(--mui-palette-primary-main);
-  background-color: var(--mui-palette-background-paper);
+  background-color: var(--mui-palette-background-paper2);
   border-radius: var(--mui-shape-borderRadius);
 }
 
@@ -305,7 +305,7 @@
 }
 
 .tiptap.ProseMirror table th {
-  background-color: var(--mui-palette-background-paper);
+  background-color: var(--mui-palette-background-paper2);
   font-weight: bold;
 }
 
