@@ -9,7 +9,11 @@ interface ReadonlyLinkProps extends Partial<NodeViewProps> {
 }
 
 const ReadonlyLink = ({ attrs, selected }: ReadonlyLinkProps) => {
-  const favicon = new URL(attrs.href).origin + '/favicon.ico'
+  let favicon = ''
+  try {
+    favicon = new URL(attrs.href).origin + '/favicon.ico'
+  } catch (error) {
+  }
 
   return <NodeViewWrapper
     className={`link-wrapper ${attrs.class} ${attrs.type === 'block' ? 'block-link-wrapper' : ''} ${selected ? 'ProseMirror-selectednode' : ''}`}
