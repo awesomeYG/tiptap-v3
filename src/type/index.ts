@@ -1,5 +1,7 @@
+import { Editor } from '@tiptap/core';
 import { YoutubeOptions } from '@tiptap/extension-youtube';
-import { Editor } from '@tiptap/react';
+
+export type { Editor } from '@tiptap/react';
 
 export type UploadFunction = (
   file: File,
@@ -25,7 +27,6 @@ export type TocItem = {
 export type TocList = TocItem[]
 
 export type EditorFnProps = {
-  onSave?: (editor: Editor) => void
   onError?: (error: Error) => void
   onUpload?: UploadFunction
   onTocUpdate?: (toc: TocList) => void
@@ -44,7 +45,9 @@ export type ExtensionRelativeProps = MentionExtensionProps & EditorFnProps & {
   youtube?: Partial<YoutubeOptions>
 }
 
-export type UseTiptapProps = ExtensionRelativeProps
+export type UseTiptapProps = {
+  onSave?: (editor: Editor) => void
+} & ExtensionRelativeProps
 
 export type GetExtensionsProps = ExtensionRelativeProps
 

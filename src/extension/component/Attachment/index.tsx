@@ -186,17 +186,23 @@ const AttachmentViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
             icon={<ScrollToBottomLineIcon sx={{ transform: 'rotate(90deg)', fontSize: '1rem' }} />}
             tip='图标文字链接'
             className={type === 'icon' ? 'tool-active' : ''}
-            onClick={() => updateAttributes({
-              type: 'icon',
-            })}
+            onClick={() => {
+              updateAttributes({
+                type: 'icon',
+              })
+              handleCloseOperationPopover()
+            }}
           />
           <ToolbarItem
             icon={<CarouselViewIcon sx={{ transform: 'rotate(90deg)', fontSize: '1rem' }} />}
             tip='摘要卡片'
             className={type === 'block' ? 'tool-active' : ''}
-            onClick={() => updateAttributes({
-              type: 'block',
-            })}
+            onClick={() => {
+              updateAttributes({
+                type: 'block',
+              })
+              handleCloseOperationPopover()
+            }}
           />
         </Stack>
       </FloatingPopover>

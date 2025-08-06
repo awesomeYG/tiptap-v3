@@ -29,7 +29,6 @@ const useTiptap = ({
     exclude,
     editable,
     mentionItems,
-    onSave,
     onMentionFilter,
     onUpload,
     onError,
@@ -40,10 +39,21 @@ const useTiptap = ({
     editable,
     extensions,
     ...options,
+    editorProps: {
+      handleKeyDown: (view, event) => {
+        // 编辑模式下保存
+        if (event.key === 's' && (event.metaKey || event.ctrlKey) && editable) {
+          event.preventDefault()
+          onSave?.(editor)
+          return true
+        }
+      }
+    },
     onCreate: ({ editor: currentEditor }) => {
       if (options.onCreate) {
         options.onCreate({ editor: currentEditor })
       }
+      // 处理数学公式
       migrateMathStrings(currentEditor)
     },
     onSelectionUpdate: (props) => {
