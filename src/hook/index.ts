@@ -47,6 +47,18 @@ const useTiptap = ({
           onSave?.(editor)
           return true
         }
+        // tab
+        if (event.key === 'Tab') {
+          const isInList = editor?.isActive('orderedList') ||
+            editor?.isActive('bulletList') ||
+            editor?.isActive('taskList')
+          if (!isInList) {
+            event.preventDefault()
+            const tr = view.state.tr.insertText('\t')
+            view.dispatch(tr)
+            return true
+          }
+        }
       }
     },
     onCreate: ({ editor: currentEditor }) => {
