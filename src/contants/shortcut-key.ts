@@ -16,6 +16,7 @@ export const SHORTCUT_KEYS = {
       { label: '撤销', value: 'Undo', keys: ['ctrl', 'Z'] },
       { label: '重做', value: 'Redo', keys: ['ctrl', 'shift', 'Z'] },
       { label: '换行', value: 'Add a line break', keys: ['ctrl', 'enter'] },
+      { label: '保存', value: 'Save', keys: ['ctrl', 'S'] },
     ],
   },
 

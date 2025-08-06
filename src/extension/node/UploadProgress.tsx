@@ -87,7 +87,7 @@ export const UploadProgressExtension = Node.create({
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ['div', mergeAttributes({ 'data-type': 'upload-progress' }, HTMLAttributes), 0];
+    return ['div', mergeAttributes({ 'data-type': 'upload-progress' }, HTMLAttributes)];
   },
 
   addCommands() {

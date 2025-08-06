@@ -13,6 +13,7 @@ const useTiptap = ({
   onMentionFilter,
 
   // fn
+  onSave,
   onError,
   onUpload,
   onTocUpdate,
@@ -28,6 +29,7 @@ const useTiptap = ({
     exclude,
     editable,
     mentionItems,
+    onSave,
     onMentionFilter,
     onUpload,
     onError,

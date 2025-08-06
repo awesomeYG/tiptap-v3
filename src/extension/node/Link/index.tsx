@@ -359,10 +359,10 @@ const LinkNode = Node.create<LinkOptions>({
         defaultProtocol: this.options.defaultProtocol,
       })
     ) {
-      return ['a', mergeAttributes(this.options.HTMLAttributes, { ...HTMLAttributes, href: '' }), 0]
+      return ['a', mergeAttributes(this.options.HTMLAttributes, { ...HTMLAttributes, href: '' })]
     }
 
-    return ['a', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes), 0]
+    return ['a', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes)]
   },
 
   addPasteRules() {

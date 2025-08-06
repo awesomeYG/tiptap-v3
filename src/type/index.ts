@@ -25,6 +25,7 @@ export type TocItem = {
 export type TocList = TocItem[]
 
 export type EditorFnProps = {
+  onSave?: (editor: Editor) => void
   onError?: (error: Error) => void
   onUpload?: UploadFunction
   onTocUpdate?: (toc: TocList) => void

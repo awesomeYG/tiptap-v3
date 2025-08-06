@@ -72,7 +72,11 @@ const ALinkViewWrapper: React.FC<NodeViewProps> = ({
     }
   }, [attrs.href]);
 
-  const favicon = attrs.href ? new URL(attrs.href).origin + '/favicon.ico' : ''
+  let favicon = ''
+  try {
+    favicon = attrs.href ? new URL(attrs.href).origin + '/favicon.ico' : ''
+  } catch (err) {
+  }
 
   if (!attrs.href && !editor.isEditable) {
     return null

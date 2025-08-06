@@ -105,7 +105,7 @@ export const AttachmentExtension = (props: EditorFnProps) => Node.create({
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ['div', { 'data-tag': 'attachment', ...mergeAttributes(this.options.HTMLAttributes, HTMLAttributes) }, 0]
+    return ['div', { 'data-tag': 'attachment', ...mergeAttributes(this.options.HTMLAttributes, HTMLAttributes) }]
   },
 
 

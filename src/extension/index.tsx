@@ -22,6 +22,7 @@ import {
   ImageExtension,
   ListExtension,
   MentionExtension,
+  SaveExtension,
   TableExtension,
   UploadProgressExtension,
   VideoExtension,
@@ -39,6 +40,7 @@ export const getExtensions = ({
   onUpload,
   onError,
   onTocUpdate,
+  onSave,
 }: GetExtensionsProps) => {
   const defaultExtensions: any = [
     StarterKit.configure({
@@ -142,6 +144,11 @@ export const getExtensions = ({
   if (!exclude?.includes('tableOfContents')) {
     const TableOfContents = TableOfContentsExtension({ onTocUpdate })
     defaultExtensions.push(TableOfContents)
+  }
+
+  if (!exclude?.includes('save') && onSave) {
+    const Save = SaveExtension({ onSave })
+    defaultExtensions.push(Save)
   }
 
   return defaultExtensions

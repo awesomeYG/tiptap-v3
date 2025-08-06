@@ -6,6 +6,10 @@ const Reader = () => {
     editable: true,
     limit: 100,
     exclude: ['invisibleCharacters'],
+    onSave: (editor) => {
+      console.log(editor.getJSON())
+      console.log('保存功能触发！内容:', editor.getHTML());
+    },
     onTocUpdate: (toc) => {
       console.log(toc)
     },
@@ -77,9 +81,7 @@ const Reader = () => {
         </tr>
       </tbody>
     </table>
-    <p>
     <div data-tag="attachment" data-title="test.pdf" data-type="icon" data-size="100KB" data-url="https://placehold.co/800x400"></div>
-    </p>
     <div data-tag="attachment" data-title="test.pdf" data-type="block" data-size="100KB" data-url="https://placehold.co/800x400"></div>
     <div data-tag="attachment" data-title="" data-type="icon" data-size="0" data-url=""></div>
     放假啊收到了开发<a href="https://github.com">github</a>飞机上岛咖啡就离开

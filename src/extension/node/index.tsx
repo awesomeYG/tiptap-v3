@@ -8,6 +8,7 @@ export * from './Link';
 export * from './ListKit';
 export * from './Mathematics';
 export * from './Mention';
+export * from './Save';
 export * from './Table';
 export * from './UploadProgress';
 export * from './Video';
