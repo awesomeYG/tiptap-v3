@@ -6,19 +6,20 @@ import { AttachmentAttributes } from "."
 
 interface ReadonlyAttachmentProps extends Partial<NodeViewProps> {
   attrs: AttachmentAttributes
+  type: 'icon' | 'block'
 }
 
-const ReadonlyAttachment = ({ attrs }: ReadonlyAttachmentProps) => {
+const ReadonlyAttachment = ({ attrs, type }: ReadonlyAttachmentProps) => {
   return <NodeViewWrapper
-    className={`attachment-wrapper${attrs.type === 'block' ? ' block-attachment-wrapper' : ''}`}
+    className={`attachment-wrapper${type === 'block' ? ' block-attachment-wrapper' : ''}`}
     data-drag-handle
-    as={attrs.type === 'block' ? 'div' : 'span'}
+    as={type === 'block' ? 'div' : 'span'}
   >
     <Box component='a' href={attrs.url} target='_blank' download={attrs.title} sx={{
       textDecoration: 'none',
       color: 'inherit',
     }}>
-      {attrs.type === 'block' ? <Stack direction={'row'} alignItems={'center'} gap={2}
+      {type === 'block' ? <Stack direction={'row'} alignItems={'center'} gap={2}
         sx={{
           border: '1px solid',
           borderColor: attrs.url === 'error' ? 'error.main' : 'divider',

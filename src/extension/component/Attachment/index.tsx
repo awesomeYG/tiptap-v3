@@ -91,7 +91,7 @@ const AttachmentViewWrapper: React.FC<NodeViewProps & EditorFnProps & { attachme
   }
 
   if (!editor.isEditable) {
-    return <ReadonlyAttachment attrs={attrs} />
+    return <ReadonlyAttachment attrs={attrs} type={attachmentDisplayType} />
   }
 
   return (
