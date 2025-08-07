@@ -11,6 +11,12 @@ export const TableExtension = ({ editable }: { editable: boolean }) => [
     resizable: editable,
     lastColumnResizable: editable,
     allowTableNodeSelection: editable,
+  }).extend({
+    addKeyboardShortcuts() {
+      return {
+        'Mod-8': () => this.editor.commands.insertTable({ rows: 3, cols: 4, withHeaderRow: true }),
+      }
+    },
   }),
   TableHeader.configure({
     HTMLAttributes: {

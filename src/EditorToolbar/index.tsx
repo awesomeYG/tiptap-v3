@@ -172,11 +172,11 @@ const EditorToolbar = ({
       <EditorMath editor={editor} />
       <ToolbarItem
         tip={'表格'}
-        shortcutKey={[]}
+        shortcutKey={['ctrl', '8']}
         icon={<Table2Icon sx={{ fontSize: '1rem' }} />}
         onClick={() => editor.commands.insertTable({
           rows: 3,
-          cols: 3,
+          cols: 4,
           withHeaderRow: true,
         })}
         className={active.table ? "tool-active" : ""}

@@ -6,7 +6,7 @@ const Reader = () => {
     console.log(toc)
   }
   const { editor } = useTiptap({
-    editable: true,
+    editable: false,
     limit: 100,
     exclude: ['invisibleCharacters'],
     onSave: (editor) => {

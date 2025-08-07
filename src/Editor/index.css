@@ -333,10 +333,6 @@
   z-index: 2;
 }
 
-.tiptap.ProseMirror .tableWrapper {
-  overflow-x: auto;
-}
-
 .tiptap.ProseMirror.resize-cursor {
   cursor: ew-resize;
   cursor: col-resize;

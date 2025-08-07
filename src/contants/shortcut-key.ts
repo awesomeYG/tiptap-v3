@@ -30,6 +30,7 @@ export const SHORTCUT_KEYS = {
       { label: '行内数学公式', value: 'Inline Math', keys: ['ctrl', '5'] },
       { label: '块级数学公式', value: 'Block Math', keys: ['ctrl', '6'] },
       { label: '折叠块', value: 'Details', keys: ['ctrl', '7'] },
+      { label: '表格', value: 'Table', keys: ['ctrl', '8'] },
     ],
   },
   'Text Formatting': {

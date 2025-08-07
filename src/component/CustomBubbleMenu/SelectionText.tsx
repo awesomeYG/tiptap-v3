@@ -172,7 +172,13 @@ const SelectionText = (props: { editor: Editor }) => {
         </Stack>
         <Button fullWidth variant='contained' sx={{ mt: 2 }}
           onClick={() => {
-            editor.chain().focus().setColor(theme.palette.text.primary).setBackgroundColor(theme.palette.background.paper).run()
+            editor
+            .chain()
+            .focus()
+            .setColor('')
+            .setBackgroundColor('')
+            .run()
+            setShowColorPicker(false)
           }}
         >恢复默认</Button>
       </Box>}

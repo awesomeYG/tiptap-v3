@@ -18,6 +18,8 @@ import {
   InsertRowBottomIcon,
   InsertRowTopIcon,
   ItalicIcon,
+  LayoutLeft2LineIcon,
+  LayoutTop2LineIcon,
   MergeCellsHorizontalIcon,
   SplitCellsHorizontalIcon,
   StrikethroughIcon,
@@ -79,6 +81,18 @@ const TableContextMenu: React.FC<TableContextMenuProps> = ({
       label: '拆分单元格',
       icon: <SplitCellsHorizontalIcon sx={{ fontSize: '1rem' }} />,
       action: () => handleCommand(() => editor.chain().focus().splitCell().run()),
+      show: true
+    },
+    {
+      label: '切换表头行',
+      icon: <LayoutTop2LineIcon sx={{ fontSize: '1rem' }} />,
+      action: () => handleCommand(() => editor.chain().focus().toggleHeaderRow().run()),
+      show: true
+    },
+    {
+      label: '切换表头列',
+      icon: <LayoutLeft2LineIcon sx={{ fontSize: '1rem' }} />,
+      action: () => handleCommand(() => editor.chain().focus().toggleHeaderColumn().run()),
       show: true
     },
     {

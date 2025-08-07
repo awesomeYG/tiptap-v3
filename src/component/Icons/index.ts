@@ -58,6 +58,8 @@ export { InsertColumnRightIcon } from './insert-column-right-icon';
 export { InsertRowBottomIcon } from './insert-row-bottom-icon';
 export { InsertRowTopIcon } from './insert-row-top-icon';
 export { ItalicIcon } from './italic-icon';
+export { LayoutLeft2LineIcon } from './layout-left-2-line-icon';
+export { LayoutTop2LineIcon } from './layout-top-2-line-icon';
 export { LinkIcon } from './link-icon';
 export { LinkUnlinkIcon } from './link-unlink-icon';
 export { ListCheck2Icon } from './list-check-2-icon';
