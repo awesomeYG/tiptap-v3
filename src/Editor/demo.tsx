@@ -1,3 +1,4 @@
+import { Box } from '@mui/material';
 import { Editor, EditorThemeProvider, EditorToolbar, TocList, useTiptap } from '@yu-cq/tiptap';
 import React from 'react';
 
@@ -271,11 +272,14 @@ Nothing is impossible, the word itself says “I’m possible!”
       }}>
         <EditorToolbar editor={editor} />
       </div>
-      <div style={{
+      <Box sx={{
         backgroundColor: '#fff',
+        '.tiptap': {
+          minHeight: '500px',
+        }
       }}>
         <Editor editor={editor} />
-      </div>
+      </Box>
     </div>
   </EditorThemeProvider>
 };

@@ -55,6 +55,9 @@ const ALinkViewWrapper: React.FC<NodeViewProps> = ({
       href,
       type,
     })
+    if (type === 'block') {
+      editor.commands.splitBlock()
+    }
     handleClosePopover()
   }
 
