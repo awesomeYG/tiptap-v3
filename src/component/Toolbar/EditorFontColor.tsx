@@ -118,7 +118,7 @@ const EditorFontColor = ({ editor }: EditorFontColorProps) => {
       placement="bottom"
     >
       <Box sx={{
-        p: 0.5,
+        p: 1,
         width: `calc(1.5rem * ${THEME_TEXT_COLOR.length} + var(--mui-spacing-unit) * (${THEME_TEXT_COLOR.length} - 1))`,
         fontSize: '0.875rem',
       }}>
@@ -136,7 +136,7 @@ const EditorFontColor = ({ editor }: EditorFontColorProps) => {
             editor.chain().focus().setColor('').run()
             handleClosePopover()
           }} />
-          <Box>标准颜色</Box>
+          <Box>默认</Box>
         </Stack>
         <Stack direction={'row'} flexWrap={'wrap'} gap={1}>
           {THEME_TEXT_COLOR.map((c) => (
@@ -145,7 +145,7 @@ const EditorFontColor = ({ editor }: EditorFontColorProps) => {
               height: '1.5rem',
               cursor: 'pointer',
               border: '1px solid',
-              borderColor: 'divider',
+              borderColor:  c === theme.palette.common.white ? 'divider' : c,
               boxSizing: 'border-box',
               borderRadius: 'var(--mui-shape-borderRadius)',
               bgcolor: c,
@@ -157,7 +157,7 @@ const EditorFontColor = ({ editor }: EditorFontColorProps) => {
           ))}
         </Stack>
         <Box sx={{
-          mt: 0.5,
+          mt:1,
           '.react-colorful': { width: '100%', height: 150 },
           '.react-colorful__pointer': { width: 16, height: 16 },
           '.react-colorful__alpha, .react-colorful__hue': { height: '16px !important' }
