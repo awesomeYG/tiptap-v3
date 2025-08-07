@@ -47,33 +47,33 @@ const ReadonlyLink = ({ attrs, selected }: ReadonlyLinkProps) => {
           },
         }}
       >
-        <Avatar
-          sx={{ 
-            width: '2rem', 
-            height: '2rem', 
-            alignSelf: 'center', 
-            bgcolor: 'background.paper2',
-          }}
-          src={favicon}
-        >
-          <LinkIcon sx={{
-            fontSize: '2rem',
-            cursor: 'grab',
-            color: 'primary.main',
-            alignSelf: 'center',
-            ':active': {
-              cursor: 'grabbing',
-            }
-          }} />
-        </Avatar>
+          <Avatar
+            sx={{ 
+              width: '2rem', 
+              height: '2rem', 
+              alignSelf: 'center',
+              bgcolor: '#FFFFFF',
+            }}
+            src={favicon}
+          >
+            <LinkIcon sx={{
+              fontSize: '2rem',
+              cursor: 'grab',
+              color: 'primary.main',
+              alignSelf: 'center',
+              ':active': {
+                cursor: 'grabbing',
+              }
+            }} />
+          </Avatar>
         <Stack sx={{ flex: 1 }} gap={0.5}>
           <Box sx={{ fontSize: '0.875rem', fontWeight: 'bold' }}>{attrs.title || attrs.href}</Box>
           <Box sx={{ fontSize: '0.75rem', color: 'text.secondary' }}>{attrs.href}</Box>
         </Stack>
       </Stack> : <Box component={'span'} sx={{ display: 'inline-flex', alignItems: 'baseline', gap: 0.5 }}>
-        {attrs.type === 'icon' && <Avatar sx={{ width: '0.875rem', height: '0.875rem', alignSelf: 'center', bgcolor: 'transparent' }} src={favicon}>
+        {attrs.type === 'icon' && <Avatar sx={{ width: '1rem', height: '1rem', alignSelf: 'center', bgcolor: '#FFFFFF' }} src={favicon}>
           <LinkIcon sx={{
-            fontSize: '0.875rem',
+            fontSize: '1rem',
             cursor: 'grab',
             color: 'primary.main',
             alignSelf: 'center',

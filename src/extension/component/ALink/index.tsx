@@ -111,7 +111,6 @@ const ALinkViewWrapper: React.FC<NodeViewProps> = ({
         borderColor: 'divider',
         cursor: 'pointer',
         borderRadius: 'var(--mui-shape-borderRadius)',
-        bgcolor: 'background.paper',
         p: 2,
         ':hover': {
           borderColor: 'primary.main',
@@ -119,7 +118,7 @@ const ALinkViewWrapper: React.FC<NodeViewProps> = ({
       }}
     >
       <Avatar
-        sx={{ width: '2rem', height: '2rem', alignSelf: 'center', bgcolor: 'transparent' }}
+        sx={{ width: '2rem', height: '2rem', alignSelf: 'center', bgcolor: '#FFFFFF' }}
         src={favicon}
       >
         <LinkIcon sx={{
@@ -146,17 +145,17 @@ const ALinkViewWrapper: React.FC<NodeViewProps> = ({
         borderRadius: 'var(--mui-shape-borderRadius)',
         transition: 'background-color 0.2s ease',
         ':hover': {
-          bgcolor: 'background.paper',
+          bgcolor: 'action.hover',
         },
       }}
     >
       <Box component={'span'} sx={{ display: 'inline-flex', alignItems: 'baseline', gap: 0.5 }}>
         {attrs.type === 'icon' && <Avatar
-          sx={{ width: '0.875rem', height: '0.875rem', alignSelf: 'center', bgcolor: 'transparent' }}
+          sx={{ width: '1rem', height: '1rem', alignSelf: 'center', bgcolor: '#FFFFFF' }}
           src={favicon}
         >
           <LinkIcon sx={{
-            fontSize: '0.875rem',
+            fontSize: '1rem',
             cursor: 'grab',
             color: 'primary.main',
             alignSelf: 'center',

@@ -1,6 +1,6 @@
 const dark = {
   primary: {
-    main: "#fdfdfd",
+    main: "#3248F2",
     contrastText: "#000",
   },
   secondary: {
