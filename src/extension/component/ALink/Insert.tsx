@@ -95,7 +95,6 @@ const InsertLink = ({ updateAttributes, deleteNode, selected, attrs, editor }: I
             onChange={(e) => setHref(e.target.value)}
             placeholder="https://example.com"
             required
-            autoFocus
             error={href.length > 0 && !href.trim()}
             helperText={href.length > 0 && !href.trim() ? "请输入有效的链接地址" : ""}
           />
