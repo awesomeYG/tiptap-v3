@@ -48,7 +48,12 @@ const ReadonlyLink = ({ attrs, selected }: ReadonlyLinkProps) => {
         }}
       >
         <Avatar
-          sx={{ width: '2rem', height: '2rem', alignSelf: 'center', bgcolor: 'transparent' }}
+          sx={{ 
+            width: '2rem', 
+            height: '2rem', 
+            alignSelf: 'center', 
+            bgcolor: 'background.paper2',
+          }}
           src={favicon}
         >
           <LinkIcon sx={{
