@@ -12,6 +12,7 @@ const ReadonlyAttachment = ({ attrs }: ReadonlyAttachmentProps) => {
   return <NodeViewWrapper
     className={`attachment-wrapper${attrs.type === 'block' ? ' block-attachment-wrapper' : ''}`}
     data-drag-handle
+    as={attrs.type === 'block' ? 'div' : 'span'}
   >
     <Box component='a' href={attrs.url} target='_blank' download={attrs.title} sx={{
       textDecoration: 'none',

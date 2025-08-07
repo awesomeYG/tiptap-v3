@@ -10,7 +10,7 @@ import StarterKit from '@tiptap/starter-kit';
 import { GetExtensionsProps } from '../type';
 import {
   ALinkExtension,
-  AttachmentExtension,
+  BlockAttachmentExtension,
   CodeBlockLowlightExtension,
   CustomBlockMathExtension,
   CustomInlineMathExtension,
@@ -20,6 +20,7 @@ import {
   EmojiExtension,
   FileHandlerExtension,
   ImageExtension,
+  InlineAttachmentExtension,
   ListExtension,
   MentionExtension,
   TableExtension,
@@ -135,8 +136,10 @@ export const getExtensions = ({
   }
 
   if (!exclude?.includes('attachment')) {
-    const Attachment = AttachmentExtension({ onUpload, onError })
-    defaultExtensions.push(Attachment)
+    const InlineAttachment = InlineAttachmentExtension({ onUpload, onError })
+    const BlockAttachment = BlockAttachmentExtension({ onUpload, onError })
+    defaultExtensions.push(InlineAttachment)
+    defaultExtensions.push(BlockAttachment)
   }
 
   if (!exclude?.includes('tableOfContents')) {

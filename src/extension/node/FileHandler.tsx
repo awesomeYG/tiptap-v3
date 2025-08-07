@@ -52,10 +52,9 @@ export const FileHandlerExtension = (props: { onUpload?: UploadFunction }) => Fi
             });
             break;
           default:
-            editor.commands.setAttachment({
+            editor.commands.setInlineAttachment({
               url: url,
               title: file.name,
-              type: 'icon',
               size: formatFileSize(file.size)
             });
             break;
@@ -84,10 +83,9 @@ export const FileHandlerExtension = (props: { onUpload?: UploadFunction }) => Fi
             });
             break;
           default:
-            editor.commands.setAttachment({
+            editor.commands.setInlineAttachment({
               url: 'error',
               title: `上传失败: ${file.name}`,
-              type: 'icon',
               size: formatFileSize(file.size)
             });
             break;
@@ -149,10 +147,9 @@ export const FileHandlerExtension = (props: { onUpload?: UploadFunction }) => Fi
               });
               break;
             default:
-              editor.commands.setAttachment({
+              editor.commands.setInlineAttachment({
                 url: url,
                 title: file.name,
-                type: 'icon',
                 size: formatFileSize(file.size)
               });
               break;
@@ -181,10 +178,9 @@ export const FileHandlerExtension = (props: { onUpload?: UploadFunction }) => Fi
               });
               break;
             default:
-              editor.commands.setAttachment({
+              editor.commands.setInlineAttachment({
                 url: 'error',
                 title: `上传失败: ${file.name}`,
-                type: 'icon',
                 size: formatFileSize(file.size)
               });
               break;

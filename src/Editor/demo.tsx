@@ -10,8 +10,7 @@ const Reader = () => {
     limit: 100,
     exclude: ['invisibleCharacters'],
     onSave: (editor) => {
-      console.log(editor.getJSON())
-      console.log('保存功能触发！内容:', editor.getHTML());
+      editor.commands.setContent(editor.getHTML())
     },
     onTocUpdate: handleTocUpdate,
     onMentionFilter: async ({ query }) => {
@@ -82,9 +81,9 @@ const Reader = () => {
         </tr>
       </tbody>
     </table>
-    <div data-tag="attachment" data-title="test.pdf" data-type="icon" data-size="100KB" data-url="https://placehold.co/800x400"></div>
-    <div data-tag="attachment" data-title="test.pdf" data-type="block" data-size="100KB" data-url="https://placehold.co/800x400"></div>
-    <div data-tag="attachment" data-title="" data-type="icon" data-size="0" data-url=""></div>
+    <span data-tag="attachment" data-title="test.pdf" data-size="100KB" data-url="https://placehold.co/800x400"></span>
+    <div data-tag="attachment" data-title="test.pdf" data-size="100KB" data-url="https://placehold.co/800x400"></div>
+    <span data-tag="attachment" data-title="" data-size="0" data-url=""></span>
     放假啊收到了开发<a href="https://github.com">github</a>飞机上岛咖啡就离开
     <hr/>
     \`\`\`javascript

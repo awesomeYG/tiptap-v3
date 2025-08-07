@@ -23,7 +23,7 @@ const EditorInsert = ({ editor }: EditorInsertProps) => {
       setSelectedValue('image');
     } else if (editor.isActive('video')) {
       setSelectedValue('video');
-    } else if (editor.isActive('attachment')) {
+    } else if (editor.isActive('inlineAttachment') || editor.isActive('blockAttachment')) {
       setSelectedValue('attachment');
     } else {
       setSelectedValue('none');
@@ -37,7 +37,7 @@ const EditorInsert = ({ editor }: EditorInsertProps) => {
     } else if (value === 'video') {
       editor.commands.setVideo({ src: '', width: 760, controls: true, autoplay: false });
     } else if (value === 'attachment') {
-      editor.commands.setAttachment({ url: '', title: '', type: 'icon', size: '0' });
+      editor.commands.setInlineAttachment({ url: '', title: '', size: '0' });
     }
     setSelectedValue(value);
   };

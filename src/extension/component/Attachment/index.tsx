@@ -15,20 +15,22 @@ export interface AttachmentAttributes {
   size: string
 }
 
-const AttachmentViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
+const AttachmentViewWrapper: React.FC<NodeViewProps & EditorFnProps & { attachmentType?: 'icon' | 'block' }> = ({
   editor,
   node,
   updateAttributes,
   deleteNode,
   selected,
   onUpload,
-  onError
+  onError,
+  attachmentType = 'icon'
 }) => {
   const attrs = node.attrs as AttachmentAttributes
+  const attachmentDisplayType = attachmentType || attrs.type || 'icon'
 
   const [title, setTitle] = useState('')
   const [extension, setExtension] = useState('')
-  const [type, setType] = useState('icon')
+  const [currentType, setCurrentType] = useState(attachmentDisplayType)
   const [opraAnchorEl, setOpraAnchorEl] = useState<HTMLDivElement | null>(null)
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null)
 
@@ -48,7 +50,6 @@ const AttachmentViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
   const handleSave = () => {
     updateAttributes?.({
       title: title + (extension ? `.${extension}` : ''),
-      type,
     })
     handleClosePopover()
   }
@@ -70,8 +71,8 @@ const AttachmentViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
     let title = attrs.title || ''
     setTitle(title.split('.').slice(0, -1).join('.'))
     setExtension(title.split('.').pop() || '')
-    setType(attrs.type || 'icon')
-  }, [attrs.title, attrs.type])
+    setCurrentType(attachmentDisplayType)
+  }, [attrs.title, attachmentDisplayType])
 
   if ((!attrs.url || attrs.url === 'error') && !editor.isEditable) {
     return null
@@ -95,10 +96,11 @@ const AttachmentViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
 
   return (
     <NodeViewWrapper
-      className={`attachment-wrapper${attrs.type === 'block' ? ' block-attachment-wrapper' : ''}${selected ? ' ProseMirror-selectednode' : ''}`}
+      className={`attachment-wrapper${attachmentDisplayType === 'block' ? ' block-attachment-wrapper' : ''}${selected ? ' ProseMirror-selectednode' : ''}`}
       data-drag-handle
+      as={attachmentDisplayType === 'block' ? 'div' : 'span'}
     >
-      {attrs.type === 'block' ? <Stack direction={'row'} alignItems={'center'} gap={2}
+      {attachmentDisplayType === 'block' ? <Stack direction={'row'} alignItems={'center'} gap={2}
         onClick={handleShowOperationPopover}
         sx={{
           border: '1px solid',
@@ -183,12 +185,15 @@ const AttachmentViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
           />
           <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'divider' }} />
           <ToolbarItem
-            icon={<ScrollToBottomLineIcon sx={{ transform: 'rotate(90deg)', fontSize: '1rem' }} />}
+            icon={<ScrollToBottomLineIcon  sx={{ transform: 'rotate(90deg)', fontSize: '1rem' }} />}
             tip='图标文字链接'
-            className={type === 'icon' ? 'tool-active' : ''}
+            className={attachmentDisplayType === 'icon' ? 'tool-active' : ''}
             onClick={() => {
-              updateAttributes({
-                type: 'icon',
+              deleteNode?.()
+              editor.commands.setInlineAttachment({
+                url: attrs.url,
+                title: attrs.title,
+                size: attrs.size,
               })
               handleCloseOperationPopover()
             }}
@@ -196,10 +201,13 @@ const AttachmentViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
           <ToolbarItem
             icon={<CarouselViewIcon sx={{ transform: 'rotate(90deg)', fontSize: '1rem' }} />}
             tip='摘要卡片'
-            className={type === 'block' ? 'tool-active' : ''}
+            className={attachmentDisplayType === 'block' ? 'tool-active' : ''}
             onClick={() => {
-              updateAttributes({
-                type: 'block',
+              deleteNode?.()
+              editor.commands.setBlockAttachment({
+                url: attrs.url,
+                title: attrs.title,
+                size: attrs.size,
               })
               handleCloseOperationPopover()
             }}

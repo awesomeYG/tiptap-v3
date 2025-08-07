@@ -84,15 +84,16 @@ const useTiptap = ({
   return {
     editor,
     getText: () => {
-      return editor.getText()
+      return editor?.getText() || ''
     },
     getHTML: () => {
-      return editor.getHTML()
+      return editor?.getHTML() || ''
     },
     getJSON: () => {
-      return editor.getJSON()
+      return editor?.getJSON() || null
     },
     getMarkdownByJSON: () => {
+      if (!editor) return ''
       return renderToMarkdown({
         extensions: editor.extensionManager.extensions,
         content: editor.getJSON(),

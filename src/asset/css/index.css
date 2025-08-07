@@ -75,7 +75,7 @@
 
 .tiptap.ProseMirror .react-renderer.node-image,
 .tiptap.ProseMirror .react-renderer.node-inlineMath,
-.tiptap.ProseMirror .react-renderer.node-attachment,
+.tiptap.ProseMirror .react-renderer.node-inlineAttachment,
 .tiptap.ProseMirror .react-renderer.node-alink {
   display: inline-block;
   vertical-align: middle;
