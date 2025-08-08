@@ -4,7 +4,6 @@ import Subscript from '@tiptap/extension-subscript';
 import Superscript from '@tiptap/extension-superscript';
 import TextAlign from '@tiptap/extension-text-align';
 import { TextStyleKit } from '@tiptap/extension-text-style';
-import UniqueID from '@tiptap/extension-unique-id';
 import { CharacterCount } from '@tiptap/extensions';
 import StarterKit from '@tiptap/starter-kit';
 import { GetExtensionsProps } from '../type';
@@ -25,11 +24,11 @@ import {
   ListExtension,
   MentionExtension,
   TableExtension,
+  TableOfContents,
   UploadProgressExtension,
   VideoExtension,
   YoutubeExtension
 } from './node';
-import TableOfContentsExtension from './node/TableOfContents';
 
 export const getExtensions = ({
   limit,
@@ -65,9 +64,6 @@ export const getExtensions = ({
     Subscript,
     Superscript,
     TextStyleKit,
-    UniqueID.configure({
-      types: ['heading']
-    }),
   ]
 
   if (!exclude?.includes('mention') && (mentionItems && mentionItems.length > 0 || onMentionFilter)) {
@@ -145,8 +141,8 @@ export const getExtensions = ({
   }
 
   if (!exclude?.includes('tableOfContents')) {
-    const TableOfContents = TableOfContentsExtension({ onTocUpdate })
-    defaultExtensions.push(TableOfContents)
+    const CustomTableOfContents = TableOfContents({ onTocUpdate })
+    defaultExtensions.push(CustomTableOfContents)
   }
 
   return defaultExtensions
