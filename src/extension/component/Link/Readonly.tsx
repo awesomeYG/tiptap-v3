@@ -1,106 +1,91 @@
-// import { Avatar, Box, Link, Stack } from "@mui/material"
-// import { LinkIcon } from "@yu-cq/tiptap/component/Icons"
-// import React from "react"
-// import { LinkAttributes } from "."
+import { Avatar, Box, Stack } from "@mui/material"
+import { NodeViewProps, NodeViewWrapper } from "@tiptap/react"
+import { LinkIcon } from "@yu-cq/tiptap/component/Icons"
+import React from "react"
+import { LinkAttributes } from "."
 
-// interface ReadonlyLinkProps {
-//   attrs: LinkAttributes
-// }
+interface ReadonlyLinkProps extends Partial<NodeViewProps> {
+  attrs: LinkAttributes
+}
 
-// export const ReadonlyLink: React.FC<ReadonlyLinkProps> = (props) => {
-//   const { attrs } = props
+const ReadonlyLink = ({ attrs, selected }: ReadonlyLinkProps) => {
+  let favicon = ''
+  try {
+    favicon = new URL(attrs.href).origin + '/favicon.ico'
+  } catch (error) {
+  }
 
-//   const handleClick = (e: React.MouseEvent) => {
-//     e.preventDefault()
-//     if (attrs.href) {
-//       window.open(attrs.href, attrs.target || '_blank')
-//     }
-//   }
+  return <NodeViewWrapper
+    className={`link-wrapper ${selected ? 'ProseMirror-selectednode' : ''}`}
+    data-drag-handle
+  >
+    <Box
+      component={'a'}
+      href={attrs.href}
+      target={attrs.target}
+      rel={attrs.rel}
+      data-title={attrs.title}
+      data-type={attrs.type}
+      sx={{
+        color: 'primary.main',
+        textDecoration: 'none',
+      }}
+    >
+      {attrs.type === 'block' ? <Stack
+        direction={'row'}
+        alignItems={'center'}
+        gap={2}
+        sx={{
+          border: '1px solid',
+          borderColor: 'divider',
+          cursor: 'pointer',
+          borderRadius: 'var(--mui-shape-borderRadius)',
+          bgcolor: 'background.paper',
+          p: 2,
+          ':hover': {
+            borderColor: 'primary.main',
+          },
+        }}
+      >
+          <Avatar
+            sx={{ 
+              width: '2rem', 
+              height: '2rem', 
+              alignSelf: 'center',
+              bgcolor: '#FFFFFF',
+            }}
+            src={favicon}
+          >
+            <LinkIcon sx={{
+              fontSize: '2rem',
+              cursor: 'grab',
+              color: 'primary.main',
+              alignSelf: 'center',
+              ':active': {
+                cursor: 'grabbing',
+              }
+            }} />
+          </Avatar>
+        <Stack sx={{ flex: 1 }} gap={0.5}>
+          <Box sx={{ fontSize: '0.875rem', fontWeight: 'bold' }}>{attrs.title || attrs.href}</Box>
+          <Box sx={{ fontSize: '0.75rem', color: 'text.secondary' }}>{attrs.href}</Box>
+        </Stack>
+      </Stack> : <Box component={'span'} sx={{ display: 'inline-flex', alignItems: 'baseline', gap: 0.5 }}>
+        {attrs.type === 'icon' && <Avatar sx={{ width: '1rem', height: '1rem', alignSelf: 'center', bgcolor: '#FFFFFF' }} src={favicon}>
+          <LinkIcon sx={{
+            fontSize: '1rem',
+            cursor: 'grab',
+            color: 'primary.main',
+            alignSelf: 'center',
+            ':active': {
+              cursor: 'grabbing',
+            }
+          }} />
+        </Avatar>}
+        {attrs.title || attrs.href}
+      </Box>}
+    </Box>
+  </NodeViewWrapper>
+}
 
-//   // 获取网站图标
-//   const getFavicon = (url: string) => {
-//     try {
-//       const urlObj = new URL(url)
-//       return `${urlObj.protocol}//${urlObj.host}/favicon.ico`
-//     } catch {
-//       return null
-//     }
-//   }
-
-//   if (attrs.type === 'card') {
-//     return (
-//       <Box
-//         component="div"
-//         onClick={handleClick}
-//         sx={{
-//           display: 'block',
-//           border: '1px solid',
-//           borderColor: 'divider',
-//           borderRadius: 1,
-//           p: 2,
-//           cursor: 'pointer',
-//           textDecoration: 'none',
-//           color: 'inherit',
-//           maxWidth: 400,
-//           '&:hover': {
-//             bgcolor: 'action.hover'
-//           }
-//         }}
-//       >
-//         <Stack direction="row" gap={2} alignItems="center">
-//           <Avatar
-//             sx={{ width: 24, height: 24 }}
-//             src={getFavicon(attrs.href) || undefined}
-//           >
-//             <LinkIcon sx={{ fontSize: '1.125rem' }} />
-//           </Avatar>
-//           <Stack flex={1} sx={{ minWidth: 0 }}>
-//             <Box
-//               sx={{
-//                 fontWeight: 500,
-//                 fontSize: '0.875rem',
-//                 overflow: 'hidden',
-//                 textOverflow: 'ellipsis',
-//                 whiteSpace: 'nowrap'
-//               }}
-//             >
-//               {attrs.title || attrs.href}
-//             </Box>
-//             <Box
-//               sx={{
-//                 fontSize: '0.75rem',
-//                 color: 'text.secondary',
-//                 overflow: 'hidden',
-//                 textOverflow: 'ellipsis',
-//                 whiteSpace: 'nowrap'
-//               }}
-//             >
-//               {attrs.href}
-//             </Box>
-//           </Stack>
-//         </Stack>
-//       </Box>
-//     )
-//   }
-
-//   // 默认链接风格
-//   return (
-//     <Link
-//       component="a"
-//       href={attrs.href}
-//       target={attrs.target || '_blank'}
-//       rel={attrs.rel || 'noopener noreferrer'}
-//       onClick={handleClick}
-//       sx={{
-//         color: 'primary.main',
-//         textDecoration: 'underline',
-//         cursor: 'pointer',
-//         '&:hover': {
-//           textDecoration: 'none'
-//         }
-//       }}
-//     >
-//       {attrs.title || attrs.href}
-//     </Link>
-//   )
-// }
+export default ReadonlyLink

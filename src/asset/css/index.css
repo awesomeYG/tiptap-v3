@@ -74,14 +74,14 @@
 }
 
 .tiptap.ProseMirror .react-renderer.node-image,
-.tiptap.ProseMirror .react-renderer.node-alink,
+.tiptap.ProseMirror .react-renderer.node-inlineLink,
 .tiptap.ProseMirror .react-renderer.node-inlineAttachment,
 .tiptap.ProseMirror .react-renderer.node-inlineMath {
   display: inline-block;
   margin: 0 0.25rem;
 }
 
-.tiptap.ProseMirror .react-renderer.node-alink:has(.block-link-wrapper),
+.tiptap.ProseMirror .react-renderer.node-blockLink:has(.block-link-wrapper),
 .tiptap.ProseMirror .react-renderer.node-attachment:has(.block-attachment-wrapper) {
   display: block;
   margin: 0 0 1rem 0;

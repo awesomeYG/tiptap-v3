@@ -2,7 +2,7 @@ import { mergeAttributes, Node, nodePasteRule, type PasteRuleMatch } from '@tipt
 import type { Plugin } from '@tiptap/pm/state'
 import { ReactNodeViewRenderer } from '@tiptap/react'
 import { find, registerCustomProtocol, reset } from 'linkifyjs'
-import ALinkViewWrapper from '../../component/ALink'
+import LinkViewWrapper from '../../component/Link'
 import { autolink } from './helpers/autolink'
 import { clickHandler } from './helpers/clickHandler'
 import { pasteHandler } from './helpers/pasteHandler'
@@ -127,13 +127,13 @@ export interface LinkOptions {
 
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
-    alink: {
+    inlineLink: {
       /**
        * Set a link mark
        * @param attributes The link attributes
-       * @example editor.commands.setALink({ href: 'https://tiptap.dev' })
+       * @example editor.commands.setInlineLink({ href: 'https://tiptap.dev' })
        */
-      setALink: (attributes: {
+      setInlineLink: (attributes: {
         href: string
         target?: string | null
         rel?: string | null
@@ -144,9 +144,9 @@ declare module '@tiptap/core' {
       /**
        * Toggle a link mark
        * @param attributes The link attributes
-       * @example editor.commands.toggleALink({ href: 'https://tiptap.dev' })
+       * @example editor.commands.toggleInlineLink({ href: 'https://tiptap.dev' })
        */
-      toggleALink: (attributes?: {
+      toggleInlineLink: (attributes?: {
         href: string
         target?: string | null
         rel?: string | null
@@ -156,9 +156,24 @@ declare module '@tiptap/core' {
       }) => ReturnType
       /**
        * Unset a link mark
-       * @example editor.commands.unsetALink()
+        * @example editor.commands.unsetInlineLink()
        */
-      unsetALink: () => ReturnType
+      unsetInlineLink: () => ReturnType
+    }
+    blockLink: {
+      /**
+       * Set a block link
+       * @param attributes The link attributes
+       * @example editor.commands.setBlockLink({ href: 'https://tiptap.dev' })
+       */
+      setBlockLink: (attributes: {
+        href: string
+        target?: string | null
+        rel?: string | null
+        class?: string | null
+        title?: string | null
+        type?: string | null
+      }) => ReturnType
     }
   }
 }
@@ -188,9 +203,8 @@ export function isAllowedUri(uri: string | undefined, protocols?: LinkOptions['p
   )
 }
 
-
-const LinkNode = Node.create<LinkOptions>({
-  name: 'alink',
+export const InlineLinkExtension = Node.create<LinkOptions>({
+  name: 'inlineLink',
   group: 'inline',
   inline: true,
   atom: true,
@@ -283,41 +297,24 @@ const LinkNode = Node.create<LinkOptions>({
       title: {
         default: this.options.HTMLAttributes.title,
         parseHTML: (element) => {
-          return element.getAttribute('data-title')
+          return (element as HTMLElement).textContent || element.getAttribute('title')
         },
         renderHTML: (attributes) => {
           return {
-            'data-title': attributes.title,
+            'title': attributes.title,
           }
         },
       },
       type: {
         default: this.options.HTMLAttributes.type,
         parseHTML: (element) => {
-          return element.getAttribute('data-type') || 'icon'
+          return element.getAttribute('type') || 'icon'
         },
         renderHTML: (attributes) => {
           return {
-            'data-type': attributes.type,
+            'type': attributes.type,
           }
         },
-      },
-    }
-  },
-
-  addCommands() {
-    return {
-      setALink: (options) => ({ commands }) => {
-        return commands.insertContent({
-          type: this.name,
-          attrs: options,
-        })
-      },
-      toggleALink: (options) => ({ chain }) => {
-        return chain().toggleNode(this.name, 'a', options).run()
-      },
-      unsetALink: () => ({ chain }) => {
-        return chain().deleteNode(this.name).run()
       },
     }
   },
@@ -328,6 +325,10 @@ const LinkNode = Node.create<LinkOptions>({
         tag: 'a',
         getAttrs: dom => {
           const href = (dom as HTMLElement).getAttribute('href')
+          const dataType = (dom as HTMLElement).getAttribute('type')
+          if (dataType === 'block') {
+            return false
+          }
           if (
             href &&
             !this.options.isAllowedUri(href, {
@@ -340,11 +341,11 @@ const LinkNode = Node.create<LinkOptions>({
           }
           return {
             href,
+            target: dom.getAttribute('target') || this.options.HTMLAttributes.target,
+            class: dom.getAttribute('class') || this.options.HTMLAttributes.class,
             rel: (dom as HTMLElement).getAttribute('rel'),
-            class: (dom as HTMLElement).getAttribute('class'),
-            target: (dom as HTMLElement).getAttribute('target') || '_blank',
-            title: (dom as HTMLElement).getAttribute('data-title') || (dom as HTMLElement).textContent,
-            type: (dom as HTMLElement).getAttribute('data-type') || 'icon',
+            title: (dom as HTMLElement).textContent || (dom as HTMLElement).getAttribute('title'),
+            type: (dom as HTMLElement).getAttribute('type') || 'icon',
           }
         },
       },
@@ -363,6 +364,23 @@ const LinkNode = Node.create<LinkOptions>({
     }
 
     return ['a', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes)]
+  },
+
+  addCommands() {
+    return {
+      setInlineLink: (options) => ({ commands }) => {
+        return commands.insertContent({
+          type: this.name,
+          attrs: options,
+        })
+      },
+      toggleInlineLink: (options) => ({ chain }) => {
+        return chain().toggleNode(this.name, 'a', options).run()
+      },
+      unsetInlineLink: () => ({ chain }) => {
+        return chain().deleteNode(this.name).run()
+      },
+    }
   },
 
   addPasteRules() {
@@ -447,24 +465,142 @@ const LinkNode = Node.create<LinkOptions>({
   addKeyboardShortcuts() {
     return {
       'Mod-1': () => {
-        return this.editor.commands.setALink({ href: '', type: 'icon' })
+        return this.editor.commands.setInlineLink({ href: '', type: 'icon' })
       }
     }
   },
 
   addNodeView() {
-    return ReactNodeViewRenderer(ALinkViewWrapper)
+    return ReactNodeViewRenderer(LinkViewWrapper)
   },
 })
 
-export const ALinkExtension = LinkNode.configure({
-  autolink: true,
-  openOnClick: false,
-  linkOnPaste: true,
-  enableClickSelection: true,
-  HTMLAttributes: {
-    target: '_blank',
-    class: null,
-    type: 'icon',
+export const BlockLinkExtension = Node.create({
+  name: 'blockLink',
+  group: 'block',
+  atom: true,
+  draggable: true,
+  selectable: true,
+
+  addOptions() {
+    return {
+      HTMLAttributes: {
+        target: '_blank',
+        class: null,
+        type: 'block',
+      },
+    }
+  },
+
+  addAttributes() {
+    return {
+      href: {
+        default: null,
+        parseHTML: element => element.getAttribute('href'),
+        renderHTML: attributes => {
+          if (!attributes.href) {
+            return {}
+          }
+          return {
+            href: attributes.href,
+          }
+        },
+      },
+      target: {
+        default: this.options.HTMLAttributes.target,
+        parseHTML: element => element.getAttribute('target'),
+        renderHTML: attributes => {
+          if (!attributes.target) {
+            return {}
+          }
+          return {
+            target: attributes.target,
+          }
+        },
+      },
+      class: {
+        default: this.options.HTMLAttributes.class,
+        parseHTML: element => element.getAttribute('class'),
+        renderHTML: attributes => {
+          if (!attributes.class) {
+            return {}
+          }
+          return {
+            class: attributes.class,
+          }
+        },
+      },
+      title: {
+        default: null,
+        parseHTML: element => (element as HTMLElement).textContent || element.getAttribute('title'),
+        renderHTML: attributes => {
+          if (!attributes.title) {
+            return {}
+          }
+          return {
+            title: attributes.title,
+          }
+        },
+      },
+      rel: {
+        default: null,
+        parseHTML: element => element.getAttribute('rel'),
+        renderHTML: attributes => {
+          if (!attributes.rel) {
+            return {}
+          }
+          return {
+            rel: attributes.rel,
+          }
+        },
+      },
+      type: {
+        default: 'block',
+        parseHTML: element => element.getAttribute('type') || 'block',
+        renderHTML: attributes => {
+          return {
+            'type': attributes.type,
+          }
+        },
+      },
+    }
+  },
+
+  parseHTML() {
+    return [
+      {
+        tag: 'a[type="block"]',
+        getAttrs: (dom) => {
+          if (!(dom instanceof HTMLElement)) return false
+          return {
+            href: dom.getAttribute('href') || '',
+            target: dom.getAttribute('target') || this.options.HTMLAttributes.target,
+            class: dom.getAttribute('class') || this.options.HTMLAttributes.class,
+            title: (dom as HTMLElement).textContent || dom.getAttribute('title') || '',
+            rel: dom.getAttribute('rel') || '',
+            type: dom.getAttribute('type') || 'block',
+          }
+        }
+      }
+    ]
+  },
+
+  renderHTML({ HTMLAttributes }) {
+    return ['a', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes)]
+  },
+
+  addCommands() {
+    return {
+      setBlockLink: (options) => ({ commands }) => {
+        return commands.insertContent({
+          type: this.name,
+          attrs: options,
+        })
+      },
+    }
+  },
+
+  addNodeView() {
+    return ReactNodeViewRenderer(LinkViewWrapper)
   },
 })

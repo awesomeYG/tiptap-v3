@@ -11,6 +11,7 @@ const Reader = () => {
     limit: 100,
     exclude: ['invisibleCharacters'],
     onSave: (editor) => {
+      console.log(editor.getHTML())
       editor.commands.setContent(editor.getHTML())
     },
     onTocUpdate: handleTocUpdate,
@@ -101,7 +102,7 @@ const Reader = () => {
       <p>
         Did you know that <span data-type="inline-math" data-latex="3 * 3 = 9"></span>? Isn't that crazy? Also Pythagoras' theorem is <span data-type="inline-math" data-latex="a^2 + b^2 = c^2"></span>.<br />
         Also the square root of 2 is <span data-type="inline-math" data-latex="\\sqrt{2}"></span>. If you want to know more about <span data-type="inline-math" data-latex="\\LaTeX"></span> visit 
-        <a href="https://katex.org/docs/supported.html" data-title='aaa' data-type='block' class="link" target="_blank">katex.org</a>.
+        <a href="https://katex.org/docs/supported.html" title='aaa' type='block' class="link" target="_blank">katex.org</a>.
       </p>
         <h1>
         This editor supports <span data-type="inline-math" data-latex="\\LaTeX"></span> math expressions. And it even supports converting old $\\sub(3*5=15)$ calculations.

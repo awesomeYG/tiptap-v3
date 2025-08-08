@@ -9,8 +9,8 @@ import { CharacterCount } from '@tiptap/extensions';
 import StarterKit from '@tiptap/starter-kit';
 import { GetExtensionsProps } from '../type';
 import {
-  ALinkExtension,
   BlockAttachmentExtension,
+  BlockLinkExtension,
   CodeBlockLowlightExtension,
   CustomBlockMathExtension,
   CustomInlineMathExtension,
@@ -21,6 +21,7 @@ import {
   FileHandlerExtension,
   ImageExtension,
   InlineAttachmentExtension,
+  InlineLinkExtension,
   ListExtension,
   MentionExtension,
   TableExtension,
@@ -132,7 +133,8 @@ export const getExtensions = ({
   }
 
   if (!exclude?.includes('link')) {
-    defaultExtensions.push(ALinkExtension)
+    defaultExtensions.push(InlineLinkExtension)
+    defaultExtensions.push(BlockLinkExtension)
   }
 
   if (!exclude?.includes('attachment')) {

@@ -151,7 +151,7 @@ const EditorToolbar = ({
           const start = selection.from
           const end = selection.to
           const text = editor.state.doc.textBetween(start, end, '')
-          editor.chain().focus().setALink({ href: '', title: text }).run()
+          editor.chain().focus().setInlineLink({ href: '', title: text }).run()
         }}
         className={active.link ? "tool-active" : ""}
       />
