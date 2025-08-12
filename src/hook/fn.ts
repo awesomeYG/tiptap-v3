@@ -1,16 +1,16 @@
-import { generateHTML } from "@tiptap/html"
+import { JSONContent } from "@tiptap/core"
+import { generateHTML, generateJSON } from "@tiptap/html"
+import { generateHTML as generateHTMLServer, generateJSON as generateJSONServer } from "@tiptap/html/server"
 import { renderToHTMLString, renderToMarkdown, renderToReactElement } from "@tiptap/static-renderer"
 import { getExtensions } from "../extension"
 
-interface FnProps {
-  exclude: string[]
-  json: any
+export interface UseFnProps {
+  exclude?: string[]
 }
 
-export const fn = ({
+export const useFn = ({
   exclude,
-  json,
-}: FnProps) => {
+}: UseFnProps) => {
 
   const extensions = getExtensions({
     exclude,
@@ -18,9 +18,12 @@ export const fn = ({
   })
 
   return {
-    getHTMLByJSON: () => generateHTML(json, extensions),
-    getStaticRenderToHTMLStringByJSON: () => renderToHTMLString({ content: json, extensions }),
-    getStaticRenderToMarkdownByJSON: () => renderToMarkdown({ content: json, extensions }),
-    getStaticRenderToReactElementByJSON: () => renderToReactElement({ content: json, extensions }),
+    getJSONByHTML: (html: string) => generateJSON(html, extensions),
+    getHTMLByJSON: (json: JSONContent) => generateHTML(json, extensions),
+    getHTMLServerByJSON: (json: JSONContent) => generateHTMLServer(json, extensions),
+    getJSONServerByHTML: (html: string) => generateJSONServer(html, extensions),
+    getStaticRenderToHTMLStringByJSON: (json: JSONContent) => renderToHTMLString({ content: json, extensions }),
+    getStaticRenderToMarkdownByJSON: (json: JSONContent) => renderToMarkdown({ content: json, extensions }),
+    getStaticRenderToReactElementByJSON: (json: JSONContent) => renderToReactElement({ content: json, extensions }),
   }
 }
