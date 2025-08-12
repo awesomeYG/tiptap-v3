@@ -17,6 +17,7 @@ export const useFn = ({
   })
 
   return {
+    extensions,
     getJSONByHTML: (html: string) => generateJSON(html, extensions),
     getHTMLByJSON: (json: JSONContent) => generateHTML(json, extensions),
     getStaticRenderToHTMLStringByJSON: (json: JSONContent) => renderToHTMLString({ content: json, extensions }),
