@@ -1,8 +1,8 @@
-import { migrateMathStrings } from '@tiptap/extension-mathematics'
 import { useEditor, UseEditorOptions } from '@tiptap/react'
 import { renderToMarkdown } from '@tiptap/static-renderer/pm/markdown'
 import { getExtensions } from '@yu-cq/tiptap/extension'
 import { UseTiptapProps, UseTiptapReturn } from '@yu-cq/tiptap/type'
+import { migrateMathStrings } from '../util/migrateMathStrings'
 
 const useTiptap = ({
   // extension 
@@ -65,8 +65,15 @@ const useTiptap = ({
       if (options.onCreate) {
         options.onCreate({ editor: currentEditor })
       }
-      // 处理数学公式
-      migrateMathStrings(currentEditor)
+      // 处理数学公式 - 延迟执行确保文档完全准备好
+      setTimeout(() => {
+        try {
+          migrateMathStrings(currentEditor)
+        } catch (error) {
+          console.warn('数学公式迁移失败:', error)
+          onError?.(error as Error)
+        }
+      }, 100)
     },
     onSelectionUpdate: (props) => {
       if (options.onSelectionUpdate) {
