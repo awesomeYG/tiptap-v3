@@ -1,6 +1,7 @@
 import { Box } from '@mui/material';
 import { Editor, EditorThemeProvider, EditorToolbar, TocList, useTiptap } from '@yu-cq/tiptap';
 import React from 'react';
+import '../index.css';
 
 const Reader = () => {
   const handleTocUpdate = (toc: TocList) => {
@@ -58,7 +59,7 @@ const Reader = () => {
         }, 100);
       })
     },
-    content: ""
+    content: "<p>fsdfs$\\frac{a}{b}$fjaskdlfjksljfl</p>"
   });
 
   return <EditorThemeProvider>

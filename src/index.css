@@ -1,4 +1,4 @@
-@import url('../asset/css/index.css');
+@import url('./asset/css/index.css');
 
 .tiptap.ProseMirror {
   overflow-y: auto;
@@ -69,15 +69,15 @@
 }
 
 .tiptap.ProseMirror ul:not([data-type="taskList"]) {
-  list-style-image: url('../asset/images/down.svg');
+  list-style-image: url('./asset/images/down.svg');
 }
 
 .tiptap.ProseMirror ul:not([data-type="taskList"]) ul {
-  list-style-image: url('../asset/images/down.svg');
+  list-style-image: url('./asset/images/down.svg');
 }
 
 .tiptap.ProseMirror ul:not([data-type="taskList"]) ul ul {
-  list-style-image: url('../asset/images/down.svg');
+  list-style-image: url('./asset/images/down.svg');
 }
 
 .tiptap.ProseMirror ul[data-type="taskList"] {
