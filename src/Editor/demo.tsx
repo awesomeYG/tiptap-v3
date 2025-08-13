@@ -59,7 +59,7 @@ const Reader = () => {
         }, 100);
       })
     },
-    content: "<p>fsdfs$\\frac{a}{b}$fjaskdlfjksljfl</p>"
+    content: ``
   });
 
   return <EditorThemeProvider>

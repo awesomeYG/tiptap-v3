@@ -1,4 +1,5 @@
 export const languages = [
+  { value: 'auto', label: 'Auto' },
   { value: 'plaintext', label: 'Plain Text' },
   { value: '1c', label: '1C' },
   { value: 'abnf', label: 'ABNF' },

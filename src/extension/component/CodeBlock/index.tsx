@@ -101,7 +101,7 @@ const CodeBlockView: React.FC<NodeViewProps> = (props) => {
           }}
         >
           <Select
-            value={attrs.language || 'plaintext'}
+            value={attrs.language || 'auto'}
             onChange={(e) => handleLanguageChange(e.target.value)}
             size="small"
             variant="outlined"
