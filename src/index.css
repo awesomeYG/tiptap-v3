@@ -130,8 +130,7 @@
 .tiptap.ProseMirror code {
   padding: 0 0.25rem;
   line-height: 1.5rem;
-  font-size: 0.875rem;
-  display: inline-block;
+  font-size: inherit;
   word-break: break-all;
   color: var(--mui-palette-primary-main);
   background-color: var(--mui-palette-background-paper2);

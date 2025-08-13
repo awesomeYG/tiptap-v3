@@ -36,6 +36,8 @@ export const allMathPatternsRegex = /\$\$?[^$]*\$\$?/g
  * Creates a transaction that migrates existing math strings in the document to new math nodes.
  * This function traverses the document and replaces LaTeX math syntax with proper math nodes,
  * preserving the mathematical content. It handles both inline and block math expressions.
+ * 
+ * Note: Math formulas inside <pre> and <code> tags are ignored to preserve code formatting.
  *
  * @param editor - The editor instance containing the schema and configuration
  * @param tr - The transaction to modify with the migration operations
@@ -50,28 +52,8 @@ export const allMathPatternsRegex = /\$\$?[^$]*\$\$?/g
  * ```
  */
 export function createMathMigrateTransaction(editor: Editor, tr: Transaction) {
-  // 查找数学相关的节点类型
-  const allNodeNames = Object.keys(editor.schema.nodes)
-  const inlineMathNodeNames = allNodeNames.filter(name =>
-    name.includes('inline') || name.includes('Inline') || name.includes('math') || name.includes('Math')
-  )
-  const blockMathNodeNames = allNodeNames.filter(name =>
-    name.includes('block') || name.includes('Block') || name.includes('math') || name.includes('Math')
-  )
-
-  // 尝试找到正确的数学节点类型
-  const inlineMathNode = editor.schema.nodes.customInlineMath ||
-    editor.schema.nodes.inlineMath ||
-    inlineMathNodeNames.find(name => editor.schema.nodes[name])
-
-  const blockMathNode = editor.schema.nodes.customBlockMath ||
-    editor.schema.nodes.blockMath ||
-    blockMathNodeNames.find(name => editor.schema.nodes[name])
-
-  if (!inlineMathNode || !blockMathNode) {
-    console.warn('找不到必要的数学节点类型')
-    return tr
-  }
+  const inlineMathNode = editor.schema.nodes.inlineMath
+  const blockMathNode = editor.schema.nodes.blockMath
 
   // 收集所有需要处理的数学公式，按位置排序
   const allMathReplacements: Array<{
@@ -85,6 +67,11 @@ export function createMathMigrateTransaction(editor: Editor, tr: Transaction) {
 
   // 第一遍：收集所有数学公式信息
   tr.doc.descendants((node, pos) => {
+    // 跳过代码块和预格式化文本
+    if (node.marks.some(mark => mark.type.name === 'codeBlock' || mark.type.name === 'code')) {
+      return
+    }
+
     if (!node.isText || !node.text || !node.text.includes('$')) {
       return
     }
@@ -184,6 +171,8 @@ export function createMathMigrateTransaction(editor: Editor, tr: Transaction) {
  * into proper math nodes. It handles both inline math (single dollar signs) and
  * block math (double dollar signs). The migration happens immediately and is not
  * added to the editor's history.
+ * 
+ * Note: Math formulas inside <pre> and <code> tags are ignored to preserve code formatting.
  *
  * @param editor - The editor instance to perform the migration on
  *
