@@ -1,37 +1,27 @@
-import { MentionOptions } from '@tiptap/extension-mention'
-import { Editor, ReactRenderer } from '@tiptap/react'
+import { ReactRenderer } from '@tiptap/react'
 import { SuggestionProps } from '@tiptap/suggestion'
-import { MentionExtensionProps } from '@yu-cq/tiptap/type'
+import { slashCommands } from '@yu-cq/tiptap/contants/slash-commands'
+import type { SlashCommandsListProps, SlashCommandsListRef } from '@yu-cq/tiptap/type'
 import { updatePosition } from '@yu-cq/tiptap/util'
-import { MentionList, MentionListProps, MentionListRef } from '../component/MentionList'
+import SlashCommandsList from '../component/SlashCommandsList/index'
 
-export const mentionSuggestion = ({ mentionItems, onMentionFilter }: MentionExtensionProps): MentionOptions["suggestion"] => {
-  let getItems: ((props: {
-    query: string;
-    editor: Editor;
-  }) => any[] | Promise<any[]>) | undefined
 
-  if (mentionItems && mentionItems.length > 0) {
-    getItems = ({ query }: { query: string }) => {
-      return mentionItems.filter(item => item.toLowerCase().startsWith(query.toLowerCase()))
-        .slice(0, 5)
-    }
-  } else if (onMentionFilter) {
-    getItems = async ({ query }: { query: string }) => {
-      const items = await onMentionFilter?.({ query })
-      return items.filter(item => item.toLowerCase().startsWith(query.toLowerCase()))
-        .slice(0, 5)
-    }
-  }
-
+export const slashSuggestion = () => {
   return {
-    items: getItems,
+    items: ({ query }: { query: string }) => {
+      const commands = slashCommands
+      if (!query) return commands
+      return commands.filter(item => item.title.toLowerCase().includes(query.toLowerCase()))
+    },
+    command: ({ editor, range, props }: { editor: any; range: { from: number; to: number }; props: any }) => {
+      props.command({ editor, range })
+    },
     render: () => {
-      let component: ReactRenderer<MentionListRef, MentionListProps> | null = null
+      let component: ReactRenderer<SlashCommandsListRef, SlashCommandsListProps> | null = null
 
       return {
         onStart: (props: SuggestionProps<any>) => {
-          component = new ReactRenderer(MentionList, {
+          component = new ReactRenderer(SlashCommandsList, {
             props,
             editor: props.editor,
           })
@@ -43,6 +33,12 @@ export const mentionSuggestion = ({ mentionItems, onMentionFilter }: MentionExte
         },
         onUpdate(props: SuggestionProps<any>) {
           if (!component) return
+          // 如果用户输入了查询内容，自动关闭菜单
+          // if (props.query && props.query.trim().length > 0) {
+          //   component.element.remove()
+          //   component.destroy()
+          //   return
+          // }
           component.updateProps(props)
           if (!props.clientRect) return
           updatePosition(props.editor, component.element as HTMLElement)
@@ -66,4 +62,4 @@ export const mentionSuggestion = ({ mentionItems, onMentionFilter }: MentionExte
   }
 }
 
-export default mentionSuggestion
+export default slashSuggestion

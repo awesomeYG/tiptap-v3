@@ -1,6 +1,6 @@
 import FileHandler from "@tiptap/extension-file-handler";
 import { UploadFunction } from "@yu-cq/tiptap/type";
-import { formatFileSize, getFileType } from "@yu-cq/tiptap/util/fileHandler";
+import { formatFileSize, getFileType } from "@yu-cq/tiptap/util";
 
 export const FileHandlerExtension = (props: { onUpload?: UploadFunction }) => FileHandler.configure({
   onDrop: async (editor, files, pos) => {

@@ -1,25 +1,8 @@
-import { computePosition, flip, shift } from '@floating-ui/dom'
 import { EmojiItem, EmojiOptions } from '@tiptap/extension-emoji'
-import { Editor, posToDOMRect, ReactRenderer } from '@tiptap/react'
+import { Editor, ReactRenderer } from '@tiptap/react'
 import { SuggestionProps } from '@tiptap/suggestion'
+import { updatePosition } from '@yu-cq/tiptap/util'
 import { EmojiList, EmojiListProps, EmojiListRef } from '../component/EmojiList'
-
-const updatePosition = (editor: Editor, element: HTMLElement) => {
-  const virtualElement = {
-    getBoundingClientRect: () => posToDOMRect(editor.view, editor.state.selection.from, editor.state.selection.to),
-  }
-
-  computePosition(virtualElement, element, {
-    placement: 'bottom-start',
-    strategy: 'absolute',
-    middleware: [shift(), flip()],
-  }).then(({ x, y, strategy }: { x: number, y: number, strategy: string }) => {
-    element.style.width = 'max-content'
-    element.style.position = strategy
-    element.style.left = `${x}px`
-    element.style.top = `${y}px`
-  })
-}
 
 export const emojiSuggestion: EmojiOptions["suggestion"] = {
   allowSpaces: false,

@@ -8,6 +8,7 @@ import { CharacterCount, Placeholder } from '@tiptap/extensions';
 import StarterKit from '@tiptap/starter-kit';
 import { PLACEHOLDER } from '../contants/placeholder';
 import { GetExtensionsProps } from '../type';
+import { SlashCommands } from './extension';
 import {
   BlockAttachmentExtension,
   BlockLinkExtension,
@@ -84,6 +85,11 @@ export const getExtensions = ({
     }),
   ]
 
+  if (!exclude?.includes('emoji')) {
+    const Emoji = EmojiExtension
+    defaultExtensions.push(Emoji)
+  }
+
   if (!exclude?.includes('mention') && (mentionItems && mentionItems.length > 0 || onMentionFilter)) {
     const Mention = MentionExtension({ mentionItems, onMentionFilter })
     defaultExtensions.push(Mention)
@@ -96,11 +102,6 @@ export const getExtensions = ({
     defaultExtensions.push(Details)
     defaultExtensions.push(DetailsContent)
     defaultExtensions.push(DetailsSummary)
-  }
-
-  if (!exclude?.includes('emoji')) {
-    const Emoji = EmojiExtension
-    defaultExtensions.push(Emoji)
   }
 
   if (!exclude?.includes('mathematics')) {
@@ -142,10 +143,6 @@ export const getExtensions = ({
     defaultExtensions.push(UploadProgress)
   }
 
-  if (!exclude?.includes('invisibleCharacters') && editable) {
-    defaultExtensions.push(InvisibleCharacters)
-  }
-
   if (!exclude?.includes('link')) {
     defaultExtensions.push(InlineLinkExtension)
     defaultExtensions.push(BlockLinkExtension)
@@ -161,6 +158,16 @@ export const getExtensions = ({
   if (!exclude?.includes('tableOfContents')) {
     const CustomTableOfContents = TableOfContents({ onTocUpdate })
     defaultExtensions.push(CustomTableOfContents)
+  }
+
+  if (editable) {
+    if (!exclude?.includes('slashCommands')) {
+      defaultExtensions.push(SlashCommands)
+    }
+
+    if (!exclude?.includes('invisibleCharacters')) {
+      defaultExtensions.push(InvisibleCharacters)
+    }
   }
 
   return defaultExtensions

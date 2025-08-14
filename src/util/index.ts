@@ -1,3 +1,8 @@
+export * from './fileHandler'
+export * from './floating'
+export * from './migrateMathStrings'
+export * from './shortcutKey'
+
 import { Editor } from '@tiptap/react'
 
 export const formatFileSize = (bytes: number): string => {

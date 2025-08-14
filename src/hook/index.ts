@@ -2,7 +2,7 @@ import { useEditor, UseEditorOptions } from '@tiptap/react'
 import { renderToMarkdown } from '@tiptap/static-renderer/pm/markdown'
 import { getExtensions } from '@yu-cq/tiptap/extension'
 import { UseTiptapProps, UseTiptapReturn } from '@yu-cq/tiptap/type'
-import { migrateMathStrings } from '../util/migrateMathStrings'
+import { migrateMathStrings } from '@yu-cq/tiptap/util'
 
 const useTiptap = ({
   // extension 

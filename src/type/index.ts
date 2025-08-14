@@ -58,3 +58,20 @@ export type UseTiptapReturn = {
   getJSON: () => any
   getMarkdownByJSON: () => string
 }
+
+export interface SlashCommandItem {
+  title: string
+  icon: string
+  command: string
+  attrs?: Record<string, unknown>
+}
+
+export interface SlashCommandsListProps {
+  items: SlashCommandItem[]
+  command: (item: SlashCommandItem) => void
+  editor: Editor
+}
+
+export interface SlashCommandsListRef {
+  onKeyDown: (props: { event: KeyboardEvent }) => boolean
+}
