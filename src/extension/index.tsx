@@ -11,6 +11,7 @@ import { PLACEHOLDER } from '../contants/placeholder';
 import { GetExtensionsProps } from '../type';
 import { SlashCommands } from './extension';
 import {
+  AudioExtension,
   BlockAttachmentExtension,
   BlockLinkExtension,
   CodeBlockLowlightExtension,
@@ -128,6 +129,11 @@ export const getExtensions = ({
   if (!exclude?.includes('video')) {
     const Video = VideoExtension({ onUpload, onError })
     defaultExtensions.push(Video)
+  }
+
+  if (!exclude?.includes('audio')) {
+    const Audio = AudioExtension({ onUpload, onError })
+    defaultExtensions.push(Audio)
   }
 
   if (!exclude?.includes('image')) {

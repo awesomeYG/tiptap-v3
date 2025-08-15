@@ -1,6 +1,6 @@
 import { Editor } from '@tiptap/react';
 import * as React from 'react';
-import { AttachmentLineIcon, CodeBoxLineIcon, CodeLineIcon, DoubleQuotesLIcon, FunctionsIcon, H1Icon, H2Icon, H3Icon, H4Icon, H5Icon, H6Icon, ImageLineIcon, LinkIcon, ListCheck2Icon, ListOrdered2Icon, ListUnorderedIcon, MenuFold2FillIcon, MovieLineIcon, SeparatorIcon, SquareRootIcon, Table2Icon } from '../component/Icons';
+import { AttachmentLineIcon, CodeBoxLineIcon, CodeLineIcon, DoubleQuotesLIcon, FunctionsIcon, H1Icon, H2Icon, H3Icon, H4Icon, H5Icon, H6Icon, ImageLineIcon, LinkIcon, ListCheck2Icon, ListOrdered2Icon, ListUnorderedIcon, MenuFold2FillIcon, MovieLineIcon, Music2LineIcon, SeparatorIcon, SquareRootIcon, Table2Icon } from '../component/Icons';
 
 export const slashCommands = [
   {
@@ -148,6 +148,13 @@ export const slashCommands = [
     icon: <AttachmentLineIcon sx={{ fontSize: '1rem' }} />,
     command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
       editor.chain().focus().deleteRange(range).setInlineAttachment({ url: '', title: '', size: '0' }).run()
+    }
+  },
+  {
+    title: '音频',
+    icon: <Music2LineIcon sx={{ fontSize: '1rem' }} />,
+    command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
+      editor.chain().focus().deleteRange(range).setAudio({ src: '' }).run()
     }
   },
 ]

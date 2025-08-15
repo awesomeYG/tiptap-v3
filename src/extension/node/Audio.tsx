@@ -1,0 +1,157 @@
+import { mergeAttributes, Node } from '@tiptap/core'
+import { ReactNodeViewRenderer } from '@tiptap/react'
+import { EditorFnProps } from '@yu-cq/tiptap/type'
+import AudioViewWrapper from '../component/Audio'
+
+declare module '@tiptap/core' {
+  interface Commands<ReturnType> {
+    audio: {
+      /**
+       * Insert an audio
+       */
+      setAudio: (options: {
+        src: string
+        controls?: boolean
+        autoplay?: boolean
+        loop?: boolean
+        muted?: boolean
+      }) => ReturnType
+    }
+  }
+}
+
+export type AudioExtensionProps = EditorFnProps
+
+export const AudioExtension = (props: AudioExtensionProps) => Node.create({
+  name: 'audio',
+  group: 'block',
+  atom: true,
+  selectable: true,
+  draggable: true,
+
+  addKeyboardShortcuts() {
+    return {
+      'Mod-9': () => {
+        return this.editor.commands.setAudio({ src: '', controls: true, autoplay: false })
+      }
+    }
+  },
+
+  addAttributes() {
+    return {
+      class: {
+        default: 'audio-wrapper',
+      },
+      src: {
+        default: null,
+        parseHTML: element => element.getAttribute('src'),
+        renderHTML: attributes => {
+          if (!attributes.src) return {}
+          return { src: attributes.src }
+        },
+      },
+      controls: {
+        default: true,
+        parseHTML: element => element.hasAttribute('controls'),
+        renderHTML: attributes => {
+          if (!attributes.controls) return {}
+          return { controls: 'true' }
+        },
+      },
+      autoplay: {
+        default: false,
+        parseHTML: element => element.hasAttribute('autoplay'),
+        renderHTML: attributes => {
+          if (!attributes.autoplay) return {}
+          return { autoplay: 'true' }
+        },
+      },
+      loop: {
+        default: false,
+        parseHTML: element => element.hasAttribute('loop'),
+        renderHTML: attributes => {
+          if (!attributes.loop) return {}
+          return { loop: 'true' }
+        },
+      },
+      muted: {
+        default: false,
+        parseHTML: element => element.hasAttribute('muted'),
+        renderHTML: attributes => {
+          if (!attributes.muted) return {}
+          return { muted: 'true' }
+        },
+      },
+    }
+  },
+
+  parseHTML() {
+    return [
+      {
+        tag: 'audio',
+        getAttrs: (dom) => {
+          if (!(dom instanceof HTMLElement)) return false
+
+          const src = dom.getAttribute('src')
+          if (!src) return false
+
+          return {
+            src,
+            controls: dom.hasAttribute('controls'),
+            autoplay: dom.hasAttribute('autoplay'),
+            loop: dom.hasAttribute('loop'),
+            muted: dom.hasAttribute('muted'),
+          }
+        },
+      }
+    ]
+  },
+
+  renderHTML({ HTMLAttributes }) {
+    return ['audio', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes)]
+  },
+
+  addCommands() {
+    return {
+      setAudio: (options) => ({ commands }) => {
+        return commands.insertContent({
+          type: this.name,
+          attrs: {
+            src: options.src,
+            controls: options.controls !== false,
+            autoplay: options.autoplay || false,
+            loop: options.loop || false,
+            muted: options.muted || false,
+          },
+        })
+      },
+    }
+  },
+
+  addInputRules() {
+    return [
+      // Auto-embed audio URLs
+      {
+        find: /^https?:\/\/.*\.(mp3|wav|ogg|m4a|flac|aac|wma|webm)$/,
+        handler: ({ state, range, match }) => {
+          const { from, to } = range
+          const audioUrl = match[0]
+
+          state.tr.replaceWith(
+            from,
+            to,
+            this.type.create({
+              src: audioUrl,
+            })
+          )
+        },
+      },
+    ]
+  },
+
+  addNodeView() {
+    return ReactNodeViewRenderer((renderProps) => AudioViewWrapper({ ...renderProps, onUpload: props.onUpload, onError: props.onError }))
+  },
+})
+
+export default AudioExtension

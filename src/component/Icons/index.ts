@@ -74,6 +74,7 @@ export { MergeCellsVerticalIcon } from './merge-cells-vertical-icon';
 export { MindMapIcon } from './mind-map-icon';
 export { MoreLineIcon } from './more-line-icon';
 export { MovieLineIcon } from './movie-line-icon';
+export { Music2LineIcon } from './music-2-line-icon';
 export { NodeTreeIcon } from './node-tree-icon';
 export { Notification3LineIcon } from './notification-3-line-icon';
 export { OrganizationChartIcon } from './organization-chart-icon';
