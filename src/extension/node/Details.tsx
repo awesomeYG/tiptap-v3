@@ -5,8 +5,8 @@ const CustomDetails = Details.extend({
     return {
       open: {
         default: true,
-        parseHTML: element => element.hasAttribute('open'),
-        renderHTML: ({ open }) => {
+        parseHTML: (element: HTMLElement) => element.hasAttribute('open'),
+        renderHTML: ({ open }: { open: boolean }) => {
           if (!open) {
             return {}
           }
