@@ -1,7 +1,7 @@
-import { Box, Button, Divider, Paper, Stack, useTheme } from '@mui/material'
+import { Box, Button, Paper, Stack, useTheme } from '@mui/material'
 import { Editor } from '@tiptap/react'
 import { BubbleMenu } from '@tiptap/react/menus'
-import { BoldIcon, FontFamilyIcon, ItalicIcon, StrikethroughIcon, UnderlineIcon } from '@yu-cq/tiptap/component/Icons'
+import { BoldIcon, CodeLineIcon, ItalicIcon, LinkIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, UnderlineIcon } from '@yu-cq/tiptap/component/Icons'
 import React, { useEffect, useState } from 'react'
 import { ToolbarItem } from '../Toolbar'
 
@@ -43,8 +43,11 @@ const SelectionText = (props: { editor: Editor }) => {
     italic: false,
     strike: false,
     underline: false,
+    code: false,
+    superscript: false,
+    subscript: false,
   })
-  const [showColorPicker, setShowColorPicker] = useState(false)
+  // const [showColorPicker, setShowColorPicker] = useState(false)
 
   const updateSelection = () => {
     setActive({
@@ -53,6 +56,9 @@ const SelectionText = (props: { editor: Editor }) => {
       italic: editor.isActive('italic'),
       strike: editor.isActive('strike'),
       underline: editor.isActive('underline'),
+      code: editor.isActive('code'),
+      superscript: editor.isActive('superscript'),
+      subscript: editor.isActive('subscript'),
     })
   }
 
@@ -104,32 +110,60 @@ const SelectionText = (props: { editor: Editor }) => {
     }}>
       <Stack direction={'row'} alignItems={'center'} justifyContent={'space-between'}>
         <ToolbarItem
+          tip='加粗'
           icon={<BoldIcon sx={{ fontSize: '1rem' }} />}
           onClick={() => editor.chain().focus().toggleBold().run()}
           className={active.bold ? "tool-active" : ""}
         />
         <ToolbarItem
+          tip='斜体'
           icon={<ItalicIcon sx={{ fontSize: '1rem' }} />}
           onClick={() => editor.chain().focus().toggleItalic().run()}
           className={active.italic ? "tool-active" : ""}
         />
         <ToolbarItem
+          tip='删除线'
           icon={<StrikethroughIcon sx={{ fontSize: '1rem' }} />}
           onClick={() => editor.chain().focus().toggleStrike().run()}
           className={active.strike ? "tool-active" : ""}
         />
         <ToolbarItem
+          tip='下划线'
           icon={<UnderlineIcon sx={{ fontSize: '1rem' }} />}
           onClick={() => editor.chain().focus().toggleUnderline().run()}
           className={active.underline ? "tool-active" : ""}
         />
-        <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'divider' }} />
         <ToolbarItem
-          icon={<FontFamilyIcon sx={{ fontSize: '1rem' }} />}
-          onClick={() => setShowColorPicker(!showColorPicker)}
+          tip='上标'
+          icon={<SuperscriptIcon sx={{ fontSize: '1rem' }} />}
+          onClick={() => editor.chain().focus().toggleSuperscript().run()}
+          className={active.superscript ? "tool-active" : ""}
+        />
+        <ToolbarItem
+          tip='下标'
+          icon={<SubscriptIcon sx={{ fontSize: '1rem' }} />}
+          onClick={() => editor.chain().focus().toggleSubscript().run()}
+          className={active.subscript ? "tool-active" : ""}
+        />
+        <ToolbarItem
+          tip='代码'
+          icon={<CodeLineIcon sx={{ fontSize: '1rem' }} />}
+          onClick={() => editor.chain().focus().toggleCode().run()}
+          className={active.code ? "tool-active" : ""}
+        />
+        <ToolbarItem
+          tip='插入链接'
+          icon={<LinkIcon sx={{ fontSize: '1rem' }} />}
+          onClick={() => {
+            const selection = editor.state.selection
+            const start = selection.from
+            const end = selection.to
+            const text = editor.state.doc.textBetween(start, end, '')
+            editor.chain().focus().setInlineLink({ href: '', title: text }).run()
+          }}
         />
       </Stack>
-      {showColorPicker && <Box sx={{
+      <Box sx={{
         mt: 0.5,
         p: 1.5,
         borderTop: '1px solid',
@@ -137,7 +171,7 @@ const SelectionText = (props: { editor: Editor }) => {
         boxSizing: 'border-box',
       }}>
         <Box sx={{ fontSize: 14, mb: 0.5, color: 'text.secondary' }}>文字颜色</Box>
-        <Stack direction={'row'} flexWrap={'wrap'} gap={0.5} sx={{ width: 'calc(36px * 5 + 9px)' }}>
+        <Stack direction={'row'} flexWrap={'wrap'} gap={0.5}>
           {THEME_TEXT_COLOR.map((c) => (
             <Box key={c} sx={{
               width: '1.5rem',
@@ -154,7 +188,7 @@ const SelectionText = (props: { editor: Editor }) => {
           ))}
         </Stack>
         <Box sx={{ fontSize: 14, mb: 0.5, mt: 2, color: 'text.secondary' }}>背景颜色</Box>
-        <Stack direction={'row'} flexWrap={'wrap'} gap={0.5} sx={{ width: 'calc(36px * 5 + 9px)' }}>
+        <Stack direction={'row'} flexWrap={'wrap'} gap={0.5}>
           {THEME_TEXT_BG_COLOR.map((c) => (
             <Box key={c} sx={{
               width: '1.5rem',
@@ -173,15 +207,15 @@ const SelectionText = (props: { editor: Editor }) => {
         <Button fullWidth variant='contained' sx={{ mt: 2 }}
           onClick={() => {
             editor
-            .chain()
-            .focus()
-            .setColor('')
-            .setBackgroundColor('')
-            .run()
-            setShowColorPicker(false)
+              .chain()
+              .focus()
+              .setColor('')
+              .setBackgroundColor('')
+              .run()
+            // setShowColorPicker(false)
           }}
         >恢复默认</Button>
-      </Box>}
+      </Box>
     </Paper>
   </BubbleMenu>
 }

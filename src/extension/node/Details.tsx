@@ -1,6 +1,21 @@
 import Details, { DetailsContent, DetailsSummary } from "@tiptap/extension-details";
 
 const CustomDetails = Details.extend({
+  addAttributes() {
+    return {
+      open: {
+        default: true,
+        parseHTML: element => element.hasAttribute('open'),
+        renderHTML: ({ open }) => {
+          if (!open) {
+            return {}
+          }
+          return { open: '' }
+        },
+      },
+    }
+  },
+
   addKeyboardShortcuts() {
     return {
       'Mod-7': () => {

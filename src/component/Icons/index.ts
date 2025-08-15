@@ -80,6 +80,7 @@ export { OrganizationChartIcon } from './organization-chart-icon';
 export { QuoteTextIcon } from './quote-text-icon';
 export { ScreenshotLineIcon } from './screenshot-line-icon';
 export { ScrollToBottomLineIcon } from './scroll-to-bottom-line-icon';
+export { SeparatorIcon } from './separator-icon';
 export { ShareBoxLineIcon } from './share-box-line-icon';
 export { SplitCellsHorizontalIcon } from './split-cells-horizontal-icon';
 export { SplitCellsVerticalIcon } from './split-cells-vertical-icon';

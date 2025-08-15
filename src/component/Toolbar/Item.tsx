@@ -47,7 +47,7 @@ const ToolbarItem = React.forwardRef<HTMLButtonElement, ToolbarItemProps>(
             }}
             {...rest}
           >
-            <Stack direction={'row'} alignItems={'center'} gap={1} sx={{ lineHeight: 1 }}>
+            <Stack direction={'row'} alignItems={'center'} gap={1} sx={{ lineHeight: 1, flexShrink: 0 }}>
               {icon}
               {text && <Box component='span'>{text}</Box>}
             </Stack>

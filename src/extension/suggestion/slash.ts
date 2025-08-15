@@ -33,12 +33,6 @@ export const slashSuggestion = () => {
         },
         onUpdate(props: SuggestionProps<any>) {
           if (!component) return
-          // 如果用户输入了查询内容，自动关闭菜单
-          // if (props.query && props.query.trim().length > 0) {
-          //   component.element.remove()
-          //   component.destroy()
-          //   return
-          // }
           component.updateProps(props)
           if (!props.clientRect) return
           updatePosition(props.editor, component.element as HTMLElement)

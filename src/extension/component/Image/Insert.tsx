@@ -4,7 +4,7 @@ import { FloatingPopover } from "@yu-cq/tiptap/component/FloatingPopover"
 import { ImageLineIcon } from "@yu-cq/tiptap/component/Icons"
 import { EditorFnProps } from "@yu-cq/tiptap/type"
 import React, { useState } from "react"
-import { ImageAttributes } from "."
+import { ImageAttributes, getImageDimensions, getImageDimensionsFromFile } from "."
 
 type InsertImageProps = {
   selected: boolean
@@ -29,21 +29,47 @@ const InsertImage = ({
   const handleClosePopover = () => setAnchorEl(null)
   const handleChangeInsertType = (event: React.SyntheticEvent, newValue: string) => setInsertType(newValue as 'upload' | 'link')
 
+  // 更新图片属性，包含自动获取的宽度
+  const updateImageAttributes = async (src: string) => {
+    try {
+      const dimensions = await getImageDimensions(src)
+      updateAttributes({
+        src,
+        width: dimensions.width,
+      })
+    } catch (error) {
+      // 如果无法获取尺寸，使用默认宽度
+      console.warn('无法获取图片尺寸，使用默认宽度:', error)
+      updateAttributes({
+        src,
+        width: attrs.width || 400, // 默认宽度
+      })
+    }
+  }
+
   const handleUploadImage = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (file && onUpload) {
       setUploading(true)
       setUploadProgress(0)
       handleClosePopover()
+
       try {
+        // 先获取文件尺寸，避免重复加载
+        const dimensions = await getImageDimensionsFromFile(file)
+
         const url = await onUpload(file, (event) => {
           setUploadProgress(Math.round(event.progress * 100))
         })
+
         setEditSrc(url)
+
+        // 直接使用已获取的尺寸，无需再次加载图片
         updateAttributes({
           src: url,
-          width: attrs.width,
+          width: dimensions.width,
         })
+
       } catch (error) {
         onError?.(error as Error)
       } finally {
@@ -53,12 +79,10 @@ const InsertImage = ({
     }
   }
 
-  const handleInsertLink = () => {
+  const handleInsertLink = async () => {
     if (!editSrc.trim()) return
-    updateAttributes({
-      src: editSrc.trim(),
-      width: attrs.width,
-    })
+    // 使用新的更新函数，自动获取图片宽度
+    await updateImageAttributes(editSrc.trim())
     handleClosePopover()
   }
 

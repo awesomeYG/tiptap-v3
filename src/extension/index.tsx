@@ -1,4 +1,5 @@
 
+import Highlight from '@tiptap/extension-highlight';
 import InvisibleCharacters from '@tiptap/extension-invisible-characters';
 import Subscript from '@tiptap/extension-subscript';
 import Superscript from '@tiptap/extension-superscript';
@@ -66,6 +67,9 @@ export const getExtensions = ({
     Subscript,
     Superscript,
     TextStyleKit,
+    Highlight.configure({
+      multicolor: true,
+    }),
     Placeholder.configure({
       emptyNodeClass: 'custom-placeholder-node',
       showOnlyWhenEditable: true,

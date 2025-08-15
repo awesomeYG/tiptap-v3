@@ -191,7 +191,9 @@ const LinkViewWrapper: React.FC<NodeViewProps> = ({
         <ToolbarItem
           icon={<ShareBoxLineIcon sx={{ fontSize: '1rem' }} />}
           text='打开'
-          onClick={() => window.open(attrs.href, '_blank')}
+          onClick={() => {
+            window.open(attrs.href, attrs.target)
+          }}
         />
         <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'divider' }} />
         <ToolbarItem
@@ -313,17 +315,22 @@ const LinkViewWrapper: React.FC<NodeViewProps> = ({
             <RadioGroup
               row
               value={type}
-              onChange={(e) => setType(e.target.value as 'icon' | 'block')}
+              onChange={(e) => setType(e.target.value as 'text' | 'icon' | 'block')}
             >
+              <FormControlLabel
+                value="text"
+                control={<Radio size="small" />}
+                label="纯文字"
+              />
               <FormControlLabel
                 value="icon"
                 control={<Radio size="small" />}
-                label="图标文字链接"
+                label="图标文字"
               />
               <FormControlLabel
                 value="block"
                 control={<Radio size="small" />}
-                label="卡片链接"
+                label="卡片"
               />
             </RadioGroup>
           </Stack>

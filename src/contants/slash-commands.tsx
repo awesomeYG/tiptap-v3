@@ -1,6 +1,6 @@
 import { Editor } from '@tiptap/react';
 import * as React from 'react';
-import { AttachmentLineIcon, CodeBoxLineIcon, CodeLineIcon, DoubleQuotesLIcon, FunctionsIcon, H1Icon, H2Icon, H3Icon, H4Icon, H5Icon, H6Icon, ImageLineIcon, LinkIcon, ListCheck2Icon, ListOrdered2Icon, ListUnorderedIcon, MenuFold2FillIcon, MovieLineIcon, SquareRootIcon, Table2Icon } from '../component/Icons';
+import { AttachmentLineIcon, CodeBoxLineIcon, CodeLineIcon, DoubleQuotesLIcon, FunctionsIcon, H1Icon, H2Icon, H3Icon, H4Icon, H5Icon, H6Icon, ImageLineIcon, LinkIcon, ListCheck2Icon, ListOrdered2Icon, ListUnorderedIcon, MenuFold2FillIcon, MovieLineIcon, SeparatorIcon, SquareRootIcon, Table2Icon } from '../component/Icons';
 
 export const slashCommands = [
   {
@@ -64,6 +64,13 @@ export const slashCommands = [
     icon: <ListCheck2Icon sx={{ fontSize: '1rem' }} />,
     command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
       editor.chain().focus().deleteRange(range).toggleTaskList().run()
+    }
+  },
+  {
+    title: '分割线',
+    icon: <SeparatorIcon sx={{ fontSize: '1rem' }} />,
+    command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
+      editor.chain().focus().deleteRange(range).setHorizontalRule().run()
     }
   },
   {
