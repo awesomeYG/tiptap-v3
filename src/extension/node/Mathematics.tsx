@@ -28,7 +28,7 @@ declare module '@tiptap/core' {
 const CustomInlineMath = (options: EditorFnProps) => InlineMath.extend({
   addKeyboardShortcuts() {
     return {
-      'Mod-5': () => {
+      'Mod-6': () => {
         return this.editor.commands.insertContent({
           type: this.name,
           attrs: {
@@ -59,7 +59,7 @@ const CustomInlineMath = (options: EditorFnProps) => InlineMath.extend({
 const CustomBlockMath = (options: EditorFnProps) => BlockMath.extend({
   addKeyboardShortcuts() {
     return {
-      'Mod-6': () => {
+      'Mod-7': () => {
         return this.editor.commands.insertContent({
           type: this.name,
           attrs: {

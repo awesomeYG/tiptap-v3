@@ -144,17 +144,17 @@ export const slashCommands = [
     }
   },
   {
-    title: '附件',
-    icon: <AttachmentLineIcon sx={{ fontSize: '1rem' }} />,
-    command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
-      editor.chain().focus().deleteRange(range).setInlineAttachment({ url: '', title: '', size: '0' }).run()
-    }
-  },
-  {
     title: '音频',
     icon: <Music2LineIcon sx={{ fontSize: '1rem' }} />,
     command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
       editor.chain().focus().deleteRange(range).setAudio({ src: '' }).run()
+    }
+  },
+  {
+    title: '附件',
+    icon: <AttachmentLineIcon sx={{ fontSize: '1rem' }} />,
+    command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
+      editor.chain().focus().deleteRange(range).setInlineAttachment({ url: '', title: '', size: '0' }).run()
     }
   },
 ]

@@ -18,8 +18,7 @@ const EditorFontBgColor = ({ editor }: EditorFontBgColorProps) => {
     '#e7bdff',
     '#FFE0B2',
     '#F8BBD0',
-    '#FFCDD2',
-    '#FFECB3',
+    '#F0ECB3',
     '#FFCCBC',
     '#B3E5FC',
     '#C8E6C9',
@@ -120,7 +119,6 @@ const EditorFontBgColor = ({ editor }: EditorFontBgColorProps) => {
     >
       <Box sx={{
         p: 1,
-        width: `calc(1.5rem * ${THEME_TEXT_BG_COLOR.length} + var(--mui-spacing-unit) * (${THEME_TEXT_BG_COLOR.length} - 1))`,
         fontSize: '0.875rem',
       }}>
         <Stack direction={'row'} alignItems={'center'} gap={1} sx={{ mb: 1 }}>

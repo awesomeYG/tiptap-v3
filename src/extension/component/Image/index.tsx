@@ -314,7 +314,7 @@ const ImageViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
         onClose={handleClosePopover}
         placement="bottom"
       >
-        <Stack sx={{ p: 2, width: 320 }}>
+        <Stack sx={{ p: 2, width: 350 }}>
           <Box sx={{ fontSize: '0.875rem', color: 'text.secondary', lineHeight: '1.5', mb: 1 }}>图片地址</Box>
           <TextField
             fullWidth

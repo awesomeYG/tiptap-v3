@@ -11,6 +11,8 @@ declare module '@tiptap/core' {
        */
       setAudio: (options: {
         src: string
+        title?: string
+        poster?: string
         controls?: boolean
         autoplay?: boolean
         loop?: boolean
@@ -31,7 +33,7 @@ export const AudioExtension = (props: AudioExtensionProps) => Node.create({
 
   addKeyboardShortcuts() {
     return {
-      'Mod-9': () => {
+      'Mod-4': () => {
         return this.editor.commands.setAudio({ src: '', controls: true, autoplay: false })
       }
     }
@@ -48,6 +50,22 @@ export const AudioExtension = (props: AudioExtensionProps) => Node.create({
         renderHTML: attributes => {
           if (!attributes.src) return {}
           return { src: attributes.src }
+        },
+      },
+      title: {
+        default: null,
+        parseHTML: element => element.getAttribute('title'),
+        renderHTML: attributes => {
+          if (!attributes.title) return {}
+          return { title: attributes.title }
+        },
+      },
+      poster: {
+        default: null,
+        parseHTML: element => element.getAttribute('poster'),
+        renderHTML: attributes => {
+          if (!attributes.poster) return {}
+          return { poster: attributes.poster }
         },
       },
       controls: {
@@ -97,6 +115,8 @@ export const AudioExtension = (props: AudioExtensionProps) => Node.create({
 
           return {
             src,
+            title: dom.getAttribute('title'),
+            poster: dom.getAttribute('poster'),
             controls: dom.hasAttribute('controls'),
             autoplay: dom.hasAttribute('autoplay'),
             loop: dom.hasAttribute('loop'),
@@ -118,6 +138,8 @@ export const AudioExtension = (props: AudioExtensionProps) => Node.create({
           type: this.name,
           attrs: {
             src: options.src,
+            title: options.title || null,
+            poster: options.poster || null,
             controls: options.controls !== false,
             autoplay: options.autoplay || false,
             loop: options.loop || false,

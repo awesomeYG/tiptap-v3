@@ -352,3 +352,13 @@
   outline: 0px solid transparent;
   margin-bottom: 1rem;
 }
+
+@keyframes rotate-icon {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}

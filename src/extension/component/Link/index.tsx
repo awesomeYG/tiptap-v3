@@ -27,14 +27,16 @@ const LinkViewWrapper: React.FC<NodeViewProps> = ({
   const [title, setTitle] = useState(attrs.title)
   const [href, setHref] = useState(attrs.href)
   const [type, setType] = useState(attrs.type || 'icon')
+  const [target, setTarget] = useState(attrs.target || '_blank')
   const [opraAnchorEl, setOpraAnchorEl] = useState<HTMLDivElement | null>(null)
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null)
 
   useEffect(() => {
     setTitle(attrs.title)
-    setHref(attrs.href)
+    setHref(attrs.href || '')
     setType(attrs.type || 'icon')
-  }, [attrs.title, attrs.href, attrs.type])
+    setTarget(attrs.target || '_blank')
+  }, [attrs.title, attrs.href, attrs.type, attrs.target])
 
   const handleShowOperationPopover = (event: React.MouseEvent<HTMLDivElement>) => setOpraAnchorEl(event.currentTarget)
   const handleCloseOperationPopover = () => setOpraAnchorEl(null)
@@ -56,7 +58,7 @@ const LinkViewWrapper: React.FC<NodeViewProps> = ({
         title,
         href,
         type,
-        target: attrs.target,
+        target,
         class: attrs.class,
         rel: attrs.rel,
       })
@@ -65,6 +67,7 @@ const LinkViewWrapper: React.FC<NodeViewProps> = ({
         title,
         href,
         type,
+        target,
       })
     }
     handleClosePopover()
@@ -185,9 +188,7 @@ const LinkViewWrapper: React.FC<NodeViewProps> = ({
       onClose={handleCloseOperationPopover}
       placement="top"
     >
-      <Stack direction={'row'} alignItems={'center'} sx={{
-        p: 0.5,
-      }}>
+      <Stack direction={'row'} alignItems={'center'} sx={{ p: 0.5 }}>
         <ToolbarItem
           icon={<ShareBoxLineIcon sx={{ fontSize: '1rem' }} />}
           text='打开'
@@ -281,7 +282,8 @@ const LinkViewWrapper: React.FC<NodeViewProps> = ({
       placement="bottom"
     >
       <Stack gap={2} sx={{
-        p: 2, width: 320,
+        p: 2,
+        width: 350,
         '.MuiFormControlLabel-label': {
           fontSize: '0.875rem'
         }
@@ -331,6 +333,31 @@ const LinkViewWrapper: React.FC<NodeViewProps> = ({
                 value="block"
                 control={<Radio size="small" />}
                 label="卡片"
+              />
+            </RadioGroup>
+          </Stack>
+        </FormControl>
+        <FormControl component="fieldset">
+          <Stack direction={'row'} gap={2} alignItems={'flex-start'} sx={{
+            '.MuiFormControlLabel-label': {
+              fontSize: '0.875rem'
+            }
+          }}>
+            <FormLabel component="legend" sx={{ fontSize: '0.875rem', flexShrink: 0 }}>打开</FormLabel>
+            <RadioGroup
+              row
+              value={target}
+              onChange={(e) => setTarget(e.target.value as '_blank' | '_self' | '_parent' | '_top')}
+            >
+              <FormControlLabel
+                value="_blank"
+                control={<Radio size="small" />}
+                label="新窗口"
+              />
+              <FormControlLabel
+                value="_self"
+                control={<Radio size="small" />}
+                label="当前窗口"
               />
             </RadioGroup>
           </Stack>

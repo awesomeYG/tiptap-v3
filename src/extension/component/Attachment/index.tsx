@@ -30,7 +30,6 @@ const AttachmentViewWrapper: React.FC<NodeViewProps & EditorFnProps & { attachme
 
   const [title, setTitle] = useState('')
   const [extension, setExtension] = useState('')
-  const [currentType, setCurrentType] = useState(attachmentDisplayType)
   const [opraAnchorEl, setOpraAnchorEl] = useState<HTMLDivElement | null>(null)
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null)
 
@@ -71,7 +70,6 @@ const AttachmentViewWrapper: React.FC<NodeViewProps & EditorFnProps & { attachme
     let title = attrs.title || ''
     setTitle(title.split('.').slice(0, -1).join('.'))
     setExtension(title.split('.').pop() || '')
-    setCurrentType(attachmentDisplayType)
   }, [attrs.title, attachmentDisplayType])
 
   if ((!attrs.url || attrs.url === 'error') && !editor.isEditable) {
@@ -185,7 +183,7 @@ const AttachmentViewWrapper: React.FC<NodeViewProps & EditorFnProps & { attachme
           />
           <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'divider' }} />
           <ToolbarItem
-            icon={<ScrollToBottomLineIcon  sx={{ transform: 'rotate(90deg)', fontSize: '1rem' }} />}
+            icon={<ScrollToBottomLineIcon sx={{ transform: 'rotate(90deg)', fontSize: '1rem' }} />}
             tip='图标文字链接'
             className={attachmentDisplayType === 'icon' ? 'tool-active' : ''}
             onClick={() => {
@@ -221,7 +219,8 @@ const AttachmentViewWrapper: React.FC<NodeViewProps & EditorFnProps & { attachme
         placement="bottom"
       >
         <Stack gap={2} sx={{
-          p: 2, width: 320,
+          p: 2,
+          width: 320,
           '.MuiFormControlLabel-label': {
             fontSize: '0.875rem'
           },

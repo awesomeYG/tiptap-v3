@@ -116,7 +116,7 @@ export const MathematicsInlineViewWrapper: React.FC<NodeViewProps & EditorFnProp
         onClose={handleClosePopover}
         placement="bottom"
       >
-        <Stack gap={2} sx={{ p: 2, width: 360 }}>
+        <Stack gap={2} sx={{ p: 2, width: 350 }}>
           <TextField
             fullWidth
             multiline

@@ -13,7 +13,7 @@ interface InsertLinkProps extends Partial<NodeViewProps> {
 
 const InsertLink = ({ updateAttributes, deleteNode, selected, attrs, editor }: InsertLinkProps) => {
   const [title, setTitle] = useState(attrs.title)
-  const [href, setHref] = useState(attrs.href)
+  const [href, setHref] = useState(attrs.href || '')
   const [type, setType] = useState(attrs.type || 'icon')
   const [target, setTarget] = useState(attrs.target || '_blank')
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null)
@@ -96,7 +96,7 @@ const InsertLink = ({ updateAttributes, deleteNode, selected, attrs, editor }: I
       onClose={handleClosePopover}
       placement="bottom"
     >
-      <Stack gap={2} sx={{ p: 2, width: 320 }}>
+      <Stack gap={2} sx={{ p: 2, width: 350 }}>
         <Stack direction={'row'} gap={2} alignItems={'center'}>
           <Box sx={{ fontSize: '0.875rem', color: 'text.secondary', flexShrink: 0 }}>地址</Box>
           <TextField

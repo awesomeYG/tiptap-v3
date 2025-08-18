@@ -18,7 +18,7 @@ const CustomDetails = Details.extend({
 
   addKeyboardShortcuts() {
     return {
-      'Mod-7': () => {
+      'Mod-8': () => {
         return this.editor.chain().focus().setDetails().run()
       }
     }

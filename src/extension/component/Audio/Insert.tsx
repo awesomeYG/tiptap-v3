@@ -1,4 +1,4 @@
-import { Box, Button, CircularProgress, Stack, Tab, Tabs, TextField } from "@mui/material"
+import { Box, Button, CircularProgress, IconButton, Stack, Tab, Tabs, TextField } from "@mui/material"
 import { NodeViewWrapper } from "@tiptap/react"
 import { FloatingPopover } from "@yu-cq/tiptap/component/FloatingPopover"
 import { Attachment2Icon, UploadCloud2LineIcon } from "@yu-cq/tiptap/component/Icons"
@@ -20,8 +20,11 @@ const InsertAudio = ({
   onError
 }: InsertAudioProps) => {
   const [editSrc, setEditSrc] = useState(attrs.src || '')
+  const [editTitle, setEditTitle] = useState(attrs.title || '')
+  const [editPoster, setEditPoster] = useState(attrs.poster || '')
   const [insertType, setInsertType] = useState<'upload' | 'link'>(onUpload ? 'upload' : 'link')
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null)
+  const [uploadingPoster, setUploadingPoster] = useState(false)
   const [uploading, setUploading] = useState(false)
   const [uploadProgress, setUploadProgress] = useState(0)
 
@@ -36,13 +39,15 @@ const InsertAudio = ({
       setUploadProgress(0)
       handleClosePopover()
       try {
-        const url = await onUpload?.(file, (event) => {
+        const url = await onUpload?.(file, (event: { progress: number }) => {
           setUploadProgress(Math.round(event.progress * 100))
         })
         if (url) {
           setEditSrc(url)
           updateAttributes({
             src: url,
+            title: attrs.title || undefined,
+            poster: attrs.poster || undefined,
             controls: attrs.controls,
             autoplay: attrs.autoplay,
             loop: attrs.loop,
@@ -58,10 +63,36 @@ const InsertAudio = ({
     }
   }
 
-  const handleInsertLink = () => {
+  const handleSelectPosterImage = () => {
+    const uploadId = document.getElementById('posterUploadInput') as HTMLInputElement
+    if (uploadId) {
+      uploadId.click()
+    }
+  }
+
+  const handleUploadPoster = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (file) {
+      setUploadingPoster(true)
+      try {
+        const url = await onUpload?.(file)
+        if (url) {
+          setEditPoster(url)
+        }
+      } catch (error) {
+        onError?.(error as Error)
+      } finally {
+        setUploadingPoster(false)
+      }
+    }
+  }
+
+  const handleInsertWithPoster = () => {
     if (!editSrc.trim()) return
     updateAttributes({
       src: editSrc.trim(),
+      title: editTitle.trim() || undefined,
+      poster: editPoster.trim() || undefined,
       controls: attrs.controls,
       autoplay: attrs.autoplay,
       loop: attrs.loop,
@@ -116,7 +147,7 @@ const InsertAudio = ({
     >
       <Attachment2Icon sx={{ fontSize: '1rem', position: 'relative', flexShrink: 0 }} />
       <Box sx={{ fontSize: '0.875rem', position: 'relative', flexGrow: 1, textAlign: 'left' }}>
-        {uploading ? '音频上传中...' : '嵌入或复制音频链接'}
+        {uploading ? '音频上传中...' : '点击此处嵌入或粘贴音频链接'}
       </Box>
       {uploading && <Box sx={{ fontSize: 12, fontWeight: 'bold', color: 'primary.main', position: 'relative', flexShrink: 0 }}>
         {uploadProgress}%
@@ -128,7 +159,7 @@ const InsertAudio = ({
       onClose={handleClosePopover}
       placement="bottom"
     >
-      <Stack direction={'row'} alignItems={'center'} justifyContent={'center'} sx={{ width: 300, borderBottom: '1px solid', borderColor: 'divider' }}>
+      <Stack direction={'row'} alignItems={'center'} justifyContent={'center'} sx={{ width: 350, borderBottom: '1px solid', borderColor: 'divider' }}>
         <Tabs value={insertType} onChange={handleChangeInsertType} sx={{
           borderRadius: '0 !important',
           height: 'auto !important',
@@ -163,7 +194,34 @@ const InsertAudio = ({
           onChange={(e) => setEditSrc(e.target.value)}
           placeholder="输入音频文件的 URL"
         />
-        <Button variant="contained" fullWidth onClick={handleInsertLink}>
+        <TextField
+          fullWidth
+          size="small"
+          value={editTitle}
+          onChange={(e) => setEditTitle(e.target.value)}
+          placeholder="输入音频名称（可选）"
+        />
+        <Stack direction={'row'} gap={2}>
+          <TextField
+            fullWidth
+            size="small"
+            value={editPoster}
+            onChange={(e) => setEditPoster(e.target.value)}
+            placeholder="输入海报图片的 URL（可选）"
+          />
+          <IconButton onClick={handleSelectPosterImage}>
+            {uploadingPoster ? <CircularProgress size={20} /> : <UploadCloud2LineIcon sx={{ fontSize: 18 }} />}
+          </IconButton>
+        </Stack>
+        <input
+          id='posterUploadInput'
+          type="file"
+          hidden
+          multiple={false}
+          accept="image/*"
+          onChange={handleUploadPoster}
+        />
+        <Button variant="contained" disabled={uploadingPoster} fullWidth onClick={handleInsertWithPoster}>
           嵌入音频
         </Button>
       </Stack>}

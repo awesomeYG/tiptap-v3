@@ -119,7 +119,6 @@ const EditorFontColor = ({ editor }: EditorFontColorProps) => {
     >
       <Box sx={{
         p: 1,
-        width: `calc(1.5rem * ${THEME_TEXT_COLOR.length} + var(--mui-spacing-unit) * (${THEME_TEXT_COLOR.length} - 1))`,
         fontSize: '0.875rem',
       }}>
         <Stack direction={'row'} alignItems={'center'} gap={1} sx={{ mb: 1 }}>
@@ -145,7 +144,7 @@ const EditorFontColor = ({ editor }: EditorFontColorProps) => {
               height: '1.5rem',
               cursor: 'pointer',
               border: '1px solid',
-              borderColor:  c === theme.palette.common.white ? 'divider' : c,
+              borderColor: c === theme.palette.common.white ? 'divider' : c,
               boxSizing: 'border-box',
               borderRadius: 'var(--mui-shape-borderRadius)',
               bgcolor: c,
@@ -157,7 +156,7 @@ const EditorFontColor = ({ editor }: EditorFontColorProps) => {
           ))}
         </Stack>
         <Box sx={{
-          mt:1,
+          mt: 1,
           '.react-colorful': { width: '100%', height: 150 },
           '.react-colorful__pointer': { width: 16, height: 16 },
           '.react-colorful__alpha, .react-colorful__hue': { height: '16px !important' }

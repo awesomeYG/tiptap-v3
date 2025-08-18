@@ -14,7 +14,7 @@ export const TableExtension = ({ editable }: { editable: boolean }) => [
   }).extend({
     addKeyboardShortcuts() {
       return {
-        'Mod-8': () => this.editor.commands.insertTable({ rows: 3, cols: 4, withHeaderRow: true }),
+        'Mod-9': () => this.editor.commands.insertTable({ rows: 3, cols: 4, withHeaderRow: true }),
       }
     },
   }),

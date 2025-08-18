@@ -120,7 +120,7 @@ const InsertVideo = ({
     >
       <MovieLineIcon sx={{ fontSize: '1rem', position: 'relative', flexShrink: 0 }} />
       <Box sx={{ fontSize: '0.875rem', position: 'relative', flexGrow: 1, textAlign: 'left' }}>
-        {uploading ? '视频上传中...' : '嵌入或复制视频链接'}
+        {uploading ? '视频上传中...' : '点击此处嵌入或粘贴视频链接'}
       </Box>
       {uploading && <Box sx={{ fontSize: 12, fontWeight: 'bold', color: 'primary.main', position: 'relative', flexShrink: 0 }}>
         {uploadProgress}%
@@ -132,7 +132,7 @@ const InsertVideo = ({
       onClose={handleClosePopover}
       placement="bottom"
     >
-      <Stack direction={'row'} alignItems={'center'} justifyContent={'center'} sx={{ width: 300, borderBottom: '1px solid', borderColor: 'divider' }}>
+      <Stack direction={'row'} alignItems={'center'} justifyContent={'center'} sx={{ width: 350, borderBottom: '1px solid', borderColor: 'divider' }}>
         <Tabs value={insertType} onChange={handleChangeInsertType} sx={{
           borderRadius: '0 !important',
           height: 'auto !important',

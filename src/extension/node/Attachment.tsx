@@ -107,7 +107,7 @@ export const InlineAttachmentExtension = (props: EditorFnProps) => Node.create({
 
   addKeyboardShortcuts() {
     return {
-      'Mod-4': () => {
+      'Mod-5': () => {
         return this.editor.commands.setInlineAttachment({
           url: '',
           title: '',

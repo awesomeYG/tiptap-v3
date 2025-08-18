@@ -2,7 +2,7 @@ import { Box, MenuItem, Select, Stack, Tooltip } from "@mui/material";
 import { Editor } from "@tiptap/react";
 import { getShortcutKeyText } from "@yu-cq/tiptap/util";
 import React, { useEffect, useState } from "react";
-import { ArrowDownSLineIcon, AttachmentLineIcon, ImageLineIcon, MovieLineIcon, UploadIcon } from "../../Icons";
+import { ArrowDownSLineIcon, AttachmentLineIcon, ImageLineIcon, MovieLineIcon, Music2LineIcon, UploadIcon } from "../../Icons";
 import ToolbarItem from "../Item";
 
 interface EditorInsertProps {
@@ -15,7 +15,8 @@ const EditorInsert = ({ editor }: EditorInsertProps) => {
   const InsertOptions = [
     { id: 'image', icon: <ImageLineIcon sx={{ fontSize: '1rem' }} />, label: '图片', shortcutKey: ['ctrl', '2'] },
     { id: 'video', icon: <MovieLineIcon sx={{ fontSize: '1rem' }} />, label: '视频', shortcutKey: ['ctrl', '3'] },
-    { id: 'attachment', icon: <AttachmentLineIcon sx={{ fontSize: '1rem' }} />, label: '附件', shortcutKey: ['ctrl', '4'] },
+    { id: 'audio', icon: <Music2LineIcon sx={{ fontSize: '1rem' }} />, label: '音频', shortcutKey: ['ctrl', '4'] },
+    { id: 'attachment', icon: <AttachmentLineIcon sx={{ fontSize: '1rem' }} />, label: '附件', shortcutKey: ['ctrl', '5'] },
   ];
 
   const updateSelection = () => {
@@ -23,6 +24,8 @@ const EditorInsert = ({ editor }: EditorInsertProps) => {
       setSelectedValue('image');
     } else if (editor.isActive('video')) {
       setSelectedValue('video');
+    } else if (editor.isActive('audio')) {
+      setSelectedValue('audio');
     } else if (editor.isActive('inlineAttachment') || editor.isActive('blockAttachment')) {
       setSelectedValue('attachment');
     } else {
@@ -36,6 +39,8 @@ const EditorInsert = ({ editor }: EditorInsertProps) => {
       editor.commands.setImage({ src: '', width: 760 });
     } else if (value === 'video') {
       editor.commands.setVideo({ src: '', width: 760, controls: true, autoplay: false });
+    } else if (value === 'audio') {
+      editor.commands.setAudio({ src: '', controls: true, autoplay: false });
     } else if (value === 'attachment') {
       editor.commands.setInlineAttachment({ url: '', title: '', size: '0' });
     }
@@ -54,7 +59,7 @@ const EditorInsert = ({ editor }: EditorInsertProps) => {
 
   return <Select
     value={selectedValue}
-    className={['image', 'video'].includes(selectedValue) ? "tool-active" : ""}
+    className={['image', 'video', 'audio', 'attachment'].includes(selectedValue) ? "tool-active" : ""}
     onChange={handleChange}
     renderValue={(value) => {
       return <ToolbarItem

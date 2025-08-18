@@ -23,14 +23,15 @@ export const SHORTCUT_KEYS = {
   'Insert': {
     label: '插入',
     keys: [
-      { label: '链接', value: 'Link', keys: ['shift', '1'] },
+      { label: '链接', value: 'Link', keys: ['ctrl', '1'] },
       { label: '图片', value: 'Image', keys: ['ctrl', '2'] },
       { label: '视频', value: 'Video', keys: ['ctrl', '3'] },
-      { label: '附件', value: 'Attachment', keys: ['ctrl', '4'] },
-      { label: '行内数学公式', value: 'Inline Math', keys: ['ctrl', '5'] },
-      { label: '块级数学公式', value: 'Block Math', keys: ['ctrl', '6'] },
-      { label: '折叠块', value: 'Details', keys: ['ctrl', '7'] },
-      { label: '表格', value: 'Table', keys: ['ctrl', '8'] },
+      { label: '音频', value: 'Audio', keys: ['ctrl', '4'] },
+      { label: '附件', value: 'Attachment', keys: ['ctrl', '5'] },
+      { label: '行内数学公式', value: 'Inline Math', keys: ['ctrl', '6'] },
+      { label: '块级数学公式', value: 'Block Math', keys: ['ctrl', '7'] },
+      { label: '折叠块', value: 'Details', keys: ['ctrl', '8'] },
+      { label: '表格', value: 'Table', keys: ['ctrl', '9'] },
     ],
   },
   'Text Formatting': {

@@ -120,7 +120,7 @@ export const MathematicsBlockViewWrapper: React.FC<NodeViewProps & EditorFnProps
         onClose={handleClosePopover}
         placement="bottom"
       >
-        <Stack gap={2} sx={{ p: 2, width: 360 }}>
+        <Stack gap={2} sx={{ p: 2, width: 350 }}>
           <TextField
             fullWidth
             multiline

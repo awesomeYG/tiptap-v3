@@ -157,7 +157,7 @@ const EditorToolbar = ({
       />
       <ToolbarItem
         tip={'折叠块'}
-        shortcutKey={['ctrl', '7']}
+        shortcutKey={['ctrl', '8']}
         icon={<MenuFold2FillIcon sx={{ fontSize: '1rem' }} />}
         onClick={() => {
           if (!active.details) {
@@ -172,7 +172,7 @@ const EditorToolbar = ({
       <EditorMath editor={editor} />
       <ToolbarItem
         tip={'表格'}
-        shortcutKey={['ctrl', '8']}
+        shortcutKey={['ctrl', '9']}
         icon={<Table2Icon sx={{ fontSize: '1rem' }} />}
         onClick={() => editor.commands.insertTable({
           rows: 3,

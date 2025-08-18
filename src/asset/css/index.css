@@ -17,6 +17,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 .tiptap.ProseMirror label:has(input[type="checkbox"]) {
   line-height: 1;
   padding-top: 0.5rem;

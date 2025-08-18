@@ -6,11 +6,12 @@ import {
   Stack
 } from '@mui/material'
 import { SlashCommandsListProps, SlashCommandsListRef } from '@yu-cq/tiptap/type'
-import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react'
+import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
 
 const SlashCommandsList = forwardRef<SlashCommandsListRef, SlashCommandsListProps>(
   ({ items, command }, ref) => {
     const [selectedIndex, setSelectedIndex] = useState(0)
+    const menuItemsRef = useRef<(HTMLLIElement | null)[]>([])
 
     const selectItem = (index: number) => {
       const item = items[index]
@@ -30,6 +31,16 @@ const SlashCommandsList = forwardRef<SlashCommandsListRef, SlashCommandsListProp
     const enterHandler = () => {
       selectItem(selectedIndex)
     }
+
+    // 自动滚动到选中的菜单项
+    useEffect(() => {
+      if (menuItemsRef.current[selectedIndex]) {
+        menuItemsRef.current[selectedIndex]?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest'
+        })
+      }
+    }, [selectedIndex])
 
     useEffect(() => setSelectedIndex(0), [items])
 
@@ -72,6 +83,7 @@ const SlashCommandsList = forwardRef<SlashCommandsListRef, SlashCommandsListProp
           {items.map((item, index) => (
             <MenuItem
               key={index}
+              ref={el => menuItemsRef.current[index] = el}
               selected={index === selectedIndex}
               onClick={() => selectItem(index)}
               sx={{
