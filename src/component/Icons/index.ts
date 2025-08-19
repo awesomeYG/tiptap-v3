@@ -88,6 +88,7 @@ export { ScreenshotLineIcon } from './screenshot-line-icon';
 export { ScrollToBottomLineIcon } from './scroll-to-bottom-line-icon';
 export { SeparatorIcon } from './separator-icon';
 export { ShareBoxLineIcon } from './share-box-line-icon';
+export { SlashCommands2Icon } from './slash-commands-2-icon';
 export { SpeedLineIcon } from './speed-line-icon';
 export { SplitCellsHorizontalIcon } from './split-cells-horizontal-icon';
 export { SplitCellsVerticalIcon } from './split-cells-vertical-icon';
