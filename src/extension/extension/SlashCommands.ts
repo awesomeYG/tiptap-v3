@@ -9,7 +9,7 @@ export const SlashCommands = Extension.create({
     return {
       suggestion: {
         char: '/',
-        startOfLine: true,
+        // startOfLine: true,
         ...slashSuggestion()
       },
     }

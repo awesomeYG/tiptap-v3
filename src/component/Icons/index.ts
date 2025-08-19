@@ -94,6 +94,7 @@ export { SubscriptIcon } from './subscript-icon';
 export { SuperscriptIcon } from './superscript-icon';
 export { Table2Icon } from './table-2-icon';
 export { TextIcon } from './text-icon';
+export { TextWrapIcon } from './text-wrap-icon';
 export { TitleIcon } from './title-icon';
 export { UnderlineIcon } from './underline-icon';
 export { UploadCloud2LineIcon } from './upload-cloud-2-line-icon';
