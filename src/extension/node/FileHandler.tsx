@@ -1,6 +1,7 @@
 import FileHandler from "@tiptap/extension-file-handler";
 import { UploadFunction } from "@yu-cq/tiptap/type";
 import { formatFileSize, getFileType } from "@yu-cq/tiptap/util";
+import { getImageDimensionsFromFile } from "../component/Image";
 
 export const FileHandlerExtension = (props: { onUpload?: UploadFunction }) => FileHandler.configure({
   onDrop: async (editor, files, pos) => {
@@ -25,10 +26,19 @@ export const FileHandlerExtension = (props: { onUpload?: UploadFunction }) => Fi
         editor.commands.removeUploadProgress(tempId);
         switch (fileType) {
           case 'image':
-            editor.commands.setImage({
-              src: url,
-              width: 760
-            });
+            try {
+              const dimensions = await getImageDimensionsFromFile(file);
+              editor.commands.setImage({
+                src: url,
+                width: Math.min(dimensions.width, 760) // 使用原始宽度，但不超过760px
+              });
+            } catch (error) {
+              console.warn('无法获取图片尺寸，使用默认宽度:', error);
+              editor.commands.setImage({
+                src: url,
+                width: 760
+              });
+            }
             break;
           case 'video':
             editor.commands.setVideo({
@@ -100,10 +110,19 @@ export const FileHandlerExtension = (props: { onUpload?: UploadFunction }) => Fi
           editor.commands.removeUploadProgress(tempId);
           switch (fileType) {
             case 'image':
-              editor.commands.setImage({
-                src: url,
-                width: 760
-              });
+              try {
+                const dimensions = await getImageDimensionsFromFile(file);
+                editor.commands.setImage({
+                  src: url,
+                  width: Math.min(dimensions.width, 760) // 使用原始宽度，但不超过760px
+                });
+              } catch (error) {
+                console.warn('无法获取图片尺寸，使用默认宽度:', error);
+                editor.commands.setImage({
+                  src: url,
+                  width: 760
+                });
+              }
               break;
             case 'video':
               editor.commands.setVideo({
