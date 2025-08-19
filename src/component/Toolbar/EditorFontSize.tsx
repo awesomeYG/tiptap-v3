@@ -15,25 +15,31 @@ const EditorFontSize = ({ editor }: EditorFontSizeProps) => {
   const Options = [10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52, 54, 56, 58, 60].map(it => it.toString());
 
   const updateFontSize = () => {
+    const attrs = editor.getAttributes('textStyle');
+    let fontSize = attrs.fontSize?.replace('px', '');
+    console.log(fontSize)
+    if (fontSize) {
+      setSelectedValue(fontSize);
+      return;
+    }
+
     if (editor.isActive('heading')) {
       const headingAttrs = editor.getAttributes('heading');
       const headingLevel = headingAttrs.level;
-      let headingFontSize = '16';
+
       switch (headingLevel) {
-        case 1: headingFontSize = '28'; break;
-        case 2: headingFontSize = '24'; break;
-        case 3: headingFontSize = '20'; break;
-        case 4: headingFontSize = '18'; break;
-        case 5: headingFontSize = '16'; break;
-        case 6: headingFontSize = '14'; break;
-        default: headingFontSize = defaultFontSize;
+        case 1: fontSize = '28'; break;
+        case 2: fontSize = '24'; break;
+        case 3: fontSize = '20'; break;
+        case 4: fontSize = '18'; break;
+        case 5: fontSize = '16'; break;
+        case 6: fontSize = '14'; break;
+        default: fontSize = defaultFontSize;
       }
-      setSelectedValue(headingFontSize);
     } else {
-      const attrs = editor.getAttributes('textStyle');
-      const fontSize = attrs.fontSize?.replace('px', '') || defaultFontSize;
-      setSelectedValue(fontSize);
+      fontSize = defaultFontSize;
     }
+    setSelectedValue(fontSize);
   };
 
   const handleChange = (e: { target: { value: string } }) => {
