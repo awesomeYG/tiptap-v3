@@ -30,6 +30,7 @@ import {
   TableExtension,
   TableOfContents,
   UploadProgressExtension,
+  VerticalAlign,
   VideoExtension,
   YoutubeExtension
 } from './node';
@@ -60,6 +61,10 @@ export const getExtensions = ({
     }),
     TextAlign.configure({
       types: ['heading', 'paragraph'],
+    }),
+    VerticalAlign.configure({
+      types: ['textStyle'],
+      defaultAlignment: null,
     }),
     CodeBlockLowlightExtension,
     CharacterCount.configure({

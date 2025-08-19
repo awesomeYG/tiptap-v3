@@ -3,10 +3,13 @@
 
 export { AiGenerate2Icon } from './ai-generate-2-icon';
 export { AiGenerateTextIcon } from './ai-generate-text-icon';
+export { AlignBottomIcon } from './align-bottom-icon';
 export { AlignCenterIcon } from './align-center-icon';
 export { AlignJustifyIcon } from './align-justify-icon';
 export { AlignLeftIcon } from './align-left-icon';
 export { AlignRightIcon } from './align-right-icon';
+export { AlignTopIcon } from './align-top-icon';
+export { AlignVerticallyIcon } from './align-vertically-icon';
 export { AnticlockwiseLineIcon } from './anticlockwise-line-icon';
 export { ArrowDownSLineIcon } from './arrow-down-s-line-icon';
 export { ArrowGoBackLineIcon } from './arrow-go-back-line-icon';

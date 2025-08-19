@@ -12,6 +12,7 @@ export * from './Mention';
 export * from './Table';
 export * from './TableOfContents';
 export * from './UploadProgress';
+export * from './VerticalAlign';
 export * from './Video';
 export * from './Youtube';
 

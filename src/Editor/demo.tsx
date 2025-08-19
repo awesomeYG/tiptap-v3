@@ -56,7 +56,7 @@ const Reader = () => {
         }, 100);
       })
     },
-    content: '<p>放假撒的离开房间里说放假房间里说放假撒的离开房间里说放假撒的离开房间里说放房间里说放假撒的离开房间里说放假撒的离开房间里说放假撒的离开房间里说放假撒的离开房间里说放假撒的离开房间里说</p><p></p>'
+    content: `<p><span style="vertical-align: bottom;">放假撒了都快放假了是的放假三大克拉放假<img src="https://placehold.co/800x400" width="100">加饭撒的离开</span></p>`
   });
 
   return <EditorThemeProvider>

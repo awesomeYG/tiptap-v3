@@ -9,6 +9,7 @@ export { default as EditorListSelect } from './EditorListSelect'
 export { default as EditorMath } from './EditorMath'
 export { default as EditorMore } from './EditorMore'
 export { default as EditorScript } from './EditorScript'
+export { default as EditorVerticalAlignSelect } from './EditorVerticalAlignSelect'
 
 export { default as ToolbarItem } from './Item'
 

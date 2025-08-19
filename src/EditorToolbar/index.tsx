@@ -2,7 +2,7 @@ import { Box, Divider, Stack } from '@mui/material'
 import { Editor } from '@tiptap/react'
 import React, { useEffect, useState } from 'react'
 import { ArrowGoBackLineIcon, ArrowGoForwardLineIcon, BoldIcon, DoubleQuotesLIcon, ItalicIcon, LinkIcon, MenuFold2FillIcon, StrikethroughIcon, Table2Icon, UnderlineIcon } from '../component/Icons'
-import { EditorAlignSelect, EditorCode, EditorFontBgColor, EditorFontColor, EditorFontSize, EditorHeading, EditorInsert, EditorListSelect, EditorMath, EditorMore, EditorScript, ToolbarItem } from '../component/Toolbar'
+import { EditorAlignSelect, EditorCode, EditorFontBgColor, EditorFontColor, EditorFontSize, EditorHeading, EditorInsert, EditorListSelect, EditorMath, EditorMore, EditorScript, EditorVerticalAlignSelect, ToolbarItem } from '../component/Toolbar'
 
 interface EditorToolbarProps {
   editor: Editor
@@ -101,6 +101,7 @@ const EditorToolbar = ({
       <EditorFontSize editor={editor} />
       <EditorListSelect editor={editor} />
       <EditorAlignSelect editor={editor} />
+      <EditorVerticalAlignSelect editor={editor} />
       <ToolbarItem
         tip={'引用块'}
         shortcutKey={['ctrl', 'shift', 'B']}
