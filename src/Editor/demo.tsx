@@ -1,12 +1,9 @@
 import { Box } from '@mui/material';
-import { Editor, EditorThemeProvider, EditorToolbar, TocList, useTiptap } from '@yu-cq/tiptap';
+import { Editor, EditorThemeProvider, EditorToolbar, useTiptap } from '@yu-cq/tiptap';
 import React from 'react';
 import '../index.css';
 
 const Reader = () => {
-  const handleTocUpdate = (toc: TocList) => {
-    console.log(toc)
-  }
   const { editor } = useTiptap({
     editable: true,
     limit: 100,
@@ -15,7 +12,7 @@ const Reader = () => {
       console.log(editor.getHTML())
       editor.commands.setContent(editor.getHTML())
     },
-    onTocUpdate: handleTocUpdate,
+    // onTocUpdate: handleTocUpdate,
     onMentionFilter: async ({ query }) => {
       return new Promise((resolve) => {
         resolve([
@@ -59,7 +56,7 @@ const Reader = () => {
         }, 100);
       })
     },
-    content: '<p>放假撒的离开房间里说放假撒的离开房间里说放假撒的离开房间里说放假撒的离开房间里说放假撒的离开房间里说放假撒的离开房间里说</p><p>放假撒的离开房间里说放假撒的离开房间里说放假撒的离开房间里说放假撒的离开房间里说放假撒的离开房间里说放假撒的离开房间里说</p>'
+    content: '<p>放假撒的离开房间里说放假房间里说放假撒的离开房间里说放假撒的离开房间里说放房间里说放假撒的离开房间里说放假撒的离开房间里说放假撒的离开房间里说放假撒的离开房间里说放假撒的离开房间里说</p><p></p>'
   });
 
   return <EditorThemeProvider>
