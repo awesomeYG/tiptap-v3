@@ -85,6 +85,9 @@ const SelectionText = (props: { editor: Editor }) => {
     shouldShow={({ editor, from, to }: { editor: Editor, from: number, to: number }) => {
       if (editor.state.selection.empty
         || editor.isActive('image')
+        || editor.isActive('video')
+        || editor.isActive('audio')
+        || editor.isActive('attachment')
         || editor.isActive('link')
         || editor.isActive('code')
         || editor.isActive('codeBlock')
@@ -92,16 +95,7 @@ const SelectionText = (props: { editor: Editor }) => {
       ) {
         return false
       }
-      let isTextOnly = true
-      editor.state.doc.nodesBetween(from, to, (node) => {
-        if (node.type.name !== 'text' && node.type.name !== 'paragraph' && node.type.name !== 'doc') {
-          if (!node.isText && !node.isTextblock) {
-            isTextOnly = false
-            return false
-          }
-        }
-      })
-      return isTextOnly
+      return true
     }}
   >
     <Paper sx={{
