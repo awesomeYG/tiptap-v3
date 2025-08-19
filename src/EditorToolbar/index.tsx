@@ -59,7 +59,7 @@ const EditorToolbar = ({
       justifyContent='center'
       flexWrap={'wrap'}
       sx={{
-        height: '44px',
+        minHeight: '44px',
         '.MuiSelect-root': {
           minWidth: '36px',
           bgcolor: 'background.paper',
