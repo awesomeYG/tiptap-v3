@@ -17,7 +17,7 @@ const EditorFontSize = ({ editor }: EditorFontSizeProps) => {
   const updateFontSize = () => {
     const attrs = editor.getAttributes('textStyle');
     let fontSize = attrs.fontSize?.replace('px', '');
-    console.log(fontSize)
+
     if (fontSize) {
       setSelectedValue(fontSize);
       return;
