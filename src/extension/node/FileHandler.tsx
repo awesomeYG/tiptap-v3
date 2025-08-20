@@ -86,8 +86,8 @@ export const FileHandlerExtension = (props: { onUpload?: UploadFunction }) => Fi
       }
     }
   },
-  onPaste: async (editor, files) => {
-    if (!props.onUpload || files.length === 0) return false;
+  onPaste: async (editor, files, pasteContent) => {
+    if (!props.onUpload || files.length === 0 || !!pasteContent) return false;
     const { from } = editor.state.selection;
     if (files.length > 0) {
       for (let i = 0; i < files.length; i++) {
