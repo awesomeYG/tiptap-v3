@@ -42,21 +42,29 @@ const DEFAULT_NAME_PREFIXES: Record<FileType, string> = {
 }
 
 const getFilenameFromUrl = (url: string, type?: string): string => {
+  let pathname = ''
+
   try {
+    // 尝试解析为完整URL
     const urlObj = new URL(url)
-    const pathname = urlObj.pathname
-    const filename = pathname.split('/').pop() || ''
-
-    // 如果文件名为空或没有扩展名，且提供了类型信息，添加对应扩展名
-    if ((!filename || !filename.includes('.')) && type && type in DEFAULT_EXTENSIONS) {
-      const extension = DEFAULT_EXTENSIONS[type as FileType]
-      const baseName = filename || 'file'
-      return `${baseName}${extension}`
-    }
-
-    return filename || 'unknown_file'
+    pathname = urlObj.pathname
   } catch {
-    // 异常情况下根据类型生成默认文件名
+    // 如果URL解析失败，可能是相对路径，直接使用原始字符串
+    pathname = url
+  }
+
+  // 从路径中提取文件名（处理绝对路径和相对路径）
+  const filename = pathname.split('/').pop() || ''
+
+  // 如果文件名为空或没有扩展名，且提供了类型信息，添加对应扩展名
+  if ((!filename || !filename.includes('.')) && type && type in DEFAULT_EXTENSIONS) {
+    const extension = DEFAULT_EXTENSIONS[type as FileType]
+    const baseName = filename || 'file'
+    return `${baseName}${extension}`
+  }
+
+  // 如果文件名为空，生成默认文件名
+  if (!filename) {
     const timestamp = Date.now()
     if (type && type in DEFAULT_EXTENSIONS) {
       const prefix = DEFAULT_NAME_PREFIXES[type as FileType]
@@ -65,6 +73,8 @@ const getFilenameFromUrl = (url: string, type?: string): string => {
     }
     return `file_${timestamp}`
   }
+
+  return filename
 }
 
 /**
@@ -113,7 +123,7 @@ export const downloadFilesAsZip = async (
         }
 
         const blob = await response.blob()
-        let filename = getFilenameFromUrl(fileInfo.src)
+        let filename = fileInfo.filename || getFilenameFromUrl(fileInfo.src, type)
 
         let counter = 1
         const originalFilename = filename
