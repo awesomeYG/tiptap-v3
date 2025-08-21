@@ -22,24 +22,53 @@ const downloadFile = (blob: Blob, filename: string): void => {
   URL.revokeObjectURL(url)
 }
 
+// 支持的文件类型
+type FileType = 'img' | 'video' | 'audio' | 'attachment'
+
+// 文件类型对应的默认扩展名
+const DEFAULT_EXTENSIONS: Record<FileType, string> = {
+  img: '.jpg',
+  video: '.mp4',
+  audio: '.mp3',
+  attachment: '.bin'
+}
+
+// 文件类型对应的默认文件名前缀
+const DEFAULT_NAME_PREFIXES: Record<FileType, string> = {
+  img: 'image',
+  video: 'video',
+  audio: 'audio',
+  attachment: 'attachment'
+}
+
 const getFilenameFromUrl = (url: string, type?: string): string => {
   try {
     const urlObj = new URL(url)
     const pathname = urlObj.pathname
     const filename = pathname.split('/').pop() || ''
 
-    if (!filename.includes('.') && type === 'img') {
-      return `${filename}.jpg`
+    // 如果文件名为空或没有扩展名，且提供了类型信息，添加对应扩展名
+    if ((!filename || !filename.includes('.')) && type && type in DEFAULT_EXTENSIONS) {
+      const extension = DEFAULT_EXTENSIONS[type as FileType]
+      const baseName = filename || 'file'
+      return `${baseName}${extension}`
     }
 
-    return filename
+    return filename || 'unknown_file'
   } catch {
-    return `file_${Date.now()}${type === 'img' ? '.jpg' : ''}`
+    // 异常情况下根据类型生成默认文件名
+    const timestamp = Date.now()
+    if (type && type in DEFAULT_EXTENSIONS) {
+      const prefix = DEFAULT_NAME_PREFIXES[type as FileType]
+      const extension = DEFAULT_EXTENSIONS[type as FileType]
+      return `${prefix}_${timestamp}${extension}`
+    }
+    return `file_${timestamp}`
   }
 }
 
 /**
- * 下载单个图片
+ * 下载单个文件
  */
 export const downloadSingleFile = async (fileInfo: FileInfo, type?: string): Promise<void> => {
   try {
@@ -53,8 +82,8 @@ export const downloadSingleFile = async (fileInfo: FileInfo, type?: string): Pro
 
     downloadFile(blob, filename)
   } catch (error) {
-    console.error('下载图片失败:', error)
-    throw new Error('下载图片失败，请检查图片链接是否有效')
+    console.error('下载文件失败:', error)
+    throw new Error('下载文件失败，请检查文件链接是否有效')
   }
 }
 
@@ -98,7 +127,7 @@ export const downloadFilesAsZip = async (
 
         return { filename, blob }
       } catch (error) {
-        console.warn(`下载图片失败: ${fileInfo.src}`, error)
+        console.warn(`下载文件失败: ${fileInfo.src}`, error)
         return null
       }
     })
@@ -107,7 +136,7 @@ export const downloadFilesAsZip = async (
     const successfulDownloads = results.filter(result => result !== null)
 
     if (successfulDownloads.length === 0) {
-      throw new Error('所有图片下载失败')
+      throw new Error('所有文件下载失败')
     }
 
     successfulDownloads.forEach((result) => {
@@ -121,7 +150,7 @@ export const downloadFilesAsZip = async (
 
     if (successfulDownloads.length < files.length) {
       const failedCount = files.length - successfulDownloads.length
-      console.warn(`成功下载 ${successfulDownloads.length} 张图片，${failedCount} 张图片下载失败`)
+      console.warn(`成功下载 ${successfulDownloads.length} 张文件，${failedCount} 张文件下载失败`)
     }
   } catch (error) {
     console.error('打包下载失败:', error)
