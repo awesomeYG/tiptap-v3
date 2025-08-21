@@ -113,7 +113,7 @@ export const downloadFilesAsZip = async (
         }
 
         const blob = await response.blob()
-        let filename = fileInfo.filename || getFilenameFromUrl(fileInfo.src)
+        let filename = getFilenameFromUrl(fileInfo.src)
 
         let counter = 1
         const originalFilename = filename
