@@ -1,6 +1,6 @@
 import { Box, IconButton, Tooltip } from "@mui/material"
 import { NodeViewProps, NodeViewWrapper } from '@tiptap/react'
-import { DeleteLineIcon } from "@yu-cq/tiptap/component/Icons/delete-line-icon"
+import { DeleteLineIcon } from "@yu-cq/tiptap/component/Icons"
 import { EditorFnProps } from "@yu-cq/tiptap/type"
 import React, { useEffect, useRef, useState } from "react"
 import InsertVideo from "./Insert"
@@ -147,7 +147,7 @@ const VideoViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
             gap: '0.25rem',
           }}
         >
-          <Tooltip arrow title="删除图片">
+          <Tooltip arrow title="删除视频">
             <IconButton
               size="small"
               onClick={deleteNode}

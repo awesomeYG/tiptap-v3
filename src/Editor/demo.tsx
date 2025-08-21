@@ -43,11 +43,11 @@ const Reader = () => {
             clearInterval(interval);
             setTimeout(() => {
               if (file.type.startsWith('image/')) {
-                resolve('https://placehold.co/800x400')
+                resolve('https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg')
               } else if (file.type.startsWith('video/')) {
                 resolve('http://vjs.zencdn.net/v/oceans.mp4')
               } else {
-                resolve('https://placehold.co/800x400')
+                resolve('https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg')
               }
             }, 200);
           } else {

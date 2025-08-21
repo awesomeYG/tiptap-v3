@@ -84,14 +84,16 @@ const SelectionText = (props: { editor: Editor }) => {
     }}
     shouldShow={({ editor, from, to }: { editor: Editor, from: number, to: number }) => {
       if (editor.state.selection.empty
+        || editor.isActive('code')
         || editor.isActive('image')
         || editor.isActive('video')
         || editor.isActive('audio')
-        || editor.isActive('attachment')
-        || editor.isActive('link')
-        || editor.isActive('code')
-        || editor.isActive('codeBlock')
         || editor.isActive('emoji')
+        || editor.isActive('codeBlock')
+        || editor.isActive('blockLink')
+        || editor.isActive('inlineLink')
+        || editor.isActive('blockAttachment')
+        || editor.isActive('inlineAttachment')
       ) {
         return false
       }

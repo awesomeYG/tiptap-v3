@@ -156,11 +156,11 @@ const ImageViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
 
   const handleSave = () => {
     if (editSrc.trim()) {
-      // 获取当前实际显示的宽度，确保新图片使用正确的尺寸
       const currentWidth = getCurrentDisplayWidth()
       updateAttributes({
         src: editSrc.trim(),
-        width: currentWidth
+        width: currentWidth,
+        error: true,
       })
       setEditSrc(editSrc.trim())
     }

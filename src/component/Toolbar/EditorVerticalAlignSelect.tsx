@@ -31,15 +31,7 @@ const EditorVerticalAlignSelect = ({ editor }: EditorVerticalAlignSelectProps) =
   };
 
   const handleVerticalAlignAction = (alignType: string) => {
-    console.log('Setting vertical align to:', alignType);
-    console.log('Current selection:', editor.state.selection);
-    console.log('Is textStyle active:', editor.isActive('textStyle'));
     editor.chain().focus().toggleVerticalAlign(alignType).run();
-    // 稍微延迟后检查结果
-    setTimeout(() => {
-      console.log('After setting - Is active:', editor.isActive('textStyle', { verticalAlign: alignType }));
-      console.log('Current HTML:', editor.getHTML());
-    }, 100);
   };
 
   const handleChange = (e: { target: { value: string } }) => {

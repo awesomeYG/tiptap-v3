@@ -1,6 +1,8 @@
+export * from './fileDownload'
 export * from './fileHandler'
 export * from './floating'
 export * from './migrateMathStrings'
+export * from './resourceExtractor'
 export * from './shortcutKey'
 
 import { Editor } from '@tiptap/react'

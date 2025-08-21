@@ -123,6 +123,7 @@
     "@tiptap/static-renderer": "^3.1.0",
     "@tiptap/suggestion": "^3.1.0",
     "highlight.js": "^11.11.1",
+    "jszip": "^3.10.1",
     "katex": "^0.16.22",
     "linkifyjs": "^4.3.2",
     "lowlight": "^3.3.0",
