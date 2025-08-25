@@ -38,6 +38,7 @@ import {
 export const getExtensions = ({
   limit,
   exclude,
+  extensions: extensionsProps,
   youtube,
   editable,
   mentionItems,
@@ -183,6 +184,10 @@ export const getExtensions = ({
     if (!exclude?.includes('invisibleCharacters')) {
       defaultExtensions.push(InvisibleCharacters)
     }
+  }
+
+  if (extensionsProps && extensionsProps.length > 0) {
+    defaultExtensions.push(...extensionsProps)
   }
 
   return defaultExtensions

@@ -1,4 +1,4 @@
-import { Editor } from '@tiptap/core';
+import { Editor, Extension } from '@tiptap/core';
 import { YoutubeOptions } from '@tiptap/extension-youtube';
 
 export type { Editor } from '@tiptap/react';
@@ -41,6 +41,7 @@ export type MentionExtensionProps = {
 export type ExtensionRelativeProps = MentionExtensionProps & EditorFnProps & {
   limit?: number | null
   exclude?: string[]
+  extensions?: Extension[]
   editable: boolean
   youtube?: Partial<YoutubeOptions>
 }

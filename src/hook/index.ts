@@ -7,6 +7,7 @@ import { migrateMathStrings } from '@yu-cq/tiptap/util'
 const useTiptap = ({
   // extension 
   exclude,
+  extensions: extensionsProps,
 
   // mention
   mentionItems,
@@ -27,6 +28,7 @@ const useTiptap = ({
 
   const extensions = getExtensions({
     exclude,
+    extensions: extensionsProps,
     editable,
     mentionItems,
     onMentionFilter,
