@@ -9,6 +9,32 @@ import { downloadFiles, FileInfo, filterResourcesByType, getAllResources } from 
 import { FileCopyLineIcon } from '../Icons/file-copy-line-icon';
 import Menu from '../Menu';
 
+const DragIcon = () => <Box sx={{
+  width: '1.25rem',
+  height: '1.25rem',
+  borderRadius: '0.25rem',
+  border: '1px solid',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  mr: 1,
+  color: 'text.tertiary',
+  cursor: 'grab',
+  borderColor: 'divider',
+  bgcolor: 'background.paper',
+  transition: 'all 0.2s ease-in-out',
+  '&:hover': {
+    color: 'text.secondary',
+    bgcolor: 'divider',
+  },
+  '&:active': {
+    color: 'text.primary',
+    cursor: 'grabbing',
+  },
+}}>
+  <DraggableIcon sx={{ fontSize: '1.25rem' }} />
+</Box>
+
 const CustomDragHandle = ({ editor }: { editor: Editor }) => {
   const theme = useTheme()
 
@@ -115,13 +141,11 @@ const CustomDragHandle = ({ editor }: { editor: Editor }) => {
     }
   }, [current.pos, current.node])
 
-  console.log({ currentNode, current, resources })
-
   return <DragHandle
     editor={editor}
     onNodeChange={updateNodeChange}
   >
-    <Menu
+    {currentNode ? <Menu
       anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       transformOrigin={{ vertical: 'top', horizontal: 'left' }}
       childrenProps={{
@@ -646,32 +670,8 @@ const CustomDragHandle = ({ editor }: { editor: Editor }) => {
           }
         }
       ]}
-      context={<Box sx={{
-        width: '1.25rem',
-        height: '1.25rem',
-        borderRadius: '0.25rem',
-        border: '1px solid',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        mr: 1,
-        color: 'text.tertiary',
-        cursor: 'grab',
-        borderColor: 'divider',
-        bgcolor: 'background.paper',
-        transition: 'all 0.2s ease-in-out',
-        '&:hover': {
-          color: 'text.secondary',
-          bgcolor: 'divider',
-        },
-        '&:active': {
-          color: 'text.primary',
-          cursor: 'grabbing',
-        },
-      }}>
-        <DraggableIcon sx={{ fontSize: '1.25rem' }} />
-      </Box>}
-    />
+      context={<DragIcon />}
+    /> : <DragIcon />}
   </DragHandle>
 }
 
