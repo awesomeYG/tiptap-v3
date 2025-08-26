@@ -35,7 +35,17 @@ const ReadonlyImage = ({
       }}
     >
       <PhotoProvider>
-        <PhotoView src={attrs.src}>
+        <PhotoView render={(props) => (
+          <img
+            {...props.attrs}
+            src={attrs.src}
+            style={{
+              transformOrigin: '0 0',
+              transform: 'translate(-50%, -50%)',
+              backgroundColor: 'hsl(0, 0%, 90%)',
+            }}
+          />
+        )}>
           <img
             src={attrs.src}
             width={attrs.width}
