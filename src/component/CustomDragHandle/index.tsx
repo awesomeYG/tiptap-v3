@@ -9,7 +9,7 @@ import { downloadFiles, FileInfo, filterResourcesByType, getAllResources } from 
 import { FileCopyLineIcon } from '../Icons/file-copy-line-icon';
 import Menu from '../Menu';
 
-const DragIcon = () => <Box sx={{
+const DragIcon = ({ onClick }: { onClick?: () => void }) => <Box onClick={onClick} sx={{
   width: '1.25rem',
   height: '1.25rem',
   borderRadius: '0.25rem',
