@@ -4,6 +4,7 @@ import { Node } from '@tiptap/pm/model';
 import { Editor } from '@tiptap/react';
 import { AlignBottomIcon, AlignCenterIcon, AlignJustifyIcon, AlignLeftIcon, AlignRightIcon, AlignTopIcon, ArrowDownSLineIcon, AttachmentLineIcon, BrushLineIcon, CodeBoxLineIcon, DeleteLineIcon, DownloadLineIcon, DraggableIcon, FontSizeIcon, H1Icon, H2Icon, H3Icon, ImageLineIcon, ListCheck3Icon, ListOrdered2Icon, ListUnorderedIcon, MovieLineIcon, Music2LineIcon, QuoteTextIcon, Repeat2LineIcon, TextIcon } from '@yu-cq/tiptap/component/Icons';
 import { NODE_TYPE_LABEL, NodeTypeEnum } from '@yu-cq/tiptap/contants/enums';
+import { MenuItem } from '@yu-cq/tiptap/type';
 import React, { useCallback, useState } from 'react';
 import { downloadFiles, FileInfo, filterResourcesByType, getAllResources } from '../../util';
 import { FileCopyLineIcon } from '../Icons/file-copy-line-icon';
@@ -35,7 +36,7 @@ const DragIcon = ({ onClick }: { onClick?: () => void }) => <Box onClick={onClic
   <DraggableIcon sx={{ fontSize: '1.25rem' }} />
 </Box>
 
-const CustomDragHandle = ({ editor }: { editor: Editor }) => {
+const CustomDragHandle = ({ editor, more }: { editor: Editor, more?: MenuItem[] }) => {
   const theme = useTheme()
 
   const [current, setCurrent] = useState<{
@@ -644,6 +645,7 @@ const CustomDragHandle = ({ editor }: { editor: Editor }) => {
         //   customLabel: <Divider sx={{ my: 0.5 }} />,
         //   key: 'divider5',
         // }] : []),
+        ...(more ? more : []),
         {
           label: `复制${currentNode?.label}`,
           key: 'duplicate-and-overwrite',

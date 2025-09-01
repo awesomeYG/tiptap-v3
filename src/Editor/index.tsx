@@ -6,11 +6,12 @@ import CustomDragHandle from '../component/CustomDragHandle';
 
 const Editor = ({
   editor,
+  menuInDragHandle,
 }: EditorProps) => {
 
   return <>
     <SelectionText editor={editor} />
-    <CustomDragHandle editor={editor} />
+    <CustomDragHandle editor={editor} more={menuInDragHandle} />
     <EditorContent editor={editor} />
   </>
 };

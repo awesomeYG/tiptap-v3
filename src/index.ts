@@ -1,3 +1,4 @@
+export * from './component/Icons';
 export { default as Editor } from './Editor';
 export { default as EditorThemeProvider } from './EditorThemeProvider';
 export { default as EditorToolbar } from './EditorToolbar';

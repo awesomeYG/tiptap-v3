@@ -1,7 +1,46 @@
+import { PopoverOrigin, SxProps, Theme } from '@mui/material';
 import { Editor, Extension } from '@tiptap/core';
 import { YoutubeOptions } from '@tiptap/extension-youtube';
 
 export type { Editor } from '@tiptap/react';
+
+export interface MenuItem {
+  label?: React.ReactNode;
+  customLabel?: React.ReactNode;
+  icon?: React.ReactNode;
+  extra?: React.ReactNode;
+  selected?: boolean;
+  children?: MenuItem[];
+  textSx?: SxProps<Theme>;
+  key: number | string;
+  minWidth?: number;
+  maxHeight?: number;
+  onClick?: () => void;
+}
+
+export interface MenuProps {
+  id?: string;
+  arrowIcon?: React.ReactNode;
+  list: MenuItem[];
+  context?: React.ReactElement<{ onClick?: any; 'aria-describedby'?: any }>;
+  anchorOrigin?: PopoverOrigin;
+  transformOrigin?: PopoverOrigin;
+  childrenProps?: {
+    anchorOrigin?: PopoverOrigin;
+    transformOrigin?: PopoverOrigin;
+  };
+}
+
+export type ToolbarItemType = {
+  id: string;
+  icon?: React.ReactNode;
+  label?: string;
+  tip?: string;
+  shortcutKey?: string[];
+  className?: string;
+  disabled?: boolean;
+  onClick?: () => void;
+}
 
 export type UploadFunction = (
   file: File,
@@ -11,6 +50,7 @@ export type UploadFunction = (
 
 export type EditorProps = {
   editor: Editor;
+  menuInDragHandle?: MenuItem[]
   height?: number | string;
 }
 

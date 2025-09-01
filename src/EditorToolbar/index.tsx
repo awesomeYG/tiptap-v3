@@ -3,13 +3,16 @@ import { Editor } from '@tiptap/react'
 import React, { useEffect, useState } from 'react'
 import { ArrowGoBackLineIcon, ArrowGoForwardLineIcon, BoldIcon, DoubleQuotesLIcon, ItalicIcon, LinkIcon, MenuFold2FillIcon, StrikethroughIcon, Table2Icon, UnderlineIcon } from '../component/Icons'
 import { EditorAlignSelect, EditorCode, EditorFontBgColor, EditorFontColor, EditorFontSize, EditorHeading, EditorInsert, EditorListSelect, EditorMath, EditorMore, EditorScript, EditorVerticalAlignSelect, ToolbarItem } from '../component/Toolbar'
+import { ToolbarItemType } from '../type'
 
 interface EditorToolbarProps {
   editor: Editor
+  toolbarItemsInMore?: ToolbarItemType[]
 }
 
 const EditorToolbar = ({
   editor,
+  toolbarItemsInMore
 }: EditorToolbarProps) => {
   const [active, setActive] = useState({
     undo: false,
@@ -184,7 +187,7 @@ const EditorToolbar = ({
       />
       <Divider orientation="vertical" flexItem sx={{ mx: 0.5, height: 20, alignSelf: 'center' }} />
       <EditorInsert editor={editor} />
-      <EditorMore />
+      <EditorMore more={toolbarItemsInMore} />
     </Stack>
   </Box>
 }

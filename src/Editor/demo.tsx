@@ -1,6 +1,7 @@
 import { Box } from '@mui/material';
 import { Editor, EditorThemeProvider, EditorToolbar, useTiptap } from '@yu-cq/tiptap';
 import React from 'react';
+import { AiGenerate2Icon } from '../component/Icons';
 import '../index.css';
 
 const Reader = () => {
@@ -69,7 +70,16 @@ const Reader = () => {
         borderBottom: '1px solid #eee',
         marginBottom: '30px',
       }}>
-        <EditorToolbar editor={editor} />
+        <EditorToolbar editor={editor} toolbarItemsInMore={[
+          {
+            id: 'ai',
+            icon: <AiGenerate2Icon sx={{ fontSize: '1rem' }} />,
+            onClick: () => {
+              alert('ai');
+            },
+            label: 'AI 文本润色',
+          },
+        ]} />
       </div>
       <Box sx={{
         backgroundColor: '#fff',
@@ -77,7 +87,16 @@ const Reader = () => {
           minHeight: '500px',
         }
       }}>
-        <Editor editor={editor} />
+        <Editor editor={editor} menuInDragHandle={[
+          {
+            label: '文本润色',
+            key: 'ai',
+            icon: <AiGenerate2Icon sx={{ fontSize: '1rem' }} />,
+            onClick: () => {
+              alert('ai');
+            },
+          },
+        ]} />
       </Box>
     </div>
   </EditorThemeProvider>

@@ -1,15 +1,15 @@
 import { Box, MenuItem, Select, Stack } from "@mui/material";
-import { Editor } from "@tiptap/core";
 import { MoreLineIcon, Notification3LineIcon } from "@yu-cq/tiptap/component/Icons";
 import ToolbarItem from "@yu-cq/tiptap/component/Toolbar/Item";
+import { ToolbarItemType } from "@yu-cq/tiptap/type";
 import React, { useState } from "react";
 import NotificationDialog from "./NotificationDialog";
 
 export interface EditorMoreProps {
-  editor: Editor
+  more?: ToolbarItemType[]
 }
 
-const EditorMore = () => {
+const EditorMore = ({ more = [] }: EditorMoreProps) => {
   const [showDialog, setShowDialog] = useState('');
 
   const options = [
@@ -18,7 +18,11 @@ const EditorMore = () => {
 
   const handleChange = (e: { target: { value: string } }) => {
     const value = e.target.value;
-    setShowDialog(value);
+    if (value === 'notification') {
+      setShowDialog('notification');
+    } else {
+      more.find(it => it.id === value)?.onClick?.();
+    }
   };
 
   return <>
@@ -39,7 +43,7 @@ const EditorMore = () => {
         <MoreLineIcon sx={{ fontSize: '1rem' }} />
         <Box sx={{ ml: 1 }}>无</Box>
       </MenuItem>
-      {options.map(it => (
+      {[...more, ...options].map(it => (
         <MenuItem key={it.id} value={it.id}>
           <Stack direction={'row'} alignItems={'center'} justifyContent='center' gap={1}>
             {it.icon}

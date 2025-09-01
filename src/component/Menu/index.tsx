@@ -1,40 +1,11 @@
 import {
   Box,
   Popover,
-  PopoverOrigin,
   Stack,
-  SxProps,
-  Theme,
   Typography
 } from '@mui/material';
+import { MenuItem, MenuProps } from '@yu-cq/tiptap/type';
 import React from 'react';
-
-interface Item {
-  label?: React.ReactNode;
-  customLabel?: React.ReactNode;
-  icon?: React.ReactNode;
-  extra?: React.ReactNode;
-  selected?: boolean;
-  children?: Item[];
-  textSx?: SxProps<Theme>;
-  key: number | string;
-  minWidth?: number;
-  maxHeight?: number;
-  onClick?: () => void;
-}
-
-interface MenuProps {
-  id?: string;
-  arrowIcon?: React.ReactNode;
-  list: Item[];
-  context?: React.ReactElement<{ onClick?: any; 'aria-describedby'?: any }>;
-  anchorOrigin?: PopoverOrigin;
-  transformOrigin?: PopoverOrigin;
-  childrenProps?: {
-    anchorOrigin?: PopoverOrigin;
-    transformOrigin?: PopoverOrigin;
-  };
-}
 
 const Menu: React.FC<MenuProps> = ({
   id = 'menu-select',
@@ -61,7 +32,7 @@ const Menu: React.FC<MenuProps> = ({
   }
 }) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
-  const [hoveredItem, setHoveredItem] = React.useState<Item | null>(null);
+  const [hoveredItem, setHoveredItem] = React.useState<MenuItem | null>(null);
   const [subMenuAnchor, setSubMenuAnchor] = React.useState<HTMLElement | null>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -77,7 +48,7 @@ const Menu: React.FC<MenuProps> = ({
     setSubMenuAnchor(null);
   };
 
-  const handleItemHover = (event: React.MouseEvent<HTMLElement>, item: Item) => {
+  const handleItemHover = (event: React.MouseEvent<HTMLElement>, item: MenuItem) => {
     if (item.children?.length) {
       setHoveredItem(item);
       setSubMenuAnchor(event.currentTarget);
@@ -89,7 +60,7 @@ const Menu: React.FC<MenuProps> = ({
     setSubMenuAnchor(null);
   };
 
-  const handleItemClick = (item: Item) => {
+  const handleItemClick = (item: MenuItem) => {
     if (item.onClick) {
       item.onClick();
     }
