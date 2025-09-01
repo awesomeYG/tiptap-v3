@@ -2,10 +2,16 @@ import { Box, Button, Paper, Stack, useTheme } from '@mui/material'
 import { Editor } from '@tiptap/react'
 import { BubbleMenu } from '@tiptap/react/menus'
 import { BoldIcon, CodeLineIcon, ItalicIcon, LinkIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, UnderlineIcon } from '@yu-cq/tiptap/component/Icons'
+import { MenuItem } from '@yu-cq/tiptap/type'
 import React, { useEffect, useState } from 'react'
 import { ToolbarItem } from '../Toolbar'
 
-const SelectionText = (props: { editor: Editor }) => {
+export interface SelectionTextProps {
+  editor: Editor
+  more?: MenuItem[]
+}
+
+const SelectionText = ({ editor, more }: SelectionTextProps) => {
   const theme = useTheme()
 
   const THEME_TEXT_COLOR = [
@@ -36,7 +42,6 @@ const SelectionText = (props: { editor: Editor }) => {
     '#DCEDC8',
   ]
 
-  const { editor } = props
   const [active, setActive] = useState({
     quote: false,
     bold: false,
@@ -82,18 +87,18 @@ const SelectionText = (props: { editor: Editor }) => {
       placement: 'bottom',
       offset: 8,
     }}
-    shouldShow={({ editor, from, to }: { editor: Editor, from: number, to: number }) => {
-      if (editor.state.selection.empty
-        || editor.isActive('code')
-        || editor.isActive('image')
-        || editor.isActive('video')
-        || editor.isActive('audio')
-        || editor.isActive('emoji')
-        || editor.isActive('codeBlock')
-        || editor.isActive('blockLink')
-        || editor.isActive('inlineLink')
-        || editor.isActive('blockAttachment')
-        || editor.isActive('inlineAttachment')
+    shouldShow={({ editor: editorProps, from, to }: { editor: Editor, from: number, to: number }) => {
+      if (editorProps.state.selection.empty
+        || editorProps.isActive('code')
+        || editorProps.isActive('image')
+        || editorProps.isActive('video')
+        || editorProps.isActive('audio')
+        || editorProps.isActive('emoji')
+        || editorProps.isActive('codeBlock')
+        || editorProps.isActive('blockLink')
+        || editorProps.isActive('inlineLink')
+        || editorProps.isActive('blockAttachment')
+        || editorProps.isActive('inlineAttachment')
       ) {
         return false
       }
@@ -158,6 +163,14 @@ const SelectionText = (props: { editor: Editor }) => {
             editor.chain().focus().setInlineLink({ href: '', title: text }).run()
           }}
         />
+        {more?.map((item) => (
+          <ToolbarItem
+            key={item.key}
+            tip={item.label as string}
+            icon={item.icon || <></>}
+            onClick={item.onClick}
+          />
+        ))}
       </Stack>
       <Box sx={{
         mt: 0.5,

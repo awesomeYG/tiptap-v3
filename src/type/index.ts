@@ -51,6 +51,7 @@ export type UploadFunction = (
 export type EditorProps = {
   editor: Editor;
   menuInDragHandle?: MenuItem[]
+  menuInBubbleMenu?: MenuItem[]
   height?: number | string;
 }
 

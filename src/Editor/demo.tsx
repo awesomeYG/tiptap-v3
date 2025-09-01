@@ -70,7 +70,7 @@ const Reader = () => {
         borderBottom: '1px solid #eee',
         marginBottom: '30px',
       }}>
-        <EditorToolbar editor={editor} toolbarItemsInMore={[
+        <EditorToolbar editor={editor} menuInToolbarMore={[
           {
             id: 'ai',
             icon: <AiGenerate2Icon sx={{ fontSize: '1rem' }} />,
@@ -87,16 +87,29 @@ const Reader = () => {
           minHeight: '500px',
         }
       }}>
-        <Editor editor={editor} menuInDragHandle={[
-          {
-            label: '文本润色',
-            key: 'ai',
-            icon: <AiGenerate2Icon sx={{ fontSize: '1rem' }} />,
-            onClick: () => {
-              alert('ai');
+        <Editor
+          editor={editor}
+          menuInDragHandle={[
+            {
+              label: '文本润色',
+              key: 'ai',
+              icon: <AiGenerate2Icon sx={{ fontSize: '1rem' }} />,
+              onClick: () => {
+                alert('ai');
+              },
             },
-          },
-        ]} />
+          ]}
+          menuInBubbleMenu={[
+            {
+              label: '文本润色',
+              key: 'ai',
+              icon: <AiGenerate2Icon sx={{ fontSize: '1rem' }} />,
+              onClick: () => {
+                alert('ai');
+              },
+            },
+          ]}
+        />
       </Box>
     </div>
   </EditorThemeProvider>

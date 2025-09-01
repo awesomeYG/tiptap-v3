@@ -7,12 +7,12 @@ import { ToolbarItemType } from '../type'
 
 interface EditorToolbarProps {
   editor: Editor
-  toolbarItemsInMore?: ToolbarItemType[]
+  menuInToolbarMore?: ToolbarItemType[]
 }
 
 const EditorToolbar = ({
   editor,
-  toolbarItemsInMore
+  menuInToolbarMore
 }: EditorToolbarProps) => {
   const [active, setActive] = useState({
     undo: false,
@@ -187,7 +187,7 @@ const EditorToolbar = ({
       />
       <Divider orientation="vertical" flexItem sx={{ mx: 0.5, height: 20, alignSelf: 'center' }} />
       <EditorInsert editor={editor} />
-      <EditorMore more={toolbarItemsInMore} />
+      <EditorMore more={menuInToolbarMore} />
     </Stack>
   </Box>
 }
