@@ -6,7 +6,7 @@ import '../index.css';
 
 const Reader = () => {
   const { editor } = useTiptap({
-    editable: true,
+    editable: false,
     limit: 100,
     exclude: ['invisibleCharacters'],
     onSave: (editor) => {
@@ -57,7 +57,7 @@ const Reader = () => {
         }, 100);
       })
     },
-    content: ''
+    content: '<table style="width: 1337px;"><colgroup><col style="width: 342px;"><col style="width: 315px;"><col style="width: 298px;"><col style="width: 382px;"></colgroup><tbody><tr class="table-row"><th class="table-header" colspan="1" rowspan="1" colwidth="342"><p>飞机上大联防联控三大解放看大水解放了就打算开发及阿里</p></th><th class="table-header" colspan="1" rowspan="1" colwidth="315"><p>飞机上大联防联控三大解放看大水解放了就打算开发及阿里</p></th><th class="table-header" colspan="1" rowspan="1" colwidth="298"><p>飞机上大联防联控三大解放看大水解放了就打算开发及阿里</p></th><th class="table-header" colspan="1" rowspan="1" colwidth="382"><p>飞机上大联防联控三大解放看大水解放了就打算开发及阿里</p></th></tr><tr class="table-row"><td colspan="1" rowspan="1" colwidth="342" data-background-color="transparent" style="background-color: transparent;"><p>飞机上大联防联控三大解放看大水解放了就打算开发及阿里</p></td><td colspan="1" rowspan="1" colwidth="315" data-background-color="transparent" style="background-color: transparent;"><p>飞机上大联防联控三大解放看大水解放了就打算开发及阿里</p></td><td colspan="1" rowspan="1" colwidth="298" data-background-color="transparent" style="background-color: transparent;"><p>飞机上大联防联控三大解放看大水解放了就打算开发及阿里</p></td><td colspan="1" rowspan="1" colwidth="382" data-background-color="transparent" style="background-color: transparent;"><p>飞机上大联防联控三大解放看大水解放了就打算开发及阿里飞机上大联防联控三大解放看大水解放了就打算开发及阿里</p></td></tr><tr class="table-row"><td colspan="1" rowspan="1" colwidth="342" data-background-color="transparent" style="background-color: transparent;"><p>飞机上大联防联控三大解放看大水解放了就打算开发及阿里</p></td><td colspan="1" rowspan="1" colwidth="315" data-background-color="transparent" style="background-color: transparent;"><p>飞机上大联防联控三大解放看大水解放了就打算开发及阿里</p></td><td colspan="1" rowspan="1" colwidth="298" data-background-color="transparent" style="background-color: transparent;"><p>飞机上大联防联控三大解放看大水解放了就打算开发及阿里</p></td><td colspan="1" rowspan="1" colwidth="382" data-background-color="transparent" style="background-color: transparent;"><p>飞机上大联防联控三大解放看大水解放了就打算开发及阿里飞机上大联防联控三大解放看大水解放了就打算开发及阿里飞机上大联防联控三大解放看大水解放了就打算开发及阿里飞机上大联防联控三大解放看大水解放了就打算开发及阿里</p></td></tr></tbody></table><p>飞机上大联防联控三大解放看大水解放了就打算开发及阿里飞机上大联防联控三大解放看大水解放了就打算开发及阿里飞机上大联防联控三大解放看大水解放了就打算开发及阿里飞机上大联防联控三大解放看大水解放了就打算开发及阿里</p>'
   });
 
   return <EditorThemeProvider>
@@ -85,6 +85,10 @@ const Reader = () => {
         backgroundColor: '#fff',
         '.tiptap': {
           minHeight: '500px',
+          '.tableWrapper': {
+            maxWidth: '100%',
+            overflowX: 'auto',
+          },
         }
       }}>
         <Editor
