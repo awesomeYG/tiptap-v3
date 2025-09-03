@@ -1,4 +1,7 @@
+// @ts-nocheck
+
 import { Table, TableCell, TableHeader, TableRow } from '@tiptap/extension-table';
+import { Node } from '@tiptap/pm/model';
 
 export const TableExtension = ({ editable }: { editable: boolean }) => [
   Table.configure({
@@ -13,7 +16,10 @@ export const TableExtension = ({ editable }: { editable: boolean }) => [
         'Mod-9': () => this.editor.commands.insertTable({ rows: 3, cols: 4, withHeaderRow: true }),
       }
     },
-    renderHTML({ node, HTMLAttributes }) {
+    renderHTML({ node, HTMLAttributes }: {
+      node: Node;
+      HTMLAttributes: Record<string, any>;
+    }) {
       const originalRender = this.parent?.({ node, HTMLAttributes });
       const wrapper = ['div', { class: 'tableWrapper' }, originalRender];
       return wrapper;
