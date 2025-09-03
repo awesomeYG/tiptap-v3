@@ -39,3 +39,8 @@ export function addOpacityToColor(color: string, opacity: number) {
 
   return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
 }
+
+export const getLinkTitle = (href: string) => {
+  const paths = href.split('/').filter(it => it.trim().length > 0)
+  return paths[paths.length - 1]
+}

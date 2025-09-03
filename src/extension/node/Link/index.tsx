@@ -1,6 +1,7 @@
 import { mergeAttributes, Node, nodePasteRule, type PasteRuleMatch } from '@tiptap/core'
 import type { Plugin } from '@tiptap/pm/state'
 import { ReactNodeViewRenderer } from '@tiptap/react'
+import { getLinkTitle } from '@yu-cq/tiptap/util'
 import { find, registerCustomProtocol, reset } from 'linkifyjs'
 import LinkViewWrapper from '../../component/Link'
 import { autolink } from './helpers/autolink'
@@ -356,7 +357,7 @@ export const InlineLinkExtension = Node.create<LinkOptions>({
   },
 
   renderHTML({ HTMLAttributes }) {
-    const title = HTMLAttributes.title || HTMLAttributes.href
+    const title = HTMLAttributes.title || (HTMLAttributes.href && getLinkTitle(HTMLAttributes.href))
     if (
       !this.options.isAllowedUri(HTMLAttributes.href, {
         defaultValidate: href => !!isAllowedUri(href, this.options.protocols),
@@ -590,7 +591,7 @@ export const BlockLinkExtension = Node.create({
   },
 
   renderHTML({ HTMLAttributes }) {
-    const title = HTMLAttributes.title || HTMLAttributes.href
+    const title = HTMLAttributes.title || (HTMLAttributes.href && getLinkTitle(HTMLAttributes.href))
     return ['a', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes), title]
   },
 

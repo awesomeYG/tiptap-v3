@@ -3,6 +3,7 @@ import { NodeViewProps, NodeViewWrapper } from "@tiptap/react"
 import { FloatingPopover } from "@yu-cq/tiptap/component"
 import { CarouselViewIcon, CopyIcon, EditBoxLineIcon, LinkIcon, LinkUnlinkIcon, ScrollToBottomLineIcon, ShareBoxLineIcon, TextIcon } from "@yu-cq/tiptap/component/Icons"
 import { ToolbarItem } from "@yu-cq/tiptap/component/Toolbar"
+import { getLinkTitle } from "@yu-cq/tiptap/util"
 import React, { useCallback, useEffect, useState } from "react"
 import InsertLink from "./Insert"
 import ReadonlyLink from "./Readonly"
@@ -75,7 +76,7 @@ const LinkViewWrapper: React.FC<NodeViewProps> = ({
 
   const handleDeleteLink = () => {
     editor.commands.deleteNode(node.type)
-    editor.commands.insertContent(attrs.title)
+    editor.commands.insertContent(`[${attrs.title || getLinkTitle(attrs.href)}](${attrs.href})`)
   }
 
   const handleCopyLink = useCallback(async (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -147,7 +148,7 @@ const LinkViewWrapper: React.FC<NodeViewProps> = ({
         }} />
       </Avatar>
       <Stack sx={{ flex: 1 }} gap={0.5}>
-        <Box sx={{ fontSize: '0.875rem', fontWeight: 'bold' }}>{attrs.title || attrs.href}</Box>
+        <Box sx={{ fontSize: '0.875rem', fontWeight: 'bold' }}>{attrs.title || getLinkTitle(attrs.href)}</Box>
         <Box sx={{ fontSize: '0.75rem', color: 'text.secondary' }}>{attrs.href}</Box>
       </Stack>
     </Stack> : <Box
@@ -179,7 +180,7 @@ const LinkViewWrapper: React.FC<NodeViewProps> = ({
             }
           }} />
         </Avatar>}
-        {attrs.title || attrs.href}
+        {attrs.title || getLinkTitle(attrs.href)}
       </Box>
     </Box>}
     <FloatingPopover
