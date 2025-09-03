@@ -12,7 +12,7 @@ interface InsertLinkProps extends Partial<NodeViewProps> {
 }
 
 const InsertLink = ({ updateAttributes, deleteNode, selected, attrs, editor }: InsertLinkProps) => {
-  const [title, setTitle] = useState(attrs.title)
+  const [title, setTitle] = useState(attrs.title || '')
   const [href, setHref] = useState(attrs.href || '')
   const [type, setType] = useState(attrs.type || 'icon')
   const [target, setTarget] = useState(attrs.target || '_blank')

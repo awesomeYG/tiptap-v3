@@ -24,15 +24,15 @@ const LinkViewWrapper: React.FC<NodeViewProps> = ({
   selected,
 }) => {
   const attrs = node.attrs as LinkAttributes
-  const [title, setTitle] = useState(attrs.title)
-  const [href, setHref] = useState(attrs.href)
+  const [title, setTitle] = useState(attrs.title || '')
+  const [href, setHref] = useState(attrs.href || '')
   const [type, setType] = useState(attrs.type || 'icon')
   const [target, setTarget] = useState(attrs.target || '_blank')
   const [opraAnchorEl, setOpraAnchorEl] = useState<HTMLDivElement | null>(null)
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null)
 
   useEffect(() => {
-    setTitle(attrs.title)
+    setTitle(attrs.title || '')
     setHref(attrs.href || '')
     setType(attrs.type || 'icon')
     setTarget(attrs.target || '_blank')

@@ -329,6 +329,9 @@ export const InlineLinkExtension = Node.create<LinkOptions>({
           if (dataType === 'block') {
             return false
           }
+          if (!href || !href.trim()) {
+            return false
+          }
           if (
             href &&
             !this.options.isAllowedUri(href, {
