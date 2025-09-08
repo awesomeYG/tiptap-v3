@@ -43,6 +43,7 @@ export { FlowChartIcon } from './flow-chart-icon';
 export { FontColorIcon } from './font-color-icon';
 export { FontFamilyIcon } from './font-family-icon';
 export { FontSizeIcon } from './font-size-icon';
+export { FormatClearIcon } from './format-clear-icon';
 export { FormulaIcon } from './formula-icon';
 export { FullscreenExitLineIcon } from './fullscreen-exit-line-icon';
 export { FullscreenLineIcon } from './fullscreen-line-icon';

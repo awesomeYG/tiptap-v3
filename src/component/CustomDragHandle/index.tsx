@@ -2,7 +2,7 @@ import { Box, Divider, Typography, useTheme } from '@mui/material';
 import DragHandle from '@tiptap/extension-drag-handle-react';
 import { Fragment, Node, Slice } from '@tiptap/pm/model';
 import { Editor } from '@tiptap/react';
-import { AlignBottomIcon, AlignCenterIcon, AlignJustifyIcon, AlignLeftIcon, AlignRightIcon, AlignTopIcon, ArrowDownSLineIcon, AttachmentLineIcon, BrushLineIcon, CodeBoxLineIcon, DeleteLineIcon, DownloadLineIcon, DraggableIcon, FontSizeIcon, H1Icon, H2Icon, H3Icon, ImageLineIcon, ListCheck3Icon, ListOrdered2Icon, ListUnorderedIcon, MovieLineIcon, Music2LineIcon, QuoteTextIcon, Repeat2LineIcon, ScissorsCutLineIcon, TextIcon } from '@yu-cq/tiptap/component/Icons';
+import { AlignBottomIcon, AlignCenterIcon, AlignJustifyIcon, AlignLeftIcon, AlignRightIcon, AlignTopIcon, ArrowDownSLineIcon, AttachmentLineIcon, BrushLineIcon, CodeBoxLineIcon, DeleteLineIcon, DownloadLineIcon, DraggableIcon, FontSizeIcon, FormatClearIcon, H1Icon, H2Icon, H3Icon, ImageLineIcon, ListCheck3Icon, ListOrdered2Icon, ListUnorderedIcon, MovieLineIcon, Music2LineIcon, QuoteTextIcon, Repeat2LineIcon, ScissorsCutLineIcon, TextIcon } from '@yu-cq/tiptap/component/Icons';
 import { NODE_TYPE_LABEL, NodeTypeEnum } from '@yu-cq/tiptap/contants/enums';
 import { MenuItem, OnTipFunction } from '@yu-cq/tiptap/type';
 import React, { useCallback, useState } from 'react';
@@ -38,6 +38,7 @@ const DragIcon = ({ onClick }: { onClick?: () => void }) => <Box onClick={onClic
 
 const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: MenuItem[], onTip?: OnTipFunction }) => {
   const theme = useTheme()
+  const [isVisible, setIsVisible] = useState<boolean>(true)
 
   const [current, setCurrent] = useState<{
     editor: Editor;
@@ -120,6 +121,26 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
     }
   }
 
+  const hasMarksDeep = (node: Node | null | undefined): boolean => {
+    if (!node) return false
+    if ((node as any).marks && (node as any).marks.length > 0) return true
+    const children = (node as any).content?.content as Node[] | undefined
+    if (!children || children.length === 0) return false
+    return children.some(child => hasMarksDeep(child))
+  }
+
+  const shouldShowButton = ({ editor, data }: { editor: Editor, data: { node: Node | null, pos: number } }) => {
+    if (!editor || !editor.isEditable) return false
+    const currentNode = data.node
+    const empty = currentNode?.textContent === ''
+    if (empty) return false
+    const content = currentNode?.content.content
+    if (content && content.length > 0) {
+      return content.some(item => hasMarksDeep(item))
+    }
+    return false
+  }
+
   const updateNodeChange = useCallback((data: {
     editor: Editor;
     node: Node | null;
@@ -139,6 +160,7 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
         images,
         attachments,
       })
+      setIsVisible(shouldShowButton({ editor, data }))
     }
   }, [current.pos, current.node])
 
@@ -646,6 +668,31 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
         //   key: 'divider5',
         // }] : []),
         ...(more ? more : []),
+        ...(isVisible ? [{
+          label: '文本格式化',
+          key: 'format',
+          icon: <FormatClearIcon sx={{ fontSize: '1rem' }} />,
+          onClick: async () => {
+            if (current.node && current.pos !== undefined) {
+              const tr = current.editor.state.tr
+              const currentNode = current.node
+              const empty = currentNode?.textContent === ''
+              if (!empty) {
+                const content = currentNode?.content.content
+                if (content && content.length > 0) {
+                  tr.doc.nodesBetween(current.pos, current.pos + current.node.nodeSize, (node, pos) => {
+                    if (!node.isInline) return true
+                    node.marks.forEach((mark) => {
+                      tr.removeMark(pos, pos + node.nodeSize, mark.type)
+                    })
+                    return true
+                  })
+                }
+              }
+              editor.view.dispatch(tr)
+            }
+          }
+        }] : []),
         {
           label: `复制${currentNode?.label}`,
           key: 'copy',

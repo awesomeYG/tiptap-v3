@@ -9,7 +9,6 @@ const Reader = () => {
     editable: true,
     exclude: ['invisibleCharacters'],
     onSave: (editor) => {
-      console.log(editor.getHTML())
       editor.commands.setContent(editor.getHTML())
     },
     // onTocUpdate: handleTocUpdate,
