@@ -309,7 +309,7 @@
 
 /* 表格选择状态 */
 .tiptap.ProseMirror table .selectedCell:after {
-  background-color: color-mix(in srgb, var(--mui-palette-text-primary) 5%, transparent);
+  background-color: color-mix(in srgb, var(--mui-palette-primary-main) 7%, transparent);
   content: '';
   left: 0;
   right: 0;

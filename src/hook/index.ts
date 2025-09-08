@@ -54,7 +54,8 @@ const useTiptap = ({
           const isInList = editor?.isActive('orderedList') ||
             editor?.isActive('bulletList') ||
             editor?.isActive('taskList')
-          if (!isInList) {
+          const isInTable = editor?.isActive('table')
+          if (!isInList && !isInTable) {
             event.preventDefault()
             const tr = view.state.tr.insertText('\t')
             view.dispatch(tr)

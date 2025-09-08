@@ -94,6 +94,16 @@ export const TableExtension = ({ editable }: { editable: boolean }) => [
         },
       };
     },
+    addKeyboardShortcuts() {
+      return {
+        'Tab': () => {
+          return this.editor.commands.goToNextCell();
+        },
+        'Shift-Tab': () => {
+          return this.editor.commands.goToPreviousCell();
+        },
+      };
+    },
   }),
   // 表格右键菜单插件
   Extension.create({
