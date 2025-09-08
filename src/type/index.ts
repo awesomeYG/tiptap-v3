@@ -48,11 +48,16 @@ export type UploadFunction = (
   abortSignal?: AbortSignal
 ) => Promise<string>
 
+export type TipType = 'error' | 'success' | 'info' | 'warning'
+
+export type OnTipFunction = (type: TipType, tip: string) => void
+
 export type EditorProps = {
   editor: Editor;
   menuInDragHandle?: MenuItem[]
   menuInBubbleMenu?: MenuItem[]
   height?: number | string;
+  onTip?: OnTipFunction
 }
 
 export type TocItem = {

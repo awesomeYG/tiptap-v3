@@ -8,11 +8,12 @@ const Editor = ({
   editor,
   menuInDragHandle,
   menuInBubbleMenu,
+  onTip
 }: EditorProps) => {
 
   return <>
     <SelectionText editor={editor} more={menuInBubbleMenu} />
-    <CustomDragHandle editor={editor} more={menuInDragHandle} />
+    <CustomDragHandle editor={editor} more={menuInDragHandle} onTip={onTip} />
     <EditorContent editor={editor} />
   </>
 };

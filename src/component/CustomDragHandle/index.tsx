@@ -1,10 +1,10 @@
 import { Box, Divider, Typography, useTheme } from '@mui/material';
 import DragHandle from '@tiptap/extension-drag-handle-react';
-import { Node } from '@tiptap/pm/model';
+import { Fragment, Node, Slice } from '@tiptap/pm/model';
 import { Editor } from '@tiptap/react';
-import { AlignBottomIcon, AlignCenterIcon, AlignJustifyIcon, AlignLeftIcon, AlignRightIcon, AlignTopIcon, ArrowDownSLineIcon, AttachmentLineIcon, BrushLineIcon, CodeBoxLineIcon, DeleteLineIcon, DownloadLineIcon, DraggableIcon, FontSizeIcon, H1Icon, H2Icon, H3Icon, ImageLineIcon, ListCheck3Icon, ListOrdered2Icon, ListUnorderedIcon, MovieLineIcon, Music2LineIcon, QuoteTextIcon, Repeat2LineIcon, TextIcon } from '@yu-cq/tiptap/component/Icons';
+import { AlignBottomIcon, AlignCenterIcon, AlignJustifyIcon, AlignLeftIcon, AlignRightIcon, AlignTopIcon, ArrowDownSLineIcon, AttachmentLineIcon, BrushLineIcon, CodeBoxLineIcon, DeleteLineIcon, DownloadLineIcon, DraggableIcon, FontSizeIcon, H1Icon, H2Icon, H3Icon, ImageLineIcon, ListCheck3Icon, ListOrdered2Icon, ListUnorderedIcon, MovieLineIcon, Music2LineIcon, QuoteTextIcon, Repeat2LineIcon, ScissorsCutLineIcon, TextIcon } from '@yu-cq/tiptap/component/Icons';
 import { NODE_TYPE_LABEL, NodeTypeEnum } from '@yu-cq/tiptap/contants/enums';
-import { MenuItem } from '@yu-cq/tiptap/type';
+import { MenuItem, OnTipFunction } from '@yu-cq/tiptap/type';
 import React, { useCallback, useState } from 'react';
 import { downloadFiles, FileInfo, filterResourcesByType, getAllResources } from '../../util';
 import { FileCopyLineIcon } from '../Icons/file-copy-line-icon';
@@ -36,7 +36,7 @@ const DragIcon = ({ onClick }: { onClick?: () => void }) => <Box onClick={onClic
   <DraggableIcon sx={{ fontSize: '1.25rem' }} />
 </Box>
 
-const CustomDragHandle = ({ editor, more }: { editor: Editor, more?: MenuItem[] }) => {
+const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: MenuItem[], onTip?: OnTipFunction }) => {
   const theme = useTheme()
 
   const [current, setCurrent] = useState<{
@@ -648,19 +648,67 @@ const CustomDragHandle = ({ editor, more }: { editor: Editor, more?: MenuItem[] 
         ...(more ? more : []),
         {
           label: `复制${currentNode?.label}`,
-          key: 'duplicate-and-overwrite',
+          key: 'copy',
           icon: <FileCopyLineIcon sx={{ fontSize: '1rem' }} />,
-          onClick: () => {
+          onClick: async () => {
             if (current.node && current.pos !== undefined) {
-              const nodeJSON = current.node.toJSON();
-              const insertPos = current.pos + current.node.nodeSize;
-              current.editor.chain()
-                .focus()
-                .insertContentAt(insertPos, nodeJSON)
-                .run();
+              const content = new Slice(Fragment.from(current.node), 0, 0)
+              const textContent = current.node.textContent;
+              const htmlContent = editor.view.serializeForClipboard(content).dom.innerHTML
+              try {
+                if (htmlContent && navigator.clipboard && "write" in navigator.clipboard) {
+                  const blob = new Blob([htmlContent], { type: "text/html" })
+                  const clipboardItem = new ClipboardItem({ "text/html": blob })
+                  await navigator.clipboard.write([clipboardItem])
+                  onTip?.('success', '复制成功')
+                }
+              } catch {
+                await navigator.clipboard.writeText(textContent)
+              }
             }
-          },
+          }
         },
+        {
+          label: `剪切${currentNode?.label}`,
+          key: 'cut',
+          icon: <ScissorsCutLineIcon sx={{ fontSize: '1rem' }} />,
+          onClick: async () => {
+            if (current.node && current.pos !== undefined) {
+              try {
+                const content = new Slice(Fragment.from(current.node), 0, 0)
+                const textContent = current.node.textContent;
+                const htmlContent = editor.view.serializeForClipboard(content).dom.innerHTML
+                try {
+                  if (htmlContent && navigator.clipboard && "write" in navigator.clipboard) {
+                    const blob = new Blob([htmlContent], { type: "text/html" })
+                    const clipboardItem = new ClipboardItem({ "text/html": blob })
+                    await navigator.clipboard.write([clipboardItem])
+                  }
+                } catch {
+                  await navigator.clipboard.writeText(textContent)
+                }
+                current.editor.chain().focus().deleteRange({ from: current.pos, to: current.pos + current.node.nodeSize }).run();
+              } catch {
+                onTip?.('error', '剪切失败')
+              }
+            }
+          }
+        },
+        // {
+        //   label: `复制并粘贴`,
+        //   key: 'duplicate-and-overwrite',
+        //   icon: <FileCopyLineIcon sx={{ fontSize: '1rem' }} />,
+        //   onClick: () => {
+        //     if (current.node && current.pos !== undefined) {
+        //       const nodeJSON = current.node.toJSON();
+        //       const insertPos = current.pos + current.node.nodeSize;
+        //       current.editor.chain()
+        //         .focus()
+        //         .insertContentAt(insertPos, nodeJSON)
+        //         .run();
+        //     }
+        //   },
+        // },
         {
           label: `删除${currentNode?.label}`,
           key: 'delete',
