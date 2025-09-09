@@ -38,7 +38,7 @@ const DragIcon = ({ onClick }: { onClick?: () => void }) => <Box onClick={onClic
 
 const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: MenuItem[], onTip?: OnTipFunction }) => {
   const theme = useTheme()
-  const [isVisible, setIsVisible] = useState<boolean>(true)
+  const [showFormat, setShowFormat] = useState<boolean>(true)
 
   const [current, setCurrent] = useState<{
     editor: Editor;
@@ -47,7 +47,7 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
   }>({
     editor,
     node: null,
-    pos: 0,
+    pos: -1,
   })
 
   const [resources, setResources] = useState<{
@@ -81,6 +81,7 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
     { label: '灰色', value: theme.palette.text.disabled },
     { label: '白色', value: theme.palette.common.white },
   ]
+
   const THEME_TEXT_BG_COLOR = [
     { label: '默认背景', value: theme.palette.background.paper },
     { label: '灰色背景', value: '#f8f8f7' },
@@ -146,7 +147,8 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
     node: Node | null;
     pos: number;
   }) => {
-    if (data.pos !== current.pos && data.pos !== -1 || (data.node === null && data.pos >= 0)) {
+    if ((data.pos !== current.pos || data.node?.type.name !== current.node?.type.name) && data.pos !== -1 || (data.node === null && data.pos >= 0)) {
+      console.log(data.node?.type.name)
       const allResources = data.node ? getAllResources(data.node) : []
       const videos = filterResourcesByType(allResources, [NodeTypeEnum.Video])
       const audios = filterResourcesByType(allResources, [NodeTypeEnum.Audio])
@@ -160,7 +162,7 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
         images,
         attachments,
       })
-      setIsVisible(shouldShowButton({ editor, data }))
+      setShowFormat(shouldShowButton({ editor, data }))
     }
   }, [current.pos, current.node])
 
@@ -668,7 +670,7 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
         //   key: 'divider5',
         // }] : []),
         ...(more ? more : []),
-        ...(isVisible ? [{
+        ...(showFormat ? [{
           label: '文本格式化',
           key: 'format',
           icon: <FormatClearIcon sx={{ fontSize: '1rem' }} />,
