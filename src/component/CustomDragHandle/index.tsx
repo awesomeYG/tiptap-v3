@@ -148,7 +148,6 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
     pos: number;
   }) => {
     if ((data.pos !== current.pos || data.node?.type.name !== current.node?.type.name) && data.pos !== -1 || (data.node === null && data.pos >= 0)) {
-      console.log(data.node?.type.name)
       const allResources = data.node ? getAllResources(data.node) : []
       const videos = filterResourcesByType(allResources, [NodeTypeEnum.Video])
       const audios = filterResourcesByType(allResources, [NodeTypeEnum.Audio])
