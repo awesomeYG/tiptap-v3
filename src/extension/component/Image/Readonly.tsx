@@ -43,6 +43,8 @@ const ReadonlyImage = ({
               transformOrigin: '0 0',
               transform: 'translate(-50%, -50%)',
               backgroundColor: 'hsl(0, 0%, 90%)',
+              maxWidth: '100%',
+              maxHeight: '90%',
             }}
           />
         )}>
