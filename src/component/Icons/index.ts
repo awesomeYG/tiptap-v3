@@ -88,6 +88,7 @@ export { PauseLineIcon } from './pause-line-icon';
 export { PlayLineIcon } from './play-line-icon';
 export { QuoteTextIcon } from './quote-text-icon';
 export { Repeat2LineIcon } from './repeat-2-line-icon';
+export { ResetLeftFillIcon } from './reset-left-fill-icon';
 export { ScissorsCutLineIcon } from './scissors-cut-line-icon';
 export { ScreenshotLineIcon } from './screenshot-line-icon';
 export { ScrollToBottomLineIcon } from './scroll-to-bottom-line-icon';

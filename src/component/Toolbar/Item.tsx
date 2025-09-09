@@ -42,6 +42,9 @@ const ToolbarItem = React.forwardRef<HTMLButtonElement, ToolbarItemProps>(
               '&[disabled]': {
                 color: 'text.disabled',
               },
+              '&:hover': {
+                bgcolor: 'background.paper0',
+              },
               textTransform: 'none',
               ...sx,
             }}

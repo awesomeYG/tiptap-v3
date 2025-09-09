@@ -1,7 +1,7 @@
-import { Box, Button, Paper, Stack, useTheme } from '@mui/material'
+import { Box, IconButton, Paper, Stack, useTheme } from '@mui/material'
 import { Editor } from '@tiptap/react'
 import { BubbleMenu } from '@tiptap/react/menus'
-import { BoldIcon, CodeLineIcon, ItalicIcon, LinkIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, UnderlineIcon } from '@yu-cq/tiptap/component/Icons'
+import { BoldIcon, CodeLineIcon, ItalicIcon, LinkIcon, ResetLeftFillIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, UnderlineIcon } from '@yu-cq/tiptap/component/Icons'
 import { MenuItem } from '@yu-cq/tiptap/type'
 import React, { useEffect, useState } from 'react'
 import { ToolbarItem } from '../Toolbar'
@@ -88,7 +88,8 @@ const SelectionText = ({ editor, more }: SelectionTextProps) => {
       offset: 8,
     }}
     shouldShow={({ editor: editorProps, from, to }: { editor: Editor, from: number, to: number }) => {
-      if (editorProps.state.selection.empty
+      if (
+        editorProps.state.selection.empty
         || editorProps.isActive('code')
         || editorProps.isActive('image')
         || editorProps.isActive('video')
@@ -179,7 +180,19 @@ const SelectionText = ({ editor, more }: SelectionTextProps) => {
         borderColor: 'divider',
         boxSizing: 'border-box',
       }}>
-        <Box sx={{ fontSize: 14, mb: 0.5, color: 'text.secondary' }}>文字颜色</Box>
+        <Stack direction={'row'} alignItems={'center'} sx={{ fontSize: 14, mb: 0.5 }}>
+          <Box sx={{ color: 'text.secondary' }}>文字颜色</Box>
+          <IconButton size='small' onClick={() => {
+            editor.chain().focus().setColor('').run()
+          }} sx={{
+            color: 'text.disabled',
+            ':hover': {
+              color: 'primary.main',
+            }
+          }}>
+            <ResetLeftFillIcon sx={{ fontSize: '1rem' }} />
+          </IconButton>
+        </Stack>
         <Stack direction={'row'} flexWrap={'wrap'} gap={0.5}>
           {THEME_TEXT_COLOR.map((c) => (
             <Box key={c} sx={{
@@ -191,12 +204,28 @@ const SelectionText = ({ editor, more }: SelectionTextProps) => {
               boxSizing: 'border-box',
               borderRadius: 'var(--mui-shape-borderRadius)',
               bgcolor: c,
+              transition: 'transform 0.3s',
+              '&:hover': {
+                transform: 'scale(1.05)',
+              }
             }} onClick={() => {
               editor.chain().focus().setColor(c).run()
             }} />
           ))}
         </Stack>
-        <Box sx={{ fontSize: 14, mb: 0.5, mt: 2, color: 'text.secondary' }}>背景颜色</Box>
+        <Stack direction={'row'} alignItems={'center'} sx={{ fontSize: 14, mb: 0.5, mt: 2 }}>
+          <Box sx={{ color: 'text.secondary' }}>背景颜色</Box>
+          <IconButton size='small' onClick={() => {
+            editor.chain().focus().setBackgroundColor('').run()
+          }} sx={{
+            color: 'text.disabled',
+            ':hover': {
+              color: 'primary.main',
+            }
+          }}>
+            <ResetLeftFillIcon sx={{ fontSize: '1rem' }} />
+          </IconButton>
+        </Stack>
         <Stack direction={'row'} flexWrap={'wrap'} gap={0.5}>
           {THEME_TEXT_BG_COLOR.map((c) => (
             <Box key={c} sx={{
@@ -208,22 +237,15 @@ const SelectionText = ({ editor, more }: SelectionTextProps) => {
               boxSizing: 'border-box',
               borderRadius: 'var(--mui-shape-borderRadius)',
               bgcolor: c,
+              transition: 'transform 0.3s',
+              '&:hover': {
+                transform: 'scale(1.05)',
+              }
             }} onClick={() => {
               editor.chain().focus().setBackgroundColor(c).run()
             }} />
           ))}
         </Stack>
-        <Button fullWidth variant='contained' sx={{ mt: 2 }}
-          onClick={() => {
-            editor
-              .chain()
-              .focus()
-              .setColor('')
-              .setBackgroundColor('')
-              .run()
-            // setShowColorPicker(false)
-          }}
-        >恢复默认</Button>
       </Box>
     </Paper>
   </BubbleMenu>
