@@ -17,7 +17,7 @@ const ReadonlyLink = ({ attrs, selected }: ReadonlyLinkProps) => {
   }
 
   return <NodeViewWrapper
-    className={`link-wrapper ${selected ? 'ProseMirror-selectednode' : ''}`}
+    className={`link-wrapper`}
     data-drag-handle
   >
     <Box

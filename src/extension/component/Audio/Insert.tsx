@@ -102,7 +102,7 @@ const InsertAudio = ({
   }
 
   return <NodeViewWrapper
-    className={`audio-wrapper ${selected ? 'ProseMirror-selectednode' : ''}`}
+    className={`audio-wrapper`}
     data-drag-handle
   >
     <Stack

@@ -7,13 +7,11 @@ import { AudioAttributes } from "."
 import Disk from '../../../asset/images/disk.png'
 
 interface ReadonlyAudioProps {
-  selected: boolean
   attrs: AudioAttributes
   onError?: (error: Error) => void
 }
 
 const ReadonlyAudio = ({
-  selected,
   attrs,
   onError
 }: ReadonlyAudioProps) => {
@@ -149,7 +147,7 @@ const ReadonlyAudio = ({
 
   return (
     <NodeViewWrapper
-      className={`audio-wrapper ${selected ? 'ProseMirror-selectednode' : ''}`}
+      className={`audio-wrapper`}
       data-drag-handle
     >
       <audio

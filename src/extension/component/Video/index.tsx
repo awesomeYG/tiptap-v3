@@ -70,7 +70,7 @@ const VideoViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
   }
 
   if (!editor.isEditable) {
-    return <ReadonlyVideo selected={selected} attrs={attrs} onError={onError} />
+    return <ReadonlyVideo attrs={attrs} onError={onError} />
   }
 
   if (!attrs.src) {

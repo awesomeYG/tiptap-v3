@@ -184,7 +184,7 @@ const ImageViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
   }
 
   if (!editor.isEditable) {
-    return <ReadonlyImage selected={selected} attrs={attrs} />
+    return <ReadonlyImage attrs={attrs} />
   }
 
   if (!attrs.src) {

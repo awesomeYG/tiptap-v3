@@ -88,7 +88,7 @@ const InsertImage = ({
 
   return <>
     <NodeViewWrapper
-      className={`image-wrapper${selected ? ' ProseMirror-selectednode' : ''}`}
+      className={`image-wrapper`}
       data-drag-handle
     >
       <Stack

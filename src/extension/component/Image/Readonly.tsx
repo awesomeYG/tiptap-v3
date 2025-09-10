@@ -7,16 +7,14 @@ import { ImageAttributes } from "."
 import 'react-photo-view/dist/react-photo-view.css'
 
 interface ReadonlyImageProps {
-  selected: boolean
   attrs: ImageAttributes
 }
 
 const ReadonlyImage = ({
-  selected,
   attrs,
 }: ReadonlyImageProps) => {
   return <NodeViewWrapper
-    className={`image-wrapper ${selected ? 'ProseMirror-selectednode' : ''}`}
+    className={`image-wrapper`}
     data-drag-handle
   >
     <Box

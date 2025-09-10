@@ -58,7 +58,7 @@ const InsertLink = ({ updateAttributes, deleteNode, selected, attrs, editor }: I
   }, [])
 
   return <NodeViewWrapper
-    className={`link-wrapper ${attrs.class} ${selected ? 'ProseMirror-selectednode' : ''}`}
+    className={`link-wrapper ${attrs.class}`}
     data-drag-handle
     as={'span'}
   >

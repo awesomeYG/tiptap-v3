@@ -4,18 +4,16 @@ import React from "react"
 import { VideoAttributes } from "."
 
 interface ReadonlyVideoProps {
-  selected: boolean
   attrs: VideoAttributes
   onError?: (error: Error) => void
 }
 
 const ReadonlyVideo = ({
-  selected,
   attrs,
   onError
 }: ReadonlyVideoProps) => {
   return <NodeViewWrapper
-    className={`video-wrapper ${selected ? 'ProseMirror-selectednode' : ''}`}
+    className={`video-wrapper`}
     data-drag-handle
   >
     <Box

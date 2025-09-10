@@ -75,7 +75,7 @@ const InsertVideo = ({
   }
 
   return <NodeViewWrapper
-    className={`video-wrapper ${selected ? 'ProseMirror-selectednode' : ''}`}
+    className={`video-wrapper`}
     data-drag-handle
   >
     <Stack

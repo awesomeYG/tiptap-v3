@@ -318,7 +318,7 @@ const AudioViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
   }
 
   if (!editor.isEditable) {
-    return <ReadonlyAudio selected={selected} attrs={attrs} onError={onError} />
+    return <ReadonlyAudio attrs={attrs} onError={onError} />
   }
 
   if (!attrs.src) {
@@ -330,17 +330,14 @@ const AudioViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
       className={`audio-wrapper ${selected ? 'ProseMirror-selectednode' : ''}`}
       data-drag-handle
     >
-      <audio
-        ref={audioRef}
-        src={attrs.src}
-        style={{ display: 'none' }}
-        onError={(e) => {
-          onError?.(e as unknown as Error)
-        }}
-      />
       <Stack direction={'row'} alignItems={'center'}
         sx={{
           position: 'relative',
+          border: '1px solid',
+          borderColor: 'divider',
+          borderRadius: 'var(--mui-shape-borderRadius)',
+          p: '0.25rem',
+          bgcolor: 'background.paper',
           '&:hover': {
             '.audio-controls': {
               opacity: 1
@@ -531,6 +528,14 @@ const AudioViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
           </Box>
         )}
       </Stack>
+      <audio
+        ref={audioRef}
+        src={attrs.src}
+        style={{ display: 'none' }}
+        onError={(e) => {
+          onError?.(e as unknown as Error)
+        }}
+      />
       <FloatingPopover
         open={Boolean(anchorElEdit)}
         anchorEl={anchorElEdit}
