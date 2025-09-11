@@ -1,7 +1,7 @@
-import { Theme } from "@emotion/react";
-import { Box, Button, Stack, SxProps, Tooltip } from "@mui/material";
-import { getShortcutKeyText } from "@yu-cq/tiptap/util";
-import React from "react";
+import { Theme } from '@emotion/react';
+import { Box, Button, Stack, SxProps, Tooltip } from '@mui/material';
+import { getShortcutKeyText } from '@yu-cq/tiptap/util';
+import React from 'react';
 
 interface ToolbarItemProps {
   tip?: string;
@@ -15,15 +15,25 @@ interface ToolbarItemProps {
 }
 
 const ToolbarItem = React.forwardRef<HTMLButtonElement, ToolbarItemProps>(
-  ({ tip, shortcutKey, icon, sx, text, onClick, className, disabled, ...rest }, ref) => {
+  (
+    { tip, shortcutKey, icon, sx, text, onClick, className, disabled, ...rest },
+    ref,
+  ) => {
     const shortcutKeyText = getShortcutKeyText(shortcutKey || []);
     return (
-      <Tooltip title={
-        tip ? <Stack alignItems="center">
-          <Box>{tip}</Box>
-          {shortcutKeyText && <Box sx={{ fontSize: 12 }}>{shortcutKeyText}</Box>}
-        </Stack> : null
-      } arrow>
+      <Tooltip
+        title={
+          tip ? (
+            <Stack alignItems="center">
+              <Box>{tip}</Box>
+              {shortcutKeyText && (
+                <Box sx={{ fontSize: 12 }}>{shortcutKeyText}</Box>
+              )}
+            </Stack>
+          ) : null
+        }
+        arrow
+      >
         <Box>
           <Button
             ref={ref}
@@ -36,29 +46,34 @@ const ToolbarItem = React.forwardRef<HTMLButtonElement, ToolbarItemProps>(
               color: 'text.primary',
               borderRadius: 'var(--mui-shape-borderRadius)',
               '&.tool-active': {
-                bgcolor: 'background.paper0',
+                bgcolor: 'background.paper2',
                 color: 'primary.main',
               },
               '&[disabled]': {
                 color: 'text.disabled',
               },
               '&:hover': {
-                bgcolor: 'background.paper0',
+                bgcolor: 'background.paper2',
               },
               textTransform: 'none',
               ...sx,
             }}
             {...rest}
           >
-            <Stack direction={'row'} alignItems={'center'} gap={1} sx={{ lineHeight: 1, flexShrink: 0 }}>
+            <Stack
+              direction={'row'}
+              alignItems={'center'}
+              gap={1}
+              sx={{ lineHeight: 1, flexShrink: 0 }}
+            >
               {icon}
-              {text && <Box component='span'>{text}</Box>}
+              {text && <Box component="span">{text}</Box>}
             </Stack>
           </Button>
         </Box>
       </Tooltip>
-    )
-  }
+    );
+  },
 );
 
 ToolbarItem.displayName = 'toolbar-item';

@@ -1,6 +1,6 @@
 {
   "name": "@yu-cq/tiptap",
-  "version": "0.3.18",
+  "version": "0.3.19",
   "description": "基于 Tiptap 二次开发的编辑器组件",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -66,6 +66,11 @@
     ]
   },
   "peerDependencies": {
+    "@emotion/react": "^11",
+    "@emotion/styled": "^11",
+    "@mui/icons-material": "^7",
+    "@mui/material": "^7",
+    "@mui/utils": "^7",
     "react": ">=16.9.0",
     "react-dom": ">=16.9.0"
   },
@@ -88,11 +93,7 @@
     "stylelint": "^14.9.1"
   },
   "dependencies": {
-    "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.1",
     "@floating-ui/dom": "^1.7.2",
-    "@mui/material": "^6.2.0",
-    "@mui/utils": "^7.1.1",
     "@tiptap/core": "^3.3.0",
     "@tiptap/extension-bubble-menu": "^3.3.0",
     "@tiptap/extension-code-block-lowlight": "^3.3.0",

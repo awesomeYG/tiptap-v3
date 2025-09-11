@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import {
   ThemeProvider as MUIThemeProvider,
@@ -39,7 +39,7 @@ const EditorThemeProvider: React.FC<EditorThemeProviderProps> = ({
     if (storageMode) {
       try {
         parseStorageMode = JSON.parse(storageMode);
-      } catch (error) { }
+      } catch (error) {}
     }
 
     if (colors) {
@@ -101,7 +101,7 @@ const EditorThemeProvider: React.FC<EditorThemeProviderProps> = ({
     }
     body.className = newMode;
     // @ts-ignore
-    bodyStyle.backgroundColor = theme.palette.background.paper0;
+    bodyStyle.backgroundColor = theme.palette.background.paper2;
     bodyStyle.color = theme.palette.text.secondary;
   }, [theme]);
 
