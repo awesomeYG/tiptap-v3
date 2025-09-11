@@ -1,6 +1,6 @@
+import { SHORTCUT_KEYS } from "@baizhicloud/tiptap/contants/shortcut-key"
+import { getShortcutKeyText } from "@baizhicloud/tiptap/util"
 import { Box, Dialog, DialogContent, DialogTitle, Stack } from "@mui/material"
-import { SHORTCUT_KEYS } from "@yu-cq/tiptap/contants/shortcut-key"
-import { getShortcutKeyText } from "@yu-cq/tiptap/util"
 import React from "react"
 
 interface NotificationDialogProps {

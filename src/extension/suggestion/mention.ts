@@ -1,8 +1,8 @@
+import { MentionExtensionProps } from '@baizhicloud/tiptap/type'
+import { updatePosition } from '@baizhicloud/tiptap/util'
 import { MentionOptions } from '@tiptap/extension-mention'
 import { Editor, ReactRenderer } from '@tiptap/react'
 import { SuggestionProps } from '@tiptap/suggestion'
-import { MentionExtensionProps } from '@yu-cq/tiptap/type'
-import { updatePosition } from '@yu-cq/tiptap/util'
 import { MentionList, MentionListProps, MentionListRef } from '../component/MentionList'
 
 export const mentionSuggestion = ({ mentionItems, onMentionFilter }: MentionExtensionProps): MentionOptions["suggestion"] => {

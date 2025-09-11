@@ -1,3 +1,4 @@
+import { SlashCommandsListProps, SlashCommandsListRef } from '@baizhicloud/tiptap/type'
 import {
   Box,
   MenuItem,
@@ -5,7 +6,6 @@ import {
   Paper,
   Stack
 } from '@mui/material'
-import { SlashCommandsListProps, SlashCommandsListRef } from '@yu-cq/tiptap/type'
 import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
 
 const SlashCommandsList = forwardRef<SlashCommandsListRef, SlashCommandsListProps>(

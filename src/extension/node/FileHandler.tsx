@@ -1,6 +1,6 @@
+import { UploadFunction } from "@baizhicloud/tiptap/type";
+import { formatFileSize, getFileType } from "@baizhicloud/tiptap/util";
 import FileHandler from "@tiptap/extension-file-handler";
-import { UploadFunction } from "@yu-cq/tiptap/type";
-import { formatFileSize, getFileType } from "@yu-cq/tiptap/util";
 import { getImageDimensionsFromFile } from "../component/Image";
 
 export const FileHandlerExtension = (props: { onUpload?: UploadFunction }) => FileHandler.configure({

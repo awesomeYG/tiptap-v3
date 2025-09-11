@@ -1,7 +1,7 @@
+import { LinkIcon } from "@baizhicloud/tiptap/component/Icons"
+import { getLinkTitle } from "@baizhicloud/tiptap/util"
 import { Avatar, Box, Stack } from "@mui/material"
 import { NodeViewProps, NodeViewWrapper } from "@tiptap/react"
-import { LinkIcon } from "@yu-cq/tiptap/component/Icons"
-import { getLinkTitle } from "@yu-cq/tiptap/util"
 import React from "react"
 import { LinkAttributes } from "."
 

@@ -1,7 +1,7 @@
+import { FloatingPopover } from "@baizhicloud/tiptap/component"
+import { DownloadLineIcon, PauseLineIcon, PlayLineIcon, SpeedLineIcon, VolumeMuteLineIcon, VolumeUpLineIcon } from "@baizhicloud/tiptap/component/Icons"
 import { Box, IconButton, MenuItem, MenuList, Paper, Slider, Stack, Typography } from "@mui/material"
 import { NodeViewWrapper } from "@tiptap/react"
-import { FloatingPopover } from "@yu-cq/tiptap/component"
-import { DownloadLineIcon, PauseLineIcon, PlayLineIcon, SpeedLineIcon, VolumeMuteLineIcon, VolumeUpLineIcon } from "@yu-cq/tiptap/component/Icons"
 import React, { useEffect, useRef, useState } from "react"
 import { AudioAttributes } from "."
 import Disk from '../../../asset/images/disk.png'

@@ -1,6 +1,6 @@
+import { EditorFnProps } from "@baizhicloud/tiptap/type";
 import Image from "@tiptap/extension-image";
 import { ReactNodeViewRenderer } from "@tiptap/react";
-import { EditorFnProps } from "@yu-cq/tiptap/type";
 import ImageViewWrapper from "../component/Image";
 
 export type ImageExtensionProps = EditorFnProps

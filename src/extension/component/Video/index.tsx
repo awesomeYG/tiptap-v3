@@ -1,7 +1,7 @@
+import { DeleteLineIcon } from "@baizhicloud/tiptap/component/Icons"
+import { EditorFnProps } from "@baizhicloud/tiptap/type"
 import { Box, IconButton, Tooltip } from "@mui/material"
 import { NodeViewProps, NodeViewWrapper } from '@tiptap/react'
-import { DeleteLineIcon } from "@yu-cq/tiptap/component/Icons"
-import { EditorFnProps } from "@yu-cq/tiptap/type"
 import React, { useEffect, useRef, useState } from "react"
 import InsertVideo from "./Insert"
 import ReadonlyVideo from "./Readonly"

@@ -3,7 +3,7 @@ import { Extension } from '@tiptap/core'
 import type { Node as TiptapNode } from '@tiptap/pm/model'
 import { v4 as uuidv4 } from 'uuid'
 
-import { TocList } from '@yu-cq/tiptap/type'
+import { TocList } from '@baizhicloud/tiptap/type'
 import { TableOfContentsPlugin } from './plugin'
 import type {
   GetTableOfContentIndexFunction,

@@ -1,7 +1,7 @@
+import { updatePosition } from '@baizhicloud/tiptap/util'
 import { EmojiItem, EmojiOptions } from '@tiptap/extension-emoji'
 import { Editor, ReactRenderer } from '@tiptap/react'
 import { SuggestionProps } from '@tiptap/suggestion'
-import { updatePosition } from '@yu-cq/tiptap/util'
 import { EmojiList, EmojiListProps, EmojiListRef } from '../component/EmojiList'
 
 export const emojiSuggestion: EmojiOptions["suggestion"] = {

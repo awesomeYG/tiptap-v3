@@ -1,5 +1,3 @@
-import { Box, MenuItem, Paper, Select, Stack } from '@mui/material'
-import { Editor } from '@tiptap/react'
 import {
   ArrowDownSLineIcon,
   ArrowGoForwardLineIcon,
@@ -8,7 +6,9 @@ import {
   FontSizeIcon,
   ListOrdered2Icon,
   ListUnorderedIcon
-} from '@yu-cq/tiptap/component/Icons'
+} from '@baizhicloud/tiptap/component/Icons'
+import { Box, MenuItem, Paper, Select, Stack } from '@mui/material'
+import { Editor } from '@tiptap/react'
 import React, { useEffect, useRef, useState } from 'react'
 import { ToolbarItem } from '../Toolbar'
 

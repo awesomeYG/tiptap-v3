@@ -1,7 +1,7 @@
+import { getLinkTitle } from '@baizhicloud/tiptap/util'
 import { mergeAttributes, Node, nodePasteRule, type PasteRuleMatch } from '@tiptap/core'
 import type { Plugin } from '@tiptap/pm/state'
 import { ReactNodeViewRenderer } from '@tiptap/react'
-import { getLinkTitle } from '@yu-cq/tiptap/util'
 import { find, registerCustomProtocol, reset } from 'linkifyjs'
 import LinkViewWrapper from '../../component/Link'
 import { autolink } from './helpers/autolink'

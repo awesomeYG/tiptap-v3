@@ -1,8 +1,8 @@
+import { BoldIcon, CodeLineIcon, ItalicIcon, LinkIcon, ResetLeftFillIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, UnderlineIcon } from '@baizhicloud/tiptap/component/Icons'
+import { MenuItem } from '@baizhicloud/tiptap/type'
 import { Box, IconButton, Paper, Stack, useTheme } from '@mui/material'
 import { Editor } from '@tiptap/react'
 import { BubbleMenu } from '@tiptap/react/menus'
-import { BoldIcon, CodeLineIcon, ItalicIcon, LinkIcon, ResetLeftFillIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, UnderlineIcon } from '@yu-cq/tiptap/component/Icons'
-import { MenuItem } from '@yu-cq/tiptap/type'
 import React, { useEffect, useState } from 'react'
 import { ToolbarItem } from '../Toolbar'
 

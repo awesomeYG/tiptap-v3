@@ -1,8 +1,8 @@
+import { getExtensions } from '@baizhicloud/tiptap/extension'
+import { UseTiptapProps, UseTiptapReturn } from '@baizhicloud/tiptap/type'
+import { migrateMathStrings } from '@baizhicloud/tiptap/util'
 import { useEditor, UseEditorOptions } from '@tiptap/react'
 import { renderToMarkdown } from '@tiptap/static-renderer/pm/markdown'
-import { getExtensions } from '@yu-cq/tiptap/extension'
-import { UseTiptapProps, UseTiptapReturn } from '@yu-cq/tiptap/type'
-import { migrateMathStrings } from '@yu-cq/tiptap/util'
 
 const useTiptap = ({
   // extension 

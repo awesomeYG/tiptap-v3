@@ -1,6 +1,6 @@
+import { AttachmentLineIcon, ImageLineIcon, MovieLineIcon } from '@baizhicloud/tiptap/component/Icons';
 import { Box, CircularProgress, Stack } from '@mui/material';
 import { NodeViewProps, NodeViewWrapper } from '@tiptap/react';
-import { AttachmentLineIcon, ImageLineIcon, MovieLineIcon } from '@yu-cq/tiptap/component/Icons';
 import React from 'react';
 
 export interface UploadProgressAttributes {

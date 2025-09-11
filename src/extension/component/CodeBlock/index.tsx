@@ -1,11 +1,11 @@
-import { Box, MenuItem, Select, Stack, TextField } from '@mui/material';
-import { NodeViewContent, NodeViewProps, NodeViewWrapper } from '@tiptap/react';
 import {
   ArrowDownSLineIcon,
   CopyIcon,
   TitleIcon,
-} from '@yu-cq/tiptap/component/Icons';
-import { languages } from '@yu-cq/tiptap/contants/highlight';
+} from '@baizhicloud/tiptap/component/Icons';
+import { languages } from '@baizhicloud/tiptap/contants/highlight';
+import { Box, MenuItem, Select, Stack, TextField } from '@mui/material';
+import { NodeViewContent, NodeViewProps, NodeViewWrapper } from '@tiptap/react';
 import React, { useCallback, useState } from 'react';
 import ReadonlyCodeBlock from './Readonly';
 
@@ -86,9 +86,8 @@ const CodeBlockView: React.FC<NodeViewProps> = (props) => {
 
   return (
     <NodeViewWrapper
-      className={`codeblock-wrapper ${
-        selected ? 'ProseMirror-selectednode' : ''
-      }`}
+      className={`codeblock-wrapper ${selected ? 'ProseMirror-selectednode' : ''
+        }`}
       data-drag-handle
     >
       <Box

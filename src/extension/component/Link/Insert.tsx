@@ -1,8 +1,8 @@
+import { FloatingPopover } from "@baizhicloud/tiptap/component"
+import { LinkIcon } from "@baizhicloud/tiptap/component/Icons"
 import { Box, Button, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Stack, TextField } from "@mui/material"
 import { Editor } from "@tiptap/core"
 import { NodeViewProps, NodeViewWrapper } from "@tiptap/react"
-import { FloatingPopover } from "@yu-cq/tiptap/component"
-import { LinkIcon } from "@yu-cq/tiptap/component/Icons"
 import React, { useEffect, useState } from "react"
 import { LinkAttributes } from "."
 

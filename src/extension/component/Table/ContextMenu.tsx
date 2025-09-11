@@ -1,3 +1,4 @@
+import { ToolbarItem } from '@baizhicloud/tiptap/component/Toolbar';
 import {
   Box,
   Divider,
@@ -6,7 +7,6 @@ import {
   Stack
 } from '@mui/material';
 import { Editor } from '@tiptap/core';
-import { ToolbarItem } from '@yu-cq/tiptap/component/Toolbar';
 import React from 'react';
 import {
   BoldIcon,

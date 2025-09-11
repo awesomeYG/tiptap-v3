@@ -1,5 +1,5 @@
+import { EditorProps } from '@baizhicloud/tiptap/type';
 import { EditorContent } from '@tiptap/react';
-import { EditorProps } from '@yu-cq/tiptap/type';
 import React from 'react';
 import SelectionText from '../component/CustomBubbleMenu/SelectionText';
 import CustomDragHandle from '../component/CustomDragHandle';

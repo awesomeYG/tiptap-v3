@@ -1,5 +1,5 @@
+import { MentionExtensionProps } from "@baizhicloud/tiptap/type";
 import Mention from "@tiptap/extension-mention";
-import { MentionExtensionProps } from "@yu-cq/tiptap/type";
 import mentionSuggestion from "../suggestion/mention";
 
 export const MentionExtension = (props: MentionExtensionProps) => Mention.configure({

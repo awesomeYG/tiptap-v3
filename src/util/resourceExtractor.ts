@@ -1,5 +1,5 @@
+import { NodeTypeEnum } from '@baizhicloud/tiptap/contants/enums'
 import { Node } from '@tiptap/pm/model'
-import { NodeTypeEnum } from '@yu-cq/tiptap/contants/enums'
 
 /**
  * 文件资源类型映射

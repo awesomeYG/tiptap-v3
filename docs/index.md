@@ -19,4 +19,4 @@ features:
     description: Put ! description here
 ---
 
-@yu-cq/tiptap
+@baizhicloud/tiptap

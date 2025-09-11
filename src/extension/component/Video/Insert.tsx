@@ -1,8 +1,8 @@
+import { FloatingPopover } from "@baizhicloud/tiptap/component/FloatingPopover"
+import { MovieLineIcon, UploadCloud2LineIcon } from "@baizhicloud/tiptap/component/Icons"
+import { EditorFnProps } from "@baizhicloud/tiptap/type"
 import { Box, Button, CircularProgress, Stack, Tab, Tabs, TextField } from "@mui/material"
 import { NodeViewWrapper } from "@tiptap/react"
-import { FloatingPopover } from "@yu-cq/tiptap/component/FloatingPopover"
-import { MovieLineIcon, UploadCloud2LineIcon } from "@yu-cq/tiptap/component/Icons"
-import { EditorFnProps } from "@yu-cq/tiptap/type"
 import React, { useState } from "react"
 import { VideoAttributes } from "."
 

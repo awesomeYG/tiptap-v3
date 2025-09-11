@@ -1,6 +1,6 @@
+import { getShortcutKeyText } from "@baizhicloud/tiptap/util";
 import { Box, MenuItem, Select, Stack, Tooltip } from "@mui/material";
 import { Editor } from "@tiptap/react";
-import { getShortcutKeyText } from "@yu-cq/tiptap/util";
 import React, { useEffect, useState } from "react";
 import { ArrowDownSLineIcon, CodeBoxLineIcon, CodeLineIcon, CodeSSlashLineIcon } from "../Icons";
 import ToolbarItem from "./Item";

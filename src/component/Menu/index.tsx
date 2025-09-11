@@ -1,10 +1,10 @@
+import { MenuItem, MenuProps } from '@baizhicloud/tiptap/type';
 import {
   Box,
   Popover,
   Stack,
   Typography
 } from '@mui/material';
-import { MenuItem, MenuProps } from '@yu-cq/tiptap/type';
 import React from 'react';
 
 const Menu: React.FC<MenuProps> = ({

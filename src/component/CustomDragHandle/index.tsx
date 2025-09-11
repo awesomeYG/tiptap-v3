@@ -1,10 +1,10 @@
+import { AlignBottomIcon, AlignCenterIcon, AlignJustifyIcon, AlignLeftIcon, AlignRightIcon, AlignTopIcon, ArrowDownSLineIcon, AttachmentLineIcon, BrushLineIcon, CodeBoxLineIcon, DeleteLineIcon, DownloadLineIcon, DraggableIcon, FontSizeIcon, FormatClearIcon, H1Icon, H2Icon, H3Icon, ImageLineIcon, ListCheck3Icon, ListOrdered2Icon, ListUnorderedIcon, MovieLineIcon, Music2LineIcon, QuoteTextIcon, Repeat2LineIcon, ScissorsCutLineIcon, TextIcon } from '@baizhicloud/tiptap/component/Icons';
+import { NODE_TYPE_LABEL, NodeTypeEnum } from '@baizhicloud/tiptap/contants/enums';
+import { MenuItem, OnTipFunction } from '@baizhicloud/tiptap/type';
 import { Box, Divider, Typography, useTheme } from '@mui/material';
 import DragHandle from '@tiptap/extension-drag-handle-react';
 import { Fragment, Node, Slice } from '@tiptap/pm/model';
 import { Editor } from '@tiptap/react';
-import { AlignBottomIcon, AlignCenterIcon, AlignJustifyIcon, AlignLeftIcon, AlignRightIcon, AlignTopIcon, ArrowDownSLineIcon, AttachmentLineIcon, BrushLineIcon, CodeBoxLineIcon, DeleteLineIcon, DownloadLineIcon, DraggableIcon, FontSizeIcon, FormatClearIcon, H1Icon, H2Icon, H3Icon, ImageLineIcon, ListCheck3Icon, ListOrdered2Icon, ListUnorderedIcon, MovieLineIcon, Music2LineIcon, QuoteTextIcon, Repeat2LineIcon, ScissorsCutLineIcon, TextIcon } from '@yu-cq/tiptap/component/Icons';
-import { NODE_TYPE_LABEL, NodeTypeEnum } from '@yu-cq/tiptap/contants/enums';
-import { MenuItem, OnTipFunction } from '@yu-cq/tiptap/type';
 import React, { useCallback, useState } from 'react';
 import { downloadFiles, FileInfo, filterResourcesByType, getAllResources } from '../../util';
 import { FileCopyLineIcon } from '../Icons/file-copy-line-icon';

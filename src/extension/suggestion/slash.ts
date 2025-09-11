@@ -1,8 +1,8 @@
+import { slashCommands } from '@baizhicloud/tiptap/contants/slash-commands'
+import type { SlashCommandsListProps, SlashCommandsListRef } from '@baizhicloud/tiptap/type'
+import { updatePosition } from '@baizhicloud/tiptap/util'
 import { ReactRenderer } from '@tiptap/react'
 import { SuggestionProps } from '@tiptap/suggestion'
-import { slashCommands } from '@yu-cq/tiptap/contants/slash-commands'
-import type { SlashCommandsListProps, SlashCommandsListRef } from '@yu-cq/tiptap/type'
-import { updatePosition } from '@yu-cq/tiptap/util'
 import SlashCommandsList from '../component/SlashCommandsList/index'
 
 

@@ -1,8 +1,8 @@
+import { FloatingPopover } from "@baizhicloud/tiptap/component/FloatingPopover"
+import { Attachment2Icon, UploadCloud2LineIcon } from "@baizhicloud/tiptap/component/Icons"
+import { EditorFnProps } from "@baizhicloud/tiptap/type"
 import { Box, Button, CircularProgress, IconButton, Stack, Tab, Tabs, TextField } from "@mui/material"
 import { NodeViewWrapper } from "@tiptap/react"
-import { FloatingPopover } from "@yu-cq/tiptap/component/FloatingPopover"
-import { Attachment2Icon, UploadCloud2LineIcon } from "@yu-cq/tiptap/component/Icons"
-import { EditorFnProps } from "@yu-cq/tiptap/type"
 import React, { useState } from "react"
 import { AudioAttributes } from "."
 
