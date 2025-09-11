@@ -27,7 +27,7 @@
   padding-bottom: 0.375rem;
   margin: 1rem 0;
   color: var(--mui-palette-text-tertiary);
-  background-color: var(--mui-palette-background-paper2);
+  background-color: var(--mui-palette-background-paper3);
 }
 
 .tiptap.ProseMirror blockquote::after {
@@ -38,7 +38,7 @@
   height: 100%;
   width: 0.25rem;
   background-color: var(--mui-palette-divider);
-  content: "";
+  content: '';
   border-radius: 0;
 }
 
@@ -68,49 +68,49 @@
   list-style: lower-roman;
 }
 
-.tiptap.ProseMirror ul:not([data-type="taskList"]) {
+.tiptap.ProseMirror ul:not([data-type='taskList']) {
   list-style-image: url('./asset/images/down.svg');
 }
 
-.tiptap.ProseMirror ul:not([data-type="taskList"]) ul {
+.tiptap.ProseMirror ul:not([data-type='taskList']) ul {
   list-style-image: url('./asset/images/down.svg');
 }
 
-.tiptap.ProseMirror ul:not([data-type="taskList"]) ul ul {
+.tiptap.ProseMirror ul:not([data-type='taskList']) ul ul {
   list-style-image: url('./asset/images/down.svg');
 }
 
-.tiptap.ProseMirror ul[data-type="taskList"] {
+.tiptap.ProseMirror ul[data-type='taskList'] {
   list-style: none;
   margin-left: 0;
   padding: 0;
 }
 
-.tiptap.ProseMirror ul[data-type="taskList"] li {
+.tiptap.ProseMirror ul[data-type='taskList'] li {
   align-items: flex-start;
   display: flex;
 }
 
-.tiptap.ProseMirror ul[data-type="taskList"] li>label {
+.tiptap.ProseMirror ul[data-type='taskList'] li > label {
   flex: 0 0 auto;
   margin-right: 0.5rem;
   user-select: none;
 }
 
-.tiptap.ProseMirror ul[data-type="taskList"] li>div {
+.tiptap.ProseMirror ul[data-type='taskList'] li > div {
   flex: 1 1 auto;
 }
 
-.tiptap.ProseMirror ul[data-type="taskList"] li[data-checked="true"]>div {
+.tiptap.ProseMirror ul[data-type='taskList'] li[data-checked='true'] > div {
   color: var(--mui-palette-text-disabled);
   text-decoration: line-through;
 }
 
-.tiptap.ProseMirror ul[data-type="taskList"] input[type="checkbox"] {
+.tiptap.ProseMirror ul[data-type='taskList'] input[type='checkbox'] {
   cursor: pointer;
 }
 
-.tiptap.ProseMirror ul[data-type="taskList"] ul[data-type="taskList"] {
+.tiptap.ProseMirror ul[data-type='taskList'] ul[data-type='taskList'] {
   margin: 0;
 }
 
@@ -124,7 +124,7 @@
 .tiptap.ProseMirror pre {
   position: relative;
   border-radius: var(--mui-shape-borderRadius);
-  background-color: var(--mui-palette-background-paper2);
+  background-color: var(--mui-palette-background-paper3);
 }
 
 .tiptap.ProseMirror code {
@@ -133,7 +133,7 @@
   font-size: inherit;
   word-break: break-all;
   color: var(--mui-palette-primary-main);
-  background-color: var(--mui-palette-background-paper2);
+  background-color: var(--mui-palette-background-paper3);
   border-radius: var(--mui-shape-borderRadius);
 }
 
@@ -159,7 +159,7 @@
   font-weight: 600;
 }
 
-.tiptap.ProseMirror .cq-details>button {
+.tiptap.ProseMirror .cq-details > button {
   cursor: pointer;
   background: transparent;
   border-radius: 4px;
@@ -172,11 +172,11 @@
   padding: 0;
 }
 
-.tiptap.ProseMirror .cq-details>button:hover {
+.tiptap.ProseMirror .cq-details > button:hover {
   background-color: var(--mui-palette-divider);
 }
 
-.tiptap.ProseMirror .cq-details>button::before {
+.tiptap.ProseMirror .cq-details > button::before {
   content: '\25B6';
   width: 100%;
   height: 100%;
@@ -186,18 +186,22 @@
   transition: transform 0.2s ease-in-out;
 }
 
-.tiptap.ProseMirror .cq-details.is-open>button::before {
+.tiptap.ProseMirror .cq-details.is-open > button::before {
   transform: rotate(90deg);
 }
 
-.tiptap.ProseMirror .cq-details>div {
+.tiptap.ProseMirror .cq-details > div {
   display: flex;
   flex-direction: column;
   gap: 1rem;
   width: 100%;
 }
 
-.tiptap.ProseMirror .cq-details>div>[data-type='detailsContent']> :last-child {
+.tiptap.ProseMirror
+  .cq-details
+  > div
+  > [data-type='detailsContent']
+  > :last-child {
   margin-bottom: 0.5rem;
 }
 
@@ -297,19 +301,23 @@
   vertical-align: top;
 }
 
-.tiptap.ProseMirror table td>*,
-.tiptap.ProseMirror table th>* {
+.tiptap.ProseMirror table td > *,
+.tiptap.ProseMirror table th > * {
   margin-bottom: 0;
 }
 
 .tiptap.ProseMirror table th {
-  background-color: var(--mui-palette-background-paper2);
+  background-color: var(--mui-palette-background-paper3);
   font-weight: bold;
 }
 
 /* 表格选择状态 */
 .tiptap.ProseMirror table .selectedCell:after {
-  background-color: color-mix(in srgb, var(--mui-palette-primary-main) 7%, transparent);
+  background-color: color-mix(
+    in srgb,
+    var(--mui-palette-primary-main) 7%,
+    transparent
+  );
   content: '';
   left: 0;
   right: 0;

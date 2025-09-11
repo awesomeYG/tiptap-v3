@@ -1,5 +1,5 @@
 import { addOpacityToColor } from '../util';
-import { type ThemeColor, custom } from './color';
+import { custom, type ThemeColor } from './color';
 export default function componentStyleOverrides(color: ThemeColor) {
   return {
     MuiTabs: {
@@ -14,9 +14,9 @@ export default function componentStyleOverrides(color: ThemeColor) {
         indicator: {
           borderRadius: '0px !important',
           overflow: 'hidden',
-          backgroundColor: '#21222D !important'
-        }
-      }
+          backgroundColor: '#21222D !important',
+        },
+      },
     },
     MuiTab: {
       styleOverrides: {
@@ -26,8 +26,8 @@ export default function componentStyleOverrides(color: ThemeColor) {
           fontSize: '14px !important',
           lineHeight: '34px',
           padding: '0 16px !important',
-        }
-      }
+        },
+      },
     },
     MuiButton: {
       styleOverrides: {
@@ -39,7 +39,7 @@ export default function componentStyleOverrides(color: ThemeColor) {
             lineHeight: '36px',
             paddingLeft: '16px',
             paddingRight: '16px',
-            boxShadow: "none",
+            boxShadow: 'none',
             transition: 'all 0.2s ease-in-out',
             borderRadius: '10px',
             fontWeight: '400',
@@ -47,8 +47,7 @@ export default function componentStyleOverrides(color: ThemeColor) {
               color: color.text.inverse,
               backgroundColor: color.text.primary,
             }),
-            ...(ownerState.variant === 'text' && {
-            }),
+            ...(ownerState.variant === 'text' && {}),
             ...(ownerState.variant === 'outlined' && {
               color: color.text.primary,
               border: `1px solid ${color.text.primary}`,
@@ -60,18 +59,18 @@ export default function componentStyleOverrides(color: ThemeColor) {
               height: '32px',
               lineHeight: '32px',
             }),
-            "&:hover": {
+            '&:hover': {
               boxShadow: 'none',
               ...(ownerState.variant === 'contained' && {
                 backgroundColor: addOpacityToColor(color.text.primary, 0.9),
               }),
               ...(ownerState.variant === 'text' && {
-                backgroundColor: color.background.paper2,
+                backgroundColor: color.background.paper3,
               }),
               ...(ownerState.variant === 'outlined' && {
-                backgroundColor: color.background.paper2,
+                backgroundColor: color.background.paper3,
               }),
-              ...(ownerState.color === "neutral" && {
+              ...(ownerState.color === 'neutral' && {
                 color: color.text.primary,
               }),
             },
@@ -82,8 +81,8 @@ export default function componentStyleOverrides(color: ThemeColor) {
           marginRight: 8,
           '>*:nth-of-type(1)': {
             fontSize: 14,
-          }
-        }
+          },
+        },
       },
     },
     MuiTooltip: {
@@ -93,13 +92,13 @@ export default function componentStyleOverrides(color: ThemeColor) {
           maxWidth: '600px',
           padding: '8px 16px',
           backgroundColor: color.text.primary,
-          fontSize: "12px",
+          fontSize: '12px',
           lineHeight: '20px',
           color: color.primary.contrastText,
         },
         arrow: {
           color: color.text.primary,
-        }
+        },
       },
     },
     MuiFormHelperText: {
@@ -112,7 +111,7 @@ export default function componentStyleOverrides(color: ThemeColor) {
     MuiFormControl: {
       styleOverrides: {
         root: {
-          ".MuiFormLabel-asterisk": {
+          '.MuiFormLabel-asterisk': {
             color: color.error.main,
           },
         },
@@ -128,17 +127,17 @@ export default function componentStyleOverrides(color: ThemeColor) {
     MuiTableBody: {
       styleOverrides: {
         root: {
-          ".MuiTableRow-root:hover": {
-            ".MuiTableCell-root:not(.cx-table-empty-td)": {
+          '.MuiTableRow-root:hover': {
+            '.MuiTableCell-root:not(.cx-table-empty-td)': {
               backgroundColor: color.table.row.hoverColor,
               overflowX: 'hidden',
-              ".primary-color": {
+              '.primary-color': {
                 color: color.primary.main,
               },
-              ".no-title-url": {
+              '.no-title-url': {
                 color: `${color.primary.main} !important`,
               },
-              ".error-color": {
+              '.error-color': {
                 opacity: 1,
               },
             },
@@ -161,15 +160,15 @@ export default function componentStyleOverrides(color: ThemeColor) {
         root: {
           background: color.background.paper,
           lineHeight: 1.5,
-          fontSize: "14px",
-          paddingTop: "16px !important",
-          paddingBottom: "16px !important",
+          fontSize: '14px',
+          paddingTop: '16px !important',
+          paddingBottom: '16px !important',
           paddingLeft: 0,
-          "&:first-of-type": {
-            paddingLeft: "0px",
+          '&:first-of-type': {
+            paddingLeft: '0px',
           },
-          "&:not(:first-of-type)": {
-            paddingLeft: "0px",
+          '&:not(:first-of-type)': {
+            paddingLeft: '0px',
           },
           '.MuiCheckbox-root': {
             color: '#CCCCCC',
@@ -178,13 +177,13 @@ export default function componentStyleOverrides(color: ThemeColor) {
             },
             '&.Mui-checked': {
               color: color.text.primary,
-            }
+            },
           },
         },
         head: {
-          backgroundColor: color.background.paper2,
+          backgroundColor: color.background.paper3,
           color: color.table.head.color,
-          fontSize: "12px",
+          fontSize: '12px',
           paddingTop: '0 !important',
           paddingBottom: '0 !important',
           borderSpacing: '12px',
@@ -194,7 +193,7 @@ export default function componentStyleOverrides(color: ThemeColor) {
           borderBottom: '1px dashed',
           borderColor: color.table.cell.borderColor,
           borderSpacing: '12px',
-        }
+        },
       },
     },
     MuiPopover: {
@@ -202,8 +201,8 @@ export default function componentStyleOverrides(color: ThemeColor) {
         paper: {
           borderRadius: '10px',
           boxShadow: custom.selectPopupBoxShadow,
-        }
-      }
+        },
+      },
     },
     MuiMenu: {
       styleOverrides: {
@@ -228,7 +227,7 @@ export default function componentStyleOverrides(color: ThemeColor) {
           height: '40px',
           borderRadius: '5px',
           ':hover': {
-            backgroundColor: color.background.paper2,
+            backgroundColor: color.background.paper3,
           },
           '&.Mui-selected': {
             fontWeight: '500',
@@ -246,12 +245,12 @@ export default function componentStyleOverrides(color: ThemeColor) {
         root: ({ ownerState }: { ownerState: { elevation?: number } }) => {
           return {
             ...(ownerState.elevation === 0 && {
-              backgroundColor: color.background.paper0,
-            }),
-            ...(ownerState.elevation === 2 && {
               backgroundColor: color.background.paper2,
             }),
-            backgroundImage: "none",
+            ...(ownerState.elevation === 2 && {
+              backgroundColor: color.background.paper3,
+            }),
+            backgroundImage: 'none',
           };
         },
       },
@@ -263,35 +262,35 @@ export default function componentStyleOverrides(color: ThemeColor) {
           return {
             height: '24px',
             lineHeight: '24px',
-            borderRadius: "8px",
+            borderRadius: '8px',
             '.MuiChip-label': {
               padding: '0 8px 0 4px',
             },
-            ...(ownerState.color === "default" && {
+            ...(ownerState.color === 'default' && {
               backgroundColor: color.background.chip,
               borderColor: color.text.disabled,
-              ".Mui-focusVisible": {
+              '.Mui-focusVisible': {
                 backgroundColor: color.background.chip,
               },
             }),
-            ...(ownerState.color === "error" && {
+            ...(ownerState.color === 'error' && {
               backgroundColor: addOpacityToColor(color.error.main, 0.1),
-            })
-          }
+            }),
+          };
         },
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         label: ({ ownerState }: { ownerState: any }) => {
           return {
-            padding: "0 14px",
-            fontSize: "14px",
+            padding: '0 14px',
+            fontSize: '14px',
             lineHeight: '24px',
-            ...(ownerState.color === "default" && {
+            ...(ownerState.color === 'default' && {
               color: color.text.primary,
-            })
-          }
+            }),
+          };
         },
         deleteIcon: {
-          fontSize: "14px",
+          fontSize: '14px',
           color: color.text.disabled,
         },
       },
@@ -318,10 +317,10 @@ export default function componentStyleOverrides(color: ThemeColor) {
               minWidth: 'auto',
               color: `${color.text.primary} !important`,
             },
-          }
+          },
         },
         container: {
-          height: "100vh",
+          height: '100vh',
           bgcolor: color.text.secondary,
           backdropFilter: 'blur(5px)',
         },
@@ -329,10 +328,10 @@ export default function componentStyleOverrides(color: ThemeColor) {
           pb: 1,
           border: '1px solid',
           borderColor: color.divider,
-          borderRadius: "10px",
+          borderRadius: '10px',
           backgroundColor: color.background.paper,
-          'textarea': {
-            borderRadius: "8px 8px 0 8px",
+          textarea: {
+            borderRadius: '8px 8px 0 8px',
           },
         },
       },
@@ -343,8 +342,8 @@ export default function componentStyleOverrides(color: ThemeColor) {
           paddingTop: '24px',
           '> button': {
             top: '20px',
-          }
-        }
+          },
+        },
       },
     },
     MuiAlert: {
@@ -384,7 +383,7 @@ export default function componentStyleOverrides(color: ThemeColor) {
           },
           '& .MuiInputBase-input::placeholder': {
             fontSize: '12px',
-          }
+          },
         },
       },
     },
@@ -392,30 +391,30 @@ export default function componentStyleOverrides(color: ThemeColor) {
       styleOverrides: {
         root: {
           borderRadius: '10px !important',
-          backgroundColor: color.background.paper2,
+          backgroundColor: color.background.paper3,
           '.MuiOutlinedInput-notchedOutline': {
-            borderColor: `${color.background.paper2} !important`,
+            borderColor: `${color.background.paper3} !important`,
             borderWidth: '1px !important',
           },
           '&.Mui-focused': {
             '.MuiOutlinedInput-notchedOutline': {
               borderColor: `${color.text.primary} !important`,
               borderWidth: '1px !important',
-            }
+            },
           },
           '&:hover': {
             '.MuiOutlinedInput-notchedOutline': {
               borderColor: `${color.text.primary} !important`,
               borderWidth: '1px !important',
-            }
+            },
           },
           input: {
             height: '19px',
             '&.Mui-disabled': {
               color: `${color.text.secondary} !important`,
               WebkitTextFillColor: `${color.text.secondary} !important`,
-            }
-          }
+            },
+          },
         },
       },
     },
@@ -424,12 +423,12 @@ export default function componentStyleOverrides(color: ThemeColor) {
         root: {
           height: '36px',
           borderRadius: '10px !important',
-          backgroundColor: color.background.paper2,
+          backgroundColor: color.background.paper3,
         },
         select: {
           paddingRight: '0 !important',
-        }
+        },
       },
     },
-  }
+  };
 }
