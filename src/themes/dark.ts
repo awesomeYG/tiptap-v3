@@ -59,24 +59,22 @@ const dark = {
   },
   divider: '#ededed',
   background: {
-    paper2: '#060608',
-    paper: '#18181b',
-    paper3: '#27272a',
-    default: 'rgba(255,255,255,0.6)',
-    chip: 'rgba(145,147,171,0.16)',
-    circle: '#3B476A',
+    default: '#141923',
+    paper: '#141923',
+    paper2: '#141923',
+    paper3: '#202531',
   },
   shadows: 'transparent',
   table: {
     head: {
-      backgroundColor: '#484848',
+      backgroundColor: '#2a2a2a',
       color: '#fff',
     },
     row: {
-      hoverColor: 'rgba(48, 58, 70, 0.4)',
+      hoverColor: 'rgba(255, 255, 255, 0.05)',
     },
     cell: {
-      borderColor: '#484848',
+      borderColor: '#404040',
     },
   },
   charts: {

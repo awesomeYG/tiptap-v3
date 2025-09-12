@@ -39,7 +39,7 @@ const EditorThemeProvider: React.FC<EditorThemeProviderProps> = ({
     if (storageMode) {
       try {
         parseStorageMode = JSON.parse(storageMode);
-      } catch (error) {}
+      } catch (error) { }
     }
 
     if (colors) {
