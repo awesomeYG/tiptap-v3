@@ -255,46 +255,6 @@ export default function componentStyleOverrides(color: ThemeColor) {
         },
       },
     },
-    MuiChip: {
-      styleOverrides: {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        root: ({ ownerState }: { ownerState: any }) => {
-          return {
-            height: '24px',
-            lineHeight: '24px',
-            borderRadius: '8px',
-            '.MuiChip-label': {
-              padding: '0 8px 0 4px',
-            },
-            ...(ownerState.color === 'default' && {
-              backgroundColor: color.background.chip,
-              borderColor: color.text.disabled,
-              '.Mui-focusVisible': {
-                backgroundColor: color.background.chip,
-              },
-            }),
-            ...(ownerState.color === 'error' && {
-              backgroundColor: addOpacityToColor(color.error.main, 0.1),
-            }),
-          };
-        },
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        label: ({ ownerState }: { ownerState: any }) => {
-          return {
-            padding: '0 14px',
-            fontSize: '14px',
-            lineHeight: '24px',
-            ...(ownerState.color === 'default' && {
-              color: color.text.primary,
-            }),
-          };
-        },
-        deleteIcon: {
-          fontSize: '14px',
-          color: color.text.disabled,
-        },
-      },
-    },
     MuiAppBar: {
       defaultProps: {
         elevation: 1,
