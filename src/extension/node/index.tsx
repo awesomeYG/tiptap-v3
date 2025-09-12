@@ -1,3 +1,4 @@
+export * from './Alert';
 export * from './Attachment';
 export * from './Audio';
 export * from './CodeBlockLowlight';

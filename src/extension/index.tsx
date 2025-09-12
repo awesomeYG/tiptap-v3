@@ -11,6 +11,7 @@ import { PLACEHOLDER } from '../contants/placeholder';
 import { GetExtensionsProps } from '../type';
 import { SlashCommands } from './extension';
 import {
+  AlertExtension,
   AudioExtension,
   BlockAttachmentExtension,
   BlockLinkExtension,
@@ -75,6 +76,7 @@ export const getExtensions = ({
     Subscript,
     Superscript,
     TextStyleKit,
+    AlertExtension,
     Highlight.configure({
       multicolor: true,
     }),

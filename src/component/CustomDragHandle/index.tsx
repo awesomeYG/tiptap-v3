@@ -1,4 +1,4 @@
-import { AlignBottomIcon, AlignCenterIcon, AlignJustifyIcon, AlignLeftIcon, AlignRightIcon, AlignTopIcon, ArrowDownSLineIcon, AttachmentLineIcon, BrushLineIcon, CodeBoxLineIcon, DeleteLineIcon, DownloadLineIcon, DraggableIcon, FontSizeIcon, FormatClearIcon, H1Icon, H2Icon, H3Icon, ImageLineIcon, ListCheck3Icon, ListOrdered2Icon, ListUnorderedIcon, MovieLineIcon, Music2LineIcon, QuoteTextIcon, Repeat2LineIcon, ScissorsCutLineIcon, TextIcon } from '@baizhicloud/tiptap/component/Icons';
+import { AlignBottomIcon, AlignCenterIcon, AlignJustifyIcon, AlignLeftIcon, AlignRightIcon, AlignTopIcon, ArrowDownSLineIcon, AttachmentLineIcon, BrushLineIcon, CodeBoxLineIcon, DeleteLineIcon, DownloadLineIcon, DraggableIcon, FontSizeIcon, FormatClearIcon, H1Icon, H2Icon, H3Icon, ImageLineIcon, InsertColumnLeftIcon, ListCheck3Icon, ListOrdered2Icon, ListUnorderedIcon, MovieLineIcon, Music2LineIcon, QuoteTextIcon, Repeat2LineIcon, ScissorsCutLineIcon, TextIcon, TextWrapIcon } from '@baizhicloud/tiptap/component/Icons';
 import { NODE_TYPE_LABEL, NodeTypeEnum } from '@baizhicloud/tiptap/contants/enums';
 import { MenuItem, OnTipFunction } from '@baizhicloud/tiptap/type';
 import { Box, Divider, Typography, useTheme } from '@mui/material';
@@ -694,6 +694,23 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
             }
           }
         }] : []),
+        {
+          label: '插入',
+          key: 'insert',
+          icon: <InsertColumnLeftIcon sx={{ fontSize: '1rem' }} />,
+          children: [
+            {
+              label: '插入高亮块',
+              key: 'insert-highlight-block',
+              icon: <TextWrapIcon sx={{ fontSize: '1rem' }} />,
+              onClick: () => {
+                if (current.node && current.pos !== undefined) {
+                  current.editor.chain().focus().setAlert({ type: 'info' }).run();
+                }
+              }
+            }
+          ]
+        },
         {
           label: `复制${currentNode?.label}`,
           key: 'copy',
