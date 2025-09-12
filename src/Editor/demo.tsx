@@ -6,7 +6,7 @@ import '../index.css';
 
 const Reader = () => {
   const { editor } = useTiptap({
-    editable: true,
+    editable: false,
     exclude: ['invisibleCharacters'],
     onSave: (editor) => {
       console.log(editor.getHTML());
