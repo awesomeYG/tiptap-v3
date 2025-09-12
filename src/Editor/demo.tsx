@@ -9,6 +9,7 @@ const Reader = () => {
     editable: true,
     exclude: ['invisibleCharacters'],
     onSave: (editor) => {
+      console.log(editor.getHTML());
       editor.commands.setContent(editor.getHTML())
     },
     // onTocUpdate: handleTocUpdate,
@@ -55,7 +56,7 @@ const Reader = () => {
         }, 100);
       })
     },
-    content: ''
+    content: `demo.tsx:12 <p>飞机啊的数<code>量咖啡就拉上飞机</code>啊老<a target="_blank" type="icon" href="https://www.baidu.com" title="师的飞机拉多">师的飞机拉多</a>少分，飞<a target="_blank" type="text" href="https://remixicon.com/" title="机啊上飞机拉德">机啊上飞机拉德</a>斯基弗拉索夫卢卡斯到家了飞机啊的数量咖啡就拉上飞机啊老师的飞机拉多少分，飞机啊上飞机拉德斯基分，飞机啊上<a target="_blank" type="icon" href="afsd" title="飞机拉德斯">飞机拉德斯</a>基弗拉索<img src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg" width="760"></p><p></p>`
   });
 
   return <EditorThemeProvider>

@@ -109,6 +109,7 @@ const AttachmentViewWrapper: React.FC<NodeViewProps & EditorFnProps & { attachme
           p: 2,
           ':hover': {
             borderColor: attrs.url === 'error' ? 'error.main' : 'primary.main',
+            color: attrs.url === 'error' ? 'error.main' : 'primary.main',
           },
         }}>
         <Attachment2Icon sx={{
@@ -121,7 +122,7 @@ const AttachmentViewWrapper: React.FC<NodeViewProps & EditorFnProps & { attachme
           }
         }} />
         <Stack sx={{ flex: 1 }} gap={0.5}>
-          <Box sx={{ fontSize: '0.875rem', fontWeight: 'bold', color: attrs.url === 'error' ? 'error.main' : 'inherit' }}>
+          <Box sx={{ fontSize: '0.875rem', fontWeight: 'bold' }}>
             {attrs.title}
           </Box>
           <Box sx={{ fontSize: '0.75rem', color: 'text.secondary' }}>{attrs.size}</Box>

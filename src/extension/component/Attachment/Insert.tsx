@@ -51,16 +51,16 @@ const InsertAttachment = ({
         setUploadProgress(Math.round(progress * 100))
       })
       insertNodeAfterPosition(editor, from, {
-        type: 'inlineAttachment',
-        attrs: { url: result || '', type: 'icon', size: fileSize, title: file.name },
+        type: 'blockAttachment',
+        attrs: { url: result || '', type: 'block', size: fileSize, title: file.name },
       })
       setSuccessCount(prev => prev + 1)
     } catch (error) {
       insertNodeAfterPosition(editor, from, {
-        type: 'inlineAttachment',
+        type: 'blockAttachment',
         attrs: {
           url: 'error',
-          type: 'icon',
+          type: 'block',
           size: fileSize,
           title: error instanceof Error ? error.message : '上传失败',
         }

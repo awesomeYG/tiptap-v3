@@ -42,6 +42,8 @@ const SelectionText = ({ editor, more }: SelectionTextProps) => {
     '#DCEDC8',
   ]
 
+  const [hideColor, setHideColor] = useState(false)
+
   const [active, setActive] = useState({
     quote: false,
     bold: false,
@@ -65,6 +67,11 @@ const SelectionText = ({ editor, more }: SelectionTextProps) => {
       superscript: editor.isActive('superscript'),
       subscript: editor.isActive('subscript'),
     })
+
+    setHideColor(editor.isActive('code')
+      || editor.isActive('codeBlock')
+      || editor.isActive('inlineMath')
+      || editor.isActive('blockMath'))
   }
 
   useEffect(() => {
@@ -76,7 +83,7 @@ const SelectionText = ({ editor, more }: SelectionTextProps) => {
     };
   }, [editor]);
 
-  if (!editor.isEditable) {
+  if (!editor.isEditable || hideColor) {
     return null
   }
 

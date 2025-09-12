@@ -20,7 +20,7 @@ const ReadonlyLink = ({ attrs, selected }: ReadonlyLinkProps) => {
     className={`link-wrapper`}
     data-drag-handle
   >
-    <Box
+    {attrs.type === 'block' ? <Box
       component={'a'}
       href={attrs.href}
       target={attrs.target}
@@ -28,23 +28,25 @@ const ReadonlyLink = ({ attrs, selected }: ReadonlyLinkProps) => {
       data-title={attrs.title}
       data-type={attrs.type}
       sx={{
-        color: 'primary.main',
-        textDecoration: 'none',
+        display: 'block',
+        textDecoration: 'none !important',
       }}
     >
-      {attrs.type === 'block' ? <Stack
+      <Stack
         direction={'row'}
         alignItems={'center'}
         gap={2}
         sx={{
           border: '1px solid',
           borderColor: 'divider',
+          color: 'text.primary',
           cursor: 'pointer',
           borderRadius: 'var(--mui-shape-borderRadius)',
           bgcolor: 'background.paper',
           p: 2,
           ':hover': {
             borderColor: 'primary.main',
+            color: 'primary.main',
           },
         }}
       >
@@ -71,21 +73,29 @@ const ReadonlyLink = ({ attrs, selected }: ReadonlyLinkProps) => {
           <Box sx={{ fontSize: '0.875rem', fontWeight: 'bold' }}>{attrs.title || getLinkTitle(attrs.href)}</Box>
           <Box sx={{ fontSize: '0.75rem', color: 'text.secondary' }}>{attrs.href}</Box>
         </Stack>
-      </Stack> : <Box component={'span'} sx={{ display: 'inline-flex', alignItems: 'baseline', gap: 0.5 }}>
-        {attrs.type === 'icon' && <Avatar sx={{ width: '1rem', height: '1rem', alignSelf: 'center', bgcolor: '#FFFFFF' }} src={favicon}>
-          <LinkIcon sx={{
-            fontSize: '1rem',
-            cursor: 'grab',
-            color: 'primary.main',
-            alignSelf: 'center',
-            ':active': {
-              cursor: 'grabbing',
-            }
-          }} />
-        </Avatar>}
-        {attrs.title || getLinkTitle(attrs.href)}
-      </Box>}
-    </Box>
+      </Stack>
+    </Box> : <Box
+      component={'a'}
+      href={attrs.href}
+      target={attrs.target}
+      rel={attrs.rel}
+      data-title={attrs.title}
+      data-type={attrs.type}
+      sx={{ display: 'inline-flex', alignItems: 'baseline', gap: '2px', color: 'primary.main', fontWeight: 500 }}
+    >
+      {attrs.type === 'icon' && <Avatar sx={{ width: '1rem', height: '1rem', alignSelf: 'center', bgcolor: '#FFFFFF' }} src={favicon}>
+        <LinkIcon sx={{
+          fontSize: '1rem',
+          cursor: 'grab',
+          color: 'primary.main',
+          alignSelf: 'center',
+          ':active': {
+            cursor: 'grabbing',
+          }
+        }} />
+      </Avatar>}
+      {attrs.title || getLinkTitle(attrs.href)}
+    </Box>}
   </NodeViewWrapper>
 }
 

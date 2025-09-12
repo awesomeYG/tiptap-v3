@@ -130,6 +130,7 @@ const LinkViewWrapper: React.FC<NodeViewProps> = ({
         p: 2,
         ':hover': {
           borderColor: 'primary.main',
+          color: 'primary.main',
         },
       }}
     >
@@ -156,7 +157,6 @@ const LinkViewWrapper: React.FC<NodeViewProps> = ({
       onClick={handleShowOperationPopover}
       sx={{
         color: 'primary.main',
-        textDecoration: 'none',
         cursor: 'pointer',
         borderRadius: 'var(--mui-shape-borderRadius)',
         transition: 'background-color 0.2s ease',
@@ -165,7 +165,7 @@ const LinkViewWrapper: React.FC<NodeViewProps> = ({
         },
       }}
     >
-      <Box component={'span'} sx={{ display: 'inline-flex', alignItems: 'baseline', gap: 0.5 }}>
+      <Box component={'span'} sx={{ textDecoration: 'underline', display: 'inline-flex', alignItems: 'baseline', gap: 0.5, fontWeight: 500 }}>
         {attrs.type === 'icon' && <Avatar
           sx={{ width: '1rem', height: '1rem', alignSelf: 'center', bgcolor: '#FFFFFF' }}
           src={favicon}

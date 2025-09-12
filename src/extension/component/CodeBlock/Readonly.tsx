@@ -1,4 +1,4 @@
-import { CopyIcon } from '@ctzhian/tiptap/component/Icons';
+import { FileCopyLineIcon } from '@ctzhian/tiptap/component/Icons';
 import { Box, Stack } from '@mui/material';
 import { NodeViewContent, NodeViewProps, NodeViewWrapper } from '@tiptap/react';
 import React, { useCallback, useState } from 'react';
@@ -33,7 +33,7 @@ const ReadonlyCodeBlock: React.FC<NodeViewProps> = ({
 
   return (
     <NodeViewWrapper
-      className={`codeblock-wrapper ${selected ? 'ProseMirror-selectednode' : ''}`}
+      className={`codeblock-wrapper`}
       data-drag-handle
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
@@ -43,8 +43,7 @@ const ReadonlyCodeBlock: React.FC<NodeViewProps> = ({
         sx={{
           p: '0.75rem 1rem',
           m: 0,
-          borderRadius: 1,
-          bgcolor: 'background.paper',
+          borderRadius: '6px',
           overflow: 'hidden',
           position: 'relative',
         }}
@@ -70,11 +69,10 @@ const ReadonlyCodeBlock: React.FC<NodeViewProps> = ({
               borderRadius: 'var(--mui-shape-borderRadius)',
               cursor: 'pointer',
               userSelect: 'none',
-              '&:hover': {
-                bgcolor: 'action.hover',
-              },
+              bgcolor: 'inherit',
+              color: 'inherit',
             }}>
-            <CopyIcon sx={{ fontSize: '0.875rem', color: 'text.secondary' }} />
+            <FileCopyLineIcon sx={{ fontSize: '0.875rem', color: 'inherit' }} />
             <Box sx={{ fontSize: '0.75rem', lineHeight: 1 }}>
               {copyText}
             </Box>
@@ -98,7 +96,7 @@ const ReadonlyCodeBlock: React.FC<NodeViewProps> = ({
             height: '1rem',
             lineHeight: 1,
             fontSize: '0.875rem',
-            color: 'text.secondary',
+            color: 'inherit',
             letterSpacing: '0.01rem',
           }}
         >

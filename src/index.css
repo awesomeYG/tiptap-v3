@@ -3,16 +3,22 @@
 .tiptap.ProseMirror {
   overflow-y: auto;
   outline: none;
-  color: var(--mui-palette-text-primary);
+  color: var(--mui-palette-text-secondary);
 }
 
 .tiptap.ProseMirror :first-child {
   margin-top: 0;
 }
 
+.tiptap.ProseMirror a {
+  text-decoration: underline;
+}
+
 .tiptap.ProseMirror p {
+  line-height: 1.625;
   margin-top: 0;
-  margin-bottom: 1rem;
+  font-size: 16px;
+  margin-bottom: 16px;
 }
 
 .tiptap.ProseMirror blockquote p {
@@ -22,15 +28,15 @@
 /* blockquote */
 .tiptap.ProseMirror blockquote {
   position: relative;
-  padding-left: 1.5rem;
-  padding-top: 0.375rem;
-  padding-bottom: 0.375rem;
-  margin: 1rem 0;
-  color: var(--mui-palette-text-tertiary);
+  padding: 8px 16px;
+  margin-bottom: 16px;
+  border-radius: 10px;
+  border: 1px solid var(--mui-palette-divider);
+  color: var(--mui-palette-text-secondary);
   background-color: var(--mui-palette-background-paper3);
 }
 
-.tiptap.ProseMirror blockquote::after {
+/* .tiptap.ProseMirror blockquote::after {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -40,14 +46,13 @@
   background-color: var(--mui-palette-divider);
   content: '';
   border-radius: 0;
-}
+} */
 
 /* list */
 .tiptap.ProseMirror ol,
 .tiptap.ProseMirror ul {
-  padding: 0 1.5rem;
-  margin: 1.25rem 1rem 1.25rem 0.4rem;
-  line-height: 2rem;
+  padding: 0 32px;
+  margin: 1.25rem 1rem 1.25rem 0;
   list-style: none;
 }
 
@@ -69,15 +74,32 @@
 }
 
 .tiptap.ProseMirror ul:not([data-type='taskList']) {
-  list-style-image: url('./asset/images/down.svg');
+  list-style: none;
+}
+
+.tiptap.ProseMirror ul:not([data-type='taskList']) li {
+  position: relative;
+  padding-left: 0;
+}
+
+.tiptap.ProseMirror ul:not([data-type='taskList']) li::before {
+  content: '';
+  position: absolute;
+  left: -24px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  background-color: var(--mui-palette-text-primary);
+  border-radius: 50%;
 }
 
 .tiptap.ProseMirror ul:not([data-type='taskList']) ul {
-  list-style-image: url('./asset/images/down.svg');
+  list-style: none;
 }
 
 .tiptap.ProseMirror ul:not([data-type='taskList']) ul ul {
-  list-style-image: url('./asset/images/down.svg');
+  list-style: none;
 }
 
 .tiptap.ProseMirror ul[data-type='taskList'] {
@@ -91,19 +113,27 @@
   display: flex;
 }
 
-.tiptap.ProseMirror ul[data-type='taskList'] li > label {
+.tiptap.ProseMirror ul[data-type='taskList'] li>label {
   flex: 0 0 auto;
-  margin-right: 0.5rem;
   user-select: none;
+  margin-right: 0.5rem;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.tiptap.ProseMirror ul[data-type='taskList'] li > div {
+.tiptap.ProseMirror ul[data-type='taskList'] li>div {
   flex: 1 1 auto;
 }
 
-.tiptap.ProseMirror ul[data-type='taskList'] li[data-checked='true'] > div {
+.tiptap.ProseMirror ul[data-type='taskList'] li[data-checked='true']>div {
   color: var(--mui-palette-text-disabled);
   text-decoration: line-through;
+}
+
+.tiptap.ProseMirror label:has(input[type="checkbox"]) {
+  padding-top: 0;
 }
 
 .tiptap.ProseMirror ul[data-type='taskList'] input[type='checkbox'] {
@@ -120,26 +150,34 @@
   margin-bottom: 0.25rem;
 }
 
+.tiptap.ProseMirror ol li::marker {
+  font-family: monospace;
+}
+
 /* code */
 .tiptap.ProseMirror pre {
   position: relative;
   border-radius: var(--mui-shape-borderRadius);
-  background-color: var(--mui-palette-background-paper3);
+  color: var(--mui-palette-common-white);
+  background-color: #171c19;
+  margin-bottom: 16px;
 }
 
 .tiptap.ProseMirror code {
-  padding: 0 0.25rem;
-  line-height: 1.5rem;
+  padding: 2px 8px;
+  margin: 0 4px;
+  line-height: 1.625;
   font-size: inherit;
   word-break: break-all;
-  color: var(--mui-palette-primary-main);
-  background-color: var(--mui-palette-background-paper3);
-  border-radius: var(--mui-shape-borderRadius);
+  font-weight: 500;
+  background-color: var(--mui-palette-background-paper2);
+  border-radius: 6px;
 }
 
 .tiptap.ProseMirror pre code {
   color: inherit;
   padding: 0;
+  font-weight: normal;
   border-radius: 0;
   background-color: transparent;
   -webkit-text-fill-color: inherit;
@@ -149,7 +187,8 @@
 .tiptap.ProseMirror .cq-details {
   display: flex;
   gap: 0.25rem;
-  margin: 0 0 1rem;
+  line-height: 1.625;
+  margin-bottom: 16px;
   border: 1px solid var(--mui-palette-divider);
   border-radius: var(--mui-shape-borderRadius);
   padding: 0.5rem;
@@ -159,7 +198,7 @@
   font-weight: 600;
 }
 
-.tiptap.ProseMirror .cq-details > button {
+.tiptap.ProseMirror .cq-details>button {
   cursor: pointer;
   background: transparent;
   border-radius: 4px;
@@ -167,16 +206,15 @@
   border: none;
   width: 1.25rem;
   height: 1.25rem;
-  line-height: 1;
   margin-top: 0.1rem;
   padding: 0;
 }
 
-.tiptap.ProseMirror .cq-details > button:hover {
+.tiptap.ProseMirror .cq-details>button:hover {
   background-color: var(--mui-palette-divider);
 }
 
-.tiptap.ProseMirror .cq-details > button::before {
+.tiptap.ProseMirror .cq-details>button::before {
   content: '\25B6';
   width: 100%;
   height: 100%;
@@ -186,22 +224,18 @@
   transition: transform 0.2s ease-in-out;
 }
 
-.tiptap.ProseMirror .cq-details.is-open > button::before {
+.tiptap.ProseMirror .cq-details.is-open>button::before {
   transform: rotate(90deg);
 }
 
-.tiptap.ProseMirror .cq-details > div {
+.tiptap.ProseMirror .cq-details>div {
   display: flex;
   flex-direction: column;
   gap: 1rem;
   width: 100%;
 }
 
-.tiptap.ProseMirror
-  .cq-details
-  > div
-  > [data-type='detailsContent']
-  > :last-child {
+.tiptap.ProseMirror .cq-details>div>[data-type='detailsContent']> :last-child {
   margin-bottom: 0.5rem;
 }
 
@@ -237,48 +271,54 @@
   position: relative;
   color: inherit;
   font-style: inherit;
-  padding-bottom: 0.25rem;
-  margin: 1.5rem 0;
-  border-bottom: 1px solid var(--mui-palette-divider);
+  color: var(--mui-palette-text-primary);
 }
 
 .tiptap.ProseMirror h1 {
-  font-size: 2.2rem;
+  font-size: 30px;
+  line-height: 36px;
   font-weight: 700;
-  color: var(--mui-palette-primary-main);
-  border-bottom: 2px solid var(--mui-palette-primary-main);
+  margin: 48px 0 16px;
 }
 
 .tiptap.ProseMirror h2 {
-  font-size: 1.6rem;
+  font-size: 24px;
+  line-height: 32px;
   font-weight: 700;
+  margin: 40px 0 16px;
 }
 
 .tiptap.ProseMirror h3 {
-  font-size: 1.2rem;
+  font-size: 20px;
+  line-height: 28px;
   font-weight: 600;
+  margin: 36px 0 16px;
 }
 
 .tiptap.ProseMirror h4 {
-  font-size: 1rem;
+  font-size: 18px;
+  line-height: 26px;
   font-weight: 600;
+  margin: 32px 0 16px;
 }
 
 .tiptap.ProseMirror h5 {
-  font-size: 1rem;
+  font-size: 18px;
+  line-height: 26px;
   font-weight: 600;
-  color: var(--mui-palette-text-secondary);
+  margin: 32px 0 16px;
 }
 
 .tiptap.ProseMirror h6 {
-  font-size: 0.9rem;
+  font-size: 16px;
+  line-height: 24px;
   font-weight: 600;
-  color: var(--mui-palette-text-secondary);
+  margin: 32px 0 16px;
 }
 
 /* horizontal rule */
 .tiptap.ProseMirror hr {
-  margin: 2rem 0;
+  margin: 16px 0;
   border: none;
   height: 1px;
   background-color: var(--mui-palette-divider);
@@ -287,7 +327,7 @@
 /* table */
 .tiptap.ProseMirror table {
   border-collapse: collapse;
-  margin: calc(var(--mui-spacing-unit) * 2) 0;
+  margin: 16px 0;
   table-layout: fixed;
 }
 
@@ -301,8 +341,8 @@
   vertical-align: top;
 }
 
-.tiptap.ProseMirror table td > *,
-.tiptap.ProseMirror table th > * {
+.tiptap.ProseMirror table td>*,
+.tiptap.ProseMirror table th>* {
   margin-bottom: 0;
 }
 
@@ -313,11 +353,9 @@
 
 /* 表格选择状态 */
 .tiptap.ProseMirror table .selectedCell:after {
-  background-color: color-mix(
-    in srgb,
-    var(--mui-palette-primary-main) 7%,
-    transparent
-  );
+  background-color: color-mix(in srgb,
+      var(--mui-palette-primary-main) 7%,
+      transparent);
   content: '';
   left: 0;
   right: 0;
@@ -358,7 +396,7 @@
   min-height: 200px;
   min-width: 200px;
   outline: 0px solid transparent;
-  margin-bottom: 1rem;
+  margin-bottom: 16px;
 }
 
 @keyframes rotate-icon {
@@ -369,4 +407,15 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.PhotoView-Slider__Backdrop {
+  background: rgba(33, 34, 45, 0.3) !important;
+  backdrop-filter: blur(5px);
+  transition: none !important;
+  animation-duration: none !important;
+}
+
+.PhotoView-Slider__BannerWrap {
+  background-color: rgba(33, 34, 45, 0.2) !important;
 }

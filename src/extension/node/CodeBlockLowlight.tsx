@@ -7,7 +7,11 @@ import CodeBlockView from "../component/CodeBlock";
 
 const lowlight = createLowlight(all)
 
-const CustomCodeBlock = CodeBlockLowlight.extend({
+const CustomCodeBlock = CodeBlockLowlight.configure({
+  enableTabIndentation: true,
+  tabSize: 1,
+  lowlight,
+}).extend({
   addAttributes() {
     return {
       ...this.parent?.(),
@@ -30,6 +34,4 @@ const CustomCodeBlock = CodeBlockLowlight.extend({
   },
 })
 
-export const CodeBlockLowlightExtension = CustomCodeBlock.configure({
-  lowlight,
-});
+export const CodeBlockLowlightExtension = CustomCodeBlock

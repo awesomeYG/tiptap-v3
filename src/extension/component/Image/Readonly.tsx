@@ -29,7 +29,7 @@ const ReadonlyImage = ({
         bgcolor: 'background.paper',
         '&:hover .image-controls': {
           opacity: 1
-        }
+        },
       }}
     >
       <PhotoProvider>

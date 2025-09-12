@@ -16,7 +16,7 @@ const ReadonlyAttachment = ({ attrs, type }: ReadonlyAttachmentProps) => {
     as={type === 'block' ? 'div' : 'span'}
   >
     <Box component='a' href={attrs.url} target='_blank' download={attrs.title} sx={{
-      textDecoration: 'none',
+      textDecoration: 'none !important',
       color: 'inherit',
     }}>
       {type === 'block' ? <Stack direction={'row'} alignItems={'center'} gap={2}
@@ -29,6 +29,7 @@ const ReadonlyAttachment = ({ attrs, type }: ReadonlyAttachmentProps) => {
           p: 2,
           ':hover': {
             borderColor: attrs.url === 'error' ? 'error.main' : 'primary.main',
+            color: attrs.url === 'error' ? 'error.main' : 'primary.main',
           },
         }}>
         <Attachment2Icon sx={{
@@ -41,7 +42,7 @@ const ReadonlyAttachment = ({ attrs, type }: ReadonlyAttachmentProps) => {
           }
         }} />
         <Stack sx={{ flex: 1 }} gap={0.5}>
-          <Box sx={{ fontSize: '0.875rem', fontWeight: 'bold', color: attrs.url === 'error' ? 'error.main' : 'inherit' }}>
+          <Box sx={{ fontSize: '0.875rem', fontWeight: 'bold' }}>
             {attrs.title}
           </Box>
           <Box sx={{ fontSize: '0.75rem', color: 'text.secondary' }}>{attrs.size}</Box>

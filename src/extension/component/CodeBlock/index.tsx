@@ -1,7 +1,7 @@
 import {
   ArrowDownSLineIcon,
-  CopyIcon,
-  TitleIcon,
+  FileCopyLineIcon,
+  TitleIcon
 } from '@ctzhian/tiptap/component/Icons';
 import { languages } from '@ctzhian/tiptap/contants/highlight';
 import { Box, MenuItem, Select, Stack, TextField } from '@mui/material';
@@ -86,8 +86,7 @@ const CodeBlockView: React.FC<NodeViewProps> = (props) => {
 
   return (
     <NodeViewWrapper
-      className={`codeblock-wrapper ${selected ? 'ProseMirror-selectednode' : ''
-        }`}
+      className={`codeblock-wrapper ${selected ? 'ProseMirror-selectednode' : ''}`}
       data-drag-handle
     >
       <Box
@@ -96,9 +95,8 @@ const CodeBlockView: React.FC<NodeViewProps> = (props) => {
           p: '1.75rem 1rem 0.75rem',
           m: 0,
           borderRadius: showTitleInput
-            ? 'var(--mui-shape-borderRadius) var(--mui-shape-borderRadius) 0 0 !important'
-            : 'var(--mui-shape-borderRadius)',
-          bgcolor: 'background.paper3',
+            ? '6px 6px 0 0 !important'
+            : '6px',
           overflow: 'hidden',
         }}
       >
@@ -126,16 +124,15 @@ const CodeBlockView: React.FC<NodeViewProps> = (props) => {
               px: 0,
               height: '1.25rem',
               fontSize: '0.75rem',
-              '&:hover': {
-                bgcolor: 'action.hover',
-              },
-              '&:focus': {
-                bgcolor: 'action.selected',
-              },
+              bgcolor: 'inherit',
+              color: 'inherit',
               '&.MuiOutlinedInput-root .MuiSelect-select': {
                 p: 0,
                 pl: 1,
                 pr: 'calc(var(--mui-spacing-unit) * 3) !important',
+              },
+              '& .MuiSelect-icon': {
+                color: 'inherit',
               },
               '& .MuiOutlinedInput-notchedOutline': {
                 border: 'none',
@@ -146,7 +143,7 @@ const CodeBlockView: React.FC<NodeViewProps> = (props) => {
                 <ArrowDownSLineIcon
                   className={className}
                   {...rest}
-                  sx={{ fontSize: '1rem', color: 'text.secondary' }}
+                  sx={{ fontSize: '1rem' }}
                 />
               );
             }}
@@ -190,8 +187,8 @@ const CodeBlockView: React.FC<NodeViewProps> = (props) => {
                 },
               }}
             >
-              <CopyIcon
-                sx={{ fontSize: '0.875rem', color: 'text.secondary' }}
+              <FileCopyLineIcon
+                sx={{ fontSize: '0.875rem', color: 'inherit' }}
               />
               <Box sx={{ fontSize: '0.75rem', lineHeight: 1 }}>{copyText}</Box>
             </Stack>
@@ -203,15 +200,13 @@ const CodeBlockView: React.FC<NodeViewProps> = (props) => {
               sx={{
                 px: 1,
                 py: 0.5,
-                borderRadius: 'var(--mui-shape-borderRadius)',
                 cursor: 'pointer',
-                '&:hover': {
-                  bgcolor: 'action.hover',
-                },
+                bgcolor: 'inherit',
+                color: 'inherit',
               }}
             >
               <TitleIcon
-                sx={{ fontSize: '0.875rem', color: 'text.secondary' }}
+                sx={{ fontSize: '0.875rem', color: 'inherit' }}
               />
               <Box sx={{ fontSize: '0.75rem', lineHeight: 1 }}>标题</Box>
             </Stack>
