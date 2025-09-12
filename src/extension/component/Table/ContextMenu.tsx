@@ -1,4 +1,4 @@
-import { ToolbarItem } from '@baizhicloud/tiptap/component/Toolbar';
+import { ToolbarItem } from '@ctzhian/tiptap/component/Toolbar';
 import {
   Box,
   Divider,

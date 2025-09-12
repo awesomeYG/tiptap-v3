@@ -1,4 +1,4 @@
-import { getLinkTitle } from '@baizhicloud/tiptap/util'
+import { getLinkTitle } from '@ctzhian/tiptap/util'
 import { mergeAttributes, Node, nodePasteRule, type PasteRuleMatch } from '@tiptap/core'
 import type { Plugin } from '@tiptap/pm/state'
 import { ReactNodeViewRenderer } from '@tiptap/react'

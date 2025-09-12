@@ -1,5 +1,5 @@
-import { UploadFunction } from "@baizhicloud/tiptap/type";
-import { formatFileSize, getFileType } from "@baizhicloud/tiptap/util";
+import { UploadFunction } from "@ctzhian/tiptap/type";
+import { formatFileSize, getFileType } from "@ctzhian/tiptap/util";
 import FileHandler from "@tiptap/extension-file-handler";
 import { getImageDimensionsFromFile } from "../component/Image";
 

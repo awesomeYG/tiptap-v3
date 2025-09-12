@@ -1,4 +1,4 @@
-import { getShortcutKeyText } from "@baizhicloud/tiptap/util"
+import { getShortcutKeyText } from "@ctzhian/tiptap/util"
 import { Box, MenuItem, Select, Stack, Tooltip } from "@mui/material"
 import { Editor } from "@tiptap/react"
 import React, { useEffect, useState } from "react"

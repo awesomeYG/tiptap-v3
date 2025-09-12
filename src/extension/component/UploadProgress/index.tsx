@@ -1,4 +1,4 @@
-import { AttachmentLineIcon, ImageLineIcon, MovieLineIcon } from '@baizhicloud/tiptap/component/Icons';
+import { AttachmentLineIcon, ImageLineIcon, MovieLineIcon } from '@ctzhian/tiptap/component/Icons';
 import { Box, CircularProgress, Stack } from '@mui/material';
 import { NodeViewProps, NodeViewWrapper } from '@tiptap/react';
 import React from 'react';

@@ -1,4 +1,4 @@
-import { EditorFnProps } from "@baizhicloud/tiptap/type";
+import { EditorFnProps } from "@ctzhian/tiptap/type";
 import { BlockMath, InlineMath } from "@tiptap/extension-mathematics";
 import { ReactNodeViewRenderer } from "@tiptap/react";
 import React from "react";

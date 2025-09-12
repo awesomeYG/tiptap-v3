@@ -2,8 +2,8 @@ import {
   ArrowDownSLineIcon,
   CopyIcon,
   TitleIcon,
-} from '@baizhicloud/tiptap/component/Icons';
-import { languages } from '@baizhicloud/tiptap/contants/highlight';
+} from '@ctzhian/tiptap/component/Icons';
+import { languages } from '@ctzhian/tiptap/contants/highlight';
 import { Box, MenuItem, Select, Stack, TextField } from '@mui/material';
 import { NodeViewContent, NodeViewProps, NodeViewWrapper } from '@tiptap/react';
 import React, { useCallback, useState } from 'react';

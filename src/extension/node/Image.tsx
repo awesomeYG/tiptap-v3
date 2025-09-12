@@ -1,4 +1,4 @@
-import { EditorFnProps } from "@baizhicloud/tiptap/type";
+import { EditorFnProps } from "@ctzhian/tiptap/type";
 import Image from "@tiptap/extension-image";
 import { ReactNodeViewRenderer } from "@tiptap/react";
 import ImageViewWrapper from "../component/Image";

@@ -1,4 +1,4 @@
-import { SlashCommandsListProps, SlashCommandsListRef } from '@baizhicloud/tiptap/type'
+import { SlashCommandsListProps, SlashCommandsListRef } from '@ctzhian/tiptap/type'
 import {
   Box,
   MenuItem,

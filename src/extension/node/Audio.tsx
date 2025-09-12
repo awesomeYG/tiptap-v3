@@ -1,4 +1,4 @@
-import { EditorFnProps } from '@baizhicloud/tiptap/type'
+import { EditorFnProps } from '@ctzhian/tiptap/type'
 import { mergeAttributes, Node } from '@tiptap/core'
 import { ReactNodeViewRenderer } from '@tiptap/react'
 import AudioViewWrapper from '../component/Audio'

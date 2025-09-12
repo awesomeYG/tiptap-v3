@@ -6,7 +6,7 @@ import {
   FontSizeIcon,
   ListOrdered2Icon,
   ListUnorderedIcon
-} from '@baizhicloud/tiptap/component/Icons'
+} from '@ctzhian/tiptap/component/Icons'
 import { Box, MenuItem, Paper, Select, Stack } from '@mui/material'
 import { Editor } from '@tiptap/react'
 import React, { useEffect, useRef, useState } from 'react'

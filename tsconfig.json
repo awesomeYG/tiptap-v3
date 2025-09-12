@@ -10,8 +10,8 @@
     "baseUrl": "./",
     "paths": {
       "@@/*": [".dumi/tmp/*"],
-      "@baizhicloud/tiptap": ["src"],
-      "@baizhicloud/tiptap/*": ["src/*", "*"]
+      "@ctzhian/tiptap": ["src"],
+      "@ctzhian/tiptap/*": ["src/*", "*"]
     }
   },
   "include": [".dumirc.ts", "src/**/*"]

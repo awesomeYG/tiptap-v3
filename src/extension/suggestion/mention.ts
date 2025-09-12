@@ -1,5 +1,5 @@
-import { MentionExtensionProps } from '@baizhicloud/tiptap/type'
-import { updatePosition } from '@baizhicloud/tiptap/util'
+import { MentionExtensionProps } from '@ctzhian/tiptap/type'
+import { updatePosition } from '@ctzhian/tiptap/util'
 import { MentionOptions } from '@tiptap/extension-mention'
 import { Editor, ReactRenderer } from '@tiptap/react'
 import { SuggestionProps } from '@tiptap/suggestion'

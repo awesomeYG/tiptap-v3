@@ -1,4 +1,4 @@
-import { Editor, EditorThemeProvider, EditorToolbar, useTiptap } from '@baizhicloud/tiptap';
+import { Editor, EditorThemeProvider, EditorToolbar, useTiptap } from '@ctzhian/tiptap';
 import { Box } from '@mui/material';
 import React from 'react';
 import { AiGenerate2Icon } from '../component/Icons';

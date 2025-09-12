@@ -1,4 +1,4 @@
-import { EditorProps } from '@baizhicloud/tiptap/type';
+import { EditorProps } from '@ctzhian/tiptap/type';
 import { EditorContent } from '@tiptap/react';
 import React from 'react';
 import SelectionText from '../component/CustomBubbleMenu/SelectionText';

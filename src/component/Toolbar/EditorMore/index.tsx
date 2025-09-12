@@ -1,6 +1,6 @@
-import { MoreLineIcon, Notification3LineIcon } from "@baizhicloud/tiptap/component/Icons";
-import ToolbarItem from "@baizhicloud/tiptap/component/Toolbar/Item";
-import { ToolbarItemType } from "@baizhicloud/tiptap/type";
+import { MoreLineIcon, Notification3LineIcon } from "@ctzhian/tiptap/component/Icons";
+import ToolbarItem from "@ctzhian/tiptap/component/Toolbar/Item";
+import { ToolbarItemType } from "@ctzhian/tiptap/type";
 import { Box, MenuItem, Select, Stack } from "@mui/material";
 import React, { useState } from "react";
 import NotificationDialog from "./NotificationDialog";

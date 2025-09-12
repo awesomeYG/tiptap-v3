@@ -1,5 +1,5 @@
-import { FloatingPopover } from "@baizhicloud/tiptap/component"
-import { LinkIcon } from "@baizhicloud/tiptap/component/Icons"
+import { FloatingPopover } from "@ctzhian/tiptap/component"
+import { LinkIcon } from "@ctzhian/tiptap/component/Icons"
 import { Box, Button, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Stack, TextField } from "@mui/material"
 import { Editor } from "@tiptap/core"
 import { NodeViewProps, NodeViewWrapper } from "@tiptap/react"

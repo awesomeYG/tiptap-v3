@@ -2,7 +2,7 @@
 // import { Editor } from "@tiptap/react";
 // import React from "react";
 // // @ts-ignore
-// import { CodeBoxLineIcon, H1Icon, H2Icon, H3Icon, ListCheck3Icon, ListOrdered2Icon, ListUnorderedIcon, QuoteTextIcon, Table2Icon } from "@baizhicloud/tiptap/component/Icons";
+// import { CodeBoxLineIcon, H1Icon, H2Icon, H3Icon, ListCheck3Icon, ListOrdered2Icon, ListUnorderedIcon, QuoteTextIcon, Table2Icon } from "@ctzhian/tiptap/component/Icons";
 // import { FloatingMenu } from "@tiptap/react/menus";
 // import ToolItem from "../ToolItem";
 

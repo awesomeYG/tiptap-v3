@@ -1,5 +1,5 @@
 // import { Avatar, Box, Link, Stack } from "@mui/material"
-// import { LinkIcon } from "@baizhicloud/tiptap/component/Icons"
+// import { LinkIcon } from "@ctzhian/tiptap/component/Icons"
 // import React from "react"
 // import { LinkAttributes } from "."
 

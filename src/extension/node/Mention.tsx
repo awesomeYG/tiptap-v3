@@ -1,4 +1,4 @@
-import { MentionExtensionProps } from "@baizhicloud/tiptap/type";
+import { MentionExtensionProps } from "@ctzhian/tiptap/type";
 import Mention from "@tiptap/extension-mention";
 import mentionSuggestion from "../suggestion/mention";
 

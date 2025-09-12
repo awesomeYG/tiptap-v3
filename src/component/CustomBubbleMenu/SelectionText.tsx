@@ -1,5 +1,5 @@
-import { BoldIcon, CodeLineIcon, ItalicIcon, LinkIcon, ResetLeftFillIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, UnderlineIcon } from '@baizhicloud/tiptap/component/Icons'
-import { MenuItem } from '@baizhicloud/tiptap/type'
+import { BoldIcon, CodeLineIcon, ItalicIcon, LinkIcon, ResetLeftFillIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, UnderlineIcon } from '@ctzhian/tiptap/component/Icons'
+import { MenuItem } from '@ctzhian/tiptap/type'
 import { Box, IconButton, Paper, Stack, useTheme } from '@mui/material'
 import { Editor } from '@tiptap/react'
 import { BubbleMenu } from '@tiptap/react/menus'

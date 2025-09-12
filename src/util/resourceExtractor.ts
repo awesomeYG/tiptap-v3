@@ -1,4 +1,4 @@
-import { NodeTypeEnum } from '@baizhicloud/tiptap/contants/enums'
+import { NodeTypeEnum } from '@ctzhian/tiptap/contants/enums'
 import { Node } from '@tiptap/pm/model'
 
 /**

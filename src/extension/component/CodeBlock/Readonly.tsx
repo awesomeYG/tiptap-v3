@@ -1,4 +1,4 @@
-import { CopyIcon } from '@baizhicloud/tiptap/component/Icons';
+import { CopyIcon } from '@ctzhian/tiptap/component/Icons';
 import { Box, Stack } from '@mui/material';
 import { NodeViewContent, NodeViewProps, NodeViewWrapper } from '@tiptap/react';
 import React, { useCallback, useState } from 'react';

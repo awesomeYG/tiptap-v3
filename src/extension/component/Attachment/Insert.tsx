@@ -1,7 +1,7 @@
 
-import { Attachment2Icon } from "@baizhicloud/tiptap/component/Icons"
-import { EditorFnProps } from "@baizhicloud/tiptap/type"
-import { insertNodeAfterPosition } from "@baizhicloud/tiptap/util"
+import { Attachment2Icon } from "@ctzhian/tiptap/component/Icons"
+import { EditorFnProps } from "@ctzhian/tiptap/type"
+import { insertNodeAfterPosition } from "@ctzhian/tiptap/util"
 import { Box, CircularProgress } from "@mui/material"
 import { Editor } from "@tiptap/core"
 import { NodeViewWrapper } from "@tiptap/react"

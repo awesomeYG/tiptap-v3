@@ -1,4 +1,4 @@
-import { EditorFnProps } from "@baizhicloud/tiptap/type"
+import { EditorFnProps } from "@ctzhian/tiptap/type"
 import { Box, Button, Stack } from "@mui/material"
 import { NodeViewWrapper } from "@tiptap/react"
 import React, { useRef, useState } from "react"

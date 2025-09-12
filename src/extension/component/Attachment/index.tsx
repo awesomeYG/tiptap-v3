@@ -1,7 +1,7 @@
-import { FloatingPopover } from "@baizhicloud/tiptap/component";
-import { Attachment2Icon, CarouselViewIcon, DeleteLineIcon, DownloadLineIcon, EditBoxLineIcon, ScrollToBottomLineIcon } from "@baizhicloud/tiptap/component/Icons";
-import { ToolbarItem } from "@baizhicloud/tiptap/component/Toolbar";
-import { EditorFnProps } from "@baizhicloud/tiptap/type";
+import { FloatingPopover } from "@ctzhian/tiptap/component";
+import { Attachment2Icon, CarouselViewIcon, DeleteLineIcon, DownloadLineIcon, EditBoxLineIcon, ScrollToBottomLineIcon } from "@ctzhian/tiptap/component/Icons";
+import { ToolbarItem } from "@ctzhian/tiptap/component/Toolbar";
+import { EditorFnProps } from "@ctzhian/tiptap/type";
 import { Box, Button, Divider, Stack, TextField } from "@mui/material";
 import { NodeViewProps, NodeViewWrapper } from "@tiptap/react";
 import React, { useEffect, useState } from "react";

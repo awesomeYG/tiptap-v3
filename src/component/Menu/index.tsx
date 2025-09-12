@@ -1,4 +1,4 @@
-import { MenuItem, MenuProps } from '@baizhicloud/tiptap/type';
+import { MenuItem, MenuProps } from '@ctzhian/tiptap/type';
 import {
   Box,
   Popover,

@@ -1,4 +1,4 @@
-import { getShortcutKeyText } from '@baizhicloud/tiptap/util';
+import { getShortcutKeyText } from '@ctzhian/tiptap/util';
 import { Theme } from '@emotion/react';
 import { Box, Button, Stack, SxProps, Tooltip } from '@mui/material';
 import React from 'react';

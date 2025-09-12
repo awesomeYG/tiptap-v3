@@ -1,6 +1,6 @@
-import { getExtensions } from '@baizhicloud/tiptap/extension'
-import { UseTiptapProps, UseTiptapReturn } from '@baizhicloud/tiptap/type'
-import { migrateMathStrings } from '@baizhicloud/tiptap/util'
+import { getExtensions } from '@ctzhian/tiptap/extension'
+import { UseTiptapProps, UseTiptapReturn } from '@ctzhian/tiptap/type'
+import { migrateMathStrings } from '@ctzhian/tiptap/util'
 import { useEditor, UseEditorOptions } from '@tiptap/react'
 import { renderToMarkdown } from '@tiptap/static-renderer/pm/markdown'
 

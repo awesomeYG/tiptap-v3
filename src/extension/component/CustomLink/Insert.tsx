@@ -1,7 +1,7 @@
 // import { Box, Button, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Stack, TextField } from "@mui/material"
 // import { MarkViewContent } from "@tiptap/react"
-// import FloatingPopover from "@baizhicloud/tiptap/component/FloatingPopover"
-// import { LinkIcon } from "@baizhicloud/tiptap/component/Icons"
+// import FloatingPopover from "@ctzhian/tiptap/component/FloatingPopover"
+// import { LinkIcon } from "@ctzhian/tiptap/component/Icons"
 // import React, { useRef, useState } from "react"
 // import { LinkAttributes } from "."
 

@@ -1,5 +1,5 @@
-import { SHORTCUT_KEYS } from "@baizhicloud/tiptap/contants/shortcut-key"
-import { getShortcutKeyText } from "@baizhicloud/tiptap/util"
+import { SHORTCUT_KEYS } from "@ctzhian/tiptap/contants/shortcut-key"
+import { getShortcutKeyText } from "@ctzhian/tiptap/util"
 import { Box, Dialog, DialogContent, DialogTitle, Stack } from "@mui/material"
 import React from "react"
 

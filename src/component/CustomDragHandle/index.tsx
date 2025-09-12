@@ -1,6 +1,6 @@
-import { AlignBottomIcon, AlignCenterIcon, AlignJustifyIcon, AlignLeftIcon, AlignRightIcon, AlignTopIcon, ArrowDownSLineIcon, AttachmentLineIcon, BrushLineIcon, CodeBoxLineIcon, DeleteLineIcon, DownloadLineIcon, DraggableIcon, FontSizeIcon, FormatClearIcon, H1Icon, H2Icon, H3Icon, ImageLineIcon, InsertColumnLeftIcon, ListCheck3Icon, ListOrdered2Icon, ListUnorderedIcon, MovieLineIcon, Music2LineIcon, QuoteTextIcon, Repeat2LineIcon, ScissorsCutLineIcon, TextIcon, TextWrapIcon } from '@baizhicloud/tiptap/component/Icons';
-import { NODE_TYPE_LABEL, NodeTypeEnum } from '@baizhicloud/tiptap/contants/enums';
-import { MenuItem, OnTipFunction } from '@baizhicloud/tiptap/type';
+import { AlignBottomIcon, AlignCenterIcon, AlignJustifyIcon, AlignLeftIcon, AlignRightIcon, AlignTopIcon, ArrowDownSLineIcon, AttachmentLineIcon, BrushLineIcon, CodeBoxLineIcon, DeleteLineIcon, DownloadLineIcon, DraggableIcon, FontSizeIcon, FormatClearIcon, H1Icon, H2Icon, H3Icon, ImageLineIcon, InsertColumnLeftIcon, ListCheck3Icon, ListOrdered2Icon, ListUnorderedIcon, MovieLineIcon, Music2LineIcon, QuoteTextIcon, Repeat2LineIcon, ScissorsCutLineIcon, TextIcon, TextWrapIcon } from '@ctzhian/tiptap/component/Icons';
+import { NODE_TYPE_LABEL, NodeTypeEnum } from '@ctzhian/tiptap/contants/enums';
+import { MenuItem, OnTipFunction } from '@ctzhian/tiptap/type';
 import { Box, Divider, Typography, useTheme } from '@mui/material';
 import DragHandle from '@tiptap/extension-drag-handle-react';
 import { Fragment, Node, Slice } from '@tiptap/pm/model';

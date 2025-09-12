@@ -1,5 +1,5 @@
-import { FloatingPopover } from "@baizhicloud/tiptap/component"
-import { DownloadLineIcon, PauseLineIcon, PlayLineIcon, SpeedLineIcon, VolumeMuteLineIcon, VolumeUpLineIcon } from "@baizhicloud/tiptap/component/Icons"
+import { FloatingPopover } from "@ctzhian/tiptap/component"
+import { DownloadLineIcon, PauseLineIcon, PlayLineIcon, SpeedLineIcon, VolumeMuteLineIcon, VolumeUpLineIcon } from "@ctzhian/tiptap/component/Icons"
 import { Box, IconButton, MenuItem, MenuList, Paper, Slider, Stack, Typography } from "@mui/material"
 import { NodeViewWrapper } from "@tiptap/react"
 import React, { useEffect, useRef, useState } from "react"

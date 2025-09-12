@@ -1,4 +1,4 @@
-import { Attachment2Icon } from "@baizhicloud/tiptap/component/Icons"
+import { Attachment2Icon } from "@ctzhian/tiptap/component/Icons"
 import { Box, Stack } from "@mui/material"
 import { NodeViewProps, NodeViewWrapper } from "@tiptap/react"
 import React from "react"

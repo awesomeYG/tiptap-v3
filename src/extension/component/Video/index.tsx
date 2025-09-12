@@ -1,5 +1,5 @@
-import { DeleteLineIcon } from "@baizhicloud/tiptap/component/Icons"
-import { EditorFnProps } from "@baizhicloud/tiptap/type"
+import { DeleteLineIcon } from "@ctzhian/tiptap/component/Icons"
+import { EditorFnProps } from "@ctzhian/tiptap/type"
 import { Box, IconButton, Tooltip } from "@mui/material"
 import { NodeViewProps, NodeViewWrapper } from '@tiptap/react'
 import React, { useEffect, useRef, useState } from "react"
