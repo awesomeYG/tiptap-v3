@@ -380,6 +380,39 @@
   background-color: var(--mui-palette-background-default);
 }
 
+/* 表格悬停时显示所有列边框 - 只在编辑模式下生效 */
+.tiptap.ProseMirror[contenteditable="true"] table:hover {
+  border-left: 1px dotted var(--mui-palette-divider);
+  border-right: 1px dotted var(--mui-palette-divider);
+}
+
+.tiptap.ProseMirror[contenteditable="true"] table:hover td,
+.tiptap.ProseMirror[contenteditable="true"] table:hover th {
+  border-right-color: var(--mui-palette-divider);
+  border-right-style: dotted;
+}
+
+.tiptap.ProseMirror[contenteditable="true"] table:hover td:last-child,
+.tiptap.ProseMirror[contenteditable="true"] table:hover th:last-child {
+  border-right-color: transparent;
+}
+
+.tiptap.ProseMirror[contenteditable="false"] table {
+  border-left: 1px dotted var(--mui-palette-divider);
+  border-right: 1px dotted var(--mui-palette-divider);
+}
+
+.tiptap.ProseMirror[contenteditable="false"] table td,
+.tiptap.ProseMirror[contenteditable="false"] table th {
+  border-right-color: var(--mui-palette-divider);
+  border-right-style: dotted;
+}
+
+.tiptap.ProseMirror[contenteditable="false"] table td:last-child,
+.tiptap.ProseMirror[contenteditable="false"] table th:last-child {
+  border-right-color: transparent;
+}
+
 /* 表格选择状态 */
 .tiptap.ProseMirror[contenteditable="true"] table .selectedCell:after {
   background-color: color-mix(in srgb, var(--mui-palette-primary-main) 12%, transparent);
@@ -391,6 +424,8 @@
   pointer-events: none;
   position: absolute;
   z-index: 2;
+  /* border-radius: 4px; */
+  /* border: 2px solid var(--mui-palette-primary-main); */
 }
 
 .tiptap.ProseMirror[contenteditable="true"] table .selectedCell {
