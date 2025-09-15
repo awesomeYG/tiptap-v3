@@ -6,7 +6,7 @@ import '../index.css';
 
 const Reader = () => {
   const { editor } = useTiptap({
-    editable: false,
+    editable: true,
     exclude: ['invisibleCharacters'],
     onSave: (editor) => {
       console.log(editor.getHTML());
@@ -56,7 +56,8 @@ const Reader = () => {
         }, 100);
       })
     },
-    content: `<p>demo.tsx:12</p><p>飞机啊的数<code>量咖啡就拉上飞机</code>啊老<a target="_blank" type="icon" href="https://www.baidu.com" title="师的飞机拉多">师的飞机拉多</a>少分，飞<a target="_blank" type="text" href="https://remixicon.com/" title="机啊上飞机拉德">机啊上飞机拉德</a>斯基弗拉索夫卢卡斯到家了飞机啊的数量咖啡就拉上飞机啊老师的飞机拉多少分，飞机啊上飞机拉德斯基分，飞机啊上<a target="_blank" type="icon" href="afsd" title="飞机拉德斯">飞机拉德斯</a>基弗拉索</p><div class="tableWrapper"><table style="min-width: 436px;"><colgroup><col style="width: 136px;"><col style="min-width: 100px;"><col style="min-width: 100px;"><col style="min-width: 100px;"></colgroup><tbody><tr class="table-row"><th class="table-header" colspan="1" rowspan="1" colwidth="136"><p>文本一</p></th><th class="table-header" colspan="1" rowspan="1"><p>文本而</p></th><th class="table-header" colspan="1" rowspan="1"><p>文本三</p></th><th class="table-header" colspan="1" rowspan="1"><p>文本四</p></th></tr><tr class="table-row"><td colspan="1" rowspan="1" colwidth="136" data-background-color="transparent" style="background-color: transparent;"><p>测试数据</p></td><td colspan="1" rowspan="1" data-background-color="transparent" style="background-color: transparent;"><p>历史事件</p></td><td colspan="1" rowspan="1" data-background-color="transparent" style="background-color: transparent;"><p>福克斯</p></td><td colspan="1" rowspan="1" data-background-color="transparent" style="background-color: transparent;"><p>拉萨</p></td></tr><tr class="table-row"><td colspan="1" rowspan="1" colwidth="136" data-background-color="transparent" style="background-color: transparent;"><p>收拾收拾</p></td><td colspan="1" rowspan="1" data-background-color="transparent" style="background-color: transparent;"><p>福克斯啦发大水</p></td><td colspan="1" rowspan="1" data-background-color="transparent" style="background-color: transparent;"><p>重新你哦问粉丝</p></td><td colspan="1" rowspan="1" data-background-color="transparent" style="background-color: transparent;"><p>飞机啊圣诞快乐</p></td></tr></tbody></table></div><p></p>`
+    content: `<p>demo.tsx:12</p><pre data-title="数量飞机"><code>export { default as darkPalette } from './dark';
+export { default as lightPalette } from './light';</code></pre><p></p>`
   });
 
   return <EditorThemeProvider mode='light'>

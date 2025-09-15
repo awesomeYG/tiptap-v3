@@ -159,12 +159,14 @@
 }
 
 /* code */
+.tiptap.ProseMirror .codeblock-wrapper {
+  margin-bottom: 16px;
+}
+
 .tiptap.ProseMirror pre {
   position: relative;
-  border-radius: var(--mui-shape-borderRadius);
   color: var(--mui-palette-common-white);
   background-color: #171c19;
-  margin-bottom: 16px;
 }
 
 .tiptap.ProseMirror code {
@@ -360,6 +362,11 @@
   transition: all 0.2s ease-in-out;
 }
 
+.tiptap.ProseMirror table tbody tr:first-child th,
+.tiptap.ProseMirror table tbody tr:first-child td {
+  border-top: 1px solid var(--mui-palette-divider);
+}
+
 .tiptap.ProseMirror table td>*,
 .tiptap.ProseMirror table th>* {
   margin-bottom: 0;
@@ -464,21 +471,17 @@
 
 /* 表格滚动条样式 */
 .tiptap.ProseMirror .tableWrapper::-webkit-scrollbar {
-  height: 8px;
+  height: 2px;
 }
 
 .tiptap.ProseMirror .tableWrapper::-webkit-scrollbar-track {
-  background: var(--mui-palette-background-paper2);
-  border-radius: 4px;
-}
-
-.tiptap.ProseMirror .tableWrapper::-webkit-scrollbar-thumb {
   background: var(--mui-palette-divider);
   border-radius: 4px;
 }
 
-.tiptap.ProseMirror .tableWrapper::-webkit-scrollbar-thumb:hover {
+.tiptap.ProseMirror .tableWrapper::-webkit-scrollbar-thumb {
   background: var(--mui-palette-text-disabled);
+  border-radius: 4px;
 }
 
 /* youtube */
