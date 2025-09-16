@@ -1,5 +1,6 @@
 export * from './component/Icons';
 export { default as Editor } from './Editor';
+export { default as EditorDiff } from './EditorDiff';
 export { default as EditorThemeProvider } from './EditorThemeProvider';
 export { default as EditorToolbar } from './EditorToolbar';
 export { default as useTiptap } from './hook';

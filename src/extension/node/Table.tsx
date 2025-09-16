@@ -7,13 +7,7 @@ import { TextSelection } from '@tiptap/pm/state';
 import { createTableContextMenuPlugin } from '../component/Table';
 
 export const TableExtension = ({ editable }: { editable: boolean }) => [
-  Table.configure({
-    handleWidth: 5,
-    cellMinWidth: 100,
-    resizable: editable,
-    lastColumnResizable: editable,
-    allowTableNodeSelection: editable,
-  }).extend({
+  Table.extend({
     addCommands() {
       return {
         ...this.parent?.(),
@@ -60,6 +54,12 @@ export const TableExtension = ({ editable }: { editable: boolean }) => [
       const wrapper = ['div', { class: 'tableWrapper' }, originalRender];
       return wrapper;
     },
+  }).configure({
+    handleWidth: 5,
+    cellMinWidth: 100,
+    resizable: editable,
+    lastColumnResizable: editable,
+    allowTableNodeSelection: editable,
   }),
   TableHeader.configure({
     HTMLAttributes: {

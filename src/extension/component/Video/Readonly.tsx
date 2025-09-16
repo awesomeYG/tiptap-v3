@@ -24,7 +24,6 @@ const ReadonlyVideo = ({
         borderColor: 'divider',
         borderRadius: 'var(--mui-shape-borderRadius)',
         p: '0.25rem',
-        bgcolor: 'background.paper',
         '&:hover .video-controls': {
           opacity: 1
         }

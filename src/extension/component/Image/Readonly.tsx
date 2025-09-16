@@ -26,7 +26,6 @@ const ReadonlyImage = ({
         borderColor: 'divider',
         borderRadius: 'var(--mui-shape-borderRadius)',
         p: '0.25rem',
-        bgcolor: 'background.paper',
         '&:hover .image-controls': {
           opacity: 1
         },

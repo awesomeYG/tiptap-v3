@@ -22,7 +22,6 @@ const ReadonlyBlockMath = ({ attrs, selected, mathRef }: ReadonlyBlockMathProps)
           py: 2,
           px: 1,
           borderRadius: 1,
-          bgcolor: 'transparent',
           '&:hover': {
             bgcolor: 'action.hover'
           },

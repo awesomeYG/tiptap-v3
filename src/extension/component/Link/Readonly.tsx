@@ -42,7 +42,6 @@ const ReadonlyLink = ({ attrs, selected }: ReadonlyLinkProps) => {
           color: 'text.primary',
           cursor: 'pointer',
           borderRadius: 'var(--mui-shape-borderRadius)',
-          bgcolor: 'background.paper',
           p: 2,
           ':hover': {
             borderColor: 'primary.main',
@@ -81,7 +80,7 @@ const ReadonlyLink = ({ attrs, selected }: ReadonlyLinkProps) => {
       rel={attrs.rel}
       data-title={attrs.title}
       data-type={attrs.type}
-      sx={{ display: 'inline-flex', alignItems: 'baseline', gap: '2px', color: 'primary.main', fontWeight: 500 }}
+      sx={{ display: 'inline-flex', alignItems: 'baseline', gap: '2px', color: 'primary.main', fontWeight: 500, lineHeight: 1.625 }}
     >
       {attrs.type === 'icon' && <Avatar sx={{ width: '1rem', height: '1rem', alignSelf: 'center', bgcolor: '#FFFFFF' }} src={favicon}>
         <LinkIcon sx={{

@@ -9,7 +9,7 @@ import { CharacterCount, Placeholder } from '@tiptap/extensions';
 import StarterKit from '@tiptap/starter-kit';
 import { PLACEHOLDER } from '../contants/placeholder';
 import { GetExtensionsProps } from '../type';
-import { SlashCommands } from './extension';
+import { SlashCommands, StructuredDiffExtension } from './extension';
 import {
   AlertExtension,
   AudioExtension,
@@ -62,6 +62,7 @@ export const getExtensions = ({
         width: 2,
       },
     }),
+    ListExtension,
     TextAlign.configure({
       types: ['heading', 'paragraph'],
     }),
@@ -97,6 +98,20 @@ export const getExtensions = ({
         return ''
       },
     }),
+    InlineLinkExtension,
+    BlockLinkExtension,
+    DetailsExtension,
+    DetailsContentExtension,
+    DetailsSummaryExtension,
+    ...TableExtension({ editable }),
+    TableOfContents({ onTocUpdate }),
+    CustomInlineMathExtension({ onError }),
+    CustomBlockMathExtension({ onError }),
+    VideoExtension({ onUpload, onError }),
+    AudioExtension({ onUpload, onError }),
+    ImageExtension({ onUpload, onError }),
+    InlineAttachmentExtension({ onUpload, onError }),
+    BlockAttachmentExtension({ onUpload, onError }),
   ]
 
   if (!exclude?.includes('emoji')) {
@@ -109,83 +124,29 @@ export const getExtensions = ({
     defaultExtensions.push(Mention)
   }
 
-  if (!exclude?.includes('details')) {
-    const Details = DetailsExtension
-    const DetailsContent = DetailsContentExtension
-    const DetailsSummary = DetailsSummaryExtension
-    defaultExtensions.push(Details)
-    defaultExtensions.push(DetailsContent)
-    defaultExtensions.push(DetailsSummary)
-  }
-
-  if (!exclude?.includes('mathematics')) {
-    const CustomInlineMath = CustomInlineMathExtension({ onError })
-    const CustomBlockMath = CustomBlockMathExtension({ onError })
-    defaultExtensions.push(CustomInlineMath)
-    defaultExtensions.push(CustomBlockMath)
-  }
-
-  if (!exclude?.includes('table')) {
-    const Table = TableExtension({ editable })
-    defaultExtensions.push(...Table)
-  }
-
-  if (!exclude?.includes('list')) {
-    const List = ListExtension
-    defaultExtensions.push(List)
-  }
-
-  if (!exclude?.includes('video')) {
-    const Video = VideoExtension({ onUpload, onError })
-    defaultExtensions.push(Video)
-  }
-
-  if (!exclude?.includes('audio')) {
-    const Audio = AudioExtension({ onUpload, onError })
-    defaultExtensions.push(Audio)
-  }
-
-  if (!exclude?.includes('image')) {
-    const Image = ImageExtension({ onUpload, onError })
-    defaultExtensions.push(Image)
-  }
-
   if (!exclude?.includes('youtube')) {
     const Youtube = YoutubeExtension(youtube)
     defaultExtensions.push(Youtube)
   }
 
-  if (!exclude?.includes('fileHandler')) {
-    const FileHandler = FileHandlerExtension({ onUpload })
-    defaultExtensions.push(FileHandler)
-    const UploadProgress = UploadProgressExtension
-    defaultExtensions.push(UploadProgress)
-  }
-
-  if (!exclude?.includes('link')) {
-    defaultExtensions.push(InlineLinkExtension)
-    defaultExtensions.push(BlockLinkExtension)
-  }
-
-  if (!exclude?.includes('attachment')) {
-    const InlineAttachment = InlineAttachmentExtension({ onUpload, onError })
-    const BlockAttachment = BlockAttachmentExtension({ onUpload, onError })
-    defaultExtensions.push(InlineAttachment)
-    defaultExtensions.push(BlockAttachment)
-  }
-
-  if (!exclude?.includes('tableOfContents')) {
-    const CustomTableOfContents = TableOfContents({ onTocUpdate })
-    defaultExtensions.push(CustomTableOfContents)
-  }
-
   if (editable) {
+    if (!exclude?.includes('fileHandler')) {
+      const FileHandler = FileHandlerExtension({ onUpload })
+      defaultExtensions.push(FileHandler)
+      const UploadProgress = UploadProgressExtension
+      defaultExtensions.push(UploadProgress)
+    }
+
     if (!exclude?.includes('slashCommands')) {
       defaultExtensions.push(SlashCommands)
     }
 
     if (!exclude?.includes('invisibleCharacters')) {
       defaultExtensions.push(InvisibleCharacters)
+    }
+  } else {
+    if (!exclude?.includes('structuredDiff')) {
+      defaultExtensions.push(StructuredDiffExtension)
     }
   }
 

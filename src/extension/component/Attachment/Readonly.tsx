@@ -25,7 +25,6 @@ const ReadonlyAttachment = ({ attrs, type }: ReadonlyAttachmentProps) => {
           borderColor: attrs.url === 'error' ? 'error.main' : 'divider',
           cursor: 'pointer',
           borderRadius: 'var(--mui-shape-borderRadius)',
-          bgcolor: 'background.paper',
           p: 2,
           ':hover': {
             borderColor: attrs.url === 'error' ? 'error.main' : 'primary.main',

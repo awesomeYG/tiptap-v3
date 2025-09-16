@@ -21,7 +21,6 @@ const ReadonlyInlineMath = ({ attrs, selected, mathRef }: ReadonlyInlineMathProp
         px: 0.5,
         py: 0.25,
         borderRadius: 0.5,
-        bgcolor: 'transparent',
         '&:hover': {
           bgcolor: 'action.hover'
         },
