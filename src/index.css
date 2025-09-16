@@ -78,7 +78,7 @@
 }
 
 .tiptap.ProseMirror ul:not([data-type='taskList']) {
-  list-style: none;
+  list-style: disc;
 }
 
 .tiptap.ProseMirror ul:not([data-type='taskList']) li {
@@ -86,24 +86,12 @@
   padding-left: 0;
 }
 
-.tiptap.ProseMirror ul:not([data-type='taskList']) li::before {
-  content: '';
-  position: absolute;
-  left: -24px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 6px;
-  height: 6px;
-  background-color: var(--mui-palette-text-primary);
-  border-radius: 50%;
-}
-
 .tiptap.ProseMirror ul:not([data-type='taskList']) ul {
-  list-style: none;
+  list-style: disc;
 }
 
 .tiptap.ProseMirror ul:not([data-type='taskList']) ul ul {
-  list-style: none;
+  list-style: disc;
 }
 
 .tiptap.ProseMirror ul[data-type='taskList'] {

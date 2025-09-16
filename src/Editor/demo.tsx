@@ -56,8 +56,7 @@ const Reader = () => {
         }, 100);
       })
     },
-    content: `<p>demo.tsx:12</p><pre data-title="数量飞机"><code>export { default as darkPalette } from './dark';
-export { default as lightPalette } from './light';</code></pre><p></p>`
+    content: `<ul class="bullet-list" data-type="bulletList"><li><p>弗萨卡里打飞机了</p></li><li><p>发圣诞节了福克斯的浪费撒</p><ul class="bullet-list" data-type="bulletList"><li><p>飞机啊的数量咖啡就</p></li><li><p>发几圣诞快乐飞机上大浪费</p></li><li><p>大幅撒解放看拉上飞机啊</p><ul class="bullet-list" data-type="bulletList"><li><p>发撒的路口附近快撒了发生</p></li><li><p>发圣诞节发拉上大分了卡上</p></li><li><p>发大水快乐飞机撒路口等</p></li></ul></li></ul></li></ul><p></p>`
   });
 
   return <EditorThemeProvider mode='light'>
