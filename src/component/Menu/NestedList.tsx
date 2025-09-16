@@ -67,6 +67,7 @@ const NestedList: React.FC<NestedMenuListProps> = ({
             position: 'relative',
             cursor: 'pointer',
             borderRadius: 1,
+            fontSize: 14,
             p: 1,
             ':hover': {
               bgcolor: 'action.hover',
@@ -112,6 +113,7 @@ const NestedList: React.FC<NestedMenuListProps> = ({
                     sx={{
                       cursor: 'pointer',
                       borderRadius: 1,
+                      fontSize: 14,
                       p: 1,
                       ':hover': {
                         bgcolor: 'action.hover',
