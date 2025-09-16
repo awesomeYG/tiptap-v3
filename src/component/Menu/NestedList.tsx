@@ -1,5 +1,5 @@
 import { MenuItem } from '@ctzhian/tiptap/type';
-import { Box, Popover, PopoverOrigin, Stack, Typography } from '@mui/material';
+import { Box, Popover, PopoverOrigin, Stack } from '@mui/material';
 import React from 'react';
 
 export interface NestedMenuListProps {
@@ -79,7 +79,7 @@ const NestedList: React.FC<NestedMenuListProps> = ({
         >
           <Stack alignItems="center" gap={1.5} direction="row">
             {item.icon}
-            <Typography sx={{ flexGrow: 1, ...item.textSx }}>{item.label}</Typography>
+            <Box sx={{ flexGrow: 1, ...item.textSx }}>{item.label}</Box>
             {item.extra}
             {item.children?.length ? arrowIcon : null}
           </Stack>
@@ -124,9 +124,9 @@ const NestedList: React.FC<NestedMenuListProps> = ({
                   >
                     <Stack alignItems="center" gap={1.5} direction="row">
                       {child.icon}
-                      <Typography sx={{ flexGrow: 1, ...child.textSx }}>
+                      <Box sx={{ flexGrow: 1, ...child.textSx }}>
                         {child.label}
-                      </Typography>
+                      </Box>
                       {child.extra}
                     </Stack>
                   </Box>

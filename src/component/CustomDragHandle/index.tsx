@@ -725,7 +725,7 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
       ]}
       header={
         <>
-          <Stack direction={'row'} flexWrap={'wrap'}>
+          <Stack direction={'row'} flexWrap={'wrap'} sx={{ fontSize: 14 }}>
             <ToolbarItem
               key={'insert-line-break-top'}
               onClick={() => {

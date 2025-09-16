@@ -117,7 +117,7 @@ const SelectionText = ({ editor, more }: SelectionTextProps) => {
       p: 0.5,
       borderRadius: 'var(--mui-shape-borderRadius)',
     }}>
-      <Stack direction={'row'} alignItems={'center'} justifyContent={'space-between'}>
+      <Stack direction={'row'} alignItems={'center'}>
         <ToolbarItem
           tip='加粗'
           icon={<BoldIcon sx={{ fontSize: '1rem' }} />}
