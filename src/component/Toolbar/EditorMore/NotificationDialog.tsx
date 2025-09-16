@@ -19,7 +19,7 @@ const NotificationDialog = ({ open, onClose }: NotificationDialogProps) => {
             mb: 0,
           }
         }}>
-          <Box sx={{ fontSize: '1rem', fontWeight: 'bold', mb: 1 }}>{value.label}</Box>
+          <Box sx={{ fontSize: '1rem', fontWeight: 'bold', mb: 1, textAlign: 'center' }}>{value.label}</Box>
           <Stack gap={0.25}>
             {value.keys.map((it) => {
               return <Stack direction={'row'} alignItems={'center'} key={it.value} sx={{

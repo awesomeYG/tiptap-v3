@@ -1,156 +1,206 @@
-import { Node } from "@tiptap/core";
-import { ReactNodeViewRenderer } from "@tiptap/react";
-import { CheckboxCircleFillIcon, CloseCircleFillIcon, ErrorWarningFillIcon, Information2FillIcon } from "../../component/Icons";
-import AlertViewWrapper from "../component/Alert/index";
+import { mergeAttributes, Node } from '@tiptap/core'
+import { TextSelection } from '@tiptap/pm/state'
+import { ReactNodeViewRenderer } from '@tiptap/react'
+import AlertView from '../component/Alert'
 
-// 定义 Alert 节点的属性类型
-export interface AlertAttributes {
-  type: 'success' | 'warning' | 'error' | 'info';
-  title?: string;
-}
+export type AlertVariant = 'info' | 'warning' | 'error' | 'success'
+export type AlertType = 'text' | 'icon'
 
-// 扩展 Tiptap 的 NodeAttributes 类型
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     alert: {
-      setAlert: (attributes: AlertAttributes) => ReturnType;
-      updateAlert: (attributes: Partial<AlertAttributes>) => ReturnType;
+      /** 插入一个 Alert 节点 */
+      setAlert: (attributes?: { variant?: AlertVariant, type?: AlertType }) => ReturnType
+      /** 切换 Alert 的 variant */
+      setAlertVariant: (variant: AlertVariant) => ReturnType
+      /** 切换 Alert 的展示类型（是否显示图标） */
+      setAlertType: (type: AlertType) => ReturnType
+      /** 在当前块与 Alert 之间切换（将当前块转换为 Alert，若已是 Alert 则还原为段落） */
+      toggleAlert: (attributes?: { variant?: AlertVariant, type?: AlertType }) => ReturnType
     }
   }
 }
 
-// 创建 Alert 扩展
-export const AlertExtension = () => Node.create({
+export const AlertExtension = Node.create({
   name: 'alert',
   group: 'block',
-  atom: true,
-  selectable: true,
+  content: 'inline*',
+  defining: true,
   draggable: true,
 
   addOptions() {
     return {
-      HTMLAttributes: {},
+      HTMLAttributes: {
+        class: 'cq-alert',
+      },
     }
   },
 
   addAttributes() {
     return {
-      type: {
+      id: {
+        default: null,
+        renderHTML: attributes => attributes.id ? { 'data-id': attributes.id } : {},
+        parseHTML: element => (element as HTMLElement).getAttribute('data-id'),
+      },
+      variant: {
         default: 'info',
-        parseHTML: element => element.getAttribute('data-alert-type') || 'info',
-        renderHTML: attributes => {
-          if (!attributes.type) {
-            return {}
-          }
-          return {
-            'data-alert-type': attributes.type,
-          }
-        },
+        renderHTML: attributes => ({ 'data-variant': attributes.variant }),
+        parseHTML: element => (element as HTMLElement).getAttribute('data-variant') || 'info',
       },
-      title: {
-        default: '',
-        parseHTML: element => element.getAttribute('data-title') || '',
-        renderHTML: attributes => {
-          if (!attributes.title) {
-            return {}
-          }
-          return {
-            'data-title': attributes.title,
-          }
-        },
+      type: {
+        default: 'icon',
+        renderHTML: attributes => ({ 'data-type': attributes.type }),
+        parseHTML: element => (element as HTMLElement).getAttribute('data-type') || 'icon',
       },
     }
-  },
-
-  addCommands() {
-    return {
-      setAlert: (attributes: AlertAttributes) => ({ commands }) => {
-        return commands.insertContent({
-          type: this.name,
-          attrs: attributes,
-        })
-      },
-      updateAlert: (attributes: Partial<AlertAttributes>) => ({ commands }) => {
-        return commands.updateAttributes(this.name, attributes)
-      },
-    }
-  },
-
-  addNodeView() {
-    return ReactNodeViewRenderer((renderProps) =>
-      AlertViewWrapper({
-        ...renderProps,
-        node: {
-          ...renderProps.node,
-          attrs: renderProps.node.attrs as AlertAttributes
-        },
-      })
-    )
   },
 
   parseHTML() {
     return [
       {
-        tag: 'div[data-alert-type]',
-        getAttrs: (element) => {
-          if (typeof element === 'string') return false
-          return {
-            type: element.getAttribute('data-alert-type'),
-            title: element.getAttribute('data-title'),
-          }
-        },
+        tag: 'div.cq-alert',
+      },
+      {
+        tag: 'div[data-node="alert"]',
       },
     ]
   },
 
-  renderHTML({ node, HTMLAttributes }) {
-    const { type, title } = node.attrs as AlertAttributes
-    return [
-      'div',
-      {
-        ...HTMLAttributes,
-        'data-alert-type': type,
-        'data-title': title,
-        class: `alert alert-${type}`,
+  renderHTML({ HTMLAttributes }) {
+    return ['div', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes, { 'data-node': 'alert' }), 0]
+  },
+
+  addCommands() {
+    return {
+      setAlert:
+        (attrs = {}) => ({ chain }) => {
+          const id = `alert_${Math.random().toString(36).slice(2)}`
+          const variant: AlertVariant = (attrs.variant as AlertVariant) || 'info'
+          const type: AlertType = (attrs.type as AlertType) || 'icon'
+
+          const ok = chain()
+            .focus()
+            .insertContent({
+              type: this.name,
+              attrs: { id, variant, type },
+            })
+            .run()
+
+          if (!ok) {
+            // 尝试在当前块之后插入
+            const { state } = this.editor
+            const $from = state.selection.$from
+            const afterPos = $from.after($from.depth)
+            const fallback = this.editor.commands.insertContentAt(afterPos, {
+              type: this.name,
+              attrs: { id, variant, type },
+            })
+            if (!fallback) return false
+          }
+
+          // 将光标移动到刚插入的 Alert 内部
+          try {
+            const { doc } = this.editor.state
+            let posInside = null as number | null
+            doc.descendants((node, pos) => {
+              if (node.type.name === this.name && (node.attrs as any).id === id) {
+                posInside = pos + 1
+                return false
+              }
+              return true
+            })
+            if (posInside != null) {
+              this.editor.commands.setTextSelection(posInside)
+            }
+          } catch { }
+
+          return true
+        },
+
+      setAlertVariant:
+        (variant: AlertVariant) => ({ commands }) => {
+          return commands.updateAttributes(this.name, { variant })
+        },
+
+      setAlertType:
+        (type: AlertType) => ({ commands }) => {
+          return commands.updateAttributes(this.name, { type })
+        },
+
+      toggleAlert:
+        (attrs = {}) => ({ state, dispatch, editor }) => {
+          const { tr, selection, schema } = state
+          const $from = selection.$from
+          const currentNode = $from.node($from.depth)
+          const posStart = $from.before($from.depth)
+          const posEnd = posStart + currentNode.nodeSize
+
+          const variant: AlertVariant = (attrs.variant as AlertVariant) || 'info'
+          const type: AlertType = (attrs.type as AlertType) || 'icon'
+
+          // 已是 Alert -> 还原为段落
+          if (currentNode.type === this.type) {
+            const paragraph = schema.nodes.paragraph.create(undefined, currentNode.content)
+            tr.replaceWith(posStart, posEnd, paragraph)
+            tr.setSelection(TextSelection.near(tr.doc.resolve(posStart + 1)))
+            if (dispatch) dispatch(tr)
+            editor.view.focus()
+            return true
+          }
+
+          // 将当前块替换为 Alert，尽量保留 inline 内容
+          let inlineContent = null
+          if (currentNode.isTextblock) {
+            inlineContent = currentNode.content
+          } else {
+            const textContent = currentNode.textContent || ''
+            inlineContent = textContent ? schema.text(textContent) : undefined
+          }
+          const id = `alert_${Math.random().toString(36).slice(2)}`
+          const alertNode = schema.nodes.alert.create({ id, variant, type }, inlineContent as any)
+          tr.replaceWith(posStart, posEnd, alertNode)
+          tr.setSelection(TextSelection.near(tr.doc.resolve(posStart + 1)))
+          if (dispatch) dispatch(tr)
+          editor.view.focus()
+          return true
+        },
+    }
+  },
+
+  addKeyboardShortcuts() {
+    return {
+      Enter: () => {
+        if (!this.editor.isActive(this.name)) return false
+        // 按回车退出当前 Alert，并在后面新起一段落
+        return this.editor.chain().command(({ state, tr, dispatch }) => {
+          const { $from } = state.selection
+          // 寻找最近的 alert 节点位置
+          let pos = $from.before()
+          for (let depth = $from.depth; depth > 0; depth--) {
+            const node = $from.node(depth)
+            if (node.type === this.type) {
+              pos = $from.before(depth)
+              break
+            }
+          }
+          const node = tr.doc.nodeAt(pos)
+          if (!node || node.type !== this.type) return false
+          const insertPos = pos + node.nodeSize
+          tr.insert(insertPos, this.editor.schema.nodes.paragraph.create())
+          tr.setSelection(TextSelection.near(tr.doc.resolve(insertPos + 1)))
+          if (dispatch) dispatch(tr)
+          return true
+        }).run()
       },
-      [
-        'div',
-        { class: 'alert-content' },
-        [
-          'div',
-          { class: 'alert-icon' },
-          getIconComponent(type),
-        ],
-        [
-          'div',
-          { class: 'alert-body' },
-          title ? [
-            'div',
-            { class: 'alert-title' },
-            title,
-          ] : null,
-          [
-            'div',
-            { class: 'alert-text' },
-            0, // 这里会被 Tiptap 替换为实际内容
-          ],
-        ],
-      ],
-    ]
+    }
+  },
+
+  addNodeView() {
+    return ReactNodeViewRenderer(AlertView)
   },
 })
 
-// 根据类型获取对应的图标组件
-function getIconComponent(type: string) {
-  switch (type) {
-    case 'success':
-      return CheckboxCircleFillIcon
-    case 'warning':
-      return ErrorWarningFillIcon
-    case 'error':
-      return CloseCircleFillIcon
-    case 'info':
-    default:
-      return Information2FillIcon
-  }
-}
+export default AlertExtension
+
+

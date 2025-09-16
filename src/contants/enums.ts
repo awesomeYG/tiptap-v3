@@ -1,4 +1,5 @@
 export enum NodeTypeEnum {
+  Alert = 'alert',
   BlockAttachment = 'blockAttachment',
   InlineAttachment = 'inlineAttachment',
   Paragraph = 'paragraph',
@@ -34,6 +35,7 @@ export const NODE_TYPE_LABEL: Record<NodeTypeEnum, {
   [NodeTypeEnum.BulletList]: { label: '无序列表', color: true, fontSize: true, align: true, convert: true },
   [NodeTypeEnum.OrderedList]: { label: '有序列表', color: true, fontSize: true, align: true, convert: true },
   [NodeTypeEnum.TaskList]: { label: '任务列表', color: true, fontSize: true, align: true, convert: true },
+  [NodeTypeEnum.Alert]: { label: '警告提示', color: true, fontSize: true, align: true, convert: true },
   [NodeTypeEnum.Blockquote]: { label: '引用块', color: true, fontSize: true, align: true, convert: true },
   [NodeTypeEnum.CodeBlock]: { label: '代码块', convert: true },
 
@@ -44,7 +46,7 @@ export const NODE_TYPE_LABEL: Record<NodeTypeEnum, {
   [NodeTypeEnum.Audio]: { label: '音频', download: true },
   [NodeTypeEnum.BlockAttachment]: { label: '附件', download: true },
 
-  [NodeTypeEnum.Code]: { label: '代码' },
+  [NodeTypeEnum.Code]: { label: '行内代码' },
   [NodeTypeEnum.Link]: { label: '链接' },
   [NodeTypeEnum.Image]: { label: '图片' },
   [NodeTypeEnum.InlineMath]: { label: '行内公式' },

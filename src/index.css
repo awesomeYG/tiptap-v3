@@ -22,7 +22,7 @@
   line-height: 1.625;
   margin-top: 0;
   font-size: 16px;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 
 .tiptap.ProseMirror blockquote p {
@@ -33,30 +33,18 @@
 .tiptap.ProseMirror blockquote {
   position: relative;
   padding: 8px 16px;
-  margin-bottom: 16px;
+  margin: 0 0 20px;
   border-radius: 10px;
   border: 1px solid var(--mui-palette-divider);
   color: var(--mui-palette-text-secondary);
   background-color: var(--mui-palette-background-paper3);
 }
 
-/* .tiptap.ProseMirror blockquote::after {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  top: 0;
-  height: 100%;
-  width: 0.25rem;
-  background-color: var(--mui-palette-divider);
-  content: '';
-  border-radius: 0;
-} */
-
 /* list */
 .tiptap.ProseMirror ol,
 .tiptap.ProseMirror ul {
   padding: 0 32px;
-  margin: 1.25rem 1rem 1.25rem 0;
+  margin: 20px 16px 20px 0;
   list-style: none;
 }
 
@@ -148,7 +136,7 @@
 
 /* code */
 .tiptap.ProseMirror .codeblock-wrapper {
-  margin-bottom: 16px;
+  margin: 20px 0;
 }
 
 .tiptap.ProseMirror pre {
@@ -182,7 +170,7 @@
   display: flex;
   gap: 0.25rem;
   line-height: 1.625;
-  margin-bottom: 16px;
+  margin: 20px 0;
   border: 1px solid var(--mui-palette-divider);
   border-radius: var(--mui-shape-borderRadius);
   padding: 0.5rem;
@@ -272,47 +260,47 @@
   font-size: 30px;
   line-height: 36px;
   font-weight: 700;
-  margin: 48px 0 16px;
+  margin: 48px 0 20px;
 }
 
 .tiptap.ProseMirror h2 {
   font-size: 24px;
   line-height: 32px;
   font-weight: 700;
-  margin: 40px 0 16px;
+  margin: 40px 0 20px;
 }
 
 .tiptap.ProseMirror h3 {
   font-size: 20px;
   line-height: 28px;
   font-weight: 600;
-  margin: 36px 0 16px;
+  margin: 36px 0 20px;
 }
 
 .tiptap.ProseMirror h4 {
   font-size: 18px;
   line-height: 26px;
   font-weight: 600;
-  margin: 32px 0 16px;
+  margin: 32px 0 20px;
 }
 
 .tiptap.ProseMirror h5 {
   font-size: 18px;
   line-height: 26px;
   font-weight: 600;
-  margin: 32px 0 16px;
+  margin: 32px 0 20px;
 }
 
 .tiptap.ProseMirror h6 {
   font-size: 16px;
   line-height: 24px;
   font-weight: 600;
-  margin: 32px 0 16px;
+  margin: 32px 0 20px;
 }
 
 /* horizontal rule */
 .tiptap.ProseMirror hr {
-  margin: 16px 0;
+  margin: 20px 0;
   border: none;
   height: 1px;
   background-color: var(--mui-palette-divider);
@@ -454,7 +442,7 @@
 /* 表格包装器样式 */
 .tiptap.ProseMirror .tableWrapper {
   overflow-x: auto;
-  margin: 16px 0;
+  margin: 20px 0;
 }
 
 /* 表格滚动条样式 */
@@ -486,7 +474,7 @@
   min-height: 200px;
   min-width: 200px;
   outline: 0px solid transparent;
-  margin-bottom: 16px;
+  margin: 20px 0;
 }
 
 @keyframes rotate-icon {

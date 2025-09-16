@@ -6,6 +6,7 @@ import {
   ArrowGoForwardLineIcon,
   BoldIcon,
   DoubleQuotesLIcon,
+  Information2LineIcon,
   ItalicIcon,
   LinkIcon,
   MenuFold2FillIcon,
@@ -49,6 +50,7 @@ const EditorToolbar = ({ editor, menuInToolbarMore }: EditorToolbarProps) => {
     details: false,
     table: false,
     link: false,
+    alert: false,
   });
 
   const updateSelection = () => {
@@ -65,6 +67,7 @@ const EditorToolbar = ({ editor, menuInToolbarMore }: EditorToolbarProps) => {
       details: editor.isActive('details'),
       table: editor.isActive('table'),
       link: editor.isActive('link'),
+      alert: editor.isActive('alert'),
     });
   };
 
@@ -138,6 +141,12 @@ const EditorToolbar = ({ editor, menuInToolbarMore }: EditorToolbarProps) => {
           icon={<DoubleQuotesLIcon sx={{ fontSize: '1rem' }} />}
           onClick={() => editor.chain().focus().toggleBlockquote().run()}
           className={active.quote ? 'tool-active' : ''}
+        />
+        <ToolbarItem
+          tip={'警告提示'}
+          icon={<Information2LineIcon sx={{ fontSize: '1rem' }} />}
+          onClick={() => editor.chain().focus().toggleAlert({ type: 'icon', variant: 'info' }).run()}
+          className={active.alert ? 'tool-active' : ''}
         />
         <Divider
           orientation="vertical"

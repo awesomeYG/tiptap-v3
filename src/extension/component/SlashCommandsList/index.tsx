@@ -1,69 +1,16 @@
+import { NestedList } from '@ctzhian/tiptap/component'
+import { ArrowDownSLineIcon, AttachmentLineIcon, CheckboxCircleFillIcon, CloseCircleFillIcon, ErrorWarningFillIcon, FormulaIcon, FunctionsIcon, ImageLineIcon, Information2FillIcon, Information2LineIcon, MovieLineIcon, Music2LineIcon, SquareRootIcon, UploadIcon } from '@ctzhian/tiptap/component/Icons'
+import { ToolbarItem } from '@ctzhian/tiptap/component/Toolbar'
 import { SlashCommandsListProps, SlashCommandsListRef } from '@ctzhian/tiptap/type'
 import {
-  Box,
-  MenuItem,
-  MenuList,
+  Divider,
   Paper,
   Stack
 } from '@mui/material'
-import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
+import React, { forwardRef } from 'react'
 
 const SlashCommandsList = forwardRef<SlashCommandsListRef, SlashCommandsListProps>(
   ({ items, command }, ref) => {
-    const [selectedIndex, setSelectedIndex] = useState(0)
-    const menuItemsRef = useRef<(HTMLLIElement | null)[]>([])
-
-    const selectItem = (index: number) => {
-      const item = items[index]
-      if (item) {
-        command(item)
-      }
-    }
-
-    const upHandler = () => {
-      setSelectedIndex((selectedIndex + items.length - 1) % items.length)
-    }
-
-    const downHandler = () => {
-      setSelectedIndex((selectedIndex + 1) % items.length)
-    }
-
-    const enterHandler = () => {
-      selectItem(selectedIndex)
-    }
-
-    // 自动滚动到选中的菜单项
-    useEffect(() => {
-      if (menuItemsRef.current[selectedIndex]) {
-        menuItemsRef.current[selectedIndex]?.scrollIntoView({
-          behavior: 'smooth',
-          block: 'nearest'
-        })
-      }
-    }, [selectedIndex])
-
-    useEffect(() => setSelectedIndex(0), [items])
-
-    useImperativeHandle(ref, () => ({
-      onKeyDown: ({ event }: { event: KeyboardEvent }) => {
-        if (event.key === 'ArrowUp') {
-          upHandler()
-          return true
-        }
-
-        if (event.key === 'ArrowDown') {
-          downHandler()
-          return true
-        }
-
-        if (event.key === 'Enter') {
-          enterHandler()
-          return true
-        }
-
-        return false
-      },
-    }))
 
     if (items.length === 0) {
       return null
@@ -73,51 +20,151 @@ const SlashCommandsList = forwardRef<SlashCommandsListRef, SlashCommandsListProp
       <Paper
         elevation={8}
         sx={{
-          maxHeight: '300px',
-          overflow: 'auto',
+          // maxHeight: '300px',
+          // overflow: 'auto',
           borderRadius: 'var(--mui-shape-borderRadius)',
-          minWidth: '200px'
+          width: '224px',
+          p: 0.5
         }}
       >
-        <MenuList sx={{ p: 0.5 }}>
-          {items.map((item, index) => (
-            <MenuItem
+        <Stack direction={'row'} flexWrap={'wrap'}>
+          {items.slice(0, 17).map((item, index) => (
+            <ToolbarItem
               key={index}
-              ref={el => menuItemsRef.current[index] = el}
-              selected={index === selectedIndex}
-              onClick={() => selectItem(index)}
-              sx={{
-                py: 1,
-                px: 2,
-                fontSize: '0.875rem',
-                borderRadius: 'var(--mui-shape-borderRadius)',
-                '&:hover:not(.Mui-selected)': {
-                  backgroundColor: 'action.hover'
-                },
-                '&.Mui-selected': {
-                  backgroundColor: 'action.selected',
-                }
-              }}
-            >
-              <Stack direction="row" alignItems="center" gap={1.5}>
-                <Box
-                  sx={{
-                    width: '24px',
-                    height: '24px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '0.875rem',
-                    fontWeight: 'bold'
-                  }}
-                >
-                  {item.icon}
-                </Box>
-                <Box>{item.title}</Box>
-              </Stack>
-            </MenuItem>
+              onClick={() => command(item)}
+              icon={item.icon}
+              tip={item.title}
+            />
           ))}
-        </MenuList>
+        </Stack>
+        <Divider sx={{ my: 0.5 }} />
+        <NestedList
+          list={[
+            {
+              label: '警告提示',
+              key: 'highlight',
+              icon: <Information2LineIcon sx={{ fontSize: '1rem' }} />,
+              children: [
+                {
+                  label: '信息 Info',
+                  key: 'info',
+                  icon: <Information2FillIcon sx={{ fontSize: '1rem', color: 'primary.main' }} />,
+                  onClick: () => {
+                    const node = items.find(it => it.title === '警告提示')
+                    if (node) command({ ...node, attrs: { type: 'icon', variant: 'info' } })
+                  },
+                },
+                {
+                  label: '警告 Warning',
+                  key: 'warning',
+                  icon: <ErrorWarningFillIcon sx={{ fontSize: '1rem', color: 'warning.main' }} />,
+                  onClick: () => {
+                    const node = items.find(it => it.title === '警告提示')
+                    if (node) command({ ...node, attrs: { type: 'icon', variant: 'warning' } })
+                  },
+                },
+                {
+                  label: '错误 Error',
+                  key: 'error',
+                  icon: <CloseCircleFillIcon sx={{ fontSize: '1rem', color: 'error.main' }} />,
+                  onClick: () => {
+                    const node = items.find(it => it.title === '警告提示')
+                    if (node) command({ ...node, attrs: { type: 'icon', variant: 'error' } })
+                  },
+                },
+                {
+                  label: '成功 Success',
+                  key: 'success',
+                  icon: <CheckboxCircleFillIcon sx={{ fontSize: '1rem', color: 'success.main' }} />,
+                  onClick: () => {
+                    const node = items.find(it => it.title === '警告提示')
+                    if (node) command({ ...node, attrs: { type: 'icon', variant: 'success' } })
+                  },
+                }
+              ]
+            },
+            {
+              label: '数学公式',
+              key: 'math',
+              icon: <FormulaIcon sx={{ fontSize: '1rem' }} />,
+              children: [
+                {
+                  label: '行内数学公式',
+                  key: 'inline-math',
+                  icon: <SquareRootIcon sx={{ fontSize: '1rem' }} />,
+                  onClick: () => {
+                    const node = items.find(it => it.title === '行内数学公式')
+                    if (node) command(node)
+                  }
+                },
+                {
+                  label: '块级数学公式',
+                  key: 'block-math',
+                  icon: <FunctionsIcon sx={{ fontSize: '1rem' }} />,
+                  onClick: () => {
+                    const node = items.find(it => it.title === '块级数学公式')
+                    if (node) command(node)
+                  }
+                }
+              ]
+            },
+            {
+              label: '上传文件',
+              key: 'download',
+              icon: <UploadIcon sx={{ fontSize: '1rem' }} />,
+              children: [
+                {
+                  label: '上传图片',
+                  key: 'image',
+                  icon: <ImageLineIcon sx={{ fontSize: '1rem' }} />,
+                  onClick: () => {
+                    const node = items.find(it => it.title === '图片')
+                    if (node) command(node)
+                  }
+                },
+                {
+                  label: '上传视频',
+                  key: 'video',
+                  icon: <MovieLineIcon sx={{ fontSize: '1rem' }} />,
+                  onClick: () => {
+                    const node = items.find(it => it.title === '视频')
+                    if (node) command(node)
+                  }
+                },
+                {
+                  label: '上传音频',
+                  key: 'audio',
+                  icon: <Music2LineIcon sx={{ fontSize: '1rem' }} />,
+                  onClick: () => {
+                    const node = items.find(it => it.title === '音频')
+                    if (node) command(node)
+                  }
+                },
+                {
+                  label: '上传附件',
+                  key: 'attachment',
+                  icon: <AttachmentLineIcon sx={{ fontSize: '1rem' }} />,
+                  onClick: () => {
+                    const node = items.find(it => it.title === '附件')
+                    if (node) command(node)
+                  }
+                }
+              ]
+            }
+          ]}
+          arrowIcon={<ArrowDownSLineIcon sx={{ fontSize: '1rem', transform: 'rotate(-90deg)' }} />}
+        // onItemClick={(item) => {
+        //   console.log(1, item)
+        //   if (item.attrs) {
+        //     const node = items.find(it => it.title === '警告提示')
+        //     if (node) {
+        //       command({ ...node, attrs: item.attrs })
+        //       return
+        //     }
+        //   }
+        //   if (item.onClick) item.onClick()
+        // }}
+        />
       </Paper>
     )
   }

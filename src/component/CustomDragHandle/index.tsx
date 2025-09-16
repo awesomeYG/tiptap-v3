@@ -1,14 +1,16 @@
-import { AlignBottomIcon, AlignCenterIcon, AlignJustifyIcon, AlignLeftIcon, AlignRightIcon, AlignTopIcon, ArrowDownSLineIcon, AttachmentLineIcon, BrushLineIcon, CodeBoxLineIcon, DeleteLineIcon, DownloadLineIcon, DraggableIcon, FontSizeIcon, FormatClearIcon, H1Icon, H2Icon, H3Icon, ImageLineIcon, InsertColumnLeftIcon, ListCheck3Icon, ListOrdered2Icon, ListUnorderedIcon, MovieLineIcon, Music2LineIcon, QuoteTextIcon, Repeat2LineIcon, ScissorsCutLineIcon, TextIcon, TextWrapIcon } from '@ctzhian/tiptap/component/Icons';
+import { AlignBottomIcon, AlignCenterIcon, AlignJustifyIcon, AlignLeftIcon, AlignRightIcon, AlignTopIcon, ArrowDownSLineIcon, AttachmentLineIcon, BrushLineIcon, CodeBoxLineIcon, DeleteLineIcon, DownloadLineIcon, DraggableIcon, FontSizeIcon, FormatClearIcon, H1Icon, H2Icon, H3Icon, ImageLineIcon, Information2LineIcon, ListCheck3Icon, ListOrdered2Icon, ListUnorderedIcon, MovieLineIcon, Music2LineIcon, QuoteTextIcon, Repeat2LineIcon, ScissorsCutLineIcon, SeparatorIcon, TextIcon, TextWrapIcon } from '@ctzhian/tiptap/component/Icons';
 import { NODE_TYPE_LABEL, NodeTypeEnum } from '@ctzhian/tiptap/contants/enums';
 import { MenuItem, OnTipFunction } from '@ctzhian/tiptap/type';
-import { Box, Divider, Typography, useTheme } from '@mui/material';
+import { Box, Divider, Stack, Typography, useTheme } from '@mui/material';
 import DragHandle from '@tiptap/extension-drag-handle-react';
 import { Fragment, Node, Slice } from '@tiptap/pm/model';
+import { TextSelection } from '@tiptap/pm/state';
 import { Editor } from '@tiptap/react';
 import React, { useCallback, useState } from 'react';
 import { downloadFiles, FileInfo, filterResourcesByType, getAllResources } from '../../util';
 import { FileCopyLineIcon } from '../Icons/file-copy-line-icon';
 import Menu from '../Menu';
+import { ToolbarItem } from '../Toolbar';
 
 const DragIcon = ({ onClick }: { onClick?: () => void }) => <Box onClick={onClick} sx={{
   width: '1.25rem',
@@ -99,27 +101,39 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
     const type = current.node?.type.name
     switch (type) {
       case NodeTypeEnum.Paragraph:
-        current.editor.chain().focus().setParagraph().run();
+        current.editor.commands.setParagraph();
         break;
       case NodeTypeEnum.Heading:
-        current.editor.chain().focus().setParagraph().run();
+        current.editor.commands.setParagraph();
         break;
       case NodeTypeEnum.BulletList:
-        current.editor.chain().focus().toggleBulletList().run();
+        current.editor.commands.toggleBulletList();
         break;
       case NodeTypeEnum.OrderedList:
-        current.editor.chain().focus().toggleOrderedList().run();
+        current.editor.commands.toggleOrderedList();
         break;
       case NodeTypeEnum.TaskList:
-        current.editor.chain().focus().toggleTaskList().run();
+        current.editor.commands.toggleTaskList();
         break;
       case NodeTypeEnum.Blockquote:
-        current.editor.chain().focus().toggleBlockquote().run();
+        current.editor.commands.toggleBlockquote();
         break;
       case NodeTypeEnum.CodeBlock:
-        current.editor.chain().focus().toggleCodeBlock().run();
+        current.editor.commands.toggleCodeBlock();
+        break;
+      case NodeTypeEnum.Alert:
+        current.editor.commands.setParagraph();
         break;
     }
+  }
+
+  const selectCurrentNode = () => {
+    const { state, view } = current.editor
+    const tr = state.tr
+    const resolved = tr.doc.resolve(Math.min(current.pos + 1, tr.doc.content.size))
+    tr.setSelection(TextSelection.near(resolved))
+    view.dispatch(tr)
+    view.focus()
   }
 
   const hasMarksDeep = (node: Node | null | undefined): boolean => {
@@ -187,7 +201,7 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
         ...(currentNode?.color ? [{
           key: 'color',
           label: '颜色',
-          maxHeight: 400,
+          maxHeight: 480,
           icon: <BrushLineIcon sx={{ fontSize: '1rem' }} />,
           children: [
             {
@@ -218,8 +232,8 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
               }
             }))),
             {
-              customLabel: <Typography sx={{ p: 1, fontSize: '0.75rem', color: 'text.secondary', fontWeight: 'bold' }}>高亮颜色</Typography>,
-              key: 'highlight-color',
+              customLabel: <Typography sx={{ p: 1, fontSize: '0.75rem', color: 'text.secondary', fontWeight: 'bold' }}>背景颜色</Typography>,
+              key: 'background-color',
             },
             ...(THEME_TEXT_BG_COLOR.map(it => ({
               label: it.label,
@@ -402,49 +416,54 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
         ...(currentNode?.convert ? [{
           label: '转换',
           key: 'convert',
+          maxHeight: 400,
           icon: <Repeat2LineIcon sx={{ fontSize: '1rem' }} />,
           children: [{
             label: '文本',
-            selected: editor.isActive('paragraph'),
+            selected: current.node?.type.name === 'paragraph',
             key: 'convert-to-paragraph',
             icon: <TextIcon sx={{ fontSize: '1rem' }} />,
             onClick: () => {
               if (current.node && current.pos !== undefined) {
+                selectCurrentNode()
                 cancelNodeType()
-                current.editor.chain().focus().setParagraph().run();
+                current.editor.commands.setParagraph()
               }
             }
           }, {
             label: '一级标题',
-            selected: editor.isActive('heading', { level: 1 }),
+            selected: current.node?.type.name === 'heading' && (current.node?.attrs.level === 1),
             key: 'convert-to-heading-1',
             icon: <H1Icon sx={{ fontSize: '1rem' }} />,
             onClick: () => {
               if (current.node && current.pos !== undefined) {
+                selectCurrentNode()
                 cancelNodeType()
-                current.editor.chain().focus().setHeading({ level: 1 }).run();
+                current.editor.commands.setHeading({ level: 1 })
               }
             }
           }, {
             label: '二级标题',
-            selected: editor.isActive('heading', { level: 2 }),
+            selected: current.node?.type.name === 'heading' && (current.node?.attrs.level === 2),
             key: 'convert-to-heading-2',
             icon: <H2Icon sx={{ fontSize: '1rem' }} />,
             onClick: () => {
               if (current.node && current.pos !== undefined) {
+                selectCurrentNode()
                 cancelNodeType()
-                current.editor.chain().focus().setHeading({ level: 2 }).run();
+                current.editor.commands.setHeading({ level: 2 })
               }
             }
           }, {
             label: '三级标题',
-            selected: editor.isActive('heading', { level: 3 }),
+            selected: current.node?.type.name === 'heading' && (current.node?.attrs.level === 3),
             key: 'convert-to-heading-3',
             icon: <H3Icon sx={{ fontSize: '1rem' }} />,
             onClick: () => {
               if (current.node && current.pos !== undefined) {
+                selectCurrentNode()
                 cancelNodeType()
-                current.editor.chain().focus().setHeading({ level: 3 }).run();
+                current.editor.commands.setHeading({ level: 3 })
               }
             }
           }, {
@@ -452,35 +471,38 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
             key: 'divider2',
           }, {
             label: '有序列表',
-            selected: editor.isActive('orderedList'),
+            selected: current.node?.type.name === 'orderedList',
             key: 'convert-to-ordered-list',
             icon: <ListOrdered2Icon sx={{ fontSize: '1rem' }} />,
             onClick: () => {
               if (current.node && current.pos !== undefined) {
+                selectCurrentNode()
                 cancelNodeType()
-                current.editor.chain().focus().toggleOrderedList().run();
+                current.editor.commands.toggleOrderedList()
               }
             }
           }, {
             label: '无序列表',
-            selected: editor.isActive('bulletList'),
+            selected: current.node?.type.name === 'bulletList',
             key: 'convert-to-bullet-list',
             icon: <ListUnorderedIcon sx={{ fontSize: '1rem' }} />,
             onClick: () => {
               if (current.node && current.pos !== undefined) {
+                selectCurrentNode()
                 cancelNodeType()
-                current.editor.chain().focus().toggleBulletList().run();
+                current.editor.commands.toggleBulletList()
               }
             }
           }, {
             label: '任务列表',
-            selected: editor.isActive('taskList'),
+            selected: current.node?.type.name === 'taskList',
             key: 'convert-to-task-list',
             icon: <ListCheck3Icon sx={{ fontSize: '1rem' }} />,
             onClick: () => {
               if (current.node && current.pos !== undefined) {
+                selectCurrentNode()
                 cancelNodeType()
-                current.editor.chain().focus().toggleTaskList().run();
+                current.editor.commands.toggleTaskList()
               }
             }
           }, {
@@ -488,32 +510,42 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
             key: 'divider3',
           }, {
             label: '引用块',
-            selected: editor.isActive('blockquote'),
+            selected: current.node?.type.name === 'blockquote',
             key: 'convert-to-blockquote',
             icon: <QuoteTextIcon sx={{ fontSize: '1rem' }} />,
             onClick: () => {
               if (current.node && current.pos !== undefined) {
+                selectCurrentNode()
                 cancelNodeType()
-                current.editor.chain().focus().toggleBlockquote().run();
+                current.editor.commands.toggleBlockquote()
               }
             }
           }, {
             label: '代码块',
-            selected: editor.isActive('codeBlock'),
+            selected: current.node?.type.name === 'codeBlock',
             key: 'convert-to-code-block',
             icon: <CodeBoxLineIcon sx={{ fontSize: '1rem' }} />,
             onClick: () => {
               if (current.node && current.pos !== undefined) {
+                selectCurrentNode()
                 cancelNodeType()
-                current.editor.chain().focus().toggleCodeBlock().run();
+                current.editor.commands.toggleCodeBlock()
+              }
+            }
+          }, {
+            label: '警告提示',
+            selected: current.node?.type.name === 'alert',
+            key: 'convert-to-alert',
+            icon: <Information2LineIcon sx={{ fontSize: '1rem' }} />,
+            onClick: () => {
+              if (current.node && current.pos !== undefined) {
+                selectCurrentNode()
+                cancelNodeType()
+                current.editor.commands.toggleAlert({ type: 'icon', variant: 'info' })
               }
             }
           }]
         }] : []),
-        // ...(currentNode?.convert ? [{
-        //   customLabel: <Divider sx={{ my: 0.5 }} />,
-        //   key: 'divider4',
-        // }] : []),
         ...(currentNode?.download && (current.node?.attrs.src || current.node?.attrs.src) ? [{
           label: `下载${currentNode?.label}`,
           key: 'download',
@@ -664,10 +696,6 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
             }
           }] : [])
         ]),
-        // ...(currentNode?.download ? [{
-        //   customLabel: <Divider sx={{ my: 0.5 }} />,
-        //   key: 'divider5',
-        // }] : []),
         ...(more ? more : []),
         ...(showFormat ? [{
           label: '文本格式化',
@@ -694,97 +722,114 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
             }
           }
         }] : []),
-        {
-          label: '插入',
-          key: 'insert',
-          icon: <InsertColumnLeftIcon sx={{ fontSize: '1rem' }} />,
-          children: [
-            {
-              label: '插入高亮块',
-              key: 'insert-highlight-block',
-              icon: <TextWrapIcon sx={{ fontSize: '1rem' }} />,
-              onClick: () => {
-                if (current.node && current.pos !== undefined) {
-                  current.editor.chain().focus().setAlert({ type: 'info' }).run();
-                }
-              }
-            }
-          ]
-        },
-        {
-          label: `复制${currentNode?.label}`,
-          key: 'copy',
-          icon: <FileCopyLineIcon sx={{ fontSize: '1rem' }} />,
-          onClick: async () => {
-            if (current.node && current.pos !== undefined) {
-              const content = new Slice(Fragment.from(current.node), 0, 0)
-              const textContent = current.node.textContent;
-              const htmlContent = editor.view.serializeForClipboard(content).dom.innerHTML
-              try {
-                if (htmlContent && navigator.clipboard && "write" in navigator.clipboard) {
-                  const blob = new Blob([htmlContent], { type: "text/html" })
-                  const clipboardItem = new ClipboardItem({ "text/html": blob })
-                  await navigator.clipboard.write([clipboardItem])
-                  onTip?.('success', '复制成功')
-                }
-              } catch {
-                await navigator.clipboard.writeText(textContent)
-              }
-            }
-          }
-        },
-        {
-          label: `剪切${currentNode?.label}`,
-          key: 'cut',
-          icon: <ScissorsCutLineIcon sx={{ fontSize: '1rem' }} />,
-          onClick: async () => {
-            if (current.node && current.pos !== undefined) {
-              try {
-                const content = new Slice(Fragment.from(current.node), 0, 0)
-                const textContent = current.node.textContent;
-                const htmlContent = editor.view.serializeForClipboard(content).dom.innerHTML
-                try {
-                  if (htmlContent && navigator.clipboard && "write" in navigator.clipboard) {
-                    const blob = new Blob([htmlContent], { type: "text/html" })
-                    const clipboardItem = new ClipboardItem({ "text/html": blob })
-                    await navigator.clipboard.write([clipboardItem])
-                  }
-                } catch {
-                  await navigator.clipboard.writeText(textContent)
-                }
-                current.editor.chain().focus().deleteRange({ from: current.pos, to: current.pos + current.node.nodeSize }).run();
-              } catch {
-                onTip?.('error', '剪切失败')
-              }
-            }
-          }
-        },
-        // {
-        //   label: `复制并粘贴`,
-        //   key: 'duplicate-and-overwrite',
-        //   icon: <FileCopyLineIcon sx={{ fontSize: '1rem' }} />,
-        //   onClick: () => {
-        //     if (current.node && current.pos !== undefined) {
-        //       const nodeJSON = current.node.toJSON();
-        //       const insertPos = current.pos + current.node.nodeSize;
-        //       current.editor.chain()
-        //         .focus()
-        //         .insertContentAt(insertPos, nodeJSON)
-        //         .run();
-        //     }
-        //   },
-        // },
-        {
-          label: `删除${currentNode?.label}`,
-          key: 'delete',
-          icon: <DeleteLineIcon sx={{ fontSize: '1rem' }} />,
-          onClick: () => {
-            if (current.node && current.pos !== undefined) {
-              current.editor.chain().focus().deleteRange({ from: current.pos, to: current.pos + current.node.nodeSize }).run();
-            }
-          }
-        }
       ]}
+      header={
+        <>
+          <Stack direction={'row'} flexWrap={'wrap'}>
+            <ToolbarItem
+              key={'insert-line-break-top'}
+              onClick={() => {
+                if (current.node && current.pos !== undefined) {
+                  const afterPos = current.pos
+                  current.editor
+                    .chain()
+                    .focus()
+                    .insertContentAt(afterPos, { type: 'paragraph' }, { updateSelection: true })
+                    .run()
+                }
+              }}
+              icon={<TextWrapIcon sx={{ fontSize: '1rem', transform: 'rotate(180deg)' }} />}
+              tip={'上方插入行'}
+            />
+            <ToolbarItem
+              key={'insert-line-break'}
+              onClick={() => {
+                if (current.node && current.pos !== undefined) {
+                  const afterPos = current.pos + current.node.nodeSize
+                  current.editor
+                    .chain()
+                    .focus()
+                    .insertContentAt(afterPos, { type: 'paragraph' }, { updateSelection: true })
+                    .run()
+                }
+              }}
+              icon={<TextWrapIcon sx={{ fontSize: '1rem' }} />}
+              tip={'下方插入行'}
+            />
+            <ToolbarItem
+              key={'insert-divider'}
+              onClick={() => {
+                if (current.node && current.pos !== undefined) {
+                  current.editor.chain().focus().insertContent({
+                    type: 'horizontalRule',
+                  }).run()
+                }
+              }}
+              icon={<SeparatorIcon sx={{ fontSize: '1rem' }} />}
+              tip={'分割线'}
+            />
+            <ToolbarItem
+              key={'copy'}
+              onClick={async () => {
+                if (current.node && current.pos !== undefined) {
+                  const content = new Slice(Fragment.from(current.node), 0, 0)
+                  const textContent = current.node.textContent;
+                  const htmlContent = editor.view.serializeForClipboard(content).dom.innerHTML
+                  try {
+                    if (htmlContent && navigator.clipboard && "write" in navigator.clipboard) {
+                      const blob = new Blob([htmlContent], { type: "text/html" })
+                      const clipboardItem = new ClipboardItem({ "text/html": blob })
+                      await navigator.clipboard.write([clipboardItem])
+                      onTip?.('success', '复制成功')
+                    }
+                  } catch {
+                    await navigator.clipboard.writeText(textContent)
+                  }
+                }
+              }}
+              icon={<FileCopyLineIcon sx={{ fontSize: '1rem' }} />}
+              tip={`复制${currentNode?.label}`}
+            />
+            <ToolbarItem
+              key={'cut'}
+              onClick={async () => {
+                if (current.node && current.pos !== undefined) {
+                  try {
+                    const content = new Slice(Fragment.from(current.node), 0, 0)
+                    const textContent = current.node.textContent;
+                    const htmlContent = editor.view.serializeForClipboard(content).dom.innerHTML
+                    try {
+                      if (htmlContent && navigator.clipboard && "write" in navigator.clipboard) {
+                        const blob = new Blob([htmlContent], { type: "text/html" })
+                        const clipboardItem = new ClipboardItem({ "text/html": blob })
+                        await navigator.clipboard.write([clipboardItem])
+                      }
+                    } catch {
+                      await navigator.clipboard.writeText(textContent)
+                    }
+                    current.editor.chain().focus().deleteRange({ from: current.pos, to: current.pos + current.node.nodeSize }).run();
+                  } catch {
+                    onTip?.('error', '剪切失败')
+                  }
+                }
+              }}
+              icon={<ScissorsCutLineIcon sx={{ fontSize: '1rem' }} />}
+              tip={`剪切${currentNode?.label}`}
+            />
+            <ToolbarItem
+              key={'delete'}
+              onClick={() => {
+                if (current.node && current.pos !== undefined) {
+                  current.editor.chain().focus().deleteRange({ from: current.pos, to: current.pos + current.node.nodeSize }).run();
+                }
+              }}
+              icon={<DeleteLineIcon sx={{ fontSize: '1rem' }} />}
+              tip={`删除${currentNode?.label}`}
+            />
+          </Stack>
+          <Divider sx={{ my: 0.5 }} />
+        </>
+      }
       context={<DragIcon />}
     /> : <DragIcon />}
   </DragHandle>

@@ -1,45 +1,45 @@
 import { Editor } from '@tiptap/react';
 import * as React from 'react';
-import { AttachmentLineIcon, CodeBoxLineIcon, CodeLineIcon, DoubleQuotesLIcon, FunctionsIcon, H1Icon, H2Icon, H3Icon, H4Icon, H5Icon, H6Icon, ImageLineIcon, LinkIcon, ListCheck2Icon, ListOrdered2Icon, ListUnorderedIcon, MenuFold2FillIcon, MovieLineIcon, Music2LineIcon, SeparatorIcon, SquareRootIcon, Table2Icon, TextWrapIcon } from '../component/Icons';
+import { AttachmentLineIcon, CodeBoxLineIcon, CodeLineIcon, DoubleQuotesLIcon, FunctionsIcon, H1Icon, H2Icon, H3Icon, H4Icon, H5Icon, H6Icon, ImageLineIcon, Information2LineIcon, LinkIcon, ListCheck2Icon, ListOrdered2Icon, ListUnorderedIcon, MenuFold2FillIcon, MovieLineIcon, Music2LineIcon, SeparatorIcon, SquareRootIcon, Table2Icon, TextWrapIcon } from '../component/Icons';
 
 export const slashCommands = [
   {
-    title: '标题 1',
+    title: '一级标题',
     icon: <H1Icon sx={{ fontSize: '1rem' }} />,
     command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
       editor.chain().focus().deleteRange(range).setNode('heading', { level: 1 }).run()
     }
   },
   {
-    title: '标题 2',
+    title: '二级标题',
     icon: <H2Icon sx={{ fontSize: '1rem' }} />,
     command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
       editor.chain().focus().deleteRange(range).setNode('heading', { level: 2 }).run()
     }
   },
   {
-    title: '标题 3',
+    title: '三级标题',
     icon: <H3Icon sx={{ fontSize: '1rem' }} />,
     command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
       editor.chain().focus().deleteRange(range).setNode('heading', { level: 3 }).run()
     }
   },
   {
-    title: '标题 4',
+    title: '四级标题',
     icon: <H4Icon sx={{ fontSize: '1rem' }} />,
     command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
       editor.chain().focus().deleteRange(range).setNode('heading', { level: 4 }).run()
     }
   },
   {
-    title: '标题 5',
+    title: '五级标题',
     icon: <H5Icon sx={{ fontSize: '1rem' }} />,
     command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
       editor.chain().focus().deleteRange(range).setNode('heading', { level: 5 }).run()
     }
   },
   {
-    title: '标题 6',
+    title: '六级标题',
     icon: <H6Icon sx={{ fontSize: '1rem' }} />,
     command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
       editor.chain().focus().deleteRange(range).setNode('heading', { level: 6 }).run()
@@ -81,10 +81,24 @@ export const slashCommands = [
     }
   },
   {
-    title: '引用',
+    title: '引用块',
     icon: <DoubleQuotesLIcon sx={{ fontSize: '1rem' }} />,
     command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
       editor.chain().focus().deleteRange(range).toggleBlockquote().run()
+    }
+  },
+  {
+    title: '行内代码',
+    icon: <CodeLineIcon sx={{ fontSize: '1rem' }} />,
+    command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
+      editor.chain().focus().deleteRange(range).setMark('code').run()
+    }
+  },
+  {
+    title: '代码块',
+    icon: <CodeBoxLineIcon sx={{ fontSize: '1rem' }} />,
+    command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
+      editor.chain().focus().deleteRange(range).toggleCodeBlock().run()
     }
   },
   {
@@ -102,10 +116,24 @@ export const slashCommands = [
     }
   },
   {
-    title: '行内代码',
-    icon: <CodeLineIcon sx={{ fontSize: '1rem' }} />,
+    title: '表格',
+    icon: <Table2Icon sx={{ fontSize: '1rem' }} />,
     command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
-      editor.chain().focus().deleteRange(range).setMark('code').run()
+      editor.chain().focus().deleteRange(range).insertTable({ rows: 3, cols: 4, withHeaderRow: true }).run()
+    }
+  },
+  {
+    title: '警告提示',
+    icon: <Information2LineIcon sx={{ fontSize: '1rem' }} />,
+    command: ({ editor, range, attrs }: { editor: Editor; range: { from: number; to: number }; attrs: any }) => {
+      editor.chain().focus().deleteRange(range).toggleAlert({ type: attrs?.type || 'icon', variant: attrs?.variant || 'info' }).run()
+    }
+  },
+  {
+    title: '折叠块',
+    icon: <MenuFold2FillIcon sx={{ fontSize: '1rem' }} />,
+    command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
+      editor.chain().focus().deleteRange(range).setDetails().run()
     }
   },
   {

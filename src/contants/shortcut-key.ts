@@ -42,7 +42,7 @@ export const SHORTCUT_KEYS = {
       { label: '下划线', value: 'Underline', keys: ['ctrl', 'U'] },
       { label: '删除线', value: 'Strikethrough', keys: ['ctrl', 'shift', 'S'] },
       { label: '高亮', value: 'Highlight', keys: ['ctrl', 'shift', 'H'] },
-      { label: '代码', value: 'Code', keys: ['ctrl', 'E'] },
+      { label: '行内代码', value: 'Code', keys: ['ctrl', 'E'] },
     ],
   },
   'Paragraph Formatting': {

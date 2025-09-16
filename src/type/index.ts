@@ -10,6 +10,7 @@ export interface MenuItem {
   icon?: React.ReactNode;
   extra?: React.ReactNode;
   selected?: boolean;
+  attrs?: Record<string, unknown>;
   children?: MenuItem[];
   textSx?: SxProps<Theme>;
   key: number | string;
@@ -22,6 +23,7 @@ export interface MenuProps {
   id?: string;
   arrowIcon?: React.ReactNode;
   list: MenuItem[];
+  header?: React.ReactNode;
   context?: React.ReactElement<{ onClick?: any; 'aria-describedby'?: any }>;
   anchorOrigin?: PopoverOrigin;
   transformOrigin?: PopoverOrigin;
@@ -108,9 +110,10 @@ export type UseTiptapReturn = {
 
 export interface SlashCommandItem {
   title: string
-  icon: string
-  command: string
+  icon: React.ReactNode
+  command: (props: { editor: Editor; range: { from: number; to: number } }) => void
   attrs?: Record<string, unknown>
+  children?: SlashCommandItem[]
 }
 
 export interface SlashCommandsListProps {

@@ -155,7 +155,7 @@ const SelectionText = ({ editor, more }: SelectionTextProps) => {
           className={active.subscript ? "tool-active" : ""}
         />
         <ToolbarItem
-          tip='代码'
+          tip='行内代码'
           icon={<CodeLineIcon sx={{ fontSize: '1rem' }} />}
           onClick={() => editor.chain().focus().toggleCode().run()}
           className={active.code ? "tool-active" : ""}

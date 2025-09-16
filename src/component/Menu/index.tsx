@@ -1,16 +1,16 @@
 import { MenuItem, MenuProps } from '@ctzhian/tiptap/type';
 import {
   Box,
-  Popover,
-  Stack,
-  Typography
+  Popover
 } from '@mui/material';
 import React from 'react';
+import NestedList from './NestedList';
 
 const Menu: React.FC<MenuProps> = ({
   id = 'menu-select',
   arrowIcon,
   list,
+  header = null,
   context,
   anchorOrigin = {
     vertical: 'bottom',
@@ -32,8 +32,6 @@ const Menu: React.FC<MenuProps> = ({
   }
 }) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
-  const [hoveredItem, setHoveredItem] = React.useState<MenuItem | null>(null);
-  const [subMenuAnchor, setSubMenuAnchor] = React.useState<HTMLElement | null>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     if (context?.props?.onClick) {
@@ -44,20 +42,6 @@ const Menu: React.FC<MenuProps> = ({
 
   const handleClose = () => {
     setAnchorEl(null);
-    setHoveredItem(null);
-    setSubMenuAnchor(null);
-  };
-
-  const handleItemHover = (event: React.MouseEvent<HTMLElement>, item: MenuItem) => {
-    if (item.children?.length) {
-      setHoveredItem(item);
-      setSubMenuAnchor(event.currentTarget);
-    }
-  };
-
-  const handleItemLeave = () => {
-    setHoveredItem(null);
-    setSubMenuAnchor(null);
   };
 
   const handleItemClick = (item: MenuItem) => {
@@ -79,81 +63,16 @@ const Menu: React.FC<MenuProps> = ({
       anchorOrigin={anchorOrigin}
       transformOrigin={transformOrigin}
     >
-      <Box className="menu-select-list" sx={{ p: 0.5, minWidth: 160, lineHeight: '1.5rem' }}>
-        {list.map(item => item.customLabel ? <Box key={item.key}>
-          {item.customLabel}
-        </Box> : <Box
-          key={item.key}
-          className="menu-select-item"
-          onMouseEnter={(e) => handleItemHover(e, item)}
-          onMouseLeave={handleItemLeave}
-          onClick={() => handleItemClick(item)}
-          sx={{
-            position: 'relative',
-            cursor: 'pointer',
-            borderRadius: 1,
-            p: 1,
-            ':hover': {
-              bgcolor: 'action.hover',
-            },
-            ...(item.selected ? {
-              color: 'primary.main',
-              bgcolor: 'action.selected',
-            } : {}),
-          }}
-        >
-          <Stack alignItems="center" gap={1.5} direction="row">
-            {item.icon}
-            <Typography sx={{ flexGrow: 1, ...item.textSx }}>{item.label}</Typography>
-            {item.extra}
-            {item.children?.length ? arrowIcon : null}
-          </Stack>
-          {hoveredItem === item && item.children && <Popover
-            open={Boolean(subMenuAnchor)}
-            anchorEl={subMenuAnchor}
-            onClose={handleItemLeave}
-            sx={{ pointerEvents: 'none' }}
-            {...childrenProps}
-          >
-            <Box className="menu-select-sub-list" sx={{
-              pointerEvents: 'auto',
-              p: 0.5,
-              minWidth: 160,
-              maxHeight: 360,
-              overflow: 'auto',
-              ...(item.minWidth ? { minWidth: item.minWidth } : {}),
-              ...(item.maxHeight ? { maxHeight: item.maxHeight } : {}),
-            }}>
-              {item.children.map(child => child.customLabel ? <Box key={child.key}>
-                {child.customLabel}
-              </Box> : <Box
-                key={child.key}
-                className="menu-select-sub-item"
-                onClick={() => handleItemClick(child)}
-                sx={{
-                  cursor: 'pointer',
-                  borderRadius: 1,
-                  p: 1,
-                  ':hover': {
-                    bgcolor: 'action.hover',
-                  },
-                  ...(child.selected ? {
-                    color: 'primary.main',
-                    bgcolor: 'action.selected',
-                  } : {}),
-                }}
-              >
-                <Stack alignItems="center" gap={1.5} direction="row">
-                  {child.icon}
-                  <Typography sx={{ flexGrow: 1, ...child.textSx }}>
-                    {child.label}
-                  </Typography>
-                  {child.extra}
-                </Stack>
-              </Box>)}
-            </Box>
-          </Popover>}
-        </Box>)}
+      <Box sx={{ p: 0.5 }}>
+        <Box onClick={handleClose}>
+          {header}
+        </Box>
+        <NestedList
+          list={list}
+          arrowIcon={arrowIcon}
+          childrenProps={childrenProps}
+          onItemClick={handleItemClick}
+        />
       </Box>
     </Popover>
   </>
