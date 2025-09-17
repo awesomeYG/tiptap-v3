@@ -4,10 +4,10 @@ import { MenuItem, OnTipFunction } from '@ctzhian/tiptap/type';
 import { Box, Divider, Stack, Typography, useTheme } from '@mui/material';
 import DragHandle from '@tiptap/extension-drag-handle-react';
 import { Fragment, Node, Slice } from '@tiptap/pm/model';
-import { TextSelection } from '@tiptap/pm/state';
+import { NodeSelection } from '@tiptap/pm/state';
 import { Editor } from '@tiptap/react';
 import React, { useCallback, useState } from 'react';
-import { downloadFiles, FileInfo, filterResourcesByType, getAllResources } from '../../util';
+import { convertNodeAt, downloadFiles, FileInfo, filterResourcesByType, getAllResources } from '../../util';
 import { FileCopyLineIcon } from '../Icons/file-copy-line-icon';
 import Menu from '../Menu';
 import { ToolbarItem } from '../Toolbar';
@@ -130,10 +130,13 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
   const selectCurrentNode = () => {
     const { state, view } = current.editor
     const tr = state.tr
-    const resolved = tr.doc.resolve(Math.min(current.pos + 1, tr.doc.content.size))
-    tr.setSelection(TextSelection.near(resolved))
-    view.dispatch(tr)
-    view.focus()
+    const pos = current.pos
+    if (pos >= 0) {
+      const selection = NodeSelection.create(tr.doc as any, pos)
+      tr.setSelection(selection)
+      view.dispatch(tr)
+      view.focus()
+    }
   }
 
   const hasMarksDeep = (node: Node | null | undefined): boolean => {
@@ -186,10 +189,6 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
     {currentNode ? <Menu
       anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       transformOrigin={{ vertical: 'top', horizontal: 'left' }}
-      childrenProps={{
-        anchorOrigin: { vertical: 'center', horizontal: 'right' },
-        transformOrigin: { vertical: 'center', horizontal: 'left' },
-      }}
       arrowIcon={<ArrowDownSLineIcon sx={{ fontSize: '1rem', transform: 'rotate(-90deg)' }} />}
       list={[
         {
@@ -201,7 +200,7 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
         ...(currentNode?.color ? [{
           key: 'color',
           label: '颜色',
-          maxHeight: 480,
+          maxHeight: 400,
           icon: <BrushLineIcon sx={{ fontSize: '1rem' }} />,
           children: [
             {
@@ -424,7 +423,12 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
             key: 'convert-to-paragraph',
             icon: <TextIcon sx={{ fontSize: '1rem' }} />,
             onClick: () => {
-              if (current.node && current.pos !== undefined) {
+              if (!current.node) return
+              const type = current.node.type.name as NodeTypeEnum
+              const groupTypes = [NodeTypeEnum.BulletList, NodeTypeEnum.OrderedList, NodeTypeEnum.TaskList, NodeTypeEnum.Blockquote, NodeTypeEnum.CodeBlock, NodeTypeEnum.Alert]
+              if (groupTypes.includes(type)) {
+                convertNodeAt(current.editor, current.pos, current.node as any, { type: 'paragraph' })
+              } else {
                 selectCurrentNode()
                 cancelNodeType()
                 current.editor.commands.setParagraph()
@@ -436,7 +440,12 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
             key: 'convert-to-heading-1',
             icon: <H1Icon sx={{ fontSize: '1rem' }} />,
             onClick: () => {
-              if (current.node && current.pos !== undefined) {
+              if (!current.node) return
+              const type = current.node.type.name as NodeTypeEnum
+              const groupTypes = [NodeTypeEnum.BulletList, NodeTypeEnum.OrderedList, NodeTypeEnum.TaskList, NodeTypeEnum.Blockquote, NodeTypeEnum.CodeBlock, NodeTypeEnum.Alert]
+              if (groupTypes.includes(type)) {
+                convertNodeAt(current.editor, current.pos, current.node as any, { type: 'heading', level: 1 })
+              } else {
                 selectCurrentNode()
                 cancelNodeType()
                 current.editor.commands.setHeading({ level: 1 })
@@ -448,7 +457,12 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
             key: 'convert-to-heading-2',
             icon: <H2Icon sx={{ fontSize: '1rem' }} />,
             onClick: () => {
-              if (current.node && current.pos !== undefined) {
+              if (!current.node) return
+              const type = current.node.type.name as NodeTypeEnum
+              const groupTypes = [NodeTypeEnum.BulletList, NodeTypeEnum.OrderedList, NodeTypeEnum.TaskList, NodeTypeEnum.Blockquote, NodeTypeEnum.CodeBlock, NodeTypeEnum.Alert]
+              if (groupTypes.includes(type)) {
+                convertNodeAt(current.editor, current.pos, current.node as any, { type: 'heading', level: 2 })
+              } else {
                 selectCurrentNode()
                 cancelNodeType()
                 current.editor.commands.setHeading({ level: 2 })
@@ -460,7 +474,12 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
             key: 'convert-to-heading-3',
             icon: <H3Icon sx={{ fontSize: '1rem' }} />,
             onClick: () => {
-              if (current.node && current.pos !== undefined) {
+              if (!current.node) return
+              const type = current.node.type.name as NodeTypeEnum
+              const groupTypes = [NodeTypeEnum.BulletList, NodeTypeEnum.OrderedList, NodeTypeEnum.TaskList, NodeTypeEnum.Blockquote, NodeTypeEnum.CodeBlock, NodeTypeEnum.Alert]
+              if (groupTypes.includes(type)) {
+                convertNodeAt(current.editor, current.pos, current.node as any, { type: 'heading', level: 3 })
+              } else {
                 selectCurrentNode()
                 cancelNodeType()
                 current.editor.commands.setHeading({ level: 3 })
@@ -475,7 +494,12 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
             key: 'convert-to-ordered-list',
             icon: <ListOrdered2Icon sx={{ fontSize: '1rem' }} />,
             onClick: () => {
-              if (current.node && current.pos !== undefined) {
+              if (!current.node) return
+              const type = current.node.type.name as NodeTypeEnum
+              const groupTypes = [NodeTypeEnum.BulletList, NodeTypeEnum.OrderedList, NodeTypeEnum.TaskList, NodeTypeEnum.Blockquote, NodeTypeEnum.CodeBlock, NodeTypeEnum.Alert]
+              if (groupTypes.includes(type)) {
+                convertNodeAt(current.editor, current.pos, current.node as any, { type: 'orderedList' })
+              } else {
                 selectCurrentNode()
                 cancelNodeType()
                 current.editor.commands.toggleOrderedList()
@@ -487,7 +511,12 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
             key: 'convert-to-bullet-list',
             icon: <ListUnorderedIcon sx={{ fontSize: '1rem' }} />,
             onClick: () => {
-              if (current.node && current.pos !== undefined) {
+              if (!current.node) return
+              const type = current.node.type.name as NodeTypeEnum
+              const groupTypes = [NodeTypeEnum.BulletList, NodeTypeEnum.OrderedList, NodeTypeEnum.TaskList, NodeTypeEnum.Blockquote, NodeTypeEnum.CodeBlock, NodeTypeEnum.Alert]
+              if (groupTypes.includes(type)) {
+                convertNodeAt(current.editor, current.pos, current.node as any, { type: 'bulletList' })
+              } else {
                 selectCurrentNode()
                 cancelNodeType()
                 current.editor.commands.toggleBulletList()
@@ -499,7 +528,12 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
             key: 'convert-to-task-list',
             icon: <ListCheck3Icon sx={{ fontSize: '1rem' }} />,
             onClick: () => {
-              if (current.node && current.pos !== undefined) {
+              if (!current.node) return
+              const type = current.node.type.name as NodeTypeEnum
+              const groupTypes = [NodeTypeEnum.BulletList, NodeTypeEnum.OrderedList, NodeTypeEnum.TaskList, NodeTypeEnum.Blockquote, NodeTypeEnum.CodeBlock, NodeTypeEnum.Alert]
+              if (groupTypes.includes(type)) {
+                convertNodeAt(current.editor, current.pos, current.node as any, { type: 'taskList' })
+              } else {
                 selectCurrentNode()
                 cancelNodeType()
                 current.editor.commands.toggleTaskList()
@@ -514,7 +548,12 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
             key: 'convert-to-blockquote',
             icon: <QuoteTextIcon sx={{ fontSize: '1rem' }} />,
             onClick: () => {
-              if (current.node && current.pos !== undefined) {
+              if (!current.node) return
+              const type = current.node.type.name as NodeTypeEnum
+              const groupTypes = [NodeTypeEnum.BulletList, NodeTypeEnum.OrderedList, NodeTypeEnum.TaskList, NodeTypeEnum.Blockquote, NodeTypeEnum.CodeBlock, NodeTypeEnum.Alert]
+              if (groupTypes.includes(type)) {
+                convertNodeAt(current.editor, current.pos, current.node as any, { type: 'blockquote' })
+              } else {
                 selectCurrentNode()
                 cancelNodeType()
                 current.editor.commands.toggleBlockquote()
@@ -526,7 +565,12 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
             key: 'convert-to-code-block',
             icon: <CodeBoxLineIcon sx={{ fontSize: '1rem' }} />,
             onClick: () => {
-              if (current.node && current.pos !== undefined) {
+              if (!current.node) return
+              const type = current.node.type.name as NodeTypeEnum
+              const groupTypes = [NodeTypeEnum.BulletList, NodeTypeEnum.OrderedList, NodeTypeEnum.TaskList, NodeTypeEnum.Blockquote, NodeTypeEnum.CodeBlock, NodeTypeEnum.Alert]
+              if (groupTypes.includes(type)) {
+                convertNodeAt(current.editor, current.pos, current.node as any, { type: 'codeBlock' })
+              } else {
                 selectCurrentNode()
                 cancelNodeType()
                 current.editor.commands.toggleCodeBlock()
@@ -538,7 +582,12 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
             key: 'convert-to-alert',
             icon: <Information2LineIcon sx={{ fontSize: '1rem' }} />,
             onClick: () => {
-              if (current.node && current.pos !== undefined) {
+              if (!current.node) return
+              const type = current.node.type.name as NodeTypeEnum
+              const groupTypes = [NodeTypeEnum.BulletList, NodeTypeEnum.OrderedList, NodeTypeEnum.TaskList, NodeTypeEnum.Blockquote, NodeTypeEnum.CodeBlock, NodeTypeEnum.Alert]
+              if (groupTypes.includes(type)) {
+                convertNodeAt(current.editor, current.pos, current.node as any, { type: 'alert', attrs: { variant: 'info', type: 'icon' } })
+              } else {
                 selectCurrentNode()
                 cancelNodeType()
                 current.editor.commands.toggleAlert({ type: 'icon', variant: 'info' })
@@ -746,11 +795,7 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
               onClick={() => {
                 if (current.node && current.pos !== undefined) {
                   const afterPos = current.pos + current.node.nodeSize
-                  current.editor
-                    .chain()
-                    .focus()
-                    .insertContentAt(afterPos, { type: 'paragraph' }, { updateSelection: true })
-                    .run()
+                  current.editor.chain().focus().insertContentAt(afterPos, { type: 'paragraph' }).run()
                 }
               }}
               icon={<TextWrapIcon sx={{ fontSize: '1rem' }} />}
@@ -760,9 +805,12 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
               key={'insert-divider'}
               onClick={() => {
                 if (current.node && current.pos !== undefined) {
-                  current.editor.chain().focus().insertContent({
-                    type: 'horizontalRule',
-                  }).run()
+                  const afterPos = current.pos + current.node.nodeSize
+                  current.editor
+                    .chain()
+                    .focus()
+                    .insertContentAt(afterPos, { type: 'horizontalRule' })
+                    .run()
                 }
               }}
               icon={<SeparatorIcon sx={{ fontSize: '1rem' }} />}

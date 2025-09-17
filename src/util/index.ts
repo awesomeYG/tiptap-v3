@@ -1,6 +1,7 @@
 export * from './fileDownload'
 export * from './fileHandler'
 export * from './floating'
+export * from './linewiseConvert'
 export * from './migrateMathStrings'
 export * from './resourceExtractor'
 export * from './shortcutKey'

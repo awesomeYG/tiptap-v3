@@ -69,6 +69,7 @@ const SelectionText = ({ editor, more }: SelectionTextProps) => {
     })
 
     setHideColor(editor.isActive('codeBlock')
+      || editor.isActive('horizontalRule')
       || editor.isActive('inlineMath')
       || editor.isActive('blockMath'))
   }
@@ -105,6 +106,7 @@ const SelectionText = ({ editor, more }: SelectionTextProps) => {
         || editorProps.isActive('inlineLink')
         || editorProps.isActive('blockAttachment')
         || editorProps.isActive('inlineAttachment')
+        || editorProps.isActive('horizontalRule')
       ) {
         return false
       }
