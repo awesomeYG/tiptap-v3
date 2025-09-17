@@ -1,12 +1,14 @@
-import { autoUpdate, computePosition, flip, offset, shift } from '@floating-ui/dom'
+import { autoUpdate, computePosition, flip, offset, shift, Strategy } from '@floating-ui/dom'
 import { Paper } from '@mui/material'
 import React, { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 
 export interface FloatingPopoverProps {
   open: boolean
   anchorEl: HTMLElement | null
   onClose: () => void
   children: React.ReactNode
+  strategy?: Strategy
   placement?: 'top' | 'bottom' | 'left' | 'right'
   offset?: number
   className?: string
@@ -18,6 +20,7 @@ export const FloatingPopover: React.FC<FloatingPopoverProps> = ({
   anchorEl,
   onClose,
   children,
+  strategy = 'absolute',
   placement = 'bottom',
   offset: offsetValue = 8,
   className,
@@ -34,6 +37,7 @@ export const FloatingPopover: React.FC<FloatingPopoverProps> = ({
 
       computePosition(anchorEl, popoverRef.current, {
         placement,
+        strategy,
         middleware: [
           offset(offsetValue),
           flip(),
@@ -84,7 +88,7 @@ export const FloatingPopover: React.FC<FloatingPopoverProps> = ({
 
   if (!open) return null
 
-  return (
+  return createPortal(
     <>
       {/* 背景遮罩 */}
       <div
@@ -103,7 +107,7 @@ export const FloatingPopover: React.FC<FloatingPopoverProps> = ({
         ref={popoverRef}
         className={className}
         style={{
-          position: 'absolute',
+          position: strategy,
           left: position.x,
           top: position.y,
           zIndex: 1300,
@@ -114,7 +118,8 @@ export const FloatingPopover: React.FC<FloatingPopoverProps> = ({
       >
         {children}
       </Paper>
-    </>
+    </>,
+    document.body
   )
 }
 

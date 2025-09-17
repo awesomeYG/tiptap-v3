@@ -10,6 +10,7 @@ import StarterKit from '@tiptap/starter-kit';
 import { PLACEHOLDER } from '../contants/placeholder';
 import { GetExtensionsProps } from '../type';
 import { SlashCommands, StructuredDiffExtension } from './extension';
+import { CodeExtension } from './mark/Code';
 import {
   AlertExtension,
   AudioExtension,
@@ -51,6 +52,7 @@ export const getExtensions = ({
   const defaultExtensions: any = [
     StarterKit.configure({
       link: false,
+      code: false,
       codeBlock: false,
       listItem: false,
       orderedList: false,
@@ -77,6 +79,7 @@ export const getExtensions = ({
     Subscript,
     Superscript,
     TextStyleKit,
+    CodeExtension,
     AlertExtension,
     Highlight.configure({
       multicolor: true,

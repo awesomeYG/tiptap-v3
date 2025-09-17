@@ -68,8 +68,7 @@ const SelectionText = ({ editor, more }: SelectionTextProps) => {
       subscript: editor.isActive('subscript'),
     })
 
-    setHideColor(editor.isActive('code')
-      || editor.isActive('codeBlock')
+    setHideColor(editor.isActive('codeBlock')
       || editor.isActive('inlineMath')
       || editor.isActive('blockMath'))
   }
@@ -97,7 +96,6 @@ const SelectionText = ({ editor, more }: SelectionTextProps) => {
     shouldShow={({ editor: editorProps, from, to }: { editor: Editor, from: number, to: number }) => {
       if (
         editorProps.state.selection.empty
-        || editorProps.isActive('code')
         || editorProps.isActive('image')
         || editorProps.isActive('video')
         || editorProps.isActive('audio')

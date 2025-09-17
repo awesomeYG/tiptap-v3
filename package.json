@@ -97,6 +97,7 @@
     "@floating-ui/dom": "^1.7.2",
     "@tiptap/core": "^3.4.2",
     "@tiptap/extension-bubble-menu": "^3.4.2",
+    "@tiptap/extension-code": "^3.4.3",
     "@tiptap/extension-code-block-lowlight": "^3.4.2",
     "@tiptap/extension-details": "^3.4.2",
     "@tiptap/extension-drag-handle-react": "^3.4.2",
