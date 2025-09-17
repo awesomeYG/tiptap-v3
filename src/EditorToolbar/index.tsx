@@ -13,6 +13,7 @@ import {
   StrikethroughIcon,
   Table2Icon,
   UnderlineIcon,
+  WindowFillIcon,
 } from '../component/Icons';
 import {
   EditorAlignSelect,
@@ -51,6 +52,7 @@ const EditorToolbar = ({ editor, menuInToolbarMore }: EditorToolbarProps) => {
     table: false,
     link: false,
     alert: false,
+    iframe: false,
   });
 
   const updateSelection = () => {
@@ -68,6 +70,7 @@ const EditorToolbar = ({ editor, menuInToolbarMore }: EditorToolbarProps) => {
       table: editor.isActive('table'),
       link: editor.isActive('link'),
       alert: editor.isActive('alert'),
+      iframe: editor.isActive('iframe'),
     });
   };
 
@@ -238,6 +241,18 @@ const EditorToolbar = ({ editor, menuInToolbarMore }: EditorToolbarProps) => {
             })
           }
           className={active.table ? 'tool-active' : ''}
+        />
+        <ToolbarItem
+          tip={'iframe'}
+          icon={<WindowFillIcon sx={{ fontSize: '1rem' }} />}
+          onClick={() =>
+            editor.commands.setIframe({
+              src: '',
+              width: 760,
+              height: 400,
+            })
+          }
+          className={active.iframe ? 'tool-active' : ''}
         />
         <Divider
           orientation="vertical"
