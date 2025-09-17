@@ -5,6 +5,7 @@ export * from './CodeBlockLowlight';
 export * from './Details';
 export * from './Emoji';
 export * from './FileHandler';
+export * from './Iframe';
 export * from './Image';
 export * from './Link';
 export * from './ListKit';

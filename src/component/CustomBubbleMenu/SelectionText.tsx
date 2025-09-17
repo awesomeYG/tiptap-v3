@@ -42,8 +42,6 @@ const SelectionText = ({ editor, more }: SelectionTextProps) => {
     '#DCEDC8',
   ]
 
-  const [hideColor, setHideColor] = useState(false)
-
   const [active, setActive] = useState({
     quote: false,
     bold: false,
@@ -54,7 +52,6 @@ const SelectionText = ({ editor, more }: SelectionTextProps) => {
     superscript: false,
     subscript: false,
   })
-  // const [showColorPicker, setShowColorPicker] = useState(false)
 
   const updateSelection = () => {
     setActive({
@@ -67,11 +64,6 @@ const SelectionText = ({ editor, more }: SelectionTextProps) => {
       superscript: editor.isActive('superscript'),
       subscript: editor.isActive('subscript'),
     })
-
-    setHideColor(editor.isActive('codeBlock')
-      || editor.isActive('horizontalRule')
-      || editor.isActive('inlineMath')
-      || editor.isActive('blockMath'))
   }
 
   useEffect(() => {
@@ -83,7 +75,7 @@ const SelectionText = ({ editor, more }: SelectionTextProps) => {
     };
   }, [editor]);
 
-  if (!editor.isEditable || hideColor) {
+  if (!editor.isEditable) {
     return null
   }
 
@@ -102,11 +94,14 @@ const SelectionText = ({ editor, more }: SelectionTextProps) => {
         || editorProps.isActive('audio')
         || editorProps.isActive('emoji')
         || editorProps.isActive('codeBlock')
+        || editorProps.isActive('blockMath')
+        || editorProps.isActive('inlineMath')
         || editorProps.isActive('blockLink')
         || editorProps.isActive('inlineLink')
         || editorProps.isActive('blockAttachment')
         || editorProps.isActive('inlineAttachment')
         || editorProps.isActive('horizontalRule')
+        || editorProps.isActive('iframe')
       ) {
         return false
       }

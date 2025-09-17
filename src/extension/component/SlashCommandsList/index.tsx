@@ -20,15 +20,13 @@ const SlashCommandsList = forwardRef<SlashCommandsListRef, SlashCommandsListProp
       <Paper
         elevation={8}
         sx={{
-          // maxHeight: '300px',
-          // overflow: 'auto',
           borderRadius: 'var(--mui-shape-borderRadius)',
           width: '224px',
           p: 0.5
         }}
       >
         <Stack direction={'row'} flexWrap={'wrap'}>
-          {items.slice(0, 17).map((item, index) => (
+          {items.slice(0, 18).map((item, index) => (
             <ToolbarItem
               key={index}
               onClick={() => command(item)}

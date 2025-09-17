@@ -14,7 +14,6 @@ export const slashSuggestion = () => {
       return commands.filter(item => item.title.toLowerCase().includes(query.toLowerCase()))
     },
     command: ({ editor, range, props }: { editor: any; range: { from: number; to: number }; props: any }) => {
-      console.log(props)
       props.command({ editor, range, attrs: props.attrs })
     },
     render: () => {

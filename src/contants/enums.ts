@@ -16,6 +16,7 @@ export enum NodeTypeEnum {
   Video = 'video',
   Audio = 'audio',
   Link = 'link',
+  Iframe = 'iframe',
   Code = 'code',
   InlineMath = 'inlineMath',
   BlockMath = 'blockMath',
@@ -49,6 +50,7 @@ export const NODE_TYPE_LABEL: Record<NodeTypeEnum, {
   [NodeTypeEnum.Code]: { label: '行内代码' },
   [NodeTypeEnum.Link]: { label: '链接' },
   [NodeTypeEnum.Image]: { label: '图片' },
+  [NodeTypeEnum.Iframe]: { label: 'iframe' },
   [NodeTypeEnum.InlineMath]: { label: '行内公式' },
   [NodeTypeEnum.InlineAttachment]: { label: '附件' },
 
