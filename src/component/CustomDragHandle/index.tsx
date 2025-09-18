@@ -1,4 +1,4 @@
-import { AlignBottomIcon, AlignCenterIcon, AlignJustifyIcon, AlignLeftIcon, AlignRightIcon, AlignTopIcon, ArrowDownSLineIcon, AttachmentLineIcon, BrushLineIcon, DeleteLineIcon, DownloadLineIcon, DraggableIcon, FontSizeIcon, FormatClearIcon, H1Icon, H2Icon, H3Icon, ImageLineIcon, Information2LineIcon, ListCheck3Icon, ListOrdered2Icon, ListUnorderedIcon, MovieLineIcon, Music2LineIcon, QuoteTextIcon, Repeat2LineIcon, ScissorsCutLineIcon, SeparatorIcon, TextIcon, TextWrapIcon } from '@ctzhian/tiptap/component/Icons';
+import { AlignBottomIcon, AlignCenterIcon, AlignJustifyIcon, AlignLeftIcon, AlignRightIcon, AlignTopIcon, ArrowDownSLineIcon, AttachmentLineIcon, BrushLineIcon, DeleteLineIcon, DownloadLineIcon, DraggableIcon, FontSizeIcon, FormatClearIcon, H1Icon, H2Icon, H3Icon, ImageLineIcon, IndentDecreaseIcon, IndentIncreaseIcon, Information2LineIcon, ListCheck3Icon, ListOrdered2Icon, ListUnorderedIcon, MovieLineIcon, Music2LineIcon, QuoteTextIcon, Repeat2LineIcon, ScissorsCutLineIcon, SeparatorIcon, TextIcon, TextWrapIcon } from '@ctzhian/tiptap/component/Icons';
 import { NODE_TYPE_LABEL, NodeTypeEnum } from '@ctzhian/tiptap/contants/enums';
 import { MenuItem, OnTipFunction } from '@ctzhian/tiptap/type';
 import { Box, Divider, Stack, Typography, useTheme } from '@mui/material';
@@ -147,6 +147,17 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
     return children.some(child => hasMarksDeep(child))
   }
 
+  const canCurrentNodeIndent = (): boolean => {
+    return !!(current.node && (current.node as any).type)
+  }
+
+  const getCurrentIndentLevel = (): number => {
+    if (!canCurrentNodeIndent()) return 0
+    const node = current.node as any
+    const attrs = current.editor.getAttributes(node.type.name) as Record<string, any>
+    return Number(attrs.indent) || 0
+  }
+
   const shouldShowButton = ({ editor, data }: { editor: Editor, data: { node: Node | null, pos: number } }) => {
     if (!editor || !editor.isEditable) return false
     const currentNode = data.node
@@ -187,9 +198,140 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
     onNodeChange={updateNodeChange}
   >
     {currentNode ? <Menu
-      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      context={<DragIcon />}
+      anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
       transformOrigin={{ vertical: 'top', horizontal: 'left' }}
       arrowIcon={<ArrowDownSLineIcon sx={{ fontSize: '1rem', transform: 'rotate(-90deg)' }} />}
+      header={<>
+        <Stack direction={'row'} flexWrap={'wrap'} sx={{ fontSize: 14 }}>
+          <ToolbarItem
+            key={'indent-decrease'}
+            onClick={() => {
+              if (!canCurrentNodeIndent()) return
+              selectCurrentNode()
+              current.editor.chain().focus().decreaseIndent().run()
+              setCurrent(prev => ({ ...prev }))
+            }}
+            icon={<IndentDecreaseIcon sx={{ fontSize: '1rem' }} />}
+            tip={'减少缩进'}
+            disabled={getCurrentIndentLevel() <= 0}
+          />
+          <ToolbarItem
+            key={'indent-increase'}
+            onClick={() => {
+              if (!canCurrentNodeIndent()) return
+              selectCurrentNode()
+              current.editor.chain().focus().increaseIndent().run()
+              setCurrent(prev => ({ ...prev }))
+            }}
+            icon={<IndentIncreaseIcon sx={{ fontSize: '1rem' }} />}
+            tip={'增加缩进'}
+            disabled={!canCurrentNodeIndent()}
+          />
+          <ToolbarItem
+            key={'insert-divider'}
+            onClick={() => {
+              if (current.node && current.pos !== undefined) {
+                const afterPos = current.pos + current.node.nodeSize
+                current.editor
+                  .chain()
+                  .focus()
+                  .insertContentAt(afterPos, { type: 'horizontalRule' })
+                  .run()
+              }
+            }}
+            icon={<SeparatorIcon sx={{ fontSize: '1rem' }} />}
+            tip={'分割线'}
+          />
+          <ToolbarItem
+            key={'copy'}
+            onClick={async () => {
+              if (current.node && current.pos !== undefined) {
+                const content = new Slice(Fragment.from(current.node), 0, 0)
+                const textContent = current.node.textContent;
+                const htmlContent = editor.view.serializeForClipboard(content).dom.innerHTML
+                try {
+                  if (htmlContent && navigator.clipboard && "write" in navigator.clipboard) {
+                    const blob = new Blob([htmlContent], { type: "text/html" })
+                    const clipboardItem = new ClipboardItem({ "text/html": blob })
+                    await navigator.clipboard.write([clipboardItem])
+                    onTip?.('success', '复制成功')
+                  }
+                } catch {
+                  await navigator.clipboard.writeText(textContent)
+                }
+              }
+            }}
+            icon={<FileCopyLineIcon sx={{ fontSize: '1rem' }} />}
+            tip={`复制${currentNode?.label}`}
+          />
+          <ToolbarItem
+            key={'cut'}
+            onClick={async () => {
+              if (current.node && current.pos !== undefined) {
+                try {
+                  const content = new Slice(Fragment.from(current.node), 0, 0)
+                  const textContent = current.node.textContent;
+                  const htmlContent = editor.view.serializeForClipboard(content).dom.innerHTML
+                  try {
+                    if (htmlContent && navigator.clipboard && "write" in navigator.clipboard) {
+                      const blob = new Blob([htmlContent], { type: "text/html" })
+                      const clipboardItem = new ClipboardItem({ "text/html": blob })
+                      await navigator.clipboard.write([clipboardItem])
+                    }
+                  } catch {
+                    await navigator.clipboard.writeText(textContent)
+                  }
+                  current.editor.chain().focus().deleteRange({ from: current.pos, to: current.pos + current.node.nodeSize }).run();
+                } catch {
+                  onTip?.('error', '剪切失败')
+                }
+              }
+            }}
+            icon={<ScissorsCutLineIcon sx={{ fontSize: '1rem' }} />}
+            tip={`剪切${currentNode?.label}`}
+          />
+          <ToolbarItem
+            key={'delete'}
+            onClick={() => {
+              if (current.node && current.pos !== undefined) {
+                current.editor.chain().focus().deleteRange({ from: current.pos, to: current.pos + current.node.nodeSize }).run();
+              }
+            }}
+            icon={<DeleteLineIcon sx={{ fontSize: '1rem' }} />}
+            tip={`删除${currentNode?.label}`}
+          />
+        </Stack>
+        <Stack direction={'row'} flexWrap={'wrap'} sx={{ fontSize: 14 }}>
+          <ToolbarItem
+            key={'insert-line-break-top'}
+            onClick={() => {
+              if (current.node && current.pos !== undefined) {
+                const afterPos = current.pos
+                current.editor
+                  .chain()
+                  .focus()
+                  .insertContentAt(afterPos, { type: 'paragraph' }, { updateSelection: true })
+                  .run()
+              }
+            }}
+            icon={<TextWrapIcon sx={{ fontSize: '1rem', transform: 'rotate(180deg)' }} />}
+            text={'上方插入行'}
+          />
+          <ToolbarItem
+            key={'insert-line-break'}
+            onClick={() => {
+              if (current.node && current.pos !== undefined) {
+                const afterPos = current.pos + current.node.nodeSize
+                current.editor.chain().focus().insertContentAt(afterPos, { type: 'paragraph' }).run()
+              }
+            }}
+            icon={<TextWrapIcon sx={{ fontSize: '1rem' }} />}
+            text={'下方插入行'}
+          />
+        </Stack>
+        <Divider sx={{ my: 0.5 }} />
+      </>}
       list={[
         {
           customLabel: <Typography sx={{ p: 1, fontSize: '0.75rem', color: 'text.secondary', fontWeight: 'bold' }}>
@@ -755,113 +897,6 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
           }
         }] : []),
       ]}
-      header={
-        <>
-          <Stack direction={'row'} flexWrap={'wrap'} sx={{ fontSize: 14 }}>
-            <ToolbarItem
-              key={'insert-line-break-top'}
-              onClick={() => {
-                if (current.node && current.pos !== undefined) {
-                  const afterPos = current.pos
-                  current.editor
-                    .chain()
-                    .focus()
-                    .insertContentAt(afterPos, { type: 'paragraph' }, { updateSelection: true })
-                    .run()
-                }
-              }}
-              icon={<TextWrapIcon sx={{ fontSize: '1rem', transform: 'rotate(180deg)' }} />}
-              tip={'上方插入行'}
-            />
-            <ToolbarItem
-              key={'insert-line-break'}
-              onClick={() => {
-                if (current.node && current.pos !== undefined) {
-                  const afterPos = current.pos + current.node.nodeSize
-                  current.editor.chain().focus().insertContentAt(afterPos, { type: 'paragraph' }).run()
-                }
-              }}
-              icon={<TextWrapIcon sx={{ fontSize: '1rem' }} />}
-              tip={'下方插入行'}
-            />
-            <ToolbarItem
-              key={'insert-divider'}
-              onClick={() => {
-                if (current.node && current.pos !== undefined) {
-                  const afterPos = current.pos + current.node.nodeSize
-                  current.editor
-                    .chain()
-                    .focus()
-                    .insertContentAt(afterPos, { type: 'horizontalRule' })
-                    .run()
-                }
-              }}
-              icon={<SeparatorIcon sx={{ fontSize: '1rem' }} />}
-              tip={'分割线'}
-            />
-            <ToolbarItem
-              key={'copy'}
-              onClick={async () => {
-                if (current.node && current.pos !== undefined) {
-                  const content = new Slice(Fragment.from(current.node), 0, 0)
-                  const textContent = current.node.textContent;
-                  const htmlContent = editor.view.serializeForClipboard(content).dom.innerHTML
-                  try {
-                    if (htmlContent && navigator.clipboard && "write" in navigator.clipboard) {
-                      const blob = new Blob([htmlContent], { type: "text/html" })
-                      const clipboardItem = new ClipboardItem({ "text/html": blob })
-                      await navigator.clipboard.write([clipboardItem])
-                      onTip?.('success', '复制成功')
-                    }
-                  } catch {
-                    await navigator.clipboard.writeText(textContent)
-                  }
-                }
-              }}
-              icon={<FileCopyLineIcon sx={{ fontSize: '1rem' }} />}
-              tip={`复制${currentNode?.label}`}
-            />
-            <ToolbarItem
-              key={'cut'}
-              onClick={async () => {
-                if (current.node && current.pos !== undefined) {
-                  try {
-                    const content = new Slice(Fragment.from(current.node), 0, 0)
-                    const textContent = current.node.textContent;
-                    const htmlContent = editor.view.serializeForClipboard(content).dom.innerHTML
-                    try {
-                      if (htmlContent && navigator.clipboard && "write" in navigator.clipboard) {
-                        const blob = new Blob([htmlContent], { type: "text/html" })
-                        const clipboardItem = new ClipboardItem({ "text/html": blob })
-                        await navigator.clipboard.write([clipboardItem])
-                      }
-                    } catch {
-                      await navigator.clipboard.writeText(textContent)
-                    }
-                    current.editor.chain().focus().deleteRange({ from: current.pos, to: current.pos + current.node.nodeSize }).run();
-                  } catch {
-                    onTip?.('error', '剪切失败')
-                  }
-                }
-              }}
-              icon={<ScissorsCutLineIcon sx={{ fontSize: '1rem' }} />}
-              tip={`剪切${currentNode?.label}`}
-            />
-            <ToolbarItem
-              key={'delete'}
-              onClick={() => {
-                if (current.node && current.pos !== undefined) {
-                  current.editor.chain().focus().deleteRange({ from: current.pos, to: current.pos + current.node.nodeSize }).run();
-                }
-              }}
-              icon={<DeleteLineIcon sx={{ fontSize: '1rem' }} />}
-              tip={`删除${currentNode?.label}`}
-            />
-          </Stack>
-          <Divider sx={{ my: 0.5 }} />
-        </>
-      }
-      context={<DragIcon />}
     /> : <DragIcon />}
   </DragHandle>
 }

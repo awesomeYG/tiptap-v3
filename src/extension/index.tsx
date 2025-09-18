@@ -26,6 +26,7 @@ import {
   FileHandlerExtension,
   IframeExtension,
   ImageExtension,
+  Indent,
   InlineAttachmentExtension,
   InlineLinkExtension,
   ListExtension,
@@ -80,6 +81,22 @@ export const getExtensions = ({
     Subscript,
     Superscript,
     TextStyleKit,
+    Indent.configure({
+      types: [
+        // 常见块级与项目中定义的节点
+        'paragraph', 'heading', 'blockquote', 'alert', 'codeBlock', 'horizontalRule',
+        'orderedList', 'bulletList', 'taskList', 'taskItem', 'listItem',
+        'details', 'detailsContent', 'detailsSummary',
+        'table',
+        'image', 'video', 'audio', 'iframe',
+        'blockAttachment', 'inlineAttachment', 'blockLink',
+        // 公式
+        'blockMath', 'inlineMath',
+        // 扩展里还有：youtube 等，如需也可开启
+      ],
+      maxLevel: 8,
+      indentPx: 32,
+    }),
     CodeExtension,
     AlertExtension,
     Highlight.configure({

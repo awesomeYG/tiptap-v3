@@ -62,6 +62,8 @@ export { HeadingIcon } from './heading-icon';
 export { ImageAddLineIcon } from './image-add-line-icon';
 export { ImageLineIcon } from './image-line-icon';
 export { ImportLineIcon } from './import-line-icon';
+export { IndentDecreaseIcon } from './indent-decrease-icon';
+export { IndentIncreaseIcon } from './indent-increase-icon';
 export { Information2FillIcon } from './information-2-fill-icon';
 export { Information2LineIcon } from './information-2-line-icon';
 export { InsertColumnLeftIcon } from './insert-column-left-icon';

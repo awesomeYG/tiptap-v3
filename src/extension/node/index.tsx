@@ -7,6 +7,7 @@ export * from './Emoji';
 export * from './FileHandler';
 export * from './Iframe';
 export * from './Image';
+export * from './Indent';
 export * from './Link';
 export * from './ListKit';
 export * from './Mathematics';

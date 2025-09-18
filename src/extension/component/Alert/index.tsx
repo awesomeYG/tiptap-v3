@@ -51,6 +51,7 @@ const AlertView: React.FC<NodeViewProps> = ({ editor, node, updateAttributes, se
       data-drag-handle
       as={'div'}
       style={{
+        marginLeft: (node.attrs as any)?.indent ? (node.attrs as any).indent * 32 : undefined,
         border: '1px solid',
         borderColor: variantData.color,
         color: variantData.color,

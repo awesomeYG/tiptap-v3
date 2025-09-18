@@ -6,6 +6,39 @@
   color: var(--mui-palette-text-secondary);
 }
 
+/* 节点缩进（依赖 data-indent 属性） */
+.tiptap.ProseMirror [data-indent="1"] {
+  margin-left: 32px;
+}
+
+.tiptap.ProseMirror [data-indent="2"] {
+  margin-left: 64px;
+}
+
+.tiptap.ProseMirror [data-indent="3"] {
+  margin-left: 96px;
+}
+
+.tiptap.ProseMirror [data-indent="4"] {
+  margin-left: 128px;
+}
+
+.tiptap.ProseMirror [data-indent="5"] {
+  margin-left: 160px;
+}
+
+.tiptap.ProseMirror [data-indent="6"] {
+  margin-left: 192px;
+}
+
+.tiptap.ProseMirror [data-indent="7"] {
+  margin-left: 224px;
+}
+
+.tiptap.ProseMirror [data-indent="8"] {
+  margin-left: 256px;
+}
+
 .tiptap.ProseMirror[contenteditable="false"] {
   padding: 0;
 }
