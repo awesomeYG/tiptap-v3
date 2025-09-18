@@ -4,6 +4,7 @@ import { Extension } from '@tiptap/core';
 import { Table, TableCell, TableHeader, TableRow } from '@tiptap/extension-table';
 import { Node } from '@tiptap/pm/model';
 import { Plugin, TextSelection } from '@tiptap/pm/state';
+import { Decoration, DecorationSet } from '@tiptap/pm/view';
 import { createTableContextMenuPlugin } from '../component/Table';
 
 export const TableExtension = ({ editable }: { editable: boolean }) => [
@@ -151,6 +152,36 @@ export const TableExtension = ({ editable }: { editable: boolean }) => [
       return editable ? [
         createTableContextMenuPlugin(this.editor),
       ] : [];
+    },
+  })
+  ,
+  // 选中表格时为 table 添加聚焦样式类名
+  Extension.create({
+    name: 'tableActiveClass',
+
+    addProseMirrorPlugins() {
+      if (!editable) return []
+
+      return [new Plugin({
+        props: {
+          decorations: (state) => {
+            const { selection, doc } = state
+            const $from = selection.$from
+            // 如果当前不在表格内，移除装饰
+            // 通过向上寻找最近的 table 节点
+            for (let depth = $from.depth; depth > 0; depth--) {
+              const node = $from.node(depth)
+              if (node.type.name === 'table') {
+                const from = $from.before(depth)
+                const to = $from.after(depth)
+                const deco = Decoration.node(from, to, { class: 'table-focus' })
+                return DecorationSet.create(doc, [deco])
+              }
+            }
+            return null
+          }
+        }
+      })]
     },
   })
   ,
