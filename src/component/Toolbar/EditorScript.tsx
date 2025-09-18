@@ -54,6 +54,17 @@ const EditorScript = ({ editor }: EditorScriptProps) => {
     value={selectedValue}
     className={['superscript', 'subscript'].includes(selectedValue) ? "tool-active" : ""}
     onChange={handleChange}
+    sx={{
+      bgcolor: 'transparent',
+      '&:hover .MuiOutlinedInput-notchedOutline': {
+        borderWidth: '0px !important',
+        borderColor: 'transparent !important',
+      },
+      '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+        borderWidth: '0px !important',
+        borderColor: 'transparent !important',
+      },
+    }}
     renderValue={(value) => {
       return <ToolbarItem
         tip={'上标/下标'}

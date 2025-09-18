@@ -53,6 +53,17 @@ const EditorCode = ({ editor }: EditorCodeProps) => {
     value={selectedValue}
     className={['code', 'codeBlock'].includes(selectedValue) ? "tool-active" : ""}
     onChange={handleChange}
+    sx={{
+      bgcolor: 'transparent',
+      '&:hover .MuiOutlinedInput-notchedOutline': {
+        borderWidth: '0px !important',
+        borderColor: 'transparent !important',
+      },
+      '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+        borderWidth: '0px !important',
+        borderColor: 'transparent !important',
+      },
+    }}
     renderValue={(value) => {
       return <ToolbarItem
         tip={'代码'}

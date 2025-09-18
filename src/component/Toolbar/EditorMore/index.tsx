@@ -29,6 +29,17 @@ const EditorMore = ({ more = [] }: EditorMoreProps) => {
     <Select
       value={'none'}
       onChange={handleChange}
+      sx={{
+        bgcolor: 'transparent',
+        '&:hover .MuiOutlinedInput-notchedOutline': {
+          borderWidth: '0px !important',
+          borderColor: 'transparent !important',
+        },
+        '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+          borderWidth: '0px !important',
+          borderColor: 'transparent !important',
+        },
+      }}
       renderValue={() => {
         return <ToolbarItem
           tip={'更多'}

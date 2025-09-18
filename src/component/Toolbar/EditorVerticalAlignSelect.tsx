@@ -53,6 +53,17 @@ const EditorVerticalAlignSelect = ({ editor }: EditorVerticalAlignSelectProps) =
     value={selectedValue}
     className={['top', 'middle', 'bottom'].includes(selectedValue) ? "tool-active" : ""}
     onChange={handleChange}
+    sx={{
+      bgcolor: 'transparent',
+      '&:hover .MuiOutlinedInput-notchedOutline': {
+        borderWidth: '0px !important',
+        borderColor: 'transparent !important',
+      },
+      '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+        borderWidth: '0px !important',
+        borderColor: 'transparent !important',
+      },
+    }}
     renderValue={(value) => {
       return <ToolbarItem
         tip={'垂直对齐方式'}
