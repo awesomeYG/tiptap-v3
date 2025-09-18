@@ -1,12 +1,9 @@
 import { NestedList } from '@ctzhian/tiptap/component'
-import { ArrowDownSLineIcon, AttachmentLineIcon, CheckboxCircleFillIcon, CloseCircleFillIcon, ErrorWarningFillIcon, FormulaIcon, FunctionsIcon, ImageLineIcon, Information2FillIcon, Information2LineIcon, MovieLineIcon, Music2LineIcon, SquareRootIcon, UploadIcon } from '@ctzhian/tiptap/component/Icons'
+import { ArrowDownSLineIcon, AttachmentLineIcon, CheckboxCircleFillIcon, CloseCircleFillIcon, ErrorWarningFillIcon, FormulaIcon, FunctionsIcon, ImageLineIcon, Information2FillIcon, Information2LineIcon, MovieLineIcon, Music2LineIcon, SquareRootIcon, Table2Icon, UploadIcon } from '@ctzhian/tiptap/component/Icons'
 import { ToolbarItem } from '@ctzhian/tiptap/component/Toolbar'
+import TableSizePicker from '@ctzhian/tiptap/component/Toolbar/TableSizePicker'
 import { SlashCommandsListProps, SlashCommandsListRef } from '@ctzhian/tiptap/type'
-import {
-  Divider,
-  Paper,
-  Stack
-} from '@mui/material'
+import { Divider, Paper, Stack } from '@mui/material'
 import React, { forwardRef } from 'react'
 
 const SlashCommandsList = forwardRef<SlashCommandsListRef, SlashCommandsListProps>(
@@ -26,7 +23,7 @@ const SlashCommandsList = forwardRef<SlashCommandsListRef, SlashCommandsListProp
         }}
       >
         <Stack direction={'row'} flexWrap={'wrap'}>
-          {items.slice(0, 18).map((item, index) => (
+          {items.slice(0, 17).map((item, index) => (
             <ToolbarItem
               key={index}
               onClick={() => command(item)}
@@ -38,6 +35,22 @@ const SlashCommandsList = forwardRef<SlashCommandsListRef, SlashCommandsListProp
         <Divider sx={{ my: 0.5 }} />
         <NestedList
           list={[
+            {
+              label: '表格',
+              key: 'table',
+              icon: <Table2Icon sx={{ fontSize: '1rem' }} />,
+              children: [
+                {
+                  key: 'table-size-picker',
+                  customLabel: <TableSizePicker
+                    onConfirm={(cols, rows) => {
+                      const node = items.find(it => it.title === '表格')
+                      if (node) command({ ...node, attrs: { cols, rows } })
+                    }}
+                  />
+                },
+              ],
+            },
             {
               label: '警告提示',
               key: 'highlight',
@@ -151,17 +164,6 @@ const SlashCommandsList = forwardRef<SlashCommandsListRef, SlashCommandsListProp
             }
           ]}
           arrowIcon={<ArrowDownSLineIcon sx={{ fontSize: '1rem', transform: 'rotate(-90deg)' }} />}
-        // onItemClick={(item) => {
-        //   console.log(1, item)
-        //   if (item.attrs) {
-        //     const node = items.find(it => it.title === '警告提示')
-        //     if (node) {
-        //       command({ ...node, attrs: item.attrs })
-        //       return
-        //     }
-        //   }
-        //   if (item.onClick) item.onClick()
-        // }}
         />
       </Paper>
     )

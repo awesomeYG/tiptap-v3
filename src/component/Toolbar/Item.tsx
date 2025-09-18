@@ -5,6 +5,7 @@ import React from 'react';
 
 interface ToolbarItemProps {
   tip?: string;
+  customComponent?: React.ReactNode
   text?: string;
   shortcutKey?: string[];
   sx?: SxProps<Theme>;
@@ -14,66 +15,75 @@ interface ToolbarItemProps {
   onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
 
-const ToolbarItem = React.forwardRef<HTMLButtonElement, ToolbarItemProps>(
-  (
-    { tip, shortcutKey, icon, sx, text, onClick, className, disabled, ...rest },
-    ref,
-  ) => {
-    const shortcutKeyText = getShortcutKeyText(shortcutKey || []);
-    return (
-      <Tooltip
-        title={
-          tip ? (
-            <Stack alignItems="center">
-              <Box>{tip}</Box>
-              {shortcutKeyText && (
-                <Box sx={{ fontSize: 12 }}>{shortcutKeyText}</Box>
-              )}
-            </Stack>
-          ) : null
-        }
-        arrow
-      >
-        <Box>
-          <Button
-            ref={ref}
-            onClick={onClick}
-            className={className}
-            disabled={disabled}
-            sx={{
-              minWidth: '36px',
-              p: 1,
-              color: 'text.primary',
-              borderRadius: 'var(--mui-shape-borderRadius)',
-              '&.tool-active': {
-                bgcolor: 'background.paper2',
-                color: 'primary.main',
-              },
-              '&[disabled]': {
-                color: 'text.disabled',
-              },
-              '&:hover': {
-                bgcolor: 'background.paper2',
-              },
-              textTransform: 'none',
-              ...sx,
-            }}
-            {...rest}
+const ToolbarItem = React.forwardRef<HTMLButtonElement, ToolbarItemProps>(({
+  tip,
+  customComponent,
+  shortcutKey,
+  icon,
+  sx,
+  text,
+  onClick,
+  className,
+  disabled,
+  ...rest
+}, ref) => {
+  const shortcutKeyText = getShortcutKeyText(shortcutKey || []);
+
+  return (
+    <Tooltip
+      arrow
+      title={tip ? (
+        <>
+          <Stack alignItems="center" {...(customComponent ? { direction: 'row', justifyContent: 'center', gap: 1 } : {})}>
+            <Box>{tip}</Box>
+            {shortcutKeyText && (
+              <Box sx={{ fontSize: 12 }}>{shortcutKeyText}</Box>
+            )}
+          </Stack>
+          {customComponent}
+        </>
+      ) : null}
+    >
+      <Box>
+        <Button
+          ref={ref}
+          onClick={onClick}
+          className={className}
+          disabled={disabled}
+          sx={{
+            minWidth: '36px',
+            p: 1,
+            color: 'text.primary',
+            borderRadius: 'var(--mui-shape-borderRadius)',
+            '&.tool-active': {
+              bgcolor: 'background.paper2',
+              color: 'primary.main',
+            },
+            '&[disabled]': {
+              color: 'text.disabled',
+            },
+            '&:hover': {
+              bgcolor: 'background.paper2',
+            },
+            textTransform: 'none',
+            ...sx,
+          }}
+          {...rest}
+        >
+          <Stack
+            direction={'row'}
+            alignItems={'center'}
+            gap={1}
+            sx={{ lineHeight: 1, flexShrink: 0 }}
           >
-            <Stack
-              direction={'row'}
-              alignItems={'center'}
-              gap={1}
-              sx={{ lineHeight: 1, flexShrink: 0 }}
-            >
-              {icon}
-              {text && <Box component="span">{text}</Box>}
-            </Stack>
-          </Button>
-        </Box>
-      </Tooltip>
-    );
-  },
+            {icon}
+            {text && <Box component="span">{text}</Box>}
+          </Stack>
+        </Button>
+      </Box>
+    </Tooltip>
+  );
+},
 );
 
 ToolbarItem.displayName = 'toolbar-item';

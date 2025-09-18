@@ -30,6 +30,7 @@ import {
   EditorVerticalAlignSelect,
   ToolbarItem,
 } from '../component/Toolbar';
+import TableSizePicker from '../component/Toolbar/TableSizePicker';
 import { ToolbarItemType } from '../type';
 
 interface EditorToolbarProps {
@@ -233,14 +234,12 @@ const EditorToolbar = ({ editor, menuInToolbarMore }: EditorToolbarProps) => {
           tip={'表格'}
           shortcutKey={['ctrl', '9']}
           icon={<Table2Icon sx={{ fontSize: '1rem' }} />}
-          onClick={() =>
-            editor.commands.insertTable({
-              rows: 3,
-              cols: 4,
-              withHeaderRow: true,
-            })
-          }
           className={active.table ? 'tool-active' : ''}
+          customComponent={<TableSizePicker
+            onConfirm={(cols, rows) => {
+              editor.chain().focus().insertTable({ rows, cols, withHeaderRow: true }).run();
+            }}
+          />}
         />
         <ToolbarItem
           tip={'iframe'}

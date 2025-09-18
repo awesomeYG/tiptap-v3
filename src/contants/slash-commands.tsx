@@ -116,18 +116,18 @@ export const slashCommands = [
     }
   },
   {
-    title: '表格',
-    icon: <Table2Icon sx={{ fontSize: '1rem' }} />,
-    command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
-      editor.chain().focus().deleteRange(range).insertTable({ rows: 3, cols: 4, withHeaderRow: true }).run()
-    }
-  },
-  {
     title: 'iframe',
     icon: <WindowFillIcon sx={{ fontSize: '1rem' }} />,
     command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
       editor.chain().focus().deleteRange(range).setIframe({ src: '', width: 760, height: 400 }).run()
     }
+  },
+  {
+    title: '表格',
+    icon: <Table2Icon sx={{ fontSize: '1rem' }} />,
+    command: ({ editor, range, attrs }: { editor: Editor; range: { from: number; to: number }; attrs: any }) => {
+      editor.chain().focus().deleteRange(range).insertTable({ rows: attrs.rows || 3, cols: attrs.cols || 4, withHeaderRow: true }).run()
+    },
   },
   {
     title: '警告提示',

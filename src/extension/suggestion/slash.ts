@@ -5,7 +5,6 @@ import { ReactRenderer } from '@tiptap/react'
 import { SuggestionProps } from '@tiptap/suggestion'
 import SlashCommandsList from '../component/SlashCommandsList/index'
 
-
 export const slashSuggestion = () => {
   return {
     items: ({ query }: { query: string }) => {
