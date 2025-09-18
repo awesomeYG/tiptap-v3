@@ -8,7 +8,6 @@ export type LinewiseTarget =
   | { type: 'bulletList' }
   | { type: 'taskList' }
   | { type: 'blockquote' }
-  | { type: 'codeBlock' }
   | { type: 'alert', attrs?: { variant?: string, type?: 'icon' | 'text' } }
 
 /**
@@ -108,10 +107,6 @@ export function buildNodeFromLines(editor: Editor, lines: string[], target: Line
       const paragraphs = lines.map(l => createParagraph(l))
       return schema.nodes.blockquote.create(undefined, Fragment.fromArray(paragraphs))
     }
-    case 'codeBlock': {
-      const text = lines.join('\n')
-      return schema.nodes.codeBlock.create(undefined, text ? schema.text(text) : undefined)
-    }
     case 'alert': {
       const attrs = target.attrs || { variant: 'info', type: 'icon' }
       // 使用 hardBreak 分隔行
@@ -134,18 +129,72 @@ export function buildNodeFromLines(editor: Editor, lines: string[], target: Line
 }
 
 /**
+ * 通用替换与派发
+ */
+function replaceRange(editor: Editor, from: number, to: number, content: PMNode | Fragment) {
+  const tr = editor.state.tr
+  tr.replaceWith(from, to, content as any)
+  editor.view.dispatch(tr)
+  editor.view.focus()
+}
+
+function isContainerNode(node: PMNode): boolean {
+  const name = node.type.name
+  return name === 'blockquote' || name === 'alert'
+}
+
+function isContainerTarget(target: LinewiseTarget): boolean {
+  return target.type === 'blockquote' || target.type === 'alert'
+}
+
+function createContainerWithContent(editor: Editor, target: LinewiseTarget, content: PMNode | Fragment): PMNode {
+  const { schema } = editor
+  if (target.type === 'blockquote') {
+    return schema.nodes.blockquote.create(undefined, content as any)
+  }
+  if (target.type === 'alert') {
+    const attrs = (target as any).attrs || { variant: 'info', type: 'icon' }
+    return schema.nodes.alert.create(attrs as any, content as any)
+  }
+  throw new Error('createContainerWithContent: invalid container target')
+}
+
+/**
  * 将给定位置的节点转换为目标类型（按行规则）。
  */
 export function convertNodeAt(editor: Editor, pos: number, node: PMNode, target: LinewiseTarget) {
-  const lines = extractLinesFromNode(node)
-  const replacement = buildNodeFromLines(editor, lines, target)
   const from = pos
   const to = pos + node.nodeSize
-  const tr = editor.state.tr
-  // Fragment 或 Node 均可传入 replaceWith
-  tr.replaceWith(from, to, replacement as any)
-  editor.view.dispatch(tr)
-  editor.view.focus()
+  const nodeType = node.type.name
+
+  // 规则 1：目标为容器（blockquote/alert）
+  if (isContainerTarget(target)) {
+    // 再次点击同容器 -> 拆包
+    if ((target.type === 'blockquote' && nodeType === 'blockquote') || (target.type === 'alert' && nodeType === 'alert')) {
+      replaceRange(editor, from, to, node.content as any)
+      return
+    }
+    // 容器互转：用内部内容构造目标容器，避免嵌套
+    const content = isContainerNode(node) ? node.content : Fragment.from(node)
+    const wrapper = createContainerWithContent(editor, target, content)
+    replaceRange(editor, from, to, wrapper as any)
+    return
+  }
+
+  // 规则 2：当前为容器，且目标为非容器 -> 子节点逐个转换
+  if (isContainerNode(node)) {
+    const nodesToInsert: PMNode[] = [] as unknown as PMNode[]
+    node.forEach(child => {
+      const built = buildNodeFromLines(editor, extractLinesFromNode(child), target)
+      Fragment.from(built as any).forEach(n => { nodesToInsert.push(n as PMNode) })
+    })
+    replaceRange(editor, from, to, Fragment.fromArray(nodesToInsert) as any)
+    return
+  }
+
+  // 其他：按行构建单节点替换
+  const replacement = buildNodeFromLines(editor, extractLinesFromNode(node), target)
+  replaceRange(editor, from, to, replacement as any)
 }
 
 

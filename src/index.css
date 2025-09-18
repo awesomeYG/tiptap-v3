@@ -14,6 +14,10 @@
   margin-top: 0 !important;
 }
 
+.tiptap.ProseMirror :last-child {
+  margin-bottom: 0 !important;
+}
+
 .tiptap.ProseMirror a {
   text-decoration: underline;
 }
@@ -25,7 +29,8 @@
   margin-bottom: 20px;
 }
 
-.tiptap.ProseMirror blockquote p {
+.tiptap.ProseMirror blockquote p,
+.tiptap.ProseMirror .node-alert p {
   margin: 0;
 }
 

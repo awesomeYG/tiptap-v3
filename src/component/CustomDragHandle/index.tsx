@@ -1,4 +1,4 @@
-import { AlignBottomIcon, AlignCenterIcon, AlignJustifyIcon, AlignLeftIcon, AlignRightIcon, AlignTopIcon, ArrowDownSLineIcon, AttachmentLineIcon, BrushLineIcon, CodeBoxLineIcon, DeleteLineIcon, DownloadLineIcon, DraggableIcon, FontSizeIcon, FormatClearIcon, H1Icon, H2Icon, H3Icon, ImageLineIcon, Information2LineIcon, ListCheck3Icon, ListOrdered2Icon, ListUnorderedIcon, MovieLineIcon, Music2LineIcon, QuoteTextIcon, Repeat2LineIcon, ScissorsCutLineIcon, SeparatorIcon, TextIcon, TextWrapIcon } from '@ctzhian/tiptap/component/Icons';
+import { AlignBottomIcon, AlignCenterIcon, AlignJustifyIcon, AlignLeftIcon, AlignRightIcon, AlignTopIcon, ArrowDownSLineIcon, AttachmentLineIcon, BrushLineIcon, DeleteLineIcon, DownloadLineIcon, DraggableIcon, FontSizeIcon, FormatClearIcon, H1Icon, H2Icon, H3Icon, ImageLineIcon, Information2LineIcon, ListCheck3Icon, ListOrdered2Icon, ListUnorderedIcon, MovieLineIcon, Music2LineIcon, QuoteTextIcon, Repeat2LineIcon, ScissorsCutLineIcon, SeparatorIcon, TextIcon, TextWrapIcon } from '@ctzhian/tiptap/component/Icons';
 import { NODE_TYPE_LABEL, NodeTypeEnum } from '@ctzhian/tiptap/contants/enums';
 import { MenuItem, OnTipFunction } from '@ctzhian/tiptap/type';
 import { Box, Divider, Stack, Typography, useTheme } from '@mui/material';
@@ -557,23 +557,6 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
                 selectCurrentNode()
                 cancelNodeType()
                 current.editor.commands.toggleBlockquote()
-              }
-            }
-          }, {
-            label: '代码块',
-            selected: current.node?.type.name === 'codeBlock',
-            key: 'convert-to-code-block',
-            icon: <CodeBoxLineIcon sx={{ fontSize: '1rem' }} />,
-            onClick: () => {
-              if (!current.node) return
-              const type = current.node.type.name as NodeTypeEnum
-              const groupTypes = [NodeTypeEnum.BulletList, NodeTypeEnum.OrderedList, NodeTypeEnum.TaskList, NodeTypeEnum.Blockquote, NodeTypeEnum.CodeBlock, NodeTypeEnum.Alert]
-              if (groupTypes.includes(type)) {
-                convertNodeAt(current.editor, current.pos, current.node as any, { type: 'codeBlock' })
-              } else {
-                selectCurrentNode()
-                cancelNodeType()
-                current.editor.commands.toggleCodeBlock()
               }
             }
           }, {

@@ -56,7 +56,7 @@ const Reader = () => {
         }, 100);
       })
     },
-    content: `<iframe class="iframe-wrapper" width="760" height="400" src="https://bbs.chaitin.cn/user/signin?ref=%2F" frameborder="0" allowfullscreen="true"></iframe><p></p>`
+    content: ``
   });
 
   return <EditorThemeProvider mode='light'>
