@@ -107,7 +107,7 @@ const EditorFontSize = ({ editor }: EditorFontSizeProps) => {
     }}
   >
     {Options.map(it => <MenuItem key={it} value={it}>
-      <Box sx={{ textAlign: 'center', fontSize: '0.875rem' }}>{it}</Box>
+      <Box sx={{ textAlign: 'center', fontSize: '0.875rem', width: '100%' }}>{it}</Box>
     </MenuItem>)}
   </Select>
 };

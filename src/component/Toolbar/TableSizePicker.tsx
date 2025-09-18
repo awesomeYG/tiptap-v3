@@ -1,7 +1,9 @@
-import { Box, Stack } from "@mui/material";
+import { addOpacityToColor } from "@ctzhian/tiptap/util";
+import { Box, Stack, useTheme } from "@mui/material";
 import React, { useState } from "react";
 
 const TableSizePicker: React.FC<{ onConfirm: (cols: number, rows: number) => void }> = ({ onConfirm }) => {
+  const theme = useTheme()
   const [cols, setCols] = useState(0);
   const [rows, setRows] = useState(0);
   const size = 10;
@@ -36,16 +38,21 @@ const TableSizePicker: React.FC<{ onConfirm: (cols: number, rows: number) => voi
                   }}
                   onClick={() => onConfirm(c, r)}
                   sx={{
-                    width: '18px',
-                    height: '18px',
                     borderRadius: '3px',
+                    overflow: 'hidden',
+                    cursor: 'pointer',
+                    bgcolor: 'background.default',
                     border: '1px solid',
                     borderColor: 'divider',
-                    bgcolor: activeCell ? 'primary.main' : 'background.default',
-                    transition: 'background-color 0.12s ease',
-                    cursor: 'pointer',
                   }}
-                />
+                >
+                  <Box sx={{
+                    width: '18px',
+                    height: '18px',
+                    transition: 'background-color 0.12s ease',
+                    bgcolor: activeCell ? addOpacityToColor(theme.palette.primary.main, 0.5) : theme.palette.background.default,
+                  }} />
+                </Box>
               );
             })}
           </React.Fragment>

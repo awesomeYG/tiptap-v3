@@ -51,10 +51,10 @@ const ToolbarItem = React.forwardRef<HTMLButtonElement, ToolbarItemProps>(({
           className={className}
           disabled={disabled}
           sx={{
+            minHeight: '36px',
             minWidth: '36px',
             p: 1,
             color: 'text.primary',
-            borderRadius: 'var(--mui-shape-borderRadius)',
             '&.tool-active': {
               bgcolor: 'background.paper2',
               color: 'primary.main',

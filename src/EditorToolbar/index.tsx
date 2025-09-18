@@ -102,6 +102,9 @@ const EditorToolbar = ({ editor, menuInToolbarMore }: EditorToolbarProps) => {
             input: {
               display: 'none',
             },
+            '&:hover': {
+              bgcolor: 'background.paper2',
+            },
             '&.tool-active': {
               bgcolor: 'background.paper2',
               color: 'primary.main',
