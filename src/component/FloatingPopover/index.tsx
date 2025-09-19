@@ -1,11 +1,11 @@
-import { autoUpdate, computePosition, flip, offset, shift, Strategy } from '@floating-ui/dom'
+import { autoUpdate, computePosition, flip, offset, shift, Strategy, VirtualElement } from '@floating-ui/dom'
 import { Paper } from '@mui/material'
 import React, { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 
 export interface FloatingPopoverProps {
   open: boolean
-  anchorEl: HTMLElement | null
+  anchorEl: HTMLElement | VirtualElement | null
   onClose: () => void
   children: React.ReactNode
   strategy?: Strategy
@@ -69,11 +69,13 @@ export const FloatingPopover: React.FC<FloatingPopoverProps> = ({
     const handleClickOutside = (event: MouseEvent) => {
       if (
         popoverRef.current &&
-        !popoverRef.current.contains(event.target as Node) &&
-        anchorEl &&
-        !anchorEl.contains(event.target as Node)
+        !popoverRef.current.contains(event.target as Node)
       ) {
-        onClose()
+        // 仅当锚点为真实元素时，才检测是否点击在锚点上
+        const isHitAnchor = (anchorEl instanceof HTMLElement) && anchorEl.contains(event.target as Node)
+        if (!isHitAnchor) {
+          onClose()
+        }
       }
     }
 
@@ -111,6 +113,7 @@ export const FloatingPopover: React.FC<FloatingPopoverProps> = ({
           left: position.x,
           top: position.y,
           zIndex: 1300,
+          boxShadow: 'var(--mui-shadows-1)',
           borderRadius: 'var(--mui-shape-borderRadius)',
           ...style
         }}

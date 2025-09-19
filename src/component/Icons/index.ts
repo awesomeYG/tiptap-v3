@@ -1,6 +1,7 @@
 // 此文件由脚本自动生成
 // 导出所有图标组件
 
+export { AddLineIcon } from './add-line-icon';
 export { AiGenerate2Icon } from './ai-generate-2-icon';
 export { AiGenerateTextIcon } from './ai-generate-text-icon';
 export { AlignBottomIcon } from './align-bottom-icon';

@@ -76,7 +76,7 @@ const LinkViewWrapper: React.FC<NodeViewProps> = ({
 
   const handleDeleteLink = () => {
     editor.commands.deleteNode(node.type)
-    editor.commands.insertContent(attrs.title || getLinkTitle(attrs.href))
+    editor.commands.insertContent(attrs.title || attrs.href)
   }
 
   const handleCopyLink = useCallback(async (event: React.MouseEvent<HTMLButtonElement>) => {

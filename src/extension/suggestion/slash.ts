@@ -1,40 +1,55 @@
 import { slashCommands } from '@ctzhian/tiptap/contants/slash-commands'
-import type { SlashCommandsListProps, SlashCommandsListRef } from '@ctzhian/tiptap/type'
-import { updatePosition } from '@ctzhian/tiptap/util'
+import type { Editor, SlashCommandsListProps, SlashCommandsListRef } from '@ctzhian/tiptap/type'
 import { ReactRenderer } from '@tiptap/react'
 import { SuggestionProps } from '@tiptap/suggestion'
-import SlashCommandsList from '../component/SlashCommandsList/index'
+import SlashCommandsOverlay from '../component/SlashCommandsList/Overlay'
 
 export const slashSuggestion = () => {
   return {
     items: ({ query }: { query: string }) => {
-      const commands = slashCommands
-      if (!query) return commands
-      return commands.filter(item => item.title.toLowerCase().includes(query.toLowerCase()))
+      return slashCommands
+      // const commands = slashCommands
+      // if (!query) return commands
+      // return commands.filter(item => item.title.toLowerCase().includes(query.toLowerCase()))
     },
-    command: ({ editor, range, props }: { editor: any; range: { from: number; to: number }; props: any }) => {
+    decorationTag: 'span',
+    decorationClass: 'slash-decoration',
+    decorationContent: '插入',
+    command: ({ editor, range, props }: { editor: Editor; range: { from: number; to: number }; props: any }) => {
       props.command({ editor, range, attrs: props.attrs })
     },
     render: () => {
       let component: ReactRenderer<SlashCommandsListRef, SlashCommandsListProps> | null = null
+      let lastProps: SuggestionProps<any> | null = null
+
+      const isCaretAfterSlash = (editor: Editor) => {
+        try {
+          const pos = editor.state.selection.from
+          if (pos <= 1) return false
+          const char = editor.state.doc.textBetween(pos - 1, pos, '\n', '\n')
+          return char === '/'
+        } catch {
+          return false
+        }
+      }
 
       return {
         onStart: (props: SuggestionProps<any>) => {
-          component = new ReactRenderer(SlashCommandsList, {
-            props,
+          lastProps = props
+          const shouldOpen = !props.query || props.query.length === 0
+          component = new ReactRenderer(SlashCommandsOverlay, {
+            props: { ...props, open: shouldOpen },
             editor: props.editor,
           })
           if (!props.clientRect) return
           const element = component.element as HTMLElement
-          element.style.position = 'absolute'
           document.body.appendChild(element)
-          updatePosition(props.editor, element)
         },
         onUpdate(props: SuggestionProps<any>) {
-          if (!component) return
-          component.updateProps(props)
-          if (!props.clientRect) return
-          updatePosition(props.editor, component.element as HTMLElement)
+          if (!component) return false
+          lastProps = props
+          const shouldOpen = !props.query || props.query.length === 0
+          component.updateProps({ ...props, open: shouldOpen })
         },
         onKeyDown(props: { event: KeyboardEvent }) {
           if (!component) return false
@@ -46,7 +61,12 @@ export const slashSuggestion = () => {
           return component.ref?.onKeyDown(props) || false
         },
         onExit() {
-          if (!component) return
+          if (!component) return false
+          const editor = lastProps?.editor as Editor | undefined
+          if (editor && isCaretAfterSlash(editor)) {
+            return false
+          }
+          component.updateProps({ open: false } as any)
           component.destroy()
           component.element.remove()
         },

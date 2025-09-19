@@ -3,7 +3,7 @@ import { ArrowDownSLineIcon, AttachmentLineIcon, CheckboxCircleFillIcon, CloseCi
 import { ToolbarItem } from '@ctzhian/tiptap/component/Toolbar'
 import TableSizePicker from '@ctzhian/tiptap/component/Toolbar/TableSizePicker'
 import { SlashCommandsListProps, SlashCommandsListRef } from '@ctzhian/tiptap/type'
-import { Divider, Paper, Stack } from '@mui/material'
+import { Box, Divider, Stack } from '@mui/material'
 import React, { forwardRef } from 'react'
 
 const SlashCommandsList = forwardRef<SlashCommandsListRef, SlashCommandsListProps>(
@@ -14,10 +14,8 @@ const SlashCommandsList = forwardRef<SlashCommandsListRef, SlashCommandsListProp
     }
 
     return (
-      <Paper
-        elevation={8}
+      <Box
         sx={{
-          borderRadius: 'var(--mui-shape-borderRadius)',
           width: '224px',
           p: 0.5
         }}
@@ -165,7 +163,7 @@ const SlashCommandsList = forwardRef<SlashCommandsListRef, SlashCommandsListProp
           ]}
           arrowIcon={<ArrowDownSLineIcon sx={{ fontSize: '1rem', transform: 'rotate(-90deg)' }} />}
         />
-      </Paper>
+      </Box>
     )
   }
 )

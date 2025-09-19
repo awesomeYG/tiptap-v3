@@ -539,3 +539,17 @@
 .PhotoView-Slider__BannerWrap {
   background-color: rgba(33, 34, 45, 0.2) !important;
 }
+
+.slash-decoration[data-decoration-content].is-empty {
+  padding: 4px 8px;
+  background-color: var(--mui-palette-background-paper2);
+  border-radius: var(--mui-shape-borderRadius);
+}
+
+.slash-decoration[data-decoration-content].is-empty::after {
+  content: attr(data-decoration-content);
+  color: var(--mui-palette-text-disabled);
+  padding-left: 0.25rem;
+  font-size: 14px;
+  line-height: 24px;
+}
