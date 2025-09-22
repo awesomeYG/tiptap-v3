@@ -553,3 +553,11 @@
   font-size: 14px;
   line-height: 24px;
 }
+
+/* AI 续写建议样式 */
+.tiptap.ProseMirror .ai-writing-suggestion {
+  color: var(--mui-palette-text-disabled);
+  pointer-events: none;
+  user-select: none;
+  white-space: pre-wrap;
+}

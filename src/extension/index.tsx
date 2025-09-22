@@ -9,7 +9,7 @@ import { CharacterCount, Placeholder } from '@tiptap/extensions';
 import StarterKit from '@tiptap/starter-kit';
 import { PLACEHOLDER } from '../contants/placeholder';
 import { GetExtensionsProps } from '../type';
-import { SlashCommands, StructuredDiffExtension } from './extension';
+import { AiWritingExtension, SlashCommands, StructuredDiffExtension } from './extension';
 import { CodeExtension } from './mark/Code';
 import {
   AlertExtension,
@@ -50,6 +50,7 @@ export const getExtensions = ({
   onUpload,
   onError,
   onTocUpdate,
+  onAiWritingGetSuggestion,
 }: GetExtensionsProps) => {
   const defaultExtensions: any = [
     StarterKit.configure({
@@ -105,16 +106,19 @@ export const getExtensions = ({
     Placeholder.configure({
       emptyNodeClass: 'custom-placeholder-node',
       showOnlyWhenEditable: true,
-      placeholder: ({ node, pos }) => {
+      placeholder: ({ editor, node, pos }) => {
         const { type, attrs } = node
         if (pos === 0) {
           return PLACEHOLDER.default
         }
-        if (type.name === 'heading') {
-          return PLACEHOLDER.heading[attrs.level as keyof typeof PLACEHOLDER.heading]
-        }
-        if (PLACEHOLDER[type.name as keyof typeof PLACEHOLDER]) {
-          return PLACEHOLDER[type.name as keyof typeof PLACEHOLDER] as string
+        const aiWritingEnabled = !!(editor as any)?.storage?.aiWriting?.enabled
+        if (!aiWritingEnabled) {
+          if (type.name === 'heading') {
+            return PLACEHOLDER.heading[attrs.level as keyof typeof PLACEHOLDER.heading]
+          }
+          if (PLACEHOLDER[type.name as keyof typeof PLACEHOLDER]) {
+            return PLACEHOLDER[type.name as keyof typeof PLACEHOLDER] as string
+          }
         }
         return ''
       },
@@ -151,7 +155,7 @@ export const getExtensions = ({
     defaultExtensions.push(Youtube)
   }
 
-  if (editable) {
+  if (editable) { // 编辑模式
     if (!exclude?.includes('fileHandler')) {
       const FileHandler = FileHandlerExtension({ onUpload })
       defaultExtensions.push(FileHandler)
@@ -163,10 +167,14 @@ export const getExtensions = ({
       defaultExtensions.push(SlashCommands)
     }
 
+    if (!exclude?.includes('aiWriting')) {
+      defaultExtensions.push(AiWritingExtension({ onAiWritingGetSuggestion }))
+    }
+
     if (!exclude?.includes('invisibleCharacters')) {
       defaultExtensions.push(InvisibleCharacters)
     }
-  } else {
+  } else { // 只读模式
     if (!exclude?.includes('structuredDiff')) {
       defaultExtensions.push(StructuredDiffExtension)
     }

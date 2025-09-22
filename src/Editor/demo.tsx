@@ -1,6 +1,6 @@
 import { Editor, EditorThemeProvider, EditorToolbar, useTiptap } from '@ctzhian/tiptap';
 import { Box } from '@mui/material';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { AiGenerate2Icon } from '../component/Icons';
 import '../index.css';
 
@@ -11,6 +11,27 @@ const Reader = () => {
     onSave: (editor) => {
       console.log(editor.getHTML());
       editor.commands.setContent(editor.getHTML())
+    },
+    onAiWritingGetSuggestion: async ({ text }: { text: string }) => {
+      return new Promise<string>((resolve) => {
+        resolve([
+          'this is a default suggestion.',
+          'we are good.',
+          'what is your name?',
+          'how are you?',
+          'what is your favorite color?',
+          'what is your favorite food?',
+          'what is your favorite animal?',
+          'what is your favorite book?',
+          'what is your favorite movie?',
+          'what is your favorite song?',
+          'what is your favorite artist?',
+          'what is your favorite band?',
+          'what is your favorite city?',
+          'what is your favorite country?',
+          'what is your favorite sport?',
+        ][Math.floor(Math.random() * 10)]);
+      })
     },
     // onTocUpdate: handleTocUpdate,
     onMentionFilter: async ({ query }) => {
@@ -58,6 +79,12 @@ const Reader = () => {
     },
     content: ``
   });
+
+  useEffect(() => {
+    if (editor) {
+      editor.commands.setAiWriting(true);
+    }
+  }, [editor]);
 
   return <EditorThemeProvider mode='light'>
     <Box sx={{

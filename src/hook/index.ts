@@ -18,6 +18,7 @@ const useTiptap = ({
   onError,
   onUpload,
   onTocUpdate,
+  onAiWritingGetSuggestion,
 
   // editor
   editable = true,
@@ -35,6 +36,7 @@ const useTiptap = ({
     onUpload,
     onError,
     onTocUpdate,
+    onAiWritingGetSuggestion,
   })
 
   const editor = useEditor({
@@ -51,6 +53,11 @@ const useTiptap = ({
         }
         // tab
         if (event.key === 'Tab') {
+          // 若开启了 aiWriting，则放行给扩展处理（Tab 接受建议），不再插入制表符
+          const aiWritingEnabled = !!(editor as any)?.storage?.aiWriting?.enabled
+          if (aiWritingEnabled) {
+            return false
+          }
           const isInList = editor?.isActive('orderedList') ||
             editor?.isActive('bulletList') ||
             editor?.isActive('taskList')

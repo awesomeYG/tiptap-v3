@@ -78,6 +78,7 @@ export type EditorFnProps = {
   onError?: (error: Error) => void
   onUpload?: UploadFunction
   onTocUpdate?: (toc: TocList) => void
+  onAiWritingGetSuggestion?: ({ text }: { text: string }) => Promise<string>
 }
 
 export type MentionItems = string[]
