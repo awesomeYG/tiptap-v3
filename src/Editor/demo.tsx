@@ -12,7 +12,8 @@ const Reader = () => {
       console.log(editor.getHTML());
       editor.commands.setContent(editor.getHTML())
     },
-    onAiWritingGetSuggestion: async ({ text }: { text: string }) => {
+    onAiWritingGetSuggestion: async ({ prefix, suffix }: { prefix: string, suffix: string }) => {
+      console.log('onAiWritingGetSuggestion', prefix, suffix);
       return new Promise<string>((resolve) => {
         resolve([
           'this is a default suggestion.',

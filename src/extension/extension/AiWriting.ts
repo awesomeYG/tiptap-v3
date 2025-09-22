@@ -23,6 +23,7 @@ type SuggestionState = {
   text: string
   decorations: DecorationSet
   lastDocText: string
+  lastTriggerPos: number | null
 }
 
 const aiWritingPluginKey = new PluginKey<SuggestionState>('aiWritingPlugin')
@@ -45,16 +46,13 @@ function isAtEndWithNoContentAfter(view: EditorView): boolean {
   const { state } = view
   const { selection, doc } = state
   if (!selection.empty) return false
-  // 文档需非空
-  const fullText = getFullText(view)
-  if (!fullText || fullText.trim().length === 0) return false
-  // 光标后文档范围内无可见字符
-  const afterText = (doc as any).textBetween(selection.from, doc.content.size, '\n', '\n') as string
-  if (afterText && afterText.trim().length > 0) return false
-  // 同时在当前文本块末尾（不在块中间）
-  const $from: any = selection.$from
-  const atEndOfBlock = $from.parentOffset === $from.parent.content.size
-  return !!atEndOfBlock
+  // 基于当前行：从光标到下一处换行（或文末）之间是否仅为空白
+  const suffixFromCursor = (doc as any).textBetween(selection.from, doc.content.size, '\n', '\n') as string
+  const nextNewlineIndex = suffixFromCursor.indexOf('\n')
+  const currentLineAfterCursor = nextNewlineIndex >= 0
+    ? suffixFromCursor.slice(0, nextNewlineIndex)
+    : suffixFromCursor
+  return currentLineAfterCursor.trim().length === 0
 }
 
 function createSuggestionWidget(text: string) {
@@ -64,12 +62,12 @@ function createSuggestionWidget(text: string) {
   return dom
 }
 
-export const AiWritingExtension = (props: { onAiWritingGetSuggestion?: ({ text }: { text: string }) => Promise<string> }) => Extension.create<AiWritingOptions>({
+export const AiWritingExtension = (props: { onAiWritingGetSuggestion?: ({ prefix, suffix }: { prefix: string, suffix: string }) => Promise<string> }) => Extension.create<AiWritingOptions>({
   name: 'aiWriting',
 
   addOptions() {
     return {
-      minChars: 1,
+      minChars: 0,
       debounceMs: 1000,
     }
   },
@@ -107,7 +105,21 @@ export const AiWritingExtension = (props: { onAiWritingGetSuggestion?: ({ text }
         return this.editor.commands.command(({ tr, state, dispatch }) => {
           if (!dispatch) return true
           const insertPos = state.selection.from
-          tr.insertText(text, insertPos)
+          const { schema } = state
+          const segments = text.split('\n')
+          let posCursor = insertPos
+          for (let i = 0; i < segments.length; i++) {
+            const segment = segments[i]
+            if (segment.length > 0) {
+              tr.insertText(segment, posCursor)
+              posCursor += segment.length
+            }
+            if (i < segments.length - 1) {
+              const br = schema.nodes.hardBreak.create()
+              tr.insert(posCursor, br as any)
+              posCursor += 1
+            }
+          }
           // 接受后清空建议
           dispatch(tr.setMeta(aiWritingPluginKey, { type: 'clearSuggestion' }))
           return true
@@ -129,13 +141,19 @@ export const AiWritingExtension = (props: { onAiWritingGetSuggestion?: ({ text }
 
       const text = getFullText(view)
       if ((text?.length || 0) < minChars) return
+      // 空文档不触发
+      if (!text || text.trim().length === 0) return
 
-      // 避免重复请求同一内容
-      if (state.lastDocText === text) return
+      // 避免重复请求同一内容与同一光标位置
+      const from = (view.state as any).selection.from as number
+      if (state.lastDocText === text && state.lastTriggerPos === from) return
 
       let suggestion = ''
       try {
-        suggestion = await props.onAiWritingGetSuggestion?.({ text }) ?? ''
+        const { doc } = view.state as any
+        const prefix = (doc as any).textBetween(0, from, '\n', '\n') as string
+        const suffix = (doc as any).textBetween(from, doc.content.size, '\n', '\n') as string
+        suggestion = await props.onAiWritingGetSuggestion?.({ prefix, suffix }) ?? ''
       } catch (error) {
         console.error('getSuggestion error', error)
       }
@@ -145,6 +163,7 @@ export const AiWritingExtension = (props: { onAiWritingGetSuggestion?: ({ text }
         text: suggestion,
         pos: view.state.selection.from,
         lastDocText: text,
+        lastTriggerPos: from,
       })
       view.dispatch(tr)
     }
@@ -166,6 +185,7 @@ export const AiWritingExtension = (props: { onAiWritingGetSuggestion?: ({ text }
             text: '',
             decorations: DecorationSet.create(state.doc, []),
             lastDocText: '',
+            lastTriggerPos: null,
           }),
           apply: (tr, pluginState, _old, newState) => {
             let next = pluginState
@@ -176,7 +196,7 @@ export const AiWritingExtension = (props: { onAiWritingGetSuggestion?: ({ text }
               next = { ...next, decorations: mapped }
               // 用户输入则清空建议（除非是我们主动 setSuggestion 立即覆盖）
               if (!tr.getMeta(aiWritingPluginKey)) {
-                next = { ...next, text: '', pos: null, decorations: DecorationSet.create(newState.doc, []) }
+                next = { ...next, text: '', pos: null, decorations: DecorationSet.create(newState.doc, []), lastTriggerPos: null }
               }
             }
 
@@ -187,21 +207,22 @@ export const AiWritingExtension = (props: { onAiWritingGetSuggestion?: ({ text }
                   const enabled = !!meta.enabled
                   // 关闭时清空
                   const cleared = enabled ? next.decorations : DecorationSet.create(newState.doc, [])
-                  return { ...next, enabled, text: enabled ? next.text : '', pos: enabled ? next.pos : null, decorations: cleared }
+                  return { ...next, enabled, text: enabled ? next.text : '', pos: enabled ? next.pos : null, decorations: cleared, lastTriggerPos: enabled ? next.lastTriggerPos : null }
                 }
                 case 'setSuggestion': {
                   const text: string = meta.text || ''
                   const pos: number | null = typeof meta.pos === 'number' ? meta.pos : null
                   const lastDocText: string = meta.lastDocText ?? next.lastDocText
+                  const lastTriggerPos: number | null = typeof meta.lastTriggerPos === 'number' ? meta.lastTriggerPos : next.lastTriggerPos
                   if (!text || pos == null) {
-                    return { ...next, text: '', pos: null, decorations: DecorationSet.create(newState.doc, []), lastDocText }
+                    return { ...next, text: '', pos: null, decorations: DecorationSet.create(newState.doc, []), lastDocText, lastTriggerPos }
                   }
                   const deco = Decoration.widget(pos, () => createSuggestionWidget(text), { side: 1, ignoreSelection: true })
                   const decoSet = DecorationSet.create(newState.doc, [deco])
-                  return { ...next, text, pos, decorations: decoSet, lastDocText }
+                  return { ...next, text, pos, decorations: decoSet, lastDocText, lastTriggerPos }
                 }
                 case 'clearSuggestion': {
-                  return { ...next, text: '', pos: null, decorations: DecorationSet.create(newState.doc, []) }
+                  return { ...next, text: '', pos: null, decorations: DecorationSet.create(newState.doc, []), lastTriggerPos: null }
                 }
               }
             }
@@ -214,6 +235,11 @@ export const AiWritingExtension = (props: { onAiWritingGetSuggestion?: ({ text }
           const handler = () => {
             const state = aiWritingPluginKey.getState(view.state)
             if (!state || !state.enabled) return
+            const currentPos = view.state.selection.from
+            // 若光标位置与建议位置不同且有建议，先清空（视为拒绝）
+            if (state.text && state.pos != null && state.pos !== currentPos) {
+              view.dispatch(view.state.tr.setMeta(aiWritingPluginKey, { type: 'clearSuggestion' }))
+            }
             if (!isAtEndWithNoContentAfter(view)) return
             ensureDebounced()(view)
           }
