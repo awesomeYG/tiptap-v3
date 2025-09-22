@@ -1,6 +1,6 @@
 import { Editor, EditorThemeProvider, EditorToolbar, useTiptap } from '@ctzhian/tiptap';
 import { Box } from '@mui/material';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { AiGenerate2Icon } from '../component/Icons';
 import '../index.css';
 
@@ -11,6 +11,9 @@ const Reader = () => {
     onSave: (editor) => {
       console.log(editor.getHTML());
       editor.commands.setContent(editor.getHTML())
+    },
+    onCreate: ({ editor: currentEditor }) => {
+      currentEditor.commands.setAiWriting(true);
     },
     onAiWritingGetSuggestion: async ({ prefix, suffix }: { prefix: string, suffix: string }) => {
       console.log('onAiWritingGetSuggestion', prefix, suffix);
@@ -80,12 +83,6 @@ const Reader = () => {
     },
     content: ``
   });
-
-  useEffect(() => {
-    if (editor) {
-      editor.commands.setAiWriting(true);
-    }
-  }, [editor]);
 
   return <EditorThemeProvider mode='light'>
     <Box sx={{

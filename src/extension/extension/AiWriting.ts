@@ -15,6 +15,11 @@ declare module '@tiptap/core' {
       setAiWriting: (enabled: boolean) => ReturnType
     }
   }
+  interface Storage {
+    aiWriting: {
+      enabled: boolean
+    }
+  }
 }
 
 type SuggestionState = {
@@ -80,17 +85,14 @@ export const AiWritingExtension = (props: { onAiWritingGetSuggestion?: ({ prefix
 
   addCommands() {
     return {
-      setAiWriting:
-        (enabled: boolean) =>
-          ({ tr, state, dispatch }) => {
-            if (dispatch) {
-              const meta = { type: 'setEnabled', enabled }
-              dispatch(tr.setMeta(aiWritingPluginKey, meta))
-                // 同步到 storage，便于外部判断
-                ; (this as any).storage.enabled = !!enabled
-            }
-            return true
-          },
+      setAiWriting: (enabled: boolean) => ({ tr, dispatch }) => {
+        if (dispatch) {
+          const meta = { type: 'setEnabled', enabled }
+          dispatch(tr.setMeta(aiWritingPluginKey, meta))
+          this.storage.enabled = !!enabled
+        }
+        return true
+      },
     }
   },
 
