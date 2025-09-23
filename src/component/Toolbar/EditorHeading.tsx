@@ -76,7 +76,7 @@ const EditorHeading = ({ editor }: EditorHeadingProps) => {
         label: it.label,
         key: it.id,
         icon: it.icon,
-        extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(it.shortcutKey, ' ')}</Typography>,
+        extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(it.shortcutKey, '+')}</Typography>,
         onClick: () => handleChange(it.id),
       })),
     ]}

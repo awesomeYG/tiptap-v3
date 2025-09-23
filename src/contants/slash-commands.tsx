@@ -4,42 +4,48 @@ import { AttachmentLineIcon, CodeBoxLineIcon, CodeLineIcon, DoubleQuotesLIcon, F
 
 export const slashCommands = [
   {
-    title: '一级标题',
+    title: '标题1',
+    shortcutKey: ['ctrl', 'alt', '1'],
     icon: <H1Icon sx={{ fontSize: '1rem' }} />,
     command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
       editor.chain().focus().deleteRange(range).setNode('heading', { level: 1 }).run()
     }
   },
   {
-    title: '二级标题',
+    title: '标题2',
+    shortcutKey: ['ctrl', 'alt', '2'],
     icon: <H2Icon sx={{ fontSize: '1rem' }} />,
     command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
       editor.chain().focus().deleteRange(range).setNode('heading', { level: 2 }).run()
     }
   },
   {
-    title: '三级标题',
+    title: '标题3',
+    shortcutKey: ['ctrl', 'alt', '3'],
     icon: <H3Icon sx={{ fontSize: '1rem' }} />,
     command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
       editor.chain().focus().deleteRange(range).setNode('heading', { level: 3 }).run()
     }
   },
   {
-    title: '四级标题',
+    title: '标题4',
+    shortcutKey: ['ctrl', 'alt', '4'],
     icon: <H4Icon sx={{ fontSize: '1rem' }} />,
     command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
       editor.chain().focus().deleteRange(range).setNode('heading', { level: 4 }).run()
     }
   },
   {
-    title: '五级标题',
+    title: '标题5',
+    shortcutKey: ['ctrl', 'alt', '5'],
     icon: <H5Icon sx={{ fontSize: '1rem' }} />,
     command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
       editor.chain().focus().deleteRange(range).setNode('heading', { level: 5 }).run()
     }
   },
   {
-    title: '六级标题',
+    title: '标题6',
+    shortcutKey: ['ctrl', 'alt', '6'],
     icon: <H6Icon sx={{ fontSize: '1rem' }} />,
     command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
       editor.chain().focus().deleteRange(range).setNode('heading', { level: 6 }).run()
@@ -47,6 +53,7 @@ export const slashCommands = [
   },
   {
     title: '有序列表',
+    shortcutKey: ['ctrl', 'shift', '7'],
     icon: <ListOrdered2Icon sx={{ fontSize: '1rem' }} />,
     command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
       editor.chain().focus().deleteRange(range).toggleOrderedList().run()
@@ -54,6 +61,7 @@ export const slashCommands = [
   },
   {
     title: '无序列表',
+    shortcutKey: ['ctrl', 'shift', '8'],
     icon: <ListUnorderedIcon sx={{ fontSize: '1rem' }} />,
     command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
       editor.chain().focus().deleteRange(range).toggleBulletList().run()
@@ -61,6 +69,7 @@ export const slashCommands = [
   },
   {
     title: '任务列表',
+    shortcutKey: ['ctrl', 'shift', '9'],
     icon: <ListCheck2Icon sx={{ fontSize: '1rem' }} />,
     command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
       editor.chain().focus().deleteRange(range).toggleTaskList().run()
@@ -82,6 +91,7 @@ export const slashCommands = [
   },
   {
     title: '引用块',
+    shortcutKey: ['ctrl', 'shift', 'B'],
     icon: <DoubleQuotesLIcon sx={{ fontSize: '1rem' }} />,
     command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
       editor.chain().focus().deleteRange(range).toggleBlockquote().run()
@@ -89,6 +99,7 @@ export const slashCommands = [
   },
   {
     title: '行内代码',
+    shortcutKey: ['ctrl', 'E'],
     icon: <CodeLineIcon sx={{ fontSize: '1rem' }} />,
     command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
       editor.chain().focus().deleteRange(range).setMark('code').run()
@@ -96,6 +107,7 @@ export const slashCommands = [
   },
   {
     title: '代码块',
+    shortcutKey: ['ctrl', 'alt', 'C'],
     icon: <CodeBoxLineIcon sx={{ fontSize: '1rem' }} />,
     command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
       editor.chain().focus().deleteRange(range).toggleCodeBlock().run()
@@ -103,6 +115,7 @@ export const slashCommands = [
   },
   {
     title: '链接',
+    shortcutKey: ['ctrl', '1'],
     icon: <LinkIcon sx={{ fontSize: '1rem' }} />,
     command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
       editor.chain().focus().deleteRange(range).setInlineLink({ href: '' }).run()
@@ -110,6 +123,7 @@ export const slashCommands = [
   },
   {
     title: '折叠块',
+    shortcutKey: ['ctrl', '8'],
     icon: <MenuFold2FillIcon sx={{ fontSize: '1rem' }} />,
     command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
       editor.chain().focus().deleteRange(range).setDetails().run()
@@ -124,6 +138,7 @@ export const slashCommands = [
   },
   {
     title: '表格',
+    shortcutKey: ['ctrl', '9'],
     icon: <Table2Icon sx={{ fontSize: '1rem' }} />,
     command: ({ editor, range, attrs }: { editor: Editor; range: { from: number; to: number }; attrs: any }) => {
       editor.chain().focus().deleteRange(range).insertTable({ rows: attrs.rows || 3, cols: attrs.cols || 4, withHeaderRow: true }).run()

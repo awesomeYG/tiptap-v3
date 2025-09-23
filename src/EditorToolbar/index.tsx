@@ -38,6 +38,7 @@ const EditorToolbar = ({ editor, menuInToolbarMore }: EditorToolbarProps) => {
   const [active, setActive] = useState({
     undo: false,
     redo: false,
+    format: false,
     quote: false,
     bold: false,
     italic: false,
@@ -55,8 +56,9 @@ const EditorToolbar = ({ editor, menuInToolbarMore }: EditorToolbarProps) => {
 
   const updateSelection = () => {
     setActive({
-      undo: editor.can().undo(),
-      redo: editor.can().redo(),
+      undo: editor.can().chain().undo().run() ?? false,
+      redo: editor.can().chain().redo().run() ?? false,
+      format: editor.can().chain().unsetAllMarks().run() ?? false,
       quote: editor.isActive('blockquote'),
       bold: editor.isActive('bold'),
       italic: editor.isActive('italic'),
@@ -120,7 +122,7 @@ const EditorToolbar = ({ editor, menuInToolbarMore }: EditorToolbarProps) => {
         {editor.options.extensions.find(it => it.name === 'aiWriting') && <ToolbarItem
           text={'AI 伴写'}
           icon={<AiGenerate2Icon sx={{ fontSize: '1rem' }} />}
-          onClick={() => editor.commands.setAiWriting(!active.aiWriting)}
+          onClick={() => editor.chain().focus().setAiWriting(!active.aiWriting).run()}
           className={active.aiWriting ? 'tool-active' : ''}
         />}
         <Divider
@@ -145,27 +147,8 @@ const EditorToolbar = ({ editor, menuInToolbarMore }: EditorToolbarProps) => {
         <ToolbarItem
           tip={'清除格式'}
           icon={<EraserLineIcon sx={{ fontSize: '1rem' }} />}
-          disabled={editor.state.selection.empty}
-          onClick={async () => {
-            if (!editor.state.selection.empty) {
-              const tr = editor.state.tr
-              const currentNode = editor.state.selection.content()
-              const empty = currentNode.content.size === 0
-              if (!empty) {
-                const content = currentNode.content.content
-                if (content && content.length > 0) {
-                  tr.doc.nodesBetween(editor.state.selection.from, editor.state.selection.to, (node, pos) => {
-                    if (!node.isInline) return true
-                    node.marks.forEach((mark) => {
-                      tr.removeMark(pos, pos + node.nodeSize, mark.type)
-                    })
-                    return true
-                  })
-                }
-              }
-              editor.view.dispatch(tr)
-            }
-          }}
+          disabled={!active.format}
+          onClick={() => editor.chain().focus().unsetAllMarks().run()}
         />
         <Divider
           orientation="vertical"

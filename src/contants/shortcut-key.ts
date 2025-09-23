@@ -19,7 +19,6 @@ export const SHORTCUT_KEYS = {
       { label: '保存', value: 'Save', keys: ['ctrl', 'S'] },
     ],
   },
-
   'Insert': {
     label: '插入',
     keys: [

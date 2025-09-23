@@ -7,7 +7,7 @@ import { Fragment, Node, Slice } from '@tiptap/pm/model';
 import { NodeSelection } from '@tiptap/pm/state';
 import { Editor } from '@tiptap/react';
 import React, { useCallback, useState } from 'react';
-import { convertNodeAt, downloadFiles, FileInfo, filterResourcesByType, getAllResources } from '../../util';
+import { convertNodeAt, downloadFiles, FileInfo, filterResourcesByType, getAllResources, getShortcutKeyText } from '../../util';
 import Menu from '../Menu';
 import { ToolbarItem } from '../Toolbar';
 
@@ -212,7 +212,7 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
         images,
         attachments,
       })
-      setShowFormat(shouldShowButton({ editor, data }))
+      setShowFormat(editor.can().chain().unsetAllMarks().run() ?? false)
     }
   }, [current.pos, current.node])
 
@@ -466,7 +466,6 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
           ...(currentNode?.align ? [{
             key: 'align',
             label: '对齐方式',
-            width: 160,
             icon: <AlignLeftIcon sx={{ fontSize: '1rem' }} />,
             children: [
               {
@@ -477,6 +476,7 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
               },
               {
                 label: '左侧对齐',
+                extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', 'shift', 'L'], '+')}</Typography>,
                 key: 'align-horizontal-left',
                 icon: <AlignLeftIcon sx={{ fontSize: '1rem' }} />,
                 onClick: () => {
@@ -492,6 +492,7 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
               },
               {
                 label: '居中对齐',
+                extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', 'shift', 'E'], '+')}</Typography>,
                 key: 'align-horizontal-center',
                 icon: <AlignCenterIcon sx={{ fontSize: '1rem' }} />,
                 onClick: () => {
@@ -507,6 +508,7 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
               },
               {
                 label: '右侧对齐',
+                extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', 'shift', 'R'], '+')}</Typography>,
                 key: 'align-horizontal-right',
                 icon: <AlignRightIcon sx={{ fontSize: '1rem' }} />,
                 onClick: () => {
@@ -522,6 +524,7 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
               },
               {
                 label: '两端对齐',
+                extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', 'shift', 'J'], '+')}</Typography>,
                 key: 'align-horizontal-justify',
                 icon: <AlignJustifyIcon sx={{ fontSize: '1rem' }} />,
                 onClick: () => {
@@ -543,6 +546,7 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
               },
               {
                 label: '顶部对齐',
+                extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', 'alt', 'T'], '+')}</Typography>,
                 key: 'align-vertical-top',
                 icon: <AlignTopIcon sx={{ fontSize: '1rem' }} />,
                 onClick: () => {
@@ -558,6 +562,7 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
               },
               {
                 label: '居中对齐',
+                extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', 'alt', 'M'], '+')}</Typography>,
                 key: 'align-vertical-center',
                 icon: <AlignCenterIcon sx={{ fontSize: '1rem' }} />,
                 onClick: () => {
@@ -573,6 +578,7 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
               },
               {
                 label: '底部对齐',
+                extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', 'alt', 'B'], '+')}</Typography>,
                 key: 'align-vertical-bottom',
                 icon: <AlignBottomIcon sx={{ fontSize: '1rem' }} />,
                 onClick: () => {
@@ -616,7 +622,7 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
                 }
               }
             }, {
-              label: '一级标题',
+              label: '标题1',
               selected: current.node?.type.name === 'heading' && (current.node?.attrs.level === 1),
               key: 'convert-to-heading-1',
               icon: <H1Icon sx={{ fontSize: '1rem' }} />,
@@ -633,7 +639,7 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
                 }
               }
             }, {
-              label: '二级标题',
+              label: '标题2',
               selected: current.node?.type.name === 'heading' && (current.node?.attrs.level === 2),
               key: 'convert-to-heading-2',
               icon: <H2Icon sx={{ fontSize: '1rem' }} />,
@@ -650,7 +656,7 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
                 }
               }
             }, {
-              label: '三级标题',
+              label: '标题3',
               selected: current.node?.type.name === 'heading' && (current.node?.attrs.level === 3),
               key: 'convert-to-heading-3',
               icon: <H3Icon sx={{ fontSize: '1rem' }} />,
@@ -914,25 +920,8 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
             label: '文本格式化',
             key: 'format',
             icon: <EraserLineIcon sx={{ fontSize: '1rem' }} />,
-            onClick: async () => {
-              if (current.node && current.pos !== undefined) {
-                const tr = current.editor.state.tr
-                const currentNode = current.node
-                const empty = currentNode?.textContent === ''
-                if (!empty) {
-                  const content = currentNode?.content.content
-                  if (content && content.length > 0) {
-                    tr.doc.nodesBetween(current.pos, current.pos + current.node.nodeSize, (node, pos) => {
-                      if (!node.isInline) return true
-                      node.marks.forEach((mark) => {
-                        tr.removeMark(pos, pos + node.nodeSize, mark.type)
-                      })
-                      return true
-                    })
-                  }
-                }
-                editor.view.dispatch(tr)
-              }
+            onClick: () => {
+              current.editor.chain().focus().unsetAllMarks().run()
             }
           }] : []),
         ]}

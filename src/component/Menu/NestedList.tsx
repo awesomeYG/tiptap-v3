@@ -53,7 +53,7 @@ const NestedList: React.FC<NestedMenuListProps> = ({
   };
 
   return (
-    <Box className="menu-select-list" sx={{ minWidth: 160, width, lineHeight: 1.625 }}>
+    <Box className="menu-select-list" sx={{ minWidth: 160, lineHeight: 1.625, ...(width ? { width } : {}) }}>
       {list.map(item => item.customLabel ? (
         <Box key={item.key}>
           {item.customLabel}
@@ -92,12 +92,12 @@ const NestedList: React.FC<NestedMenuListProps> = ({
               anchorEl={subMenuAnchor}
               onClose={handleItemLeave}
               sx={{ pointerEvents: 'none' }}
+              disableScrollLock
               {...childrenProps}
             >
               <Box className="menu-select-sub-list" sx={{
                 pointerEvents: 'auto',
                 p: 0.5,
-                width,
                 minWidth: 160,
                 maxHeight: 360,
                 overflow: 'auto',

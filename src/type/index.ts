@@ -116,6 +116,7 @@ export interface SlashCommandItem {
   icon: React.ReactNode
   command: (props: { editor: Editor; range: { from: number; to: number } }) => void
   attrs?: Record<string, unknown>
+  shortcutKey?: string[]
   children?: SlashCommandItem[]
 }
 

@@ -8,7 +8,7 @@ import NestedList from './NestedList';
 
 const Menu: React.FC<MenuProps> = ({
   id = 'menu-select',
-  width = 160,
+  width,
   arrowIcon,
   list,
   header = null,
@@ -63,6 +63,7 @@ const Menu: React.FC<MenuProps> = ({
       onClose={handleClose}
       anchorOrigin={anchorOrigin}
       transformOrigin={transformOrigin}
+      disableScrollLock
     >
       <Box sx={{ p: 0.5 }}>
         <Box onClick={handleClose}>

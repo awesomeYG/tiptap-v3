@@ -1,4 +1,4 @@
-import { MoreLineIcon, Notification3LineIcon } from "@ctzhian/tiptap/component/Icons";
+import { CommandLineIcon, MoreLineIcon } from "@ctzhian/tiptap/component/Icons";
 import ToolbarItem from "@ctzhian/tiptap/component/Toolbar/Item";
 import { ToolbarItemType } from "@ctzhian/tiptap/type";
 import { Box, MenuItem, Select, Stack } from "@mui/material";
@@ -13,7 +13,7 @@ const EditorMore = ({ more = [] }: EditorMoreProps) => {
   const [showDialog, setShowDialog] = useState('');
 
   const options = [
-    { id: 'notification', icon: <Notification3LineIcon sx={{ fontSize: '1rem' }} />, label: '查看快捷键' },
+    { id: 'notification', icon: <CommandLineIcon sx={{ fontSize: '1rem' }} />, label: '查看快捷键' },
   ];
 
   const handleChange = (e: { target: { value: string } }) => {
