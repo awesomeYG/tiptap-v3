@@ -1,6 +1,7 @@
 // 此文件由脚本自动生成
 // 导出所有图标组件
 
+export { AddCircleFillIcon } from './add-circle-fill-icon';
 export { AddLineIcon } from './add-line-icon';
 export { AiGenerate2Icon } from './ai-generate-2-icon';
 export { AiGenerateTextIcon } from './ai-generate-text-icon';
@@ -39,11 +40,13 @@ export { DoubleQuotesLIcon } from './double-quotes-l-icon';
 export { DownloadLineIcon } from './download-line-icon';
 export { DraggableIcon } from './draggable-icon';
 export { EditBoxLineIcon } from './edit-box-line-icon';
+export { EraserLineIcon } from './eraser-line-icon';
 export { ErrorWarningFillIcon } from './error-warning-fill-icon';
 export { ExportLineIcon } from './export-line-icon';
 export { FileCopyLineIcon } from './file-copy-line-icon';
 export { FileUploadLineIcon } from './file-upload-line-icon';
 export { FlowChartIcon } from './flow-chart-icon';
+export { Folder2LineIcon } from './folder-2-line-icon';
 export { FontColorIcon } from './font-color-icon';
 export { FontFamilyIcon } from './font-family-icon';
 export { FontSizeIcon } from './font-size-icon';

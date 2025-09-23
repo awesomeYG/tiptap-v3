@@ -4,6 +4,7 @@ import React from 'react';
 
 export interface NestedMenuListProps {
   list: MenuItem[];
+  width?: number;
   arrowIcon?: React.ReactNode;
   childrenProps?: {
     anchorOrigin?: PopoverOrigin;
@@ -14,6 +15,7 @@ export interface NestedMenuListProps {
 
 const NestedList: React.FC<NestedMenuListProps> = ({
   list,
+  width,
   arrowIcon,
   childrenProps = {
     anchorOrigin: {
@@ -51,7 +53,7 @@ const NestedList: React.FC<NestedMenuListProps> = ({
   };
 
   return (
-    <Box className="menu-select-list" sx={{ minWidth: 160, lineHeight: 1.625 }}>
+    <Box className="menu-select-list" sx={{ minWidth: 160, width, lineHeight: 1.625 }}>
       {list.map(item => item.customLabel ? (
         <Box key={item.key}>
           {item.customLabel}
@@ -95,9 +97,11 @@ const NestedList: React.FC<NestedMenuListProps> = ({
               <Box className="menu-select-sub-list" sx={{
                 pointerEvents: 'auto',
                 p: 0.5,
+                width,
                 minWidth: 160,
                 maxHeight: 360,
                 overflow: 'auto',
+                ...(item.width ? { width: item.width } : {}),
                 ...(item.minWidth ? { minWidth: item.minWidth } : {}),
                 ...(item.maxHeight ? { maxHeight: item.maxHeight } : {}),
               }}>

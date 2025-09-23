@@ -1,121 +1,222 @@
-import { getShortcutKeyText } from "@ctzhian/tiptap/util";
-import { Box, MenuItem, Select, Stack, Tooltip } from "@mui/material";
-import { Editor } from "@tiptap/react";
-import React, { useEffect, useState } from "react";
-import { ArrowDownSLineIcon, AttachmentLineIcon, ImageLineIcon, MovieLineIcon, Music2LineIcon, UploadIcon } from "../../Icons";
-import ToolbarItem from "../Item";
+import { getShortcutKeyText } from '@ctzhian/tiptap/util';
+import { Typography } from '@mui/material';
+import { Editor } from '@tiptap/react';
+import React from 'react';
+import { AddCircleFillIcon, ArrowDownSLineIcon, AttachmentLineIcon, CheckboxCircleFillIcon, CloseCircleFillIcon, CodeBoxLineIcon, CodeLineIcon, CodeSSlashLineIcon, DoubleQuotesLIcon, ErrorWarningFillIcon, Folder2LineIcon, FormulaIcon, FunctionsIcon, ImageLineIcon, Information2FillIcon, Information2LineIcon, MenuFold2FillIcon, MovieLineIcon, Music2LineIcon, SeparatorIcon, SquareRootIcon, Table2Icon, WindowFillIcon } from '../../Icons';
+import Menu from '../../Menu';
+import ToolbarItem from '../Item';
+import TableSizePicker from '../TableSizePicker';
 
 interface EditorInsertProps {
   editor: Editor;
 }
 
 const EditorInsert = ({ editor }: EditorInsertProps) => {
-  const [selectedValue, setSelectedValue] = useState<string>("none");
-
-  const InsertOptions = [
-    { id: 'image', icon: <ImageLineIcon sx={{ fontSize: '1rem' }} />, label: '图片', shortcutKey: ['ctrl', '2'] },
-    { id: 'video', icon: <MovieLineIcon sx={{ fontSize: '1rem' }} />, label: '视频', shortcutKey: ['ctrl', '3'] },
-    { id: 'audio', icon: <Music2LineIcon sx={{ fontSize: '1rem' }} />, label: '音频', shortcutKey: ['ctrl', '4'] },
-    { id: 'attachment', icon: <AttachmentLineIcon sx={{ fontSize: '1rem' }} />, label: '附件', shortcutKey: ['ctrl', '5'] },
-  ];
-
-  const updateSelection = () => {
-    if (editor.isActive('image')) {
-      setSelectedValue('image');
-    } else if (editor.isActive('video')) {
-      setSelectedValue('video');
-    } else if (editor.isActive('audio')) {
-      setSelectedValue('audio');
-    } else if (editor.isActive('inlineAttachment') || editor.isActive('blockAttachment')) {
-      setSelectedValue('attachment');
-    } else {
-      setSelectedValue('none');
-    }
-  };
-
-  const handleChange = (e: { target: { value: string } }) => {
-    const value = e.target.value;
-    if (value === 'image') {
-      editor.commands.setImage({ src: '', width: 760 });
-    } else if (value === 'video') {
-      editor.commands.setVideo({ src: '', width: 760, controls: true, autoplay: false });
-    } else if (value === 'audio') {
-      editor.commands.setAudio({ src: '', controls: true, autoplay: false });
-    } else if (value === 'attachment') {
-      editor.commands.setInlineAttachment({ url: '', title: '', size: '0' });
-    }
-    setSelectedValue(value);
-  };
-
-  useEffect(() => {
-    editor.on('selectionUpdate', updateSelection);
-    editor.on('transaction', updateSelection);
-
-    return () => {
-      editor.off('selectionUpdate', updateSelection);
-      editor.off('transaction', updateSelection);
-    };
-  }, [editor]);
-
-  return <Select
-    value={selectedValue}
-    className={['image', 'video', 'audio', 'attachment'].includes(selectedValue) ? "tool-active" : ""}
-    onChange={handleChange}
-    sx={{
-      bgcolor: 'transparent',
-      '&:hover .MuiOutlinedInput-notchedOutline': {
-        borderWidth: '0px !important',
-        borderColor: 'transparent !important',
+  return <Menu
+    width={224}
+    context={<ToolbarItem
+      tip={'插入'}
+      text={'插入'}
+      icon={<AddCircleFillIcon sx={{ fontSize: '1rem' }} />}
+    />}
+    anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+    transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+    arrowIcon={<ArrowDownSLineIcon sx={{ fontSize: '1rem', transform: 'rotate(-90deg)' }} />}
+    list={[
+      {
+        customLabel: <Typography sx={{ px: 1, pt: 2, fontSize: '12px', color: 'text.disabled' }}>
+          通用
+        </Typography>,
+        key: 'current-node',
       },
-      '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-        borderWidth: '0px !important',
-        borderColor: 'transparent !important',
+      {
+        label: '图片',
+        key: 'image',
+        icon: <ImageLineIcon sx={{ fontSize: '1rem' }} />,
+        extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', '2'], '+')}</Typography>,
+        onClick: () => editor.commands.setImage({ src: '', width: 760 }),
       },
-    }}
-    renderValue={(value) => {
-      return <ToolbarItem
-        tip={'插入'}
-        icon={<Stack direction={'row'} alignItems={'center'} sx={{ mr: 0.5, width: '1.5rem' }}>
-          {InsertOptions.find(it => it.id === value)?.icon || <UploadIcon sx={{ fontSize: '1rem' }} />}
-        </Stack>}
-      />;
-    }}
-    IconComponent={({ className, ...rest }) => {
-      return (
-        <ArrowDownSLineIcon
-          sx={{
-            position: 'absolute',
-            right: 2,
-            flexSelf: 'center',
-            fontSize: '1rem',
-            flexShrink: 0,
-            mr: 0,
-            color: 'text.disabled',
-            transform: className?.includes('MuiSelect-iconOpen') ? 'rotate(-180deg)' : 'none',
-            transition: 'transform 0.3s',
-            cursor: 'pointer',
-            pointerEvents: 'none'
-          }}
-          {...rest}
-        />
-      );
-    }}
-  >
-    <MenuItem key={'none'} value={'none'} sx={{ display: 'none' }}>
-      <UploadIcon sx={{ fontSize: '1rem' }} />
-      <Box sx={{ ml: 1 }}>无</Box>
-    </MenuItem>
-    {InsertOptions.map(it => (
-      <MenuItem key={it.id} value={it.id}>
-        <Tooltip arrow title={getShortcutKeyText(it.shortcutKey || [])} placement="right">
-          <Stack direction={'row'} alignItems={'center'} justifyContent='center' gap={1}>
-            {it.icon}
-            <Box sx={{ fontSize: '0.875rem' }}>{it.label}</Box>
-          </Stack>
-        </Tooltip>
-      </MenuItem>
-    ))}
-  </Select>
+      {
+        label: '表格',
+        key: 'table',
+        icon: <Table2Icon sx={{ fontSize: '1rem' }} />,
+        extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', '9'], '+')}</Typography>,
+        children: [
+          {
+            key: 'table-size-picker',
+            customLabel: <TableSizePicker
+              onConfirm={(cols, rows) => {
+                editor.commands.insertTable({ rows, cols, withHeaderRow: true });
+              }}
+            />
+          },
+        ],
+      },
+      {
+        label: '文件',
+        key: 'file',
+        icon: <Folder2LineIcon sx={{ fontSize: '1rem' }} />,
+        children: [
+          {
+            label: '附件',
+            key: 'attachment',
+            extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', '5'], '+')}</Typography>,
+            icon: <AttachmentLineIcon sx={{ fontSize: '1rem' }} />,
+            onClick: () => editor.commands.setInlineAttachment({ url: '', title: '', size: '0' }),
+          },
+          {
+            label: '音频',
+            key: 'audio',
+            extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', '4'], '+')}</Typography>,
+            icon: <Music2LineIcon sx={{ fontSize: '1rem' }} />,
+            onClick: () => editor.commands.setAudio({ src: '', controls: true, autoplay: false }),
+          },
+          {
+            label: '视频',
+            key: 'video',
+            extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', '3'], '+')}</Typography>,
+            icon: <MovieLineIcon sx={{ fontSize: '1rem' }} />,
+            onClick: () => editor.commands.setVideo({ src: '', width: 760, controls: true, autoplay: false }),
+          },
+        ]
+      },
+      {
+        customLabel: <Typography sx={{ px: 1, pt: 2, fontSize: '12px', color: 'text.disabled' }}>
+          样式布局
+        </Typography>,
+        key: 'style',
+      },
+      {
+        label: '分割线',
+        key: 'separator',
+        icon: <SeparatorIcon sx={{ fontSize: '1rem' }} />,
+        onClick: () => editor.commands.insertContentAt(editor.state.selection.from, { type: 'horizontalRule' }),
+      },
+      {
+        label: '引用块',
+        key: 'blockquote',
+        icon: <DoubleQuotesLIcon sx={{ fontSize: '1rem' }} />,
+        extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', 'shift', 'B'], '+')}</Typography>,
+        onClick: () => editor.chain().focus().toggleBlockquote().run(),
+      },
+      {
+        label: '折叠块',
+        key: 'details',
+        icon: <MenuFold2FillIcon sx={{ fontSize: '1rem' }} />,
+        extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', '8'], '+')}</Typography>,
+        onClick: () => editor.chain().focus().setDetails().run(),
+      },
+      {
+        label: '警告提示',
+        key: 'highlight',
+        icon: <Information2LineIcon sx={{ fontSize: '1rem' }} />,
+        children: [
+          {
+            label: '信息 Info',
+            key: 'info',
+            icon: <Information2FillIcon sx={{ fontSize: '1rem', color: 'primary.main' }} />,
+            onClick: () => {
+              editor.commands.setAlert({ type: 'icon', variant: 'info' })
+            },
+          },
+          {
+            label: '警告 Warning',
+            key: 'warning',
+            icon: <ErrorWarningFillIcon sx={{ fontSize: '1rem', color: 'warning.main' }} />,
+            onClick: () => {
+              editor.commands.setAlert({ type: 'icon', variant: 'warning' })
+            },
+          },
+          {
+            label: '错误 Error',
+            key: 'error',
+            icon: <CloseCircleFillIcon sx={{ fontSize: '1rem', color: 'error.main' }} />,
+            onClick: () => {
+              editor.commands.setAlert({ type: 'icon', variant: 'error' })
+            },
+          },
+          {
+            label: '成功 Success',
+            key: 'success',
+            icon: <CheckboxCircleFillIcon sx={{ fontSize: '1rem', color: 'success.main' }} />,
+            onClick: () => {
+              editor.commands.setAlert({ type: 'icon', variant: 'success' })
+            },
+          }
+        ]
+      },
+      {
+        label: 'Iframe 链接',
+        key: 'iframe',
+        icon: <WindowFillIcon sx={{ fontSize: '1rem' }} />,
+        onClick: () => editor.commands.setIframe({ src: '', width: 760, height: 400 }),
+      },
+      {
+        customLabel: <Typography sx={{ px: 1, pt: 2, fontSize: '12px', color: 'text.disabled' }}>
+          程序员专用
+        </Typography>,
+        key: 'programmer',
+      },
+      {
+        label: '代码',
+        key: 'code',
+        icon: <CodeSSlashLineIcon sx={{ fontSize: '1rem' }} />,
+        children: [
+          {
+            label: '行内代码',
+            key: 'inlineCode',
+            icon: <CodeLineIcon sx={{ fontSize: '1rem' }} />,
+            extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', 'E'], '+')}</Typography>,
+            onClick: () => editor.commands.toggleCode(),
+          },
+          {
+            label: '代码块',
+            key: 'codeBlock',
+            icon: <CodeBoxLineIcon sx={{ fontSize: '1rem' }} />,
+            extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', 'alt', 'C'], '+')}</Typography>,
+            onClick: () => editor.commands.toggleCodeBlock(),
+          },
+        ]
+      },
+      {
+        label: '数学公式',
+        key: 'math',
+        icon: <FormulaIcon sx={{ fontSize: '1rem' }} />,
+        children: [
+          {
+            label: '行内数学公式',
+            key: 'inline-math',
+            icon: <SquareRootIcon sx={{ fontSize: '1rem' }} />,
+            extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', '6'], '+')}</Typography>,
+            onClick: () => {
+              editor.commands.setInlineMath({ latex: '' });
+            }
+          },
+          {
+            label: '块级数学公式',
+            key: 'block-math',
+            icon: <FunctionsIcon sx={{ fontSize: '1rem' }} />,
+            extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', '7'], '+')}</Typography>,
+            onClick: () => {
+              editor.commands.setBlockMath({ latex: '' });
+            }
+          }
+        ]
+      },
+      {
+        customLabel: <Typography sx={{ px: 1, pt: 2, fontSize: '12px', color: 'text.disabled' }}>
+          其他
+        </Typography>,
+        key: 'other',
+      },
+      {
+        label: 'Iframe 链接',
+        key: 'iframe',
+        icon: <WindowFillIcon sx={{ fontSize: '1rem' }} />,
+        onClick: () => editor.commands.setIframe({ src: '', width: 760, height: 400 }),
+      },
+    ]}
+  />
 }
 
 export default EditorInsert;

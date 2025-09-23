@@ -1,7 +1,6 @@
 import { Editor, EditorThemeProvider, EditorToolbar, useTiptap } from '@ctzhian/tiptap';
 import { Box } from '@mui/material';
 import React from 'react';
-import { AiGenerate2Icon } from '../component/Icons';
 import '../index.css';
 
 const Reader = () => {
@@ -11,9 +10,6 @@ const Reader = () => {
     onSave: (editor) => {
       console.log(editor.getHTML());
       editor.commands.setContent(editor.getHTML())
-    },
-    onCreate: ({ editor: currentEditor }) => {
-      currentEditor.commands.setAiWriting(true);
     },
     onAiWritingGetSuggestion: async ({ prefix, suffix }: { prefix: string, suffix: string }) => {
       console.log('onAiWritingGetSuggestion', prefix, suffix);
@@ -38,7 +34,7 @@ const Reader = () => {
       })
     },
     // onTocUpdate: handleTocUpdate,
-    onMentionFilter: async ({ query }) => {
+    onMentionFilter: async ({ query }: { query: string }) => {
       return new Promise((resolve) => {
         resolve([
           'Winona Ryder',
@@ -57,7 +53,7 @@ const Reader = () => {
           .slice(0, 5))
       })
     },
-    onUpload: async (file, onProgress) => {
+    onUpload: async (file: File, onProgress?: (progress: { progress: number }) => void) => {
       return new Promise((resolve) => {
         let progress = 0;
         const interval = setInterval(() => {
@@ -95,16 +91,7 @@ const Reader = () => {
         borderBottom: '1px solid #eee',
         marginBottom: '30px',
       }}>
-        <EditorToolbar editor={editor} menuInToolbarMore={[
-          {
-            id: 'ai',
-            icon: <AiGenerate2Icon sx={{ fontSize: '1rem' }} />,
-            onClick: () => {
-              alert('ai');
-            },
-            label: 'AI 文本润色',
-          },
-        ]} />
+        <EditorToolbar editor={editor} />
       </div>
       <Box sx={{
         '.tiptap': {
@@ -115,29 +102,7 @@ const Reader = () => {
           },
         }
       }}>
-        <Editor
-          editor={editor}
-          menuInDragHandle={[
-            {
-              label: '文本润色',
-              key: 'ai',
-              icon: <AiGenerate2Icon sx={{ fontSize: '1rem' }} />,
-              onClick: () => {
-                alert('ai');
-              },
-            },
-          ]}
-          menuInBubbleMenu={[
-            {
-              label: '文本润色',
-              key: 'ai',
-              icon: <AiGenerate2Icon sx={{ fontSize: '1rem' }} />,
-              onClick: () => {
-                alert('ai');
-              },
-            },
-          ]}
-        />
+        <Editor editor={editor} />
       </Box>
     </Box>
   </EditorThemeProvider>

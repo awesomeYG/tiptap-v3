@@ -6,7 +6,7 @@ import React from 'react';
 interface ToolbarItemProps {
   tip?: string;
   customComponent?: React.ReactNode
-  text?: string;
+  text?: React.ReactNode;
   shortcutKey?: string[];
   sx?: SxProps<Theme>;
   icon?: React.ReactNode;

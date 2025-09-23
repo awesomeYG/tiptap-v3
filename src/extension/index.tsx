@@ -167,7 +167,7 @@ export const getExtensions = ({
       defaultExtensions.push(SlashCommands)
     }
 
-    if (!exclude?.includes('aiWriting')) {
+    if (!exclude?.includes('aiWriting') && onAiWritingGetSuggestion) {
       defaultExtensions.push(AiWritingExtension({ onAiWritingGetSuggestion }))
     }
 

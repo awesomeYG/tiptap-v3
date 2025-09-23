@@ -14,6 +14,7 @@ export interface MenuItem {
   children?: MenuItem[];
   textSx?: SxProps<Theme>;
   key: number | string;
+  width?: number;
   minWidth?: number;
   maxHeight?: number;
   onClick?: () => void;
@@ -21,6 +22,7 @@ export interface MenuItem {
 
 export interface MenuProps {
   id?: string;
+  width?: number;
   arrowIcon?: React.ReactNode;
   list: MenuItem[];
   header?: React.ReactNode;

@@ -1,4 +1,4 @@
-import { AddLineIcon, AlignBottomIcon, AlignCenterIcon, AlignJustifyIcon, AlignLeftIcon, AlignRightIcon, AlignTopIcon, ArrowDownSLineIcon, AttachmentLineIcon, BrushLineIcon, DeleteLineIcon, DownloadLineIcon, DraggableIcon, FontSizeIcon, FormatClearIcon, H1Icon, H2Icon, H3Icon, ImageLineIcon, IndentDecreaseIcon, IndentIncreaseIcon, Information2LineIcon, ListCheck3Icon, ListOrdered2Icon, ListUnorderedIcon, MovieLineIcon, Music2LineIcon, QuoteTextIcon, Repeat2LineIcon, ScissorsCutLineIcon, SeparatorIcon, TextIcon, TextWrapIcon } from '@ctzhian/tiptap/component/Icons';
+import { AddLineIcon, AlignBottomIcon, AlignCenterIcon, AlignJustifyIcon, AlignLeftIcon, AlignRightIcon, AlignTopIcon, ArrowDownSLineIcon, AttachmentLineIcon, BrushLineIcon, DeleteLineIcon, DownloadLineIcon, DraggableIcon, EraserLineIcon, FileCopyLineIcon, FontSizeIcon, H1Icon, H2Icon, H3Icon, ImageLineIcon, IndentDecreaseIcon, IndentIncreaseIcon, Information2LineIcon, ListCheck3Icon, ListOrdered2Icon, ListUnorderedIcon, MovieLineIcon, Music2LineIcon, QuoteTextIcon, Repeat2LineIcon, ScissorsCutLineIcon, SeparatorIcon, TextIcon, TextWrapIcon } from '@ctzhian/tiptap/component/Icons';
 import { NODE_TYPE_LABEL, NodeTypeEnum } from '@ctzhian/tiptap/contants/enums';
 import { MenuItem, OnTipFunction } from '@ctzhian/tiptap/type';
 import { Box, Divider, Stack, Typography, useTheme } from '@mui/material';
@@ -8,7 +8,6 @@ import { NodeSelection } from '@tiptap/pm/state';
 import { Editor } from '@tiptap/react';
 import React, { useCallback, useState } from 'react';
 import { convertNodeAt, downloadFiles, FileInfo, filterResourcesByType, getAllResources } from '../../util';
-import { FileCopyLineIcon } from '../Icons/file-copy-line-icon';
 import Menu from '../Menu';
 import { ToolbarItem } from '../Toolbar';
 
@@ -233,6 +232,7 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
         }
       }} />
       {currentNode ? <Menu
+        width={224}
         context={<DragIcon />}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
         transformOrigin={{ vertical: 'top', horizontal: 'left' }}
@@ -378,6 +378,7 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
             key: 'color',
             label: '颜色',
             maxHeight: 400,
+            width: 160,
             icon: <BrushLineIcon sx={{ fontSize: '1rem' }} />,
             children: [
               {
@@ -439,6 +440,7 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
             key: 'fontSize',
             label: '字号',
             icon: <FontSizeIcon sx={{ fontSize: '1rem' }} />,
+            width: 100,
             minWidth: 100,
             maxHeight: 200,
             children: [
@@ -464,6 +466,7 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
           ...(currentNode?.align ? [{
             key: 'align',
             label: '对齐方式',
+            width: 160,
             icon: <AlignLeftIcon sx={{ fontSize: '1rem' }} />,
             children: [
               {
@@ -592,6 +595,7 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
           ...(currentNode?.convert ? [{
             label: '转换',
             key: 'convert',
+            width: 160,
             maxHeight: 400,
             icon: <Repeat2LineIcon sx={{ fontSize: '1rem' }} />,
             children: [{
@@ -909,7 +913,7 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
           ...(showFormat ? [{
             label: '文本格式化',
             key: 'format',
-            icon: <FormatClearIcon sx={{ fontSize: '1rem' }} />,
+            icon: <EraserLineIcon sx={{ fontSize: '1rem' }} />,
             onClick: async () => {
               if (current.node && current.pos !== undefined) {
                 const tr = current.editor.state.tr

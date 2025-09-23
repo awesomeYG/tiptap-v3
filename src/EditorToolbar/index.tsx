@@ -2,35 +2,30 @@ import { Box, Divider, Stack } from '@mui/material';
 import { Editor } from '@tiptap/react';
 import React, { useEffect, useState } from 'react';
 import {
+  AiGenerate2Icon,
   ArrowGoBackLineIcon,
   ArrowGoForwardLineIcon,
   BoldIcon,
-  DoubleQuotesLIcon,
-  Information2LineIcon,
+  EraserLineIcon,
   ItalicIcon,
   LinkIcon,
-  MenuFold2FillIcon,
   StrikethroughIcon,
-  Table2Icon,
-  UnderlineIcon,
-  WindowFillIcon,
+  SubscriptIcon,
+  SuperscriptIcon,
+  UnderlineIcon
 } from '../component/Icons';
 import {
   EditorAlignSelect,
-  EditorCode,
   EditorFontBgColor,
   EditorFontColor,
   EditorFontSize,
   EditorHeading,
   EditorInsert,
   EditorListSelect,
-  EditorMath,
   EditorMore,
-  EditorScript,
   EditorVerticalAlignSelect,
-  ToolbarItem,
+  ToolbarItem
 } from '../component/Toolbar';
-import TableSizePicker from '../component/Toolbar/TableSizePicker';
 import { ToolbarItemType } from '../type';
 
 interface EditorToolbarProps {
@@ -39,6 +34,7 @@ interface EditorToolbarProps {
 }
 
 const EditorToolbar = ({ editor, menuInToolbarMore }: EditorToolbarProps) => {
+
   const [active, setActive] = useState({
     undo: false,
     redo: false,
@@ -54,6 +50,7 @@ const EditorToolbar = ({ editor, menuInToolbarMore }: EditorToolbarProps) => {
     link: false,
     alert: false,
     iframe: false,
+    aiWriting: false,
   });
 
   const updateSelection = () => {
@@ -72,6 +69,7 @@ const EditorToolbar = ({ editor, menuInToolbarMore }: EditorToolbarProps) => {
       link: editor.isActive('link'),
       alert: editor.isActive('alert'),
       iframe: editor.isActive('iframe'),
+      aiWriting: editor.storage.aiWriting.enabled,
     });
   };
 
@@ -118,6 +116,18 @@ const EditorToolbar = ({ editor, menuInToolbarMore }: EditorToolbarProps) => {
           },
         }}
       >
+        <EditorInsert editor={editor} />
+        {editor.options.extensions.find(it => it.name === 'aiWriting') && <ToolbarItem
+          text={'AI 伴写'}
+          icon={<AiGenerate2Icon sx={{ fontSize: '1rem' }} />}
+          onClick={() => editor.commands.setAiWriting(!active.aiWriting)}
+          className={active.aiWriting ? 'tool-active' : ''}
+        />}
+        <Divider
+          orientation="vertical"
+          flexItem
+          sx={{ mx: 0.5, height: 20, alignSelf: 'center' }}
+        />
         <ToolbarItem
           tip={'撤销'}
           shortcutKey={['ctrl', 'Z']}
@@ -132,6 +142,31 @@ const EditorToolbar = ({ editor, menuInToolbarMore }: EditorToolbarProps) => {
           onClick={() => editor.chain().focus().redo().run()}
           disabled={!active.redo}
         />
+        <ToolbarItem
+          tip={'清除格式'}
+          icon={<EraserLineIcon sx={{ fontSize: '1rem' }} />}
+          disabled={editor.state.selection.empty}
+          onClick={async () => {
+            if (!editor.state.selection.empty) {
+              const tr = editor.state.tr
+              const currentNode = editor.state.selection.content()
+              const empty = currentNode.content.size === 0
+              if (!empty) {
+                const content = currentNode.content.content
+                if (content && content.length > 0) {
+                  tr.doc.nodesBetween(editor.state.selection.from, editor.state.selection.to, (node, pos) => {
+                    if (!node.isInline) return true
+                    node.marks.forEach((mark) => {
+                      tr.removeMark(pos, pos + node.nodeSize, mark.type)
+                    })
+                    return true
+                  })
+                }
+              }
+              editor.view.dispatch(tr)
+            }
+          }}
+        />
         <Divider
           orientation="vertical"
           flexItem
@@ -139,22 +174,6 @@ const EditorToolbar = ({ editor, menuInToolbarMore }: EditorToolbarProps) => {
         />
         <EditorHeading editor={editor} />
         <EditorFontSize editor={editor} />
-        <EditorListSelect editor={editor} />
-        <EditorAlignSelect editor={editor} />
-        <EditorVerticalAlignSelect editor={editor} />
-        <ToolbarItem
-          tip={'引用块'}
-          shortcutKey={['ctrl', 'shift', 'B']}
-          icon={<DoubleQuotesLIcon sx={{ fontSize: '1rem' }} />}
-          onClick={() => editor.chain().focus().toggleBlockquote().run()}
-          className={active.quote ? 'tool-active' : ''}
-        />
-        <ToolbarItem
-          tip={'警告提示'}
-          icon={<Information2LineIcon sx={{ fontSize: '1rem' }} />}
-          onClick={() => editor.chain().focus().toggleAlert({ type: 'icon', variant: 'info' }).run()}
-          className={active.alert ? 'tool-active' : ''}
-        />
         <Divider
           orientation="vertical"
           flexItem
@@ -188,12 +207,20 @@ const EditorToolbar = ({ editor, menuInToolbarMore }: EditorToolbarProps) => {
           onClick={() => editor.chain().focus().toggleUnderline().run()}
           className={active.underline ? 'tool-active' : ''}
         />
-        <Divider
-          orientation="vertical"
-          flexItem
-          sx={{ mx: 0.5, height: 20, alignSelf: 'center' }}
+        <ToolbarItem
+          tip={'上标'}
+          shortcutKey={['ctrl', '.']}
+          icon={<SuperscriptIcon sx={{ fontSize: '1rem' }} />}
+          onClick={() => editor.chain().focus().toggleSuperscript().run()}
+          className={active.superscript ? 'tool-active' : ''}
         />
-        <EditorScript editor={editor} />
+        <ToolbarItem
+          tip={'下标'}
+          shortcutKey={['ctrl', ',']}
+          icon={<SubscriptIcon sx={{ fontSize: '1rem' }} />}
+          onClick={() => editor.chain().focus().toggleSubscript().run()}
+          className={active.subscript ? 'tool-active' : ''}
+        />
         <EditorFontColor editor={editor} />
         <EditorFontBgColor editor={editor} />
         <Divider
@@ -201,6 +228,7 @@ const EditorToolbar = ({ editor, menuInToolbarMore }: EditorToolbarProps) => {
           flexItem
           sx={{ mx: 0.5, height: 20, alignSelf: 'center' }}
         />
+        <EditorListSelect editor={editor} />
         <ToolbarItem
           tip={'链接'}
           shortcutKey={['ctrl', '1']}
@@ -218,50 +246,13 @@ const EditorToolbar = ({ editor, menuInToolbarMore }: EditorToolbarProps) => {
           }}
           className={active.link ? 'tool-active' : ''}
         />
-        <ToolbarItem
-          tip={'折叠块'}
-          shortcutKey={['ctrl', '8']}
-          icon={<MenuFold2FillIcon sx={{ fontSize: '1rem' }} />}
-          onClick={() => {
-            if (!active.details) {
-              editor.chain().focus().setDetails().run();
-            } else {
-              editor.chain().focus().unsetDetails().run();
-            }
-          }}
-          className={active.details ? 'tool-active' : ''}
-        />
-        <EditorCode editor={editor} />
-        <EditorMath editor={editor} />
-        <ToolbarItem
-          tip={'表格'}
-          shortcutKey={['ctrl', '9']}
-          icon={<Table2Icon sx={{ fontSize: '1rem' }} />}
-          className={active.table ? 'tool-active' : ''}
-          customComponent={<TableSizePicker
-            onConfirm={(cols, rows) => {
-              editor.chain().focus().insertTable({ rows, cols, withHeaderRow: true }).run();
-            }}
-          />}
-        />
-        <ToolbarItem
-          tip={'iframe'}
-          icon={<WindowFillIcon sx={{ fontSize: '1rem' }} />}
-          onClick={() =>
-            editor.commands.setIframe({
-              src: '',
-              width: 760,
-              height: 400,
-            })
-          }
-          className={active.iframe ? 'tool-active' : ''}
-        />
+        <EditorAlignSelect editor={editor} />
+        <EditorVerticalAlignSelect editor={editor} />
         <Divider
           orientation="vertical"
           flexItem
           sx={{ mx: 0.5, height: 20, alignSelf: 'center' }}
         />
-        <EditorInsert editor={editor} />
         <EditorMore more={menuInToolbarMore} />
       </Stack>
     </Box>

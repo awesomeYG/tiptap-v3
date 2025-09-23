@@ -8,6 +8,7 @@ import NestedList from './NestedList';
 
 const Menu: React.FC<MenuProps> = ({
   id = 'menu-select',
+  width = 160,
   arrowIcon,
   list,
   header = null,
@@ -68,6 +69,7 @@ const Menu: React.FC<MenuProps> = ({
           {header}
         </Box>
         <NestedList
+          width={width}
           list={list}
           arrowIcon={arrowIcon}
           childrenProps={childrenProps}
