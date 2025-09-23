@@ -146,12 +146,6 @@ const EditorInsert = ({ editor }: EditorInsertProps) => {
         ]
       },
       {
-        label: 'Iframe 链接',
-        key: 'iframe',
-        icon: <WindowFillIcon sx={{ fontSize: '1rem' }} />,
-        onClick: () => editor.commands.setIframe({ src: '', width: 760, height: 400 }),
-      },
-      {
         customLabel: <Typography sx={{ px: 1, pt: 2, fontSize: '12px', color: 'text.disabled' }}>
           程序员专用
         </Typography>,
