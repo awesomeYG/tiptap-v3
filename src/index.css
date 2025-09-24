@@ -3,7 +3,7 @@
 .tiptap.ProseMirror {
   overflow-y: auto;
   outline: none;
-  color: var(--mui-palette-text-secondary);
+  color: var(--mui-palette-text-primary);
 }
 
 /* 节点缩进（依赖 data-indent 属性） */
@@ -74,7 +74,6 @@
   margin: 0 0 20px;
   border-radius: 10px;
   border: 1px solid var(--mui-palette-divider);
-  color: var(--mui-palette-text-secondary);
   background-color: var(--mui-palette-background-paper3);
 }
 
@@ -291,7 +290,6 @@
   position: relative;
   color: inherit;
   font-style: inherit;
-  color: var(--mui-palette-text-primary);
 }
 
 .tiptap.ProseMirror h1 {
@@ -389,7 +387,6 @@
 .tiptap.ProseMirror table th {
   background-color: var(--mui-palette-background-paper3);
   font-weight: 600;
-  color: var(--mui-palette-text-primary);
   text-transform: uppercase;
   letter-spacing: 0.5px;
   text-align: left;
@@ -556,7 +553,7 @@
 
 /* AI 续写建议样式 */
 .tiptap.ProseMirror .ai-writing-suggestion {
-  color: var(--mui-palette-text-disabled);
+  color: color-mix(in srgb, var(--mui-palette-text-primary) 15%, transparent);
   pointer-events: none;
   user-select: none;
   white-space: pre-wrap;
