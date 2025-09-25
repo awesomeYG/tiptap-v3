@@ -2,12 +2,12 @@ import { mergeAttributes, Node } from '@tiptap/core'
 import { ReactNodeViewRenderer } from '@tiptap/react'
 import AlertView from '../component/Alert'
 
-export type AlertVariant = 'info' | 'warning' | 'error' | 'success'
+export type AlertVariant = 'info' | 'warning' | 'error' | 'success' | 'default'
 export type AlertType = 'text' | 'icon'
 
 export interface AlertOptions {
   /**
-   * HTML attributes to add to the blockquote element
+   * HTML attributes to add to the alert element
    * @default {}
    * @example { class: 'foo' }
    */

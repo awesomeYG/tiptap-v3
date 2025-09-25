@@ -267,12 +267,7 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
               key={'insert-divider'}
               onClick={() => {
                 if (current.node && current.pos !== undefined) {
-                  const afterPos = current.pos + current.node.nodeSize
-                  current.editor
-                    .chain()
-                    .focus()
-                    .insertContentAt(afterPos, { type: 'horizontalRule' })
-                    .run()
+                  current.editor.chain().focus().setHorizontalRule().run()
                 }
               }}
               icon={<SeparatorIcon sx={{ fontSize: '1rem' }} />}
@@ -730,7 +725,7 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
               customLabel: <Divider sx={{ my: 0.5 }} />,
               key: 'divider3',
             }, {
-              label: '引用块',
+              label: '引用',
               selected: current.node?.type.name === 'blockquote',
               key: 'convert-to-blockquote',
               icon: <QuoteTextIcon sx={{ fontSize: '1rem' }} />,

@@ -208,12 +208,12 @@ const ImageViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
     <NodeViewWrapper
       className={`image-wrapper ${selected ? 'ProseMirror-selectednode' : ''}`}
       data-drag-handle
+      as={'span'}
     >
       <Box
         component={'span'}
         sx={{
           position: 'relative',
-          display: 'inline-block',
           border: '1px solid',
           borderColor: 'divider',
           borderRadius: 'var(--mui-shape-borderRadius)',

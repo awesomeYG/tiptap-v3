@@ -2,7 +2,7 @@ import { getShortcutKeyText } from '@ctzhian/tiptap/util';
 import { Typography } from '@mui/material';
 import { Editor } from '@tiptap/react';
 import React from 'react';
-import { AddCircleFillIcon, ArrowDownSLineIcon, AttachmentLineIcon, CheckboxCircleFillIcon, CloseCircleFillIcon, CodeBoxLineIcon, CodeLineIcon, CodeSSlashLineIcon, DoubleQuotesLIcon, ErrorWarningFillIcon, Folder2LineIcon, FormulaIcon, FunctionsIcon, ImageLineIcon, Information2FillIcon, Information2LineIcon, MenuFold2FillIcon, MovieLineIcon, Music2LineIcon, SeparatorIcon, SquareRootIcon, Table2Icon, WindowFillIcon } from '../../Icons';
+import { AddCircleFillIcon, ArrowDownSLineIcon, AttachmentLineIcon, CheckboxCircleFillIcon, CloseCircleFillIcon, CodeBoxLineIcon, CodeLineIcon, CodeSSlashLineIcon, DoubleQuotesLIcon, ErrorWarningFillIcon, Folder2LineIcon, FormulaIcon, FunctionsIcon, ImageLineIcon, Information2FillIcon, Information2LineIcon, MenuFold2FillIcon, MovieLineIcon, Music2LineIcon, SeparatorIcon, SquareRootIcon, Table2Icon, UserSmileFillIcon, WindowFillIcon } from '../../Icons';
 import Menu from '../../Menu';
 import ToolbarItem from '../Item';
 import TableSizePicker from '../TableSizePicker';
@@ -90,17 +90,17 @@ const EditorInsert = ({ editor }: EditorInsertProps) => {
         label: '分割线',
         key: 'separator',
         icon: <SeparatorIcon sx={{ fontSize: '1rem' }} />,
-        onClick: () => editor.commands.insertContentAt(editor.state.selection.from, { type: 'horizontalRule' }),
+        onClick: () => editor.chain().focus().setHorizontalRule().run(),
       },
       {
-        label: '引用块',
+        label: '引用',
         key: 'blockquote',
         icon: <DoubleQuotesLIcon sx={{ fontSize: '1rem' }} />,
         extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', 'shift', 'B'], '+')}</Typography>,
         onClick: () => editor.chain().focus().toggleBlockquote().run(),
       },
       {
-        label: '折叠块',
+        label: '折叠面板',
         key: 'details',
         icon: <MenuFold2FillIcon sx={{ fontSize: '1rem' }} />,
         extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', '8'], '+')}</Typography>,
@@ -116,7 +116,7 @@ const EditorInsert = ({ editor }: EditorInsertProps) => {
             key: 'info',
             icon: <Information2FillIcon sx={{ fontSize: '1rem', color: 'primary.main' }} />,
             onClick: () => {
-              editor.commands.setAlert({ type: 'icon', variant: 'info' })
+              editor.chain().focus().setAlert({ type: 'icon', variant: 'info' }).run()
             },
           },
           {
@@ -124,7 +124,7 @@ const EditorInsert = ({ editor }: EditorInsertProps) => {
             key: 'warning',
             icon: <ErrorWarningFillIcon sx={{ fontSize: '1rem', color: 'warning.main' }} />,
             onClick: () => {
-              editor.commands.setAlert({ type: 'icon', variant: 'warning' })
+              editor.chain().focus().setAlert({ type: 'icon', variant: 'warning' }).run()
             },
           },
           {
@@ -132,7 +132,7 @@ const EditorInsert = ({ editor }: EditorInsertProps) => {
             key: 'error',
             icon: <CloseCircleFillIcon sx={{ fontSize: '1rem', color: 'error.main' }} />,
             onClick: () => {
-              editor.commands.setAlert({ type: 'icon', variant: 'error' })
+              editor.chain().focus().setAlert({ type: 'icon', variant: 'error' }).run()
             },
           },
           {
@@ -140,7 +140,15 @@ const EditorInsert = ({ editor }: EditorInsertProps) => {
             key: 'success',
             icon: <CheckboxCircleFillIcon sx={{ fontSize: '1rem', color: 'success.main' }} />,
             onClick: () => {
-              editor.commands.setAlert({ type: 'icon', variant: 'success' })
+              editor.chain().focus().setAlert({ type: 'icon', variant: 'success' }).run()
+            },
+          },
+          {
+            label: '默认 Default',
+            key: 'default',
+            icon: <UserSmileFillIcon sx={{ fontSize: '1rem', color: 'text.disabled' }} />,
+            onClick: () => {
+              editor.chain().focus().setAlert({ type: 'icon', variant: 'default' }).run()
             },
           }
         ]
@@ -161,14 +169,14 @@ const EditorInsert = ({ editor }: EditorInsertProps) => {
             key: 'inlineCode',
             icon: <CodeLineIcon sx={{ fontSize: '1rem' }} />,
             extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', 'E'], '+')}</Typography>,
-            onClick: () => editor.commands.toggleCode(),
+            onClick: () => editor.chain().focus().toggleCode().run(),
           },
           {
             label: '代码块',
             key: 'codeBlock',
             icon: <CodeBoxLineIcon sx={{ fontSize: '1rem' }} />,
             extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', 'alt', 'C'], '+')}</Typography>,
-            onClick: () => editor.commands.toggleCodeBlock(),
+            onClick: () => editor.chain().focus().toggleCodeBlock().run(),
           },
         ]
       },

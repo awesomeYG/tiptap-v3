@@ -37,10 +37,10 @@ export const NODE_TYPE_LABEL: Record<NodeTypeEnum, {
   [NodeTypeEnum.OrderedList]: { label: '有序列表', color: true, fontSize: true, align: true, convert: true },
   [NodeTypeEnum.TaskList]: { label: '任务列表', color: true, fontSize: true, align: true, convert: true },
   [NodeTypeEnum.Alert]: { label: '警告提示', color: true, fontSize: true, align: true, convert: true },
-  [NodeTypeEnum.Blockquote]: { label: '引用块', color: true, fontSize: true, align: true, convert: true },
+  [NodeTypeEnum.Blockquote]: { label: '引用', color: true, fontSize: true, align: true, convert: true },
   [NodeTypeEnum.CodeBlock]: { label: '代码块', convert: true },
 
-  [NodeTypeEnum.Details]: { label: '折叠块', align: true },
+  [NodeTypeEnum.Details]: { label: '折叠面板', align: true },
   [NodeTypeEnum.BlockMath]: { label: '块公式' },
   [NodeTypeEnum.Table]: { label: '表格', color: true, fontSize: true, align: true },
   [NodeTypeEnum.Video]: { label: '视频', download: true },

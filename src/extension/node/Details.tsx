@@ -34,7 +34,13 @@ export const DetailsExtension = CustomDetails.configure({
 });
 
 export const DetailsSummaryExtension = DetailsSummary.configure({
+  HTMLAttributes: {
+    class: 'cq-details-summary',
+  },
 });
 
 export const DetailsContentExtension = DetailsContent.configure({
+  HTMLAttributes: {
+    class: 'cq-details-content',
+  },
 });

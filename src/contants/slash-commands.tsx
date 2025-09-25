@@ -90,7 +90,7 @@ export const slashCommands = [
     }
   },
   {
-    title: '引用块',
+    title: '引用',
     shortcutKey: ['ctrl', 'shift', 'B'],
     icon: <DoubleQuotesLIcon sx={{ fontSize: '1rem' }} />,
     command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
@@ -122,7 +122,7 @@ export const slashCommands = [
     }
   },
   {
-    title: '折叠块',
+    title: '折叠面板',
     shortcutKey: ['ctrl', '8'],
     icon: <MenuFold2FillIcon sx={{ fontSize: '1rem' }} />,
     command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
@@ -152,7 +152,7 @@ export const slashCommands = [
     }
   },
   {
-    title: '折叠块',
+    title: '折叠面板',
     icon: <MenuFold2FillIcon sx={{ fontSize: '1rem' }} />,
     command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
       editor.chain().focus().deleteRange(range).setDetails().run()

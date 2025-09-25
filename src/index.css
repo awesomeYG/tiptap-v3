@@ -224,7 +224,7 @@
   font-size: 0.625rem;
   border: none;
   width: 1.25rem;
-  height: 1.25rem;
+  height: 1.5rem;
   margin-top: 0.1rem;
   padding: 0;
 }
@@ -557,4 +557,14 @@
   pointer-events: none;
   user-select: none;
   white-space: pre-wrap;
+}
+
+/* placeholder */
+.tiptap.ProseMirror .cq-details[data-placeholder]::before,
+.tiptap.ProseMirror .table-row[data-placeholder]::before {
+  display: none;
+}
+
+.tiptap.ProseMirror li p[data-placeholder]::before {
+  display: none;
 }

@@ -106,9 +106,11 @@ export const getExtensions = ({
     Placeholder.configure({
       emptyNodeClass: 'custom-placeholder-node',
       showOnlyWhenEditable: true,
+      showOnlyCurrent: true,
+      includeChildren: true,
       placeholder: ({ editor, node, pos }) => {
         const { type, attrs } = node
-        if (pos === 0) {
+        if (pos === 0 && editor.isEmpty) {
           return PLACEHOLDER.default
         }
         const aiWritingEnabled = !!(editor as any)?.storage?.aiWriting?.enabled
