@@ -1,5 +1,5 @@
 import { EditorFnProps } from '@ctzhian/tiptap/type'
-import { mergeAttributes, Node } from '@tiptap/core'
+import { InputRule, mergeAttributes, Node } from '@tiptap/core'
 import { ReactNodeViewRenderer } from '@tiptap/react'
 import AudioViewWrapper from '../component/Audio'
 
@@ -152,22 +152,17 @@ export const AudioExtension = (props: AudioExtensionProps) => Node.create({
 
   addInputRules() {
     return [
-      // Auto-embed audio URLs
-      {
+      new InputRule({
         find: /^https?:\/\/.*\.(mp3|wav|ogg|m4a|flac|aac|wma|webm)$/,
-        handler: ({ state, range, match }) => {
+        handler: ({ range, match, commands }) => {
           const { from, to } = range
           const audioUrl = match[0]
-
-          state.tr.replaceWith(
-            from,
-            to,
-            this.type.create({
-              src: audioUrl,
-            })
-          )
+          commands.insertContentAt({ from, to }, {
+            type: this.name,
+            attrs: { src: audioUrl },
+          })
         },
-      },
+      }),
     ]
   },
 

@@ -1,5 +1,5 @@
 import { EditorFnProps } from '@ctzhian/tiptap/type'
-import { mergeAttributes, Node } from '@tiptap/core'
+import { InputRule, mergeAttributes, Node } from '@tiptap/core'
 import { ReactNodeViewRenderer } from '@tiptap/react'
 import VideoViewWrapper from '../component/Video'
 
@@ -154,22 +154,17 @@ export const VideoExtension = (props: VideoExtensionProps) => Node.create({
 
   addInputRules() {
     return [
-      // Auto-embed video URLs
-      {
+      new InputRule({
         find: /^https?:\/\/.*\.(mp4|webm|ogg|mov|m4v|avi|wmv|flv|mkv|mpg|mpeg|m4p|m4v|m4b|m4r|m4a)$/,
-        handler: ({ state, range, match }) => {
+        handler: ({ range, match, commands }) => {
           const { from, to } = range
           const videoUrl = match[0]
-
-          state.tr.replaceWith(
-            from,
-            to,
-            this.type.create({
-              src: videoUrl,
-            })
-          )
+          commands.insertContentAt({ from, to }, {
+            type: this.name,
+            attrs: { src: videoUrl },
+          })
         },
-      },
+      }),
     ]
   },
 
