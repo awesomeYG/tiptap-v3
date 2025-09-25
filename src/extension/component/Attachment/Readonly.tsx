@@ -12,7 +12,6 @@ interface ReadonlyAttachmentProps extends Partial<NodeViewProps> {
 const ReadonlyAttachment = ({ attrs, type }: ReadonlyAttachmentProps) => {
   return <NodeViewWrapper
     className={`attachment-wrapper${type === 'block' ? ' block-attachment-wrapper' : ''}`}
-    data-drag-handle
     as={type === 'block' ? 'div' : 'span'}
   >
     <Box component='a' href={attrs.url} target='_blank' download={attrs.title} sx={{

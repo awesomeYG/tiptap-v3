@@ -14,7 +14,6 @@ const ReadonlyVideo = ({
 }: ReadonlyVideoProps) => {
   return <NodeViewWrapper
     className={`video-wrapper`}
-    data-drag-handle
   >
     <Box
       sx={{

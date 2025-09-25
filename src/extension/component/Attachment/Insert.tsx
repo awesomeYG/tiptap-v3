@@ -92,7 +92,6 @@ const InsertAttachment = ({
 
   return <NodeViewWrapper
     className={`attachment-wrapper${selected ? ' ProseMirror-selectednode' : ''}`}
-    data-drag-handle
     as={'span'}
   >
     <input

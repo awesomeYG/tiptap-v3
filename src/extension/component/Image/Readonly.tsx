@@ -15,7 +15,6 @@ const ReadonlyImage = ({
 }: ReadonlyImageProps) => {
   return <NodeViewWrapper
     className={`image-wrapper`}
-    data-drag-handle
   >
     <Box
       component={'span'}

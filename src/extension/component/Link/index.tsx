@@ -114,8 +114,8 @@ const LinkViewWrapper: React.FC<NodeViewProps> = ({
 
   return <NodeViewWrapper
     className={`link-wrapper ${attrs.class} ${attrs.type === 'block' ? 'block-link-wrapper' : ''} ${selected ? 'ProseMirror-selectednode' : ''}`}
-    data-drag-handle
     as={attrs.type === 'block' ? 'div' : 'span'}
+    {...(attrs.type === 'block' ? { 'data-drag-handle': true } : {})}
   >
     {attrs.type === 'block' ? <Stack
       direction={'row'}

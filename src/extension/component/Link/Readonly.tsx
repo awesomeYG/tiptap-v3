@@ -18,7 +18,6 @@ const ReadonlyLink = ({ attrs, selected }: ReadonlyLinkProps) => {
 
   return <NodeViewWrapper
     className={`link-wrapper`}
-    data-drag-handle
   >
     {attrs.type === 'block' ? <Box
       component={'a'}

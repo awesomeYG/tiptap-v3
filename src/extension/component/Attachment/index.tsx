@@ -95,8 +95,8 @@ const AttachmentViewWrapper: React.FC<NodeViewProps & EditorFnProps & { attachme
   return (
     <NodeViewWrapper
       className={`attachment-wrapper${attachmentDisplayType === 'block' ? ' block-attachment-wrapper' : ''}${selected ? ' ProseMirror-selectednode' : ''}`}
-      data-drag-handle
       as={attachmentDisplayType === 'block' ? 'div' : 'span'}
+      {...(attachmentDisplayType === 'block' ? { 'data-drag-handle': true } : {})}
     >
       {attachmentDisplayType === 'block' ? <Stack direction={'row'} alignItems={'center'} gap={2}
         onClick={handleShowOperationPopover}

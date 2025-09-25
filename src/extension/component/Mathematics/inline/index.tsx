@@ -59,7 +59,6 @@ export const MathematicsInlineViewWrapper: React.FC<NodeViewProps & EditorFnProp
   return (
     <NodeViewWrapper
       className={`mathematics-inline-wrapper ${selected ? 'ProseMirror-selectednode' : ''}`}
-      data-drag-handle
       as="span"
     >
       {!attrs.latex ? <Box

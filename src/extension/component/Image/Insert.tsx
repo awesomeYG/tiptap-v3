@@ -89,7 +89,6 @@ const InsertImage = ({
   return <>
     <NodeViewWrapper
       className={`image-wrapper`}
-      data-drag-handle
     >
       <Stack
         direction={'row'}

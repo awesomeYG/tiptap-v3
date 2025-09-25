@@ -153,7 +153,6 @@ const CropImage = ({
   return (
     <NodeViewWrapper
       className={`image-wrapper ${selected ? 'ProseMirror-selectednode' : ''}`}
-      data-drag-handle
     >
       <Box
         component={'span'}

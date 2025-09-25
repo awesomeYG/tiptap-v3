@@ -80,7 +80,6 @@ const VideoViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
   return (
     <NodeViewWrapper
       className={`video-wrapper ${selected ? 'ProseMirror-selectednode' : ''}`}
-      data-drag-handle
     >
       <Box
         sx={{

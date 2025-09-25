@@ -12,7 +12,6 @@ interface ReadonlyInlineMathProps {
 const ReadonlyInlineMath = ({ attrs, selected, mathRef }: ReadonlyInlineMathProps) => {
   return <NodeViewWrapper
     className={`mathematics-inline-wrapper ${selected ? 'ProseMirror-selectednode' : ''}`}
-    data-drag-handle
   >
     <Box
       component="span"
