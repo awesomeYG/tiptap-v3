@@ -1,5 +1,5 @@
 import { NestedList } from '@ctzhian/tiptap/component'
-import { ArrowDownSLineIcon, AttachmentLineIcon, CheckboxCircleFillIcon, CloseCircleFillIcon, ErrorWarningFillIcon, FormulaIcon, FunctionsIcon, ImageLineIcon, Information2FillIcon, Information2LineIcon, MovieLineIcon, Music2LineIcon, SquareRootIcon, Table2Icon, UploadIcon } from '@ctzhian/tiptap/component/Icons'
+import { ArrowDownSLineIcon, AttachmentLineIcon, CheckboxCircleFillIcon, CloseCircleFillIcon, ErrorWarningFillIcon, FormulaIcon, FunctionsIcon, ImageLineIcon, Information2FillIcon, Information2LineIcon, MovieLineIcon, Music2LineIcon, SquareRootIcon, Table2Icon, UploadIcon, UserSmileFillIcon } from '@ctzhian/tiptap/component/Icons'
 import { ToolbarItem } from '@ctzhian/tiptap/component/Toolbar'
 import TableSizePicker from '@ctzhian/tiptap/component/Toolbar/TableSizePicker'
 import { SlashCommandsListProps, SlashCommandsListRef } from '@ctzhian/tiptap/type'
@@ -91,6 +91,15 @@ const SlashCommandsList = forwardRef<SlashCommandsListRef, SlashCommandsListProp
                   onClick: () => {
                     const node = items.find(it => it.title === '警告提示')
                     if (node) command({ ...node, attrs: { type: 'icon', variant: 'success' } })
+                  },
+                },
+                {
+                  label: '默认 Default',
+                  key: 'default',
+                  icon: <UserSmileFillIcon sx={{ fontSize: '1rem', color: 'text.disabled' }} />,
+                  onClick: () => {
+                    const node = items.find(it => it.title === '警告提示')
+                    if (node) command({ ...node, attrs: { type: 'icon', variant: 'default' } })
                   },
                 }
               ]
