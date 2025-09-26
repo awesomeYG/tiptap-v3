@@ -118,13 +118,14 @@ const EditorToolbar = ({ editor, menuInToolbarMore }: EditorToolbarProps) => {
           },
         }}
       >
-        <EditorInsert editor={editor} />
         {editor.options.extensions.find(it => it.name === 'aiWriting') && <ToolbarItem
           text={'AI 伴写'}
+          tip='开启后按下 Tab 键采纳建议'
           icon={<AiGenerate2Icon sx={{ fontSize: '1rem' }} />}
           onClick={() => editor.chain().focus().setAiWriting(!active.aiWriting).run()}
           className={active.aiWriting ? 'tool-active' : ''}
         />}
+        <EditorInsert editor={editor} />
         <Divider
           orientation="vertical"
           flexItem
