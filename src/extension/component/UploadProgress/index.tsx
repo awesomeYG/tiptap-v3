@@ -1,11 +1,11 @@
-import { AttachmentLineIcon, ImageLineIcon, MovieLineIcon } from '@ctzhian/tiptap/component/Icons';
+import { AttachmentLineIcon, ImageLineIcon, MovieLineIcon, Music2LineIcon } from '@ctzhian/tiptap/component/Icons';
 import { Box, CircularProgress, Stack } from '@mui/material';
 import { NodeViewProps, NodeViewWrapper } from '@tiptap/react';
 import React from 'react';
 
 export interface UploadProgressAttributes {
   fileName: string;
-  fileType: 'image' | 'video' | 'other';
+  fileType: 'image' | 'video' | 'audio' | 'other';
   progress: number;
   tempId: string;
 }
@@ -16,6 +16,8 @@ export const getFileIcon = (fileType: string) => {
       return <ImageLineIcon sx={{ fontSize: '1rem' }} />;
     case 'video':
       return <MovieLineIcon sx={{ fontSize: '1rem' }} />;
+    case 'audio':
+      return <Music2LineIcon sx={{ fontSize: '1rem' }} />;
     default:
       return <AttachmentLineIcon sx={{ fontSize: '1rem' }} />;
   }
@@ -27,6 +29,8 @@ export const getFileTypeText = (fileType: string) => {
       return '图片';
     case 'video':
       return '视频';
+    case 'audio':
+      return '音频';
     default:
       return '文件';
   }

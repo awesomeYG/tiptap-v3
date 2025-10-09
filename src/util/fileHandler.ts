@@ -1,7 +1,7 @@
 import { Editor } from '@tiptap/react'
 
 // 判断文件类型
-export const getFileType = (file: File): 'image' | 'video' | 'other' => {
+export const getFileType = (file: File): 'image' | 'video' | 'audio' | 'other' => {
   const { type } = file
 
   if (type.startsWith('image/')) {
@@ -10,6 +10,10 @@ export const getFileType = (file: File): 'image' | 'video' | 'other' => {
 
   if (type.startsWith('video/')) {
     return 'video'
+  }
+
+  if (type.startsWith('audio/')) {
+    return 'audio'
   }
 
   return 'other'
