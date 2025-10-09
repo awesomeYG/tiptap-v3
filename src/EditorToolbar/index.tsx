@@ -71,7 +71,7 @@ const EditorToolbar = ({ editor, menuInToolbarMore }: EditorToolbarProps) => {
       link: editor.isActive('link'),
       alert: editor.isActive('alert'),
       iframe: editor.isActive('iframe'),
-      aiWriting: editor.storage.aiWriting.enabled,
+      aiWriting: !!(editor.storage?.aiWriting?.enabled),
     });
   };
 
