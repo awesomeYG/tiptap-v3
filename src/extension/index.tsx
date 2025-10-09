@@ -29,6 +29,7 @@ import {
   Indent,
   InlineAttachmentExtension,
   InlineLinkExtension,
+  InlineUploadProgressExtension,
   ListExtension,
   MentionExtension,
   TableExtension,
@@ -138,6 +139,7 @@ export const getExtensions = ({
     VideoExtension({ onUpload, onError }),
     AudioExtension({ onUpload, onError }),
     ImageExtension({ onUpload, onError }),
+    InlineUploadProgressExtension,
     InlineAttachmentExtension({ onUpload, onError }),
     BlockAttachmentExtension({ onUpload, onError }),
   ]

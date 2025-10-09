@@ -10,30 +10,30 @@ export interface UploadProgressAttributes {
   tempId: string;
 }
 
+export const getFileIcon = (fileType: string) => {
+  switch (fileType) {
+    case 'image':
+      return <ImageLineIcon sx={{ fontSize: '1rem' }} />;
+    case 'video':
+      return <MovieLineIcon sx={{ fontSize: '1rem' }} />;
+    default:
+      return <AttachmentLineIcon sx={{ fontSize: '1rem' }} />;
+  }
+};
+
+export const getFileTypeText = (fileType: string) => {
+  switch (fileType) {
+    case 'image':
+      return '图片';
+    case 'video':
+      return '视频';
+    default:
+      return '文件';
+  }
+};
+
 const UploadProgressView: React.FC<NodeViewProps> = ({ node }) => {
   const attrs = node.attrs as UploadProgressAttributes;
-
-  const getFileIcon = (fileType: string) => {
-    switch (fileType) {
-      case 'image':
-        return <ImageLineIcon sx={{ fontSize: '1rem' }} />;
-      case 'video':
-        return <MovieLineIcon sx={{ fontSize: '1rem' }} />;
-      default:
-        return <AttachmentLineIcon sx={{ fontSize: '1rem' }} />;
-    }
-  };
-
-  const getFileTypeText = (fileType: string) => {
-    switch (fileType) {
-      case 'image':
-        return '图片';
-      case 'video':
-        return '视频';
-      default:
-        return '文件';
-    }
-  };
 
   return (
     <NodeViewWrapper className="upload-progress-wrapper">
