@@ -398,24 +398,19 @@
 }
 
 /* 表格悬停时显示所有列边框 - 只在编辑模式下生效 */
-.tiptap.ProseMirror[contenteditable="true"] table:hover,
-.tiptap.ProseMirror[contenteditable="true"] .table-focus table {
+.tiptap.ProseMirror[contenteditable="true"] table {
   border-left: 1px dotted var(--mui-palette-divider);
   border-right: 1px dotted var(--mui-palette-divider);
 }
 
-.tiptap.ProseMirror[contenteditable="true"] table:hover td,
-.tiptap.ProseMirror[contenteditable="true"] table:hover th,
-.tiptap.ProseMirror[contenteditable="true"] .table-focus td,
-.tiptap.ProseMirror[contenteditable="true"] .table-focus th {
+.tiptap.ProseMirror[contenteditable="true"] table td,
+.tiptap.ProseMirror[contenteditable="true"] table th {
   border-right-color: var(--mui-palette-divider);
   border-right-style: dotted;
 }
 
-.tiptap.ProseMirror[contenteditable="true"] table:hover td:last-child,
-.tiptap.ProseMirror[contenteditable="true"] table:hover th:last-child,
-.tiptap.ProseMirror[contenteditable="true"] .table-focus td:last-child,
-.tiptap.ProseMirror[contenteditable="true"] .table-focus th:last-child {
+.tiptap.ProseMirror[contenteditable="true"] table td:last-child,
+.tiptap.ProseMirror[contenteditable="true"] table th:last-child {
   border-right-color: transparent;
 }
 
@@ -455,9 +450,9 @@
 }
 
 /* 选中单元格的边框样式 - 只改变最外圈边框颜色 */
-.tiptap.ProseMirror[contenteditable="true"] table .selectedCell {
+/* .tiptap.ProseMirror[contenteditable="true"] table .selectedCell {
   border-color: var(--mui-palette-primary-main) !important;
-}
+} */
 
 /* 表格列调整手柄 */
 .tiptap.ProseMirror[contenteditable="true"] table .column-resize-handle {
