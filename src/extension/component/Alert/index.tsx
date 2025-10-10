@@ -58,7 +58,7 @@ const AlertView: React.FC<NodeViewProps> = ({ editor, node, updateAttributes, se
         marginLeft: (node.attrs as any)?.indent ? (node.attrs as any).indent * 32 : undefined,
         border: '1px solid',
         borderColor: variantData.color,
-        color: attrs.variant === 'default' ? 'var(--mui-palette-text-primary)' : variantData.color,
+        // color: attrs.variant === 'default' ? 'var(--mui-palette-text-primary)' : variantData.color,
         borderRadius: '10px',
         padding: '12px 16px',
         lineHeight: 1.625,
@@ -79,7 +79,8 @@ const AlertView: React.FC<NodeViewProps> = ({ editor, node, updateAttributes, se
       <Box sx={{
         flex: 1,
         'code': {
-          bgcolor: attrs.variant === 'default' ? '' : `color-mix(in srgb, ${variantData.color} 20%, transparent) !important`,
+          borderColor: attrs.variant === 'default' ? '' : `color-mix(in srgb, ${variantData.color} 30%, transparent) !important`,
+          bgcolor: attrs.variant === 'default' ? '' : `color-mix(in srgb, ${variantData.color} 10%, transparent) !important`,
         }
       }}>
         <NodeViewContent as={'div'} />

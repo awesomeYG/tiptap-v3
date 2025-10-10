@@ -77,7 +77,7 @@ const Reader = () => {
         }, 100);
       })
     },
-    content: ``
+    content: `<blockquote><p></p></blockquote><p></p>`
   });
 
   return <EditorThemeProvider mode='light'>
