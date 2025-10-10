@@ -82,11 +82,12 @@ const SelectionText = ({ editor, more }: SelectionTextProps) => {
   return <BubbleMenu
     editor={editor}
     pluginKey={'bubble-menu'}
+    updateDelay={750}
     options={{
       placement: 'bottom',
       offset: 8,
     }}
-    shouldShow={({ editor: editorProps, from, to }: { editor: Editor, from: number, to: number }) => {
+    shouldShow={({ editor: editorProps }: { editor: Editor, from: number, to: number }) => {
       if (
         editorProps.state.selection.empty
         || editorProps.isActive('image')

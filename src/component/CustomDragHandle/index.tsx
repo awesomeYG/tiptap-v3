@@ -181,18 +181,6 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
     return Number(attrs.indent) || 0
   }
 
-  const shouldShowButton = ({ editor, data }: { editor: Editor, data: { node: Node | null, pos: number } }) => {
-    if (!editor || !editor.isEditable) return false
-    const currentNode = data.node
-    const empty = currentNode?.textContent === ''
-    if (empty) return false
-    const content = currentNode?.content.content
-    if (content && content.length > 0) {
-      return content.some(item => hasMarksDeep(item))
-    }
-    return false
-  }
-
   const updateNodeChange = useCallback((data: {
     editor: Editor;
     node: Node | null;
@@ -221,18 +209,38 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
     onNodeChange={updateNodeChange}
   >
     <Stack direction={'row'} alignItems={'center'} gap={1} sx={{ mr: 1, height: '1.625rem' }}>
-      <AddIcon onClick={(event: React.MouseEvent<HTMLDivElement>) => {
-        event.stopPropagation()
-        if (current.node && current.pos !== undefined) {
-          if (current.pos === 0) {
-            current.editor.chain().focus().insertContentAt(current.pos, { type: 'paragraph', content: [{ type: 'text', text: '/' }] }).run()
-          } else {
-            current.editor.chain().focus().insertContentAt(current.pos + current.node.nodeSize, { type: 'paragraph', content: [{ type: 'text', text: '/' }] }).run()
+      <Menu
+        context={<AddIcon />}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+        arrowIcon={<ArrowDownSLineIcon sx={{ fontSize: '1rem', transform: 'rotate(-90deg)' }} />}
+        list={[
+          {
+            label: '上方插入行',
+            key: 'insert-line-break-top',
+            icon: <TextWrapIcon sx={{ fontSize: '1rem', transform: 'rotate(180deg)' }} />,
+            onClick: () => {
+              if (current.node && current.pos !== undefined) {
+                const afterPos = current.pos
+                current.editor.chain().focus().insertContentAt(afterPos, { type: 'paragraph', content: [{ type: 'text', text: '/' }] }, { updateSelection: true }).run()
+              }
+            }
+          },
+          {
+            label: '下方插入行',
+            key: 'insert-line-break',
+            icon: <TextWrapIcon sx={{ fontSize: '1rem' }} />,
+            onClick: () => {
+              if (current.node && current.pos !== undefined) {
+                const afterPos = current.pos + current.node.nodeSize
+                current.editor.chain().focus().insertContentAt(afterPos, { type: 'paragraph', content: [{ type: 'text', text: '/' }] }).run()
+              }
+            }
           }
-        }
-      }} />
+        ]}
+      />
       {currentNode ? <Menu
-        width={224}
+        width={216}
         context={<DragIcon />}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
         transformOrigin={{ vertical: 'top', horizontal: 'left' }}
@@ -330,34 +338,6 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
               }}
               icon={<DeleteLineIcon sx={{ fontSize: '1rem' }} />}
               tip={`删除${currentNode?.label}`}
-            />
-          </Stack>
-          <Stack direction={'row'} flexWrap={'wrap'} sx={{ fontSize: 14 }}>
-            <ToolbarItem
-              key={'insert-line-break-top'}
-              onClick={() => {
-                if (current.node && current.pos !== undefined) {
-                  const afterPos = current.pos
-                  current.editor
-                    .chain()
-                    .focus()
-                    .insertContentAt(afterPos, { type: 'paragraph' }, { updateSelection: true })
-                    .run()
-                }
-              }}
-              icon={<TextWrapIcon sx={{ fontSize: '1rem', transform: 'rotate(180deg)' }} />}
-              text={'上方插入行'}
-            />
-            <ToolbarItem
-              key={'insert-line-break'}
-              onClick={() => {
-                if (current.node && current.pos !== undefined) {
-                  const afterPos = current.pos + current.node.nodeSize
-                  current.editor.chain().focus().insertContentAt(afterPos, { type: 'paragraph' }).run()
-                }
-              }}
-              icon={<TextWrapIcon sx={{ fontSize: '1rem' }} />}
-              text={'下方插入行'}
             />
           </Stack>
           <Divider sx={{ my: 0.5 }} />

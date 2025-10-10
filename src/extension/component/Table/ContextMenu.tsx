@@ -127,12 +127,12 @@ const TableContextMenu: React.FC<TableContextMenuProps> = ({
           icon={<ItalicIcon sx={{ fontSize: '1rem' }} />}
         />
         <ToolbarItem
-          onClick={() => editor.chain().focus().toggleUnderline().run()}
-          icon={<UnderlineIcon sx={{ fontSize: '1rem' }} />}
-        />
-        <ToolbarItem
           onClick={() => editor.chain().focus().toggleStrike().run()}
           icon={<StrikethroughIcon sx={{ fontSize: '1rem' }} />}
+        />
+        <ToolbarItem
+          onClick={() => editor.chain().focus().toggleUnderline().run()}
+          icon={<UnderlineIcon sx={{ fontSize: '1rem' }} />}
         />
       </Stack>
       <Divider />

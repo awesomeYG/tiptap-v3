@@ -412,7 +412,7 @@
   border-right-color: transparent;
 }
 
-.tiptap.ProseMirror[contenteditable="true"] table .selectedCell {
+.tiptap.ProseMirror[contenteditable="true"] table .selectedCell * {
   pointer-events: none;
 }
 
