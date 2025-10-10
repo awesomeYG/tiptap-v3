@@ -392,42 +392,28 @@
   text-align: left;
 }
 
-/* 表格数据单元格样式 */
 .tiptap.ProseMirror table td {
   background-color: var(--mui-palette-background-default);
 }
 
-/* 表格悬停时显示所有列边框 - 只在编辑模式下生效 */
-.tiptap.ProseMirror[contenteditable="true"] table {
+.tiptap.ProseMirror table {
   border-left: 1px dotted var(--mui-palette-divider);
   border-right: 1px dotted var(--mui-palette-divider);
 }
 
-.tiptap.ProseMirror[contenteditable="true"] table td,
-.tiptap.ProseMirror[contenteditable="true"] table th {
+.tiptap.ProseMirror table td,
+.tiptap.ProseMirror table th {
   border-right-color: var(--mui-palette-divider);
   border-right-style: dotted;
 }
 
-.tiptap.ProseMirror[contenteditable="true"] table td:last-child,
-.tiptap.ProseMirror[contenteditable="true"] table th:last-child {
+.tiptap.ProseMirror table td:last-child,
+.tiptap.ProseMirror table th:last-child {
   border-right-color: transparent;
 }
 
-.tiptap.ProseMirror[contenteditable="false"] table {
-  border-left: 1px dotted var(--mui-palette-divider);
-  border-right: 1px dotted var(--mui-palette-divider);
-}
-
-.tiptap.ProseMirror[contenteditable="false"] table td,
-.tiptap.ProseMirror[contenteditable="false"] table th {
-  border-right-color: var(--mui-palette-divider);
-  border-right-style: dotted;
-}
-
-.tiptap.ProseMirror[contenteditable="false"] table td:last-child,
-.tiptap.ProseMirror[contenteditable="false"] table th:last-child {
-  border-right-color: transparent;
+.tiptap.ProseMirror[contenteditable="true"] table .selectedCell {
+  pointer-events: none;
 }
 
 /* 表格选择状态 */
@@ -441,18 +427,7 @@
   pointer-events: none;
   position: absolute;
   z-index: 2;
-  /* border-radius: 4px; */
-  /* border: 2px solid var(--mui-palette-primary-main); */
 }
-
-.tiptap.ProseMirror[contenteditable="true"] table .selectedCell {
-  background-color: color-mix(in srgb, var(--mui-palette-primary-main) 5%, transparent) !important;
-}
-
-/* 选中单元格的边框样式 - 只改变最外圈边框颜色 */
-/* .tiptap.ProseMirror[contenteditable="true"] table .selectedCell {
-  border-color: var(--mui-palette-primary-main) !important;
-} */
 
 /* 表格列调整手柄 */
 .tiptap.ProseMirror[contenteditable="true"] table .column-resize-handle {
@@ -519,17 +494,6 @@
   to {
     transform: rotate(360deg);
   }
-}
-
-.PhotoView-Slider__Backdrop {
-  background: rgba(33, 34, 45, 0.3) !important;
-  backdrop-filter: blur(5px);
-  transition: none !important;
-  animation-duration: none !important;
-}
-
-.PhotoView-Slider__BannerWrap {
-  background-color: rgba(33, 34, 45, 0.2) !important;
 }
 
 .slash-decoration[data-decoration-content].is-empty {

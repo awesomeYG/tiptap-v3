@@ -77,7 +77,7 @@ const Reader = () => {
         }, 100);
       })
     },
-    content: `<p>Hello Tiptap</p><p></p>`
+    content: ``
   });
 
   return <EditorThemeProvider mode='light'>

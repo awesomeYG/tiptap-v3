@@ -76,7 +76,12 @@ const AlertView: React.FC<NodeViewProps> = ({ editor, node, updateAttributes, se
           color: attrs.variant === 'default' ? 'text.disabled' : variantData.color,
         }}>{variantData.icon}</Box>
       )}
-      <Box sx={{ flex: 1 }}>
+      <Box sx={{
+        flex: 1,
+        'code': {
+          bgcolor: attrs.variant === 'default' ? '' : `color-mix(in srgb, ${variantData.color} 20%, transparent) !important`,
+        }
+      }}>
         <NodeViewContent as={'div'} />
       </Box>
 
