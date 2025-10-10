@@ -75,7 +75,7 @@
   background-color: var(--mui-palette-background-paper3);
 }
 
-.tiptap.ProseMirror blockquote::before {
+.tiptap.ProseMirror blockquote::after {
   content: '';
   position: absolute;
   top: 0;
@@ -530,10 +530,7 @@
 
 /* placeholder */
 .tiptap.ProseMirror .cq-details[data-placeholder]::before,
-.tiptap.ProseMirror .table-row[data-placeholder]::before {
-  display: none;
-}
-
+.tiptap.ProseMirror .table-row[data-placeholder]::before,
 .tiptap.ProseMirror li p[data-placeholder]::before {
   display: none;
 }
