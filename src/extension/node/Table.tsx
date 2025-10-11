@@ -43,7 +43,7 @@ export const TableExtension = ({ editable }: { editable: boolean }) => [
     },
     addKeyboardShortcuts() {
       return {
-        'Mod-9': () => this.editor.commands.insertTable({ rows: 3, cols: 4, withHeaderRow: true }),
+        'Mod-9': () => this.editor.chain().insertTable({ rows: 3, cols: 4, withHeaderRow: true }).focus().run(),
       }
     },
     renderHTML({ node, HTMLAttributes }: {
@@ -131,7 +131,7 @@ export const TableExtension = ({ editable }: { editable: boolean }) => [
     addKeyboardShortcuts() {
       return {
         Tab: () => {
-          if (this.editor.commands.goToNextCell()) {
+          if (this.editor.chain().goToNextCell().focus().run()) {
             return this.editor.chain().cancelSelection().run()
           } else if (!this.editor.can().addRowAfter()) {
             return false

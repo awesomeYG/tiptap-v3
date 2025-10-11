@@ -5,6 +5,9 @@ import { PhotoProvider } from 'react-photo-view';
 import SelectionText from '../component/CustomBubbleMenu/SelectionText';
 import CustomDragHandle from '../component/CustomDragHandle';
 
+// fix: https://github.com/ueberdosis/tiptap/issues/6785
+import 'core-js/actual/array/find-last';
+
 const Editor = ({
   editor,
   menuInDragHandle,

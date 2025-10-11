@@ -3,6 +3,9 @@ import React, { useEffect } from "react"
 import { PhotoProvider } from "react-photo-view"
 import useTiptap from "../hook"
 
+// fix: https://github.com/ueberdosis/tiptap/issues/6785
+import 'core-js/actual/array/find-last'
+
 interface EditorDiffProps {
   oldHtml: string
   newHtml: string

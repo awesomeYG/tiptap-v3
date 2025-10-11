@@ -64,6 +64,9 @@ const Menu: React.FC<MenuProps> = ({
       anchorOrigin={anchorOrigin}
       transformOrigin={transformOrigin}
       disableScrollLock
+      disableAutoFocus
+      disableEnforceFocus
+      disableRestoreFocus
     >
       <Box sx={{ p: 0.5 }}>
         <Box onClick={handleClose}>

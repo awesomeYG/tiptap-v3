@@ -361,8 +361,7 @@
   overflow: hidden;
   background-color: var(--mui-palette-background-paper);
   caption-side: top;
-  border-left: 1px solid transparent;
-  border-right: 1px solid transparent;
+  border-left: 1px dotted var(--mui-palette-divider);
 }
 
 .tiptap.ProseMirror table p {
@@ -370,12 +369,17 @@
   line-height: 24px;
 }
 
+.tiptap.ProseMirror table th *,
+.tiptap.ProseMirror table td * {
+  word-break: break-all;
+}
+
 /* 表格单元格基础样式 */
 .tiptap.ProseMirror table td,
 .tiptap.ProseMirror table th {
   border: none;
   border-bottom: 1px solid var(--mui-palette-divider);
-  border-right: 1px solid transparent;
+  border-right: 1px dotted var(--mui-palette-divider);
   box-sizing: border-box;
   padding: 12px 16px;
   position: relative;
@@ -406,24 +410,9 @@
   background-color: var(--mui-palette-background-default);
 }
 
-.tiptap.ProseMirror table {
-  border-left: 1px dotted var(--mui-palette-divider);
-  border-right: 1px dotted var(--mui-palette-divider);
-}
-
-.tiptap.ProseMirror table td,
-.tiptap.ProseMirror table th {
-  border-right-color: var(--mui-palette-divider);
-  border-right-style: dotted;
-}
-
-.tiptap.ProseMirror table td:last-child,
-.tiptap.ProseMirror table th:last-child {
-  border-right-color: transparent;
-}
-
 .tiptap.ProseMirror[contenteditable="true"] table .selectedCell * {
   pointer-events: none;
+  user-select: none;
 }
 
 /* 表格选择状态 */

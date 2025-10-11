@@ -88,6 +88,16 @@ const SelectionText = ({ editor, more }: SelectionTextProps) => {
       offset: 8,
     }}
     shouldShow={({ editor: editorProps }: { editor: Editor, from: number, to: number }) => {
+      // 表格多选单元格时禁止弹出气泡菜单
+      if (editorProps.state.selection.constructor.name === '_CellSelection') {
+        const cellSelection = editorProps.state.selection as any;
+        if (cellSelection.ranges.length > 1) {
+          return false
+        }
+        if (cellSelection.$anchorCell && cellSelection.$headCell) {
+          return cellSelection.$anchorCell.pos !== cellSelection.$headCell.pos;
+        }
+      }
       if (
         editorProps.state.selection.empty
         || editorProps.isActive('image')

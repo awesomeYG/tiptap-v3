@@ -116,6 +116,9 @@ importers:
       '@tiptap/suggestion':
         specifier: 3.5.3
         version: 3.5.3(@tiptap/core@3.5.3(@tiptap/pm@3.5.3))(@tiptap/pm@3.5.3)
+      core-js:
+        specifier: ^3.46.0
+        version: 3.46.0
       diff-match-patch:
         specifier: ^1.0.5
         version: 1.0.5
@@ -3260,6 +3263,9 @@ packages:
 
   core-js@3.34.0:
     resolution: {integrity: sha512-aDdvlDder8QmY91H88GzNi9EtQi2TjvQhpCX6B1v/dAZHU1AuLgHvRh54RiOerpEhEW46Tkf+vgAViB/CWC0ag==}
+
+  core-js@3.46.0:
+    resolution: {integrity: sha512-vDMm9B0xnqqZ8uSBpZ8sNtRtOdmfShrvT6h2TuQGLs0Is+cR0DYbj/KWP6ALVNbWPpqA/qPLoOuppJN07humpA==}
 
   core-util-is@1.0.3:
     resolution: {integrity: sha512-ZQBvi1DcpJ4GDqanjucZ2Hj3wEO5pZDS89BWbkcrvdxksJorwUDDZamX9ldFkp9aw2lmBDLgkObEA4DWNJ9FYQ==}
@@ -11205,6 +11211,8 @@ snapshots:
   core-js-pure@3.45.1: {}
 
   core-js@3.34.0: {}
+
+  core-js@3.46.0: {}
 
   core-util-is@1.0.3: {}
 

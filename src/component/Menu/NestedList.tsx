@@ -93,6 +93,9 @@ const NestedList: React.FC<NestedMenuListProps> = ({
               onClose={handleItemLeave}
               sx={{ pointerEvents: 'none' }}
               disableScrollLock
+              disableAutoFocus
+              disableEnforceFocus
+              disableRestoreFocus
               {...childrenProps}
             >
               <Box className="menu-select-sub-list" sx={{

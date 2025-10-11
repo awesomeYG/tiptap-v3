@@ -1,6 +1,6 @@
 {
   "name": "@ctzhian/tiptap",
-  "version": "1.6.26",
+  "version": "1.7.2",
   "description": "基于 Tiptap 二次开发的编辑器组件",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -125,6 +125,7 @@
     "@tiptap/starter-kit": "3.5.3",
     "@tiptap/static-renderer": "3.5.3",
     "@tiptap/suggestion": "3.5.3",
+    "core-js": "^3.46.0",
     "diff-match-patch": "^1.0.5",
     "highlight.js": "^11.11.1",
     "jszip": "^3.10.1",

@@ -1,7 +1,5 @@
-import { ToolbarItem } from '@ctzhian/tiptap/component/Toolbar';
 import {
   Box,
-  Divider,
   MenuItem,
   MenuList,
   Stack
@@ -9,7 +7,6 @@ import {
 import { Editor } from '@tiptap/core';
 import React from 'react';
 import {
-  BoldIcon,
   DeleteColumnIcon,
   DeleteLineIcon,
   DeleteRowIcon,
@@ -17,13 +14,10 @@ import {
   InsertColumnRightIcon,
   InsertRowBottomIcon,
   InsertRowTopIcon,
-  ItalicIcon,
   LayoutLeft2LineIcon,
   LayoutTop2LineIcon,
   MergeCellsHorizontalIcon,
-  SplitCellsHorizontalIcon,
-  StrikethroughIcon,
-  UnderlineIcon
+  SplitCellsHorizontalIcon
 } from '../../../component/Icons';
 
 interface TableContextMenuProps {
@@ -31,12 +25,14 @@ interface TableContextMenuProps {
   onClose: () => void;
   onCommandExecute?: () => void;
   hasMultipleSelection: boolean;
+  hasMultipleCellElements: boolean;
 }
 
 const TableContextMenu: React.FC<TableContextMenuProps> = ({
   editor,
   onClose,
   hasMultipleSelection,
+  hasMultipleCellElements,
   onCommandExecute
 }) => {
 
@@ -81,7 +77,7 @@ const TableContextMenu: React.FC<TableContextMenuProps> = ({
       label: '拆分单元格',
       icon: <SplitCellsHorizontalIcon sx={{ fontSize: '1rem' }} />,
       action: () => handleCommand(() => editor.chain().focus().splitCell().run()),
-      show: true
+      show: !hasMultipleSelection && hasMultipleCellElements
     },
     {
       label: '切换表头行',
@@ -117,25 +113,31 @@ const TableContextMenu: React.FC<TableContextMenuProps> = ({
 
   return (
     <>
-      <Stack direction={'row'} alignItems={'center'} sx={{ p: 0.5 }}>
+      {/* <Stack direction={'row'} alignItems={'center'} sx={{ p: 0.5 }}>
         <ToolbarItem
-          onClick={() => editor.chain().focus().toggleBold().run()}
+          onClick={() => {
+            if (editor.commands.setCellAttribute('align', 'right')) {
+              console.log('right')
+            } else {
+              console.log('left')
+            }
+          }}
           icon={<BoldIcon sx={{ fontSize: '1rem' }} />}
         />
         <ToolbarItem
-          onClick={() => editor.chain().focus().toggleItalic().run()}
+          onClick={() => editor.chain().toggleItalic().focus().run()}
           icon={<ItalicIcon sx={{ fontSize: '1rem' }} />}
         />
         <ToolbarItem
-          onClick={() => editor.chain().focus().toggleStrike().run()}
+          onClick={() => editor.chain().toggleStrike().focus().run()}
           icon={<StrikethroughIcon sx={{ fontSize: '1rem' }} />}
         />
         <ToolbarItem
-          onClick={() => editor.chain().focus().toggleUnderline().run()}
+          onClick={() => editor.chain().toggleUnderline().focus().run()}
           icon={<UnderlineIcon sx={{ fontSize: '1rem' }} />}
         />
       </Stack>
-      <Divider />
+      <Divider /> */}
       <MenuList sx={{ p: 0.5 }}>
         {menuItems.map((item, index) => (
           item.show ? <MenuItem
