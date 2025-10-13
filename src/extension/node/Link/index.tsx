@@ -232,7 +232,7 @@ export const InlineLinkExtension = Node.create<LinkOptions>({
 
   addOptions() {
     return {
-      autolink: true,
+      autolink: false,
       linkOnPaste: false,
       protocols: [],
       defaultProtocol: 'http',
