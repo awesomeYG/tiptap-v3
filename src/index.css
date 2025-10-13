@@ -455,17 +455,20 @@
 
 /* 表格滚动条样式 */
 .tiptap.ProseMirror .tableWrapper::-webkit-scrollbar {
-  height: 2px;
+  height: 5px;
+  cursor: pointer;
 }
 
 .tiptap.ProseMirror .tableWrapper::-webkit-scrollbar-track {
   background: var(--mui-palette-divider);
   border-radius: 4px;
+  cursor: pointer;
 }
 
 .tiptap.ProseMirror .tableWrapper::-webkit-scrollbar-thumb {
   background: var(--mui-palette-text-disabled);
   border-radius: 4px;
+  cursor: pointer;
 }
 
 /* youtube */
