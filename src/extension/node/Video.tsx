@@ -1,5 +1,7 @@
 import { EditorFnProps } from '@ctzhian/tiptap/type'
+import { getFileType } from '@ctzhian/tiptap/util'
 import { InputRule, mergeAttributes, Node } from '@tiptap/core'
+import { Plugin, PluginKey } from '@tiptap/pm/state'
 import { ReactNodeViewRenderer } from '@tiptap/react'
 import VideoViewWrapper from '../component/Video'
 
@@ -171,6 +173,101 @@ export const VideoExtension = (props: VideoExtensionProps) => Node.create({
   addNodeView() {
     return ReactNodeViewRenderer((renderProps) => VideoViewWrapper({ ...renderProps, onUpload: props.onUpload, onError: props.onError }))
   },
+
+  addProseMirrorPlugins() {
+    return [
+      new Plugin({
+        key: new PluginKey('videoPasteHandler'),
+        props: {
+          handlePaste: (view, event) => {
+            if (!props.onUpload) return false
+
+            const items = Array.from(event.clipboardData?.items || [])
+            const videoFiles = items
+              .map(item => item.getAsFile())
+              .filter((file): file is File => file !== null && getFileType(file) === 'video')
+
+            if (videoFiles.length === 0) return false
+
+            const { from } = view.state.selection
+            const editor = this.editor
+
+            const findNodePosition = (typeName: string, tempId: string) => {
+              let targetPos: number | null = null
+              editor.state.doc.descendants((node, position) => {
+                if (node.type.name === typeName && node.attrs.tempId === tempId) {
+                  targetPos = position
+                  return false
+                }
+                return undefined
+              })
+              return targetPos
+            };
+            (async () => {
+              if (!props.onUpload) return
+
+              for (let i = 0; i < videoFiles.length; i++) {
+                const file = videoFiles[i]
+                const tempId = `upload-${Date.now()}-${i}`
+                const insertPosition = from + i
+
+                try {
+                  editor.chain().insertContentAt(insertPosition, {
+                    type: 'uploadProgress',
+                    attrs: {
+                      fileName: file.name,
+                      fileType: 'video',
+                      progress: 0,
+                      tempId,
+                    },
+                  }).focus().run()
+
+                  const progressPos = findNodePosition('uploadProgress', tempId)
+
+                  const url = await props.onUpload(file, (progressEvent) => {
+                    const progressValue = progressEvent.progress
+                    editor.chain().updateUploadProgress(tempId, progressValue).focus().run()
+                  })
+
+                  editor.chain().removeUploadProgress(tempId).focus().run()
+
+                  const chain = editor.chain().focus()
+                  if (progressPos !== null) {
+                    chain.setTextSelection(progressPos)
+                  }
+
+                  chain.setVideo({
+                    src: url,
+                    width: 760,
+                    controls: true,
+                    autoplay: false,
+                  }).run()
+                } catch (error) {
+                  console.error('视频上传失败:', error)
+                  editor.chain().removeUploadProgress(tempId).focus().run()
+
+                  const progressPos = findNodePosition('uploadProgress', tempId)
+                  const chain = editor.chain().focus()
+                  if (progressPos !== null) {
+                    chain.setTextSelection(progressPos)
+                  }
+
+                  chain.setVideo({
+                    src: '',
+                    width: 760,
+                    controls: true,
+                    autoplay: false,
+                  }).run()
+                }
+              }
+            })()
+
+            return true
+          }
+        }
+      })
+    ]
+  }
 })
 
 export default VideoExtension

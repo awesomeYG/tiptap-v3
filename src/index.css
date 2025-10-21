@@ -359,8 +359,8 @@
   max-width: 100%;
   table-layout: fixed;
   overflow: hidden;
-  background-color: var(--mui-palette-background-paper);
   caption-side: top;
+  background-color: var(--mui-palette-background-paper);
   border-left: 1px dotted var(--mui-palette-divider);
 }
 
@@ -449,6 +449,7 @@
 
 /* 表格包装器样式 */
 .tiptap.ProseMirror .tableWrapper {
+  width: 100%;
   overflow-x: auto;
   margin: 20px 0;
 }
@@ -522,7 +523,7 @@
 
 /* placeholder */
 .tiptap.ProseMirror .cq-details[data-placeholder]::before,
-.tiptap.ProseMirror .table-row[data-placeholder]::before,
+.tiptap.ProseMirror table *[data-placeholder]::before,
 .tiptap.ProseMirror li p[data-placeholder]::before {
   display: none;
 }

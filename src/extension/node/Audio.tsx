@@ -41,9 +41,6 @@ export const AudioExtension = (props: AudioExtensionProps) => Node.create({
 
   addAttributes() {
     return {
-      class: {
-        default: 'audio-wrapper',
-      },
       src: {
         default: null,
         parseHTML: element => element.getAttribute('src'),
