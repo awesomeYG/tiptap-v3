@@ -6,6 +6,7 @@ import Superscript from '@tiptap/extension-superscript';
 import TextAlign from '@tiptap/extension-text-align';
 import { TextStyleKit } from '@tiptap/extension-text-style';
 import { CharacterCount, Placeholder } from '@tiptap/extensions';
+import { Markdown } from '@tiptap/markdown';
 import StarterKit from '@tiptap/starter-kit';
 import { PLACEHOLDER } from '../contants/placeholder';
 import { GetExtensionsProps } from '../type';
@@ -85,16 +86,13 @@ export const getExtensions = ({
     TextStyleKit,
     Indent.configure({
       types: [
-        // 常见块级与项目中定义的节点
         'paragraph', 'heading', 'blockquote', 'alert', 'codeBlock', 'horizontalRule',
         'orderedList', 'bulletList', 'taskList', 'taskItem', 'listItem',
         'details', 'detailsContent', 'detailsSummary',
         'table',
         'image', 'video', 'audio', 'iframe',
         'blockAttachment', 'inlineAttachment', 'blockLink',
-        // 公式
         'blockMath', 'inlineMath',
-        // 扩展里还有：youtube 等，如需也可开启
       ],
       maxLevel: 8,
       indentPx: 32,
@@ -103,6 +101,12 @@ export const getExtensions = ({
     AlertExtension,
     Highlight.configure({
       multicolor: true,
+    }),
+    Markdown.configure({
+      indentation: {
+        style: 'space',
+        size: 2,
+      },
     }),
     Placeholder.configure({
       emptyNodeClass: 'custom-placeholder-node',
