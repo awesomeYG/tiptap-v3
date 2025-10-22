@@ -78,6 +78,7 @@ const AlertView: React.FC<NodeViewProps> = ({ editor, node, updateAttributes, se
       )}
       <Box sx={{
         flex: 1,
+        width: 0,
         'code': {
           borderColor: attrs.variant === 'default' ? '' : `color-mix(in srgb, ${variantData.color} 30%, transparent) !important`,
           bgcolor: attrs.variant === 'default' ? '' : `color-mix(in srgb, ${variantData.color} 10%, transparent) !important`,
