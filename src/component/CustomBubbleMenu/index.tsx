@@ -62,9 +62,7 @@ const CustomBubbleMenu = ({ editor, more }: CustomBubbleMenuProps) => {
       isUnderline: ctx.editor.isActive('underline'),
       isCode: ctx.editor.isActive('code'),
       isHighlight: ctx.editor.isActive('highlight'),
-      hasAnyMarks: ctx.editor.state.selection.empty
-        ? ctx.editor.state.selection.$from.marks().length > 0
-        : hasMarksInSelection(ctx.editor.state),
+      hasAnyMarks: hasMarksInSelection(ctx.editor.state),
       // isSuperscript: ctx.editor.isActive('superscript'),
       // isSubscript: ctx.editor.isActive('subscript'),
     })

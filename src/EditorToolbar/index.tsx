@@ -1,6 +1,6 @@
 import { Box, Divider, Stack } from '@mui/material';
-import { Editor } from '@tiptap/react';
-import React, { useEffect, useState } from 'react';
+import { Editor, useEditorState } from '@tiptap/react';
+import React from 'react';
 import {
   AiGenerate2Icon,
   ArrowGoBackLineIcon,
@@ -28,6 +28,7 @@ import {
   ToolbarItem
 } from '../component/Toolbar';
 import { ToolbarItemType } from '../type';
+import { hasMarksInSelection } from '../util';
 
 interface EditorToolbarProps {
   editor: Editor;
@@ -35,57 +36,46 @@ interface EditorToolbarProps {
 }
 
 const EditorToolbar = ({ editor, menuInToolbarMore }: EditorToolbarProps) => {
-
-  const [active, setActive] = useState({
-    undo: false,
-    redo: false,
-    format: false,
-    quote: false,
-    bold: false,
-    italic: false,
-    strike: false,
-    underline: false,
-    superscript: false,
-    subscript: false,
-    details: false,
-    table: false,
-    link: false,
-    alert: false,
-    iframe: false,
-    aiWriting: false,
-    highlight: false,
+  const {
+    isUndo,
+    isRedo,
+    isFormat,
+    isQuote,
+    isBold,
+    isItalic,
+    isStrike,
+    isUnderline,
+    isSuperscript,
+    isSubscript,
+    isDetails,
+    isTable,
+    isLink,
+    isAlert,
+    isIframe,
+    isAiWriting,
+    isHighlight,
+  } = useEditorState({
+    editor,
+    selector: ctx => ({
+      isUndo: ctx.editor.can().chain().undo().run() ?? false,
+      isRedo: ctx.editor.can().chain().redo().run() ?? false,
+      isFormat: hasMarksInSelection(ctx.editor.state),
+      isQuote: ctx.editor.isActive('blockquote'),
+      isBold: ctx.editor.isActive('bold'),
+      isItalic: ctx.editor.isActive('italic'),
+      isStrike: ctx.editor.isActive('strike'),
+      isUnderline: ctx.editor.isActive('underline'),
+      isSuperscript: ctx.editor.isActive('superscript'),
+      isSubscript: ctx.editor.isActive('subscript'),
+      isDetails: ctx.editor.isActive('details'),
+      isTable: ctx.editor.isActive('table'),
+      isLink: ctx.editor.isActive('link'),
+      isAlert: ctx.editor.isActive('alert'),
+      isIframe: ctx.editor.isActive('iframe'),
+      isHighlight: ctx.editor.isActive('highlight'),
+      isAiWriting: !!(ctx.editor.storage?.aiWriting?.enabled),
+    }),
   });
-
-  const updateSelection = () => {
-    setActive({
-      undo: editor.can().chain().undo().run() ?? false,
-      redo: editor.can().chain().redo().run() ?? false,
-      format: editor.can().chain().unsetAllMarks().run() ?? false,
-      quote: editor.isActive('blockquote'),
-      bold: editor.isActive('bold'),
-      italic: editor.isActive('italic'),
-      strike: editor.isActive('strike'),
-      underline: editor.isActive('underline'),
-      superscript: editor.isActive('superscript'),
-      subscript: editor.isActive('subscript'),
-      details: editor.isActive('details'),
-      table: editor.isActive('table'),
-      link: editor.isActive('link'),
-      alert: editor.isActive('alert'),
-      iframe: editor.isActive('iframe'),
-      aiWriting: !!(editor.storage?.aiWriting?.enabled),
-      highlight: editor.isActive('highlight'),
-    });
-  };
-
-  useEffect(() => {
-    editor.on('selectionUpdate', updateSelection);
-    editor.on('transaction', updateSelection);
-    return () => {
-      editor.off('selectionUpdate', updateSelection);
-      editor.off('transaction', updateSelection);
-    };
-  }, [editor]);
 
   return (
     <Box className="editor-toolbar">
@@ -125,8 +115,8 @@ const EditorToolbar = ({ editor, menuInToolbarMore }: EditorToolbarProps) => {
           text={'AI 伴写'}
           tip='开启后按下 Tab 键采纳建议'
           icon={<AiGenerate2Icon sx={{ fontSize: '1rem' }} />}
-          onClick={() => editor.chain().focus().setAiWriting(!active.aiWriting).run()}
-          className={active.aiWriting ? 'tool-active' : ''}
+          onClick={() => editor.chain().focus().setAiWriting(!isAiWriting).run()}
+          className={isAiWriting ? 'tool-active' : ''}
         />}
         <EditorInsert editor={editor} />
         <Divider
@@ -139,19 +129,19 @@ const EditorToolbar = ({ editor, menuInToolbarMore }: EditorToolbarProps) => {
           shortcutKey={['ctrl', 'Z']}
           icon={<ArrowGoBackLineIcon sx={{ fontSize: '1rem' }} />}
           onClick={() => editor.chain().focus().undo().run()}
-          disabled={!active.undo}
+          disabled={!isUndo}
         />
         <ToolbarItem
           tip={'重做'}
           shortcutKey={['ctrl', 'Y']}
           icon={<ArrowGoForwardLineIcon sx={{ fontSize: '1rem' }} />}
           onClick={() => editor.chain().focus().redo().run()}
-          disabled={!active.redo}
+          disabled={!isRedo}
         />
         <ToolbarItem
           tip={'清除格式'}
           icon={<EraserLineIcon sx={{ fontSize: '1rem' }} />}
-          disabled={!active.format}
+          disabled={!isFormat}
           onClick={() => editor.chain().focus().unsetAllMarks().run()}
         />
         <Divider
@@ -171,49 +161,49 @@ const EditorToolbar = ({ editor, menuInToolbarMore }: EditorToolbarProps) => {
           shortcutKey={['ctrl', 'B']}
           icon={<BoldIcon sx={{ fontSize: '1rem' }} />}
           onClick={() => editor.chain().focus().toggleBold().run()}
-          className={active.bold ? 'tool-active' : ''}
+          className={isBold ? 'tool-active' : ''}
         />
         <ToolbarItem
           tip={'斜体'}
           shortcutKey={['ctrl', 'I']}
           icon={<ItalicIcon sx={{ fontSize: '1rem' }} />}
           onClick={() => editor.chain().focus().toggleItalic().run()}
-          className={active.italic ? 'tool-active' : ''}
+          className={isItalic ? 'tool-active' : ''}
         />
         <ToolbarItem
           tip={'删除线'}
           shortcutKey={['ctrl', 'shift', 'S']}
           icon={<StrikethroughIcon sx={{ fontSize: '1rem' }} />}
           onClick={() => editor.chain().focus().toggleStrike().run()}
-          className={active.strike ? 'tool-active' : ''}
+          className={isStrike ? 'tool-active' : ''}
         />
         <ToolbarItem
           tip={'下划线'}
           shortcutKey={['ctrl', 'U']}
           icon={<UnderlineIcon sx={{ fontSize: '1rem' }} />}
           onClick={() => editor.chain().focus().toggleUnderline().run()}
-          className={active.underline ? 'tool-active' : ''}
+          className={isUnderline ? 'tool-active' : ''}
         />
         <ToolbarItem
           tip={'高亮'}
           shortcutKey={['ctrl', 'shift', 'H']}
           icon={<MarkPenLineIcon sx={{ fontSize: '1rem' }} />}
           onClick={() => editor.chain().focus().toggleHighlight().run()}
-          className={active.highlight ? 'tool-active' : ''}
+          className={isHighlight ? 'tool-active' : ''}
         />
         <ToolbarItem
           tip={'上标'}
           shortcutKey={['ctrl', '.']}
           icon={<SuperscriptIcon sx={{ fontSize: '1rem' }} />}
           onClick={() => editor.chain().focus().toggleSuperscript().run()}
-          className={active.superscript ? 'tool-active' : ''}
+          className={isSuperscript ? 'tool-active' : ''}
         />
         <ToolbarItem
           tip={'下标'}
           shortcutKey={['ctrl', ',']}
           icon={<SubscriptIcon sx={{ fontSize: '1rem' }} />}
           onClick={() => editor.chain().focus().toggleSubscript().run()}
-          className={active.subscript ? 'tool-active' : ''}
+          className={isSubscript ? 'tool-active' : ''}
         />
         <EditorFontColor editor={editor} />
         <EditorFontBgColor editor={editor} />
@@ -238,7 +228,7 @@ const EditorToolbar = ({ editor, menuInToolbarMore }: EditorToolbarProps) => {
               .setInlineLink({ href: '', title: text })
               .run();
           }}
-          className={active.link ? 'tool-active' : ''}
+          className={isLink ? 'tool-active' : ''}
         />
         <EditorAlignSelect editor={editor} />
         <EditorVerticalAlignSelect editor={editor} />

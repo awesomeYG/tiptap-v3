@@ -22,6 +22,9 @@ export const insertNodeAfterPosition = (editor: Editor, pos: number, nodeContent
 }
 
 export const hasMarksInSelection = (state: EditorState) => {
+  if (state.selection.empty) {
+    return false;
+  }
   const { from, to } = state.selection;
   let hasMarks = false;
   state.doc.nodesBetween(from, to, (node) => {
