@@ -69,7 +69,6 @@ export const getExtensions = ({
         width: 2,
       },
     }),
-    ListExtension,
     TextAlign.configure({
       types: ['heading', 'paragraph'],
     }),
@@ -77,13 +76,18 @@ export const getExtensions = ({
       types: ['textStyle'],
       defaultAlignment: null,
     }),
+    TextStyleKit.configure({
+      backgroundColor: {
+        types: ['textStyle'],
+      }
+    }),
+    ListExtension,
     CodeBlockLowlightExtension,
     CharacterCount.configure({
       limit: limit ?? null,
     }),
     Subscript,
     Superscript,
-    TextStyleKit,
     Indent.configure({
       types: [
         'paragraph', 'heading', 'blockquote', 'alert', 'codeBlock', 'horizontalRule',

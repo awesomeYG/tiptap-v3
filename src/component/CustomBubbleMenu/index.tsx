@@ -1,81 +1,76 @@
-import { BoldIcon, CodeLineIcon, ItalicIcon, LinkIcon, ResetLeftFillIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, UnderlineIcon } from '@ctzhian/tiptap/component/Icons'
+import { BoldIcon, CodeLineIcon, EraserLineIcon, ItalicIcon, LinkIcon, MarkPenLineIcon, StrikethroughIcon, UnderlineIcon } from '@ctzhian/tiptap/component/Icons'
 import { MenuItem } from '@ctzhian/tiptap/type'
-import { Box, IconButton, Paper, Stack, useTheme } from '@mui/material'
-import { Editor } from '@tiptap/react'
+import { hasMarksInSelection } from '@ctzhian/tiptap/util'
+import { Paper, Stack } from '@mui/material'
+import { Editor, useEditorState } from '@tiptap/react'
 import { BubbleMenu } from '@tiptap/react/menus'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { ToolbarItem } from '../Toolbar'
 
-export interface SelectionTextProps {
+export interface CustomBubbleMenuProps {
   editor: Editor
   more?: MenuItem[]
 }
 
-const SelectionText = ({ editor, more }: SelectionTextProps) => {
-  const theme = useTheme()
+const CustomBubbleMenu = ({ editor, more }: CustomBubbleMenuProps) => {
+  // const theme = useTheme()
 
-  const THEME_TEXT_COLOR = [
-    theme.palette.primary.main,
-    theme.palette.success.main,
-    theme.palette.warning.main,
-    theme.palette.error.main,
-    '#D8A47F',
-    '#73B5F0',
-    '#CDDFA0',
-    theme.palette.text.primary,
-    theme.palette.text.secondary,
-    theme.palette.text.disabled,
-    theme.palette.common.white,
-  ]
+  // const THEME_TEXT_COLOR = [
+  //   theme.palette.primary.main,
+  //   theme.palette.success.main,
+  //   theme.palette.warning.main,
+  //   theme.palette.error.main,
+  //   '#D8A47F',
+  //   '#73B5F0',
+  //   '#CDDFA0',
+  //   theme.palette.text.primary,
+  //   theme.palette.text.secondary,
+  //   theme.palette.text.disabled,
+  //   theme.palette.common.white,
+  // ]
 
-  const THEME_TEXT_BG_COLOR = [
-    '#e7bdff',
-    '#FFE0B2',
-    '#F8BBD0',
-    '#FFCDD2',
-    '#FFECB3',
-    '#FFCCBC',
-    '#B3E5FC',
-    '#C8E6C9',
-    '#B2EBF2',
-    '#BBDEFB',
-    '#DCEDC8',
-  ]
+  // const THEME_TEXT_BG_COLOR = [
+  //   '#e7bdff',
+  //   '#FFE0B2',
+  //   '#F8BBD0',
+  //   '#FFCDD2',
+  //   '#FFECB3',
+  //   '#FFCCBC',
+  //   '#B3E5FC',
+  //   '#C8E6C9',
+  //   '#B2EBF2',
+  //   '#BBDEFB',
+  //   '#DCEDC8',
+  // ]
 
-  const [active, setActive] = useState({
-    quote: false,
-    bold: false,
-    italic: false,
-    strike: false,
-    underline: false,
-    code: false,
-    superscript: false,
-    subscript: false,
+  const {
+    isBold,
+    isItalic,
+    isStrike,
+    isUnderline,
+    isCode,
+    isHighlight,
+    hasAnyMarks,
+    // isSuperscript,
+    // isSubscript,
+  } = useEditorState({
+    editor,
+    selector: ctx => ({
+      isBold: ctx.editor.isActive('bold'),
+      isItalic: ctx.editor.isActive('italic'),
+      isStrike: ctx.editor.isActive('strike'),
+      isUnderline: ctx.editor.isActive('underline'),
+      isCode: ctx.editor.isActive('code'),
+      isHighlight: ctx.editor.isActive('highlight'),
+      hasAnyMarks: ctx.editor.state.selection.empty
+        ? ctx.editor.state.selection.$from.marks().length > 0
+        : hasMarksInSelection(ctx.editor.state),
+      // isSuperscript: ctx.editor.isActive('superscript'),
+      // isSubscript: ctx.editor.isActive('subscript'),
+    })
   })
 
-  const updateSelection = () => {
-    setActive({
-      quote: editor.isActive('blockquote'),
-      bold: editor.isActive('bold'),
-      italic: editor.isActive('italic'),
-      strike: editor.isActive('strike'),
-      underline: editor.isActive('underline'),
-      code: editor.isActive('code'),
-      superscript: editor.isActive('superscript'),
-      subscript: editor.isActive('subscript'),
-    })
-  }
-
-  useEffect(() => {
-    editor.on('selectionUpdate', updateSelection);
-    editor.on('transaction', updateSelection);
-    return () => {
-      editor.off('selectionUpdate', updateSelection);
-      editor.off('transaction', updateSelection);
-    };
-  }, [editor]);
-
-  if (!editor.isEditable) {
+  if (editor && !editor.isEditable) {
     return null
   }
 
@@ -86,33 +81,34 @@ const SelectionText = ({ editor, more }: SelectionTextProps) => {
     options={{
       placement: 'bottom',
       offset: 8,
+      flip: true,
     }}
-    shouldShow={({ editor: editorProps }: { editor: Editor, from: number, to: number }) => {
+    shouldShow={() => {
       // 表格多选单元格时禁止弹出气泡菜单
-      if (editorProps.state.selection.constructor.name === '_CellSelection') {
-        const cellSelection = editorProps.state.selection as any;
-        if (cellSelection.ranges.length > 1) {
-          return false
-        }
-        if (cellSelection.$anchorCell && cellSelection.$headCell) {
-          return cellSelection.$anchorCell.pos !== cellSelection.$headCell.pos;
-        }
-      }
+      // if (editor.state.selection.constructor.name === '_CellSelection') {
+      //   const cellSelection = editor.state.selection as any;
+      //   if (cellSelection.ranges.length > 1) {
+      //     return false
+      //   }
+      //   if (cellSelection.$anchorCell && cellSelection.$headCell) {
+      //     return cellSelection.$anchorCell.pos !== cellSelection.$headCell.pos;
+      //   }
+      // }
       if (
-        editorProps.state.selection.empty
-        || editorProps.isActive('image')
-        || editorProps.isActive('video')
-        || editorProps.isActive('audio')
-        || editorProps.isActive('emoji')
-        || editorProps.isActive('codeBlock')
-        || editorProps.isActive('blockMath')
-        || editorProps.isActive('inlineMath')
-        || editorProps.isActive('blockLink')
-        || editorProps.isActive('inlineLink')
-        || editorProps.isActive('blockAttachment')
-        || editorProps.isActive('inlineAttachment')
-        || editorProps.isActive('horizontalRule')
-        || editorProps.isActive('iframe')
+        editor.state.selection.empty ||
+        editor.isActive('image') ||
+        editor.isActive('video') ||
+        editor.isActive('audio') ||
+        editor.isActive('emoji') ||
+        editor.isActive('codeBlock') ||
+        editor.isActive('blockMath') ||
+        editor.isActive('inlineMath') ||
+        editor.isActive('blockLink') ||
+        editor.isActive('inlineLink') ||
+        editor.isActive('blockAttachment') ||
+        editor.isActive('inlineAttachment') ||
+        editor.isActive('horizontalRule') ||
+        editor.isActive('iframe')
       ) {
         return false
       }
@@ -126,45 +122,63 @@ const SelectionText = ({ editor, more }: SelectionTextProps) => {
       <Stack direction={'row'} alignItems={'center'}>
         <ToolbarItem
           tip='加粗'
+          shortcutKey={['ctrl', 'B']}
           icon={<BoldIcon sx={{ fontSize: '1rem' }} />}
           onClick={() => editor.chain().focus().toggleBold().run()}
-          className={active.bold ? "tool-active" : ""}
+          className={isBold ? "tool-active" : ""}
         />
         <ToolbarItem
           tip='斜体'
+          shortcutKey={['ctrl', 'I']}
           icon={<ItalicIcon sx={{ fontSize: '1rem' }} />}
           onClick={() => editor.chain().focus().toggleItalic().run()}
-          className={active.italic ? "tool-active" : ""}
+          className={isItalic ? "tool-active" : ""}
         />
         <ToolbarItem
           tip='删除线'
+          shortcutKey={['ctrl', 'shift', 'S']}
           icon={<StrikethroughIcon sx={{ fontSize: '1rem' }} />}
           onClick={() => editor.chain().focus().toggleStrike().run()}
-          className={active.strike ? "tool-active" : ""}
+          className={isStrike ? "tool-active" : ""}
         />
         <ToolbarItem
           tip='下划线'
+          shortcutKey={['ctrl', 'U']}
           icon={<UnderlineIcon sx={{ fontSize: '1rem' }} />}
           onClick={() => editor.chain().focus().toggleUnderline().run()}
-          className={active.underline ? "tool-active" : ""}
+          className={isUnderline ? "tool-active" : ""}
         />
         <ToolbarItem
+          tip='高亮'
+          shortcutKey={['ctrl', 'shift', 'H']}
+          icon={<MarkPenLineIcon sx={{ fontSize: '1rem' }} />}
+          onClick={() => editor.chain().focus().toggleHighlight().run()}
+          className={isHighlight ? "tool-active" : ""}
+        />
+        {/* <ToolbarItem
           tip='上标'
           icon={<SuperscriptIcon sx={{ fontSize: '1rem' }} />}
           onClick={() => editor.chain().focus().toggleSuperscript().run()}
-          className={active.superscript ? "tool-active" : ""}
+          className={isSuperscript ? "tool-active" : ""}
         />
         <ToolbarItem
           tip='下标'
           icon={<SubscriptIcon sx={{ fontSize: '1rem' }} />}
           onClick={() => editor.chain().focus().toggleSubscript().run()}
-          className={active.subscript ? "tool-active" : ""}
-        />
+          className={isSubscript ? "tool-active" : ""}
+        /> */}
         <ToolbarItem
           tip='行内代码'
+          shortcutKey={['ctrl', 'E']}
           icon={<CodeLineIcon sx={{ fontSize: '1rem' }} />}
           onClick={() => editor.chain().focus().toggleCode().run()}
-          className={active.code ? "tool-active" : ""}
+          className={isCode ? "tool-active" : ""}
+        />
+        <ToolbarItem
+          tip='文本格式化'
+          icon={<EraserLineIcon sx={{ fontSize: '1rem' }} />}
+          onClick={() => editor.chain().focus().unsetAllMarks().run()}
+          disabled={!hasAnyMarks}
         />
         <ToolbarItem
           tip='插入链接'
@@ -186,7 +200,7 @@ const SelectionText = ({ editor, more }: SelectionTextProps) => {
           />
         ))}
       </Stack>
-      <Box sx={{
+      {/* <Box sx={{
         mt: 0.5,
         p: 1.5,
         borderTop: '1px solid',
@@ -259,9 +273,9 @@ const SelectionText = ({ editor, more }: SelectionTextProps) => {
             }} />
           ))}
         </Stack>
-      </Box>
+      </Box> */}
     </Paper>
   </BubbleMenu>
 }
 
-export default SelectionText
+export default CustomBubbleMenu

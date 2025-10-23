@@ -2,7 +2,7 @@ import { EditorProps } from '@ctzhian/tiptap/type';
 import { EditorContent } from '@tiptap/react';
 import React from 'react';
 import { PhotoProvider } from 'react-photo-view';
-import SelectionText from '../component/CustomBubbleMenu/SelectionText';
+import CustomBubbleMenu from '../component/CustomBubbleMenu';
 import CustomDragHandle from '../component/CustomDragHandle';
 
 // fix: https://github.com/ueberdosis/tiptap/issues/6785
@@ -33,7 +33,7 @@ const Editor = ({
       );
     }}
   >
-    <SelectionText editor={editor} more={menuInBubbleMenu} />
+    <CustomBubbleMenu editor={editor} more={menuInBubbleMenu} />
     <CustomDragHandle editor={editor} more={menuInDragHandle} onTip={onTip} />
     <EditorContent editor={editor} />
   </PhotoProvider>

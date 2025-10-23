@@ -86,6 +86,7 @@ export { ListCheck2Icon } from './list-check-2-icon';
 export { ListCheck3Icon } from './list-check-3-icon';
 export { ListOrdered2Icon } from './list-ordered-2-icon';
 export { ListUnorderedIcon } from './list-unordered-icon';
+export { MarkPenLineIcon } from './mark-pen-line-icon';
 export { MarkdownLineIcon } from './markdown-line-icon';
 export { MarkupLineIcon } from './markup-line-icon';
 export { MenuFold2FillIcon } from './menu-fold-2-fill-icon';

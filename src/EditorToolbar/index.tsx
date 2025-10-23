@@ -9,6 +9,7 @@ import {
   EraserLineIcon,
   ItalicIcon,
   LinkIcon,
+  MarkPenLineIcon,
   StrikethroughIcon,
   SubscriptIcon,
   SuperscriptIcon,
@@ -52,6 +53,7 @@ const EditorToolbar = ({ editor, menuInToolbarMore }: EditorToolbarProps) => {
     alert: false,
     iframe: false,
     aiWriting: false,
+    highlight: false,
   });
 
   const updateSelection = () => {
@@ -72,6 +74,7 @@ const EditorToolbar = ({ editor, menuInToolbarMore }: EditorToolbarProps) => {
       alert: editor.isActive('alert'),
       iframe: editor.isActive('iframe'),
       aiWriting: !!(editor.storage?.aiWriting?.enabled),
+      highlight: editor.isActive('highlight'),
     });
   };
 
@@ -190,6 +193,13 @@ const EditorToolbar = ({ editor, menuInToolbarMore }: EditorToolbarProps) => {
           icon={<UnderlineIcon sx={{ fontSize: '1rem' }} />}
           onClick={() => editor.chain().focus().toggleUnderline().run()}
           className={active.underline ? 'tool-active' : ''}
+        />
+        <ToolbarItem
+          tip={'高亮'}
+          shortcutKey={['ctrl', 'shift', 'H']}
+          icon={<MarkPenLineIcon sx={{ fontSize: '1rem' }} />}
+          onClick={() => editor.chain().focus().toggleHighlight().run()}
+          className={active.highlight ? 'tool-active' : ''}
         />
         <ToolbarItem
           tip={'上标'}

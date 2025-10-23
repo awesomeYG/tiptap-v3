@@ -7,7 +7,7 @@ import { Fragment, Node, Slice } from '@tiptap/pm/model';
 import { NodeSelection } from '@tiptap/pm/state';
 import { Editor } from '@tiptap/react';
 import React, { useCallback, useState } from 'react';
-import { convertNodeAt, downloadFiles, FileInfo, filterResourcesByType, getAllResources, getShortcutKeyText } from '../../util';
+import { convertNodeAt, downloadFiles, FileInfo, filterResourcesByType, getAllResources, getShortcutKeyText, hasMarksInSelection } from '../../util';
 import Menu from '../Menu';
 import { ToolbarItem } from '../Toolbar';
 
@@ -200,7 +200,8 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
         images,
         attachments,
       })
-      setShowFormat(editor.can().chain().unsetAllMarks().run() ?? false)
+      const hasMarks = hasMarksInSelection(current.editor.state)
+      setShowFormat(!hasMarks)
     }
   }, [current.pos, current.node])
 
@@ -384,7 +385,7 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
                 }
               }))),
               {
-                customLabel: <Typography sx={{ p: 1, fontSize: '0.75rem', color: 'text.secondary', fontWeight: 'bold' }}>背景颜色</Typography>,
+                customLabel: <Typography sx={{ p: 1, fontSize: '0.75rem', color: 'text.secondary', fontWeight: 'bold' }}>文字背景颜色</Typography>,
                 key: 'background-color',
               },
               ...(THEME_TEXT_BG_COLOR.map(it => ({
@@ -403,6 +404,7 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
                     const from = current.pos;
                     const to = current.pos + current.node.nodeSize;
                     current.editor.chain()
+                      .focus()
                       .setTextSelection({ from, to })
                       .setBackgroundColor(it.value)
                       .run();
@@ -896,7 +898,12 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
             key: 'format',
             icon: <EraserLineIcon sx={{ fontSize: '1rem' }} />,
             onClick: () => {
-              current.editor.chain().focus().unsetAllMarks().run()
+              if (current.node && current.pos !== undefined) {
+                const selection = current.editor.commands.setTextSelection({ from: current.pos, to: current.pos + current.node?.nodeSize })
+                if (selection) {
+                  current.editor.chain().unsetAllMarks().focus(current.pos - 1).run()
+                }
+              }
             }
           }] : []),
         ]}

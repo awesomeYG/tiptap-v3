@@ -6,6 +6,7 @@ export * from './migrateMathStrings'
 export * from './resourceExtractor'
 export * from './shortcutKey'
 
+import { EditorState } from '@tiptap/pm/state'
 import { Editor } from '@tiptap/react'
 
 export const formatFileSize = (bytes: number): string => {
@@ -18,6 +19,18 @@ export const formatFileSize = (bytes: number): string => {
 
 export const insertNodeAfterPosition = (editor: Editor, pos: number, nodeContent: any) => {
   editor.chain().focus().insertContentAt(pos, nodeContent).run()
+}
+
+export const hasMarksInSelection = (state: EditorState) => {
+  const { from, to } = state.selection;
+  let hasMarks = false;
+  state.doc.nodesBetween(from, to, (node) => {
+    if (node.marks && node.marks.length > 0) {
+      hasMarks = true;
+      return false;
+    }
+  });
+  return hasMarks;
 }
 
 export function addOpacityToColor(color: string, opacity: number) {

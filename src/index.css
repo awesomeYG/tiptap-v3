@@ -362,7 +362,6 @@
   table-layout: fixed;
   overflow: hidden;
   caption-side: top;
-  background-color: var(--mui-palette-background-paper);
   border-left: 1px dotted var(--mui-palette-divider);
 }
 
@@ -401,15 +400,10 @@
 
 /* 表格表头样式 */
 .tiptap.ProseMirror table th {
-  background-color: var(--mui-palette-background-paper3);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   text-align: left;
-}
-
-.tiptap.ProseMirror table td {
-  background-color: var(--mui-palette-background-default);
 }
 
 .tiptap.ProseMirror[contenteditable="true"] table .selectedCell * {
@@ -432,7 +426,6 @@
 
 /* 表格列调整手柄 */
 .tiptap.ProseMirror[contenteditable="true"] table .column-resize-handle {
-  background-color: transparent;
   border-right: 2px dotted var(--mui-palette-primary-main);
   bottom: -2px;
   pointer-events: none;
