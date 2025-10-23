@@ -121,36 +121,36 @@ const CustomBubbleMenu = ({ editor, more }: CustomBubbleMenuProps) => {
     }}>
       <Stack direction={'row'} alignItems={'center'}>
         <ToolbarItem
-          tip='加粗'
-          shortcutKey={['ctrl', 'B']}
+          // tip='加粗'
+          // shortcutKey={['ctrl', 'B']}
           icon={<BoldIcon sx={{ fontSize: '1rem' }} />}
           onClick={() => editor.chain().focus().toggleBold().run()}
           className={isBold ? "tool-active" : ""}
         />
         <ToolbarItem
-          tip='斜体'
-          shortcutKey={['ctrl', 'I']}
+          // tip='斜体'
+          // shortcutKey={['ctrl', 'I']}
           icon={<ItalicIcon sx={{ fontSize: '1rem' }} />}
           onClick={() => editor.chain().focus().toggleItalic().run()}
           className={isItalic ? "tool-active" : ""}
         />
         <ToolbarItem
-          tip='删除线'
-          shortcutKey={['ctrl', 'shift', 'S']}
+          // tip='删除线'
+          // shortcutKey={['ctrl', 'shift', 'S']}
           icon={<StrikethroughIcon sx={{ fontSize: '1rem' }} />}
           onClick={() => editor.chain().focus().toggleStrike().run()}
           className={isStrike ? "tool-active" : ""}
         />
         <ToolbarItem
-          tip='下划线'
-          shortcutKey={['ctrl', 'U']}
+          // tip='下划线'
+          // shortcutKey={['ctrl', 'U']}
           icon={<UnderlineIcon sx={{ fontSize: '1rem' }} />}
           onClick={() => editor.chain().focus().toggleUnderline().run()}
           className={isUnderline ? "tool-active" : ""}
         />
         <ToolbarItem
-          tip='高亮'
-          shortcutKey={['ctrl', 'shift', 'H']}
+          // tip='高亮'
+          // shortcutKey={['ctrl', 'shift', 'H']}
           icon={<MarkPenLineIcon sx={{ fontSize: '1rem' }} />}
           onClick={() => editor.chain().focus().toggleHighlight().run()}
           className={isHighlight ? "tool-active" : ""}
@@ -168,20 +168,20 @@ const CustomBubbleMenu = ({ editor, more }: CustomBubbleMenuProps) => {
           className={isSubscript ? "tool-active" : ""}
         /> */}
         <ToolbarItem
-          tip='行内代码'
-          shortcutKey={['ctrl', 'E']}
+          // tip='行内代码'
+          // shortcutKey={['ctrl', 'E']}
           icon={<CodeLineIcon sx={{ fontSize: '1rem' }} />}
           onClick={() => editor.chain().focus().toggleCode().run()}
           className={isCode ? "tool-active" : ""}
         />
         <ToolbarItem
-          tip='文本格式化'
+          // tip='文本格式化'
           icon={<EraserLineIcon sx={{ fontSize: '1rem' }} />}
           onClick={() => editor.chain().focus().unsetAllMarks().run()}
           disabled={!hasAnyMarks}
         />
         <ToolbarItem
-          tip='插入链接'
+          // tip='插入链接'
           icon={<LinkIcon sx={{ fontSize: '1rem' }} />}
           onClick={() => {
             const selection = editor.state.selection
