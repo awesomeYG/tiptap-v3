@@ -9,9 +9,10 @@ import TableSizePicker from '../TableSizePicker';
 
 interface EditorInsertProps {
   editor: Editor;
+  isMarkdown: boolean;
 }
 
-const EditorInsert = ({ editor }: EditorInsertProps) => {
+const EditorInsert = ({ editor, isMarkdown }: EditorInsertProps) => {
   return <Menu
     width={224}
     context={<ToolbarItem
@@ -52,7 +53,7 @@ const EditorInsert = ({ editor }: EditorInsertProps) => {
           },
         ],
       },
-      {
+      ...!isMarkdown ? [{
         label: '文件',
         key: 'file',
         icon: <Folder2LineIcon sx={{ fontSize: '1rem' }} />,
@@ -79,7 +80,7 @@ const EditorInsert = ({ editor }: EditorInsertProps) => {
             onClick: () => editor.commands.setVideo({ src: '', width: 760, controls: true, autoplay: false }),
           },
         ]
-      },
+      }] : [],
       {
         customLabel: <Typography sx={{ px: 1, pt: 2, fontSize: '12px', color: 'text.disabled' }}>
           样式布局
@@ -106,7 +107,7 @@ const EditorInsert = ({ editor }: EditorInsertProps) => {
         extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', '8'], '+')}</Typography>,
         onClick: () => editor.chain().focus().setDetails().run(),
       },
-      {
+      ...!isMarkdown ? [{
         label: '警告提示',
         key: 'highlight',
         icon: <Information2LineIcon sx={{ fontSize: '1rem' }} />,
@@ -152,7 +153,7 @@ const EditorInsert = ({ editor }: EditorInsertProps) => {
             },
           }
         ]
-      },
+      }] : [],
       {
         customLabel: <Typography sx={{ px: 1, pt: 2, fontSize: '12px', color: 'text.disabled' }}>
           程序员专用
@@ -205,7 +206,7 @@ const EditorInsert = ({ editor }: EditorInsertProps) => {
           }
         ]
       },
-      {
+      ...!isMarkdown ? [{
         customLabel: <Typography sx={{ px: 1, pt: 2, fontSize: '12px', color: 'text.disabled' }}>
           其他
         </Typography>,
@@ -216,7 +217,7 @@ const EditorInsert = ({ editor }: EditorInsertProps) => {
         key: 'iframe',
         icon: <WindowFillIcon sx={{ fontSize: '1rem' }} />,
         onClick: () => editor.commands.setIframe({ src: '', width: 760, height: 400 }),
-      },
+      }] : [],
     ]}
   />
 }

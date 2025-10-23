@@ -11,10 +11,11 @@ interface InsertLinkProps extends Partial<NodeViewProps> {
   editor: Editor
 }
 
-const InsertLink = ({ updateAttributes, deleteNode, selected, attrs, editor }: InsertLinkProps) => {
+const InsertLink = ({ updateAttributes, deleteNode, attrs, editor }: InsertLinkProps) => {
+  const isMarkdown = editor.options.contentType === 'markdown'
   const [title, setTitle] = useState(attrs.title || '')
   const [href, setHref] = useState(attrs.href || '')
-  const [type, setType] = useState(attrs.type || 'icon')
+  const [type, setType] = useState((isMarkdown ? 'text' : (attrs.type || 'icon')))
   const [target, setTarget] = useState(attrs.target || '_blank')
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null)
 
@@ -119,61 +120,63 @@ const InsertLink = ({ updateAttributes, deleteNode, selected, attrs, editor }: I
             placeholder="链接标题（可选）"
           />
         </Stack>
-        <FormControl component="fieldset">
-          <Stack direction={'row'} gap={2} alignItems={'flex-start'} sx={{
-            '.MuiFormControlLabel-label': {
-              fontSize: '0.875rem'
-            }
-          }}>
-            <FormLabel component="legend" sx={{ fontSize: '0.875rem', flexShrink: 0 }}>风格</FormLabel>
-            <RadioGroup
-              row
-              value={type}
-              onChange={(e) => setType(e.target.value as 'text' | 'icon' | 'block')}
-            >
-              <FormControlLabel
-                value="text"
-                control={<Radio size="small" />}
-                label="纯文字"
-              />
-              <FormControlLabel
-                value="icon"
-                control={<Radio size="small" />}
-                label="图标文字"
-              />
-              <FormControlLabel
-                value="block"
-                control={<Radio size="small" />}
-                label="卡片"
-              />
-            </RadioGroup>
-          </Stack>
-        </FormControl>
-        <FormControl component="fieldset">
-          <Stack direction={'row'} gap={2} alignItems={'flex-start'} sx={{
-            '.MuiFormControlLabel-label': {
-              fontSize: '0.875rem'
-            }
-          }}>
-            <FormLabel component="legend" sx={{ fontSize: '0.875rem', flexShrink: 0 }}>打开</FormLabel>
-            <RadioGroup
-              row
-              value={target}
-              onChange={(e) => setTarget(e.target.value as '_blank' | '_self' | '_parent' | '_top')}
-            >
-              <FormControlLabel
-                value="_blank"
-                control={<Radio size="small" />}
-                label="新窗口"
-              />
-              <FormControlLabel
-                value="_self"
-                control={<Radio size="small" />}
-                label="当前窗口"
-              />
-            </RadioGroup>
-          </Stack>
-        </FormControl>
+        {!isMarkdown && <>
+          <FormControl component="fieldset">
+            <Stack direction={'row'} gap={2} alignItems={'flex-start'} sx={{
+              '.MuiFormControlLabel-label': {
+                fontSize: '0.875rem'
+              }
+            }}>
+              <FormLabel component="legend" sx={{ fontSize: '0.875rem', flexShrink: 0 }}>风格</FormLabel>
+              <RadioGroup
+                row
+                value={type}
+                onChange={(e) => setType(e.target.value as 'text' | 'icon' | 'block')}
+              >
+                <FormControlLabel
+                  value="text"
+                  control={<Radio size="small" />}
+                  label="纯文字"
+                />
+                <FormControlLabel
+                  value="icon"
+                  control={<Radio size="small" />}
+                  label="图标文字"
+                />
+                <FormControlLabel
+                  value="block"
+                  control={<Radio size="small" />}
+                  label="卡片"
+                />
+              </RadioGroup>
+            </Stack>
+          </FormControl>
+          <FormControl component="fieldset">
+            <Stack direction={'row'} gap={2} alignItems={'flex-start'} sx={{
+              '.MuiFormControlLabel-label': {
+                fontSize: '0.875rem'
+              }
+            }}>
+              <FormLabel component="legend" sx={{ fontSize: '0.875rem', flexShrink: 0 }}>打开</FormLabel>
+              <RadioGroup
+                row
+                value={target}
+                onChange={(e) => setTarget(e.target.value as '_blank' | '_self' | '_parent' | '_top')}
+              >
+                <FormControlLabel
+                  value="_blank"
+                  control={<Radio size="small" />}
+                  label="新窗口"
+                />
+                <FormControlLabel
+                  value="_self"
+                  control={<Radio size="small" />}
+                  label="当前窗口"
+                />
+              </RadioGroup>
+            </Stack>
+          </FormControl>
+        </>}
         <Stack direction="row" gap={1}>
           <Button
             variant="outlined"

@@ -36,22 +36,19 @@ interface EditorToolbarProps {
 }
 
 const EditorToolbar = ({ editor, menuInToolbarMore }: EditorToolbarProps) => {
+  const isMarkdown = editor.options.contentType === 'markdown'
+
   const {
     isUndo,
     isRedo,
     isFormat,
-    isQuote,
     isBold,
     isItalic,
     isStrike,
     isUnderline,
     isSuperscript,
     isSubscript,
-    isDetails,
-    isTable,
     isLink,
-    isAlert,
-    isIframe,
     isAiWriting,
     isHighlight,
   } = useEditorState({
@@ -60,18 +57,13 @@ const EditorToolbar = ({ editor, menuInToolbarMore }: EditorToolbarProps) => {
       isUndo: ctx.editor.can().chain().undo().run() ?? false,
       isRedo: ctx.editor.can().chain().redo().run() ?? false,
       isFormat: hasMarksInSelection(ctx.editor.state),
-      isQuote: ctx.editor.isActive('blockquote'),
       isBold: ctx.editor.isActive('bold'),
       isItalic: ctx.editor.isActive('italic'),
       isStrike: ctx.editor.isActive('strike'),
       isUnderline: ctx.editor.isActive('underline'),
       isSuperscript: ctx.editor.isActive('superscript'),
       isSubscript: ctx.editor.isActive('subscript'),
-      isDetails: ctx.editor.isActive('details'),
-      isTable: ctx.editor.isActive('table'),
       isLink: ctx.editor.isActive('link'),
-      isAlert: ctx.editor.isActive('alert'),
-      isIframe: ctx.editor.isActive('iframe'),
       isHighlight: ctx.editor.isActive('highlight'),
       isAiWriting: !!(ctx.editor.storage?.aiWriting?.enabled),
     }),
@@ -118,7 +110,7 @@ const EditorToolbar = ({ editor, menuInToolbarMore }: EditorToolbarProps) => {
           onClick={() => editor.chain().focus().setAiWriting(!isAiWriting).run()}
           className={isAiWriting ? 'tool-active' : ''}
         />}
-        <EditorInsert editor={editor} />
+        <EditorInsert editor={editor} isMarkdown={isMarkdown} />
         <Divider
           orientation="vertical"
           flexItem

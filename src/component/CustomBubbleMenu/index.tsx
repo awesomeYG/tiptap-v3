@@ -1,7 +1,7 @@
-import { BoldIcon, CodeLineIcon, EraserLineIcon, ItalicIcon, LinkIcon, MarkPenLineIcon, StrikethroughIcon, UnderlineIcon } from '@ctzhian/tiptap/component/Icons'
+import { BoldIcon, CodeLineIcon, EraserLineIcon, ItalicIcon, MarkPenLineIcon, StrikethroughIcon, UnderlineIcon } from '@ctzhian/tiptap/component/Icons'
 import { MenuItem } from '@ctzhian/tiptap/type'
 import { hasMarksInSelection } from '@ctzhian/tiptap/util'
-import { Paper, Stack } from '@mui/material'
+import { Divider, Paper, Stack } from '@mui/material'
 import { Editor, useEditorState } from '@tiptap/react'
 import { BubbleMenu } from '@tiptap/react/menus'
 import React from 'react'
@@ -172,13 +172,14 @@ const CustomBubbleMenu = ({ editor, more }: CustomBubbleMenuProps) => {
           onClick={() => editor.chain().focus().toggleCode().run()}
           className={isCode ? "tool-active" : ""}
         />
+        <Divider orientation="vertical" flexItem sx={{ mx: 0.5, height: 20, alignSelf: 'center' }} />
         <ToolbarItem
           // tip='文本格式化'
           icon={<EraserLineIcon sx={{ fontSize: '1rem' }} />}
           onClick={() => editor.chain().focus().unsetAllMarks().run()}
           disabled={!hasAnyMarks}
         />
-        <ToolbarItem
+        {/* <ToolbarItem
           // tip='插入链接'
           icon={<LinkIcon sx={{ fontSize: '1rem' }} />}
           onClick={() => {
@@ -188,7 +189,7 @@ const CustomBubbleMenu = ({ editor, more }: CustomBubbleMenuProps) => {
             const text = editor.state.doc.textBetween(start, end, '')
             editor.chain().focus().setInlineLink({ href: '', title: text }).run()
           }}
-        />
+        /> */}
         {more?.map((item) => (
           <ToolbarItem
             key={item.key}

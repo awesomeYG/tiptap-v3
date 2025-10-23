@@ -22,12 +22,13 @@ const useTiptap = ({
 
   // editor
   editable = true,
+  contentType,
 
   // other
   ...options
 }: UseTiptapProps & UseEditorOptions): UseTiptapReturn => {
-
   const extensions = getExtensions({
+    contentType,
     exclude,
     extensions: extensionsProps,
     editable,
@@ -42,6 +43,9 @@ const useTiptap = ({
   const editor = useEditor({
     editable,
     extensions,
+    ...(contentType === 'markdown' ? {
+      contentType: 'markdown',
+    } : {}),
     ...options,
     editorProps: {
       handleKeyDown: (view, event) => {
@@ -72,9 +76,7 @@ const useTiptap = ({
       }
     },
     onCreate: ({ editor: currentEditor }) => {
-      if (options.onCreate) {
-        options.onCreate({ editor: currentEditor })
-      }
+      options.onCreate?.({ editor: currentEditor })
       // 处理数学公式 - 延迟执行确保文档完全准备好
       setTimeout(() => {
         try {
@@ -100,6 +102,16 @@ const useTiptap = ({
 
   return {
     editor,
+    getMarkdown: () => {
+      if (contentType === 'markdown') {
+        return editor.getMarkdown()
+      }
+      if (!editor) return ''
+      return renderToMarkdown({
+        extensions: editor.extensionManager.extensions,
+        content: editor.getJSON(),
+      })
+    },
     getText: () => {
       return editor?.getText() || ''
     },
@@ -108,13 +120,6 @@ const useTiptap = ({
     },
     getJSON: () => {
       return editor?.getJSON() || null
-    },
-    getMarkdownByJSON: () => {
-      if (!editor) return ''
-      return renderToMarkdown({
-        extensions: editor.extensionManager.extensions,
-        content: editor.getJSON(),
-      })
     },
   }
 }

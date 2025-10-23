@@ -42,6 +42,7 @@ import {
 } from './node';
 
 export const getExtensions = ({
+  contentType,
   limit,
   exclude,
   extensions: extensionsProps,
@@ -69,49 +70,26 @@ export const getExtensions = ({
         width: 2,
       },
     }),
-    TextAlign.configure({
-      types: ['heading', 'paragraph'],
-    }),
-    VerticalAlign.configure({
-      types: ['textStyle'],
-      defaultAlignment: null,
-    }),
-    TextStyleKit.configure({
-      backgroundColor: {
-        types: ['textStyle'],
-      }
-    }),
-    ListExtension,
-    CodeBlockLowlightExtension,
-    CharacterCount.configure({
-      limit: limit ?? null,
-    }),
     Subscript,
     Superscript,
-    Indent.configure({
-      types: [
-        'paragraph', 'heading', 'blockquote', 'alert', 'codeBlock', 'horizontalRule',
-        'orderedList', 'bulletList', 'taskList', 'taskItem', 'listItem',
-        'details', 'detailsContent', 'detailsSummary',
-        'table',
-        'image', 'video', 'audio', 'iframe',
-        'blockAttachment', 'inlineAttachment', 'blockLink',
-        'blockMath', 'inlineMath',
-      ],
-      maxLevel: 8,
-      indentPx: 32,
-    }),
+    TextStyleKit,
     CodeExtension,
-    AlertExtension,
-    Highlight.configure({
-      multicolor: true,
-    }),
-    Markdown.configure({
-      indentation: {
-        style: 'space',
-        size: 2,
-      },
-    }),
+    ListExtension,
+    EmojiExtension,
+    DetailsExtension,
+    InlineLinkExtension,
+    DetailsContentExtension,
+    DetailsSummaryExtension,
+    CodeBlockLowlightExtension,
+    ...TableExtension({ editable }),
+    TableOfContents({ onTocUpdate }),
+    ImageExtension({ onUpload, onError }),
+    CustomBlockMathExtension({ onError }),
+    CustomInlineMathExtension({ onError }),
+    Highlight.configure({ multicolor: true }),
+    CharacterCount.configure({ limit: limit ?? null }),
+    TextAlign.configure({ types: ['heading', 'paragraph'] }),
+    VerticalAlign.configure({ types: ['textStyle'], defaultAlignment: null }),
     Placeholder.configure({
       emptyNodeClass: 'custom-placeholder-node',
       showOnlyWhenEditable: true,
@@ -134,37 +112,47 @@ export const getExtensions = ({
         return ''
       },
     }),
-    InlineLinkExtension,
-    BlockLinkExtension,
-    DetailsExtension,
-    DetailsContentExtension,
-    DetailsSummaryExtension,
-    ...TableExtension({ editable }),
-    TableOfContents({ onTocUpdate }),
-    CustomInlineMathExtension({ onError }),
-    CustomBlockMathExtension({ onError }),
-    IframeExtension({ onError }),
-    VideoExtension({ onUpload, onError }),
-    AudioExtension({ onUpload, onError }),
-    ImageExtension({ onUpload, onError }),
-    InlineUploadProgressExtension,
-    InlineAttachmentExtension({ onUpload, onError }),
-    BlockAttachmentExtension({ onUpload, onError }),
   ]
 
-  if (!exclude?.includes('emoji')) {
-    const Emoji = EmojiExtension
-    defaultExtensions.push(Emoji)
+  if (contentType === 'markdown') {
+    defaultExtensions.push(Markdown.configure({
+      indentation: {
+        style: 'space',
+        size: 2,
+      },
+      markedOptions: {
+        gfm: true,
+        breaks: false,
+        pedantic: false,
+      }
+    }))
+  } else {
+    defaultExtensions.push(...[
+      AlertExtension,
+      BlockLinkExtension,
+      InlineUploadProgressExtension,
+      IframeExtension({ onError }),
+      VideoExtension({ onUpload, onError }),
+      AudioExtension({ onUpload, onError }),
+      BlockAttachmentExtension({ onUpload, onError }),
+      InlineAttachmentExtension({ onUpload, onError }),
+    ])
   }
 
-  if (!exclude?.includes('mention') && (mentionItems && mentionItems.length > 0 || onMentionFilter)) {
-    const Mention = MentionExtension({ mentionItems, onMentionFilter })
-    defaultExtensions.push(Mention)
-  }
-
-  if (!exclude?.includes('youtube')) {
-    const Youtube = YoutubeExtension(youtube)
-    defaultExtensions.push(Youtube)
+  if (!exclude?.includes('indent')) {
+    defaultExtensions.push(Indent.configure({
+      types: [
+        'paragraph', 'heading', 'blockquote', 'alert', 'codeBlock', 'horizontalRule',
+        'orderedList', 'bulletList', 'taskList', 'taskItem', 'listItem',
+        'details', 'detailsContent', 'detailsSummary',
+        'table',
+        'image', 'video', 'audio', 'iframe',
+        'blockAttachment', 'inlineAttachment', 'blockLink',
+        'blockMath', 'inlineMath',
+      ],
+      maxLevel: 8,
+      indentPx: 32,
+    }))
   }
 
   if (editable) { // 编辑模式
@@ -175,6 +163,10 @@ export const getExtensions = ({
       defaultExtensions.push(UploadProgress)
     }
 
+    if (!exclude?.includes('invisibleCharacters')) {
+      defaultExtensions.push(InvisibleCharacters)
+    }
+
     if (!exclude?.includes('slashCommands')) {
       defaultExtensions.push(SlashCommands)
     }
@@ -182,14 +174,20 @@ export const getExtensions = ({
     if (!exclude?.includes('aiWriting') && onAiWritingGetSuggestion) {
       defaultExtensions.push(AiWritingExtension({ onAiWritingGetSuggestion }))
     }
-
-    if (!exclude?.includes('invisibleCharacters')) {
-      defaultExtensions.push(InvisibleCharacters)
-    }
   } else { // 只读模式
     if (!exclude?.includes('structuredDiff')) {
       defaultExtensions.push(StructuredDiffExtension)
     }
+  }
+
+  if (!exclude?.includes('mention') && (mentionItems && mentionItems.length > 0 || onMentionFilter)) {
+    const Mention = MentionExtension({ mentionItems, onMentionFilter })
+    defaultExtensions.push(Mention)
+  }
+
+  if (!exclude?.includes('youtube')) {
+    const Youtube = YoutubeExtension(youtube)
+    defaultExtensions.push(Youtube)
   }
 
   if (extensionsProps && extensionsProps.length > 0) {

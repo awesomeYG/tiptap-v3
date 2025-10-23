@@ -89,7 +89,10 @@ export type MentionExtensionProps = {
   onMentionFilter?: ({ query }: { query: string }) => Promise<MentionItems>;
 }
 
+export type ModeType = 'rich-text' | 'markdown' | 'diff'
+
 export type ExtensionRelativeProps = MentionExtensionProps & EditorFnProps & {
+  contentType?: ModeType
   limit?: number | null
   exclude?: string[]
   extensions?: Extension[]
@@ -105,10 +108,10 @@ export type GetExtensionsProps = ExtensionRelativeProps
 
 export type UseTiptapReturn = {
   editor: Editor
+  getMarkdown: () => string
   getText: () => string
   getHTML: () => string
   getJSON: () => any
-  getMarkdownByJSON: () => string
 }
 
 export interface SlashCommandItem {

@@ -24,6 +24,7 @@ const LinkViewWrapper: React.FC<NodeViewProps> = ({
   deleteNode,
   selected,
 }) => {
+  const isMarkdown = editor.options.contentType === 'markdown'
   const attrs = node.attrs as LinkAttributes
   const [title, setTitle] = useState(attrs.title || '')
   const [href, setHref] = useState(attrs.href || '')
@@ -216,64 +217,66 @@ const LinkViewWrapper: React.FC<NodeViewProps> = ({
           tip='取消链接'
           onClick={handleDeleteLink}
         />
-        <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'divider' }} />
-        <ToolbarItem
-          icon={<TextIcon sx={{ fontSize: '1rem' }} />}
-          tip='文字链接'
-          onClick={() => {
-            if (type === 'block') {
+        {!isMarkdown && <>
+          <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'divider' }} />
+          <ToolbarItem
+            icon={<TextIcon sx={{ fontSize: '1rem' }} />}
+            tip='文字链接'
+            onClick={() => {
+              if (type === 'block') {
+                editor.commands.deleteNode(node.type)
+                editor.commands.setInlineLink({
+                  title: attrs.title,
+                  href: attrs.href,
+                  type: 'text',
+                })
+              } else {
+                updateAttributes({
+                  type: 'text',
+                })
+              }
+            }}
+            className={type === 'text' ? 'tool-active' : ''}
+          />
+          <ToolbarItem
+            icon={<ScrollToBottomLineIcon sx={{ transform: 'rotate(90deg)', fontSize: '1rem' }} />}
+            tip='图标文字链接'
+            onClick={() => {
+              if (type === 'block') {
+                editor.commands.deleteNode(node.type)
+                editor.commands.setInlineLink({
+                  title: attrs.title,
+                  href: attrs.href,
+                  type: 'icon',
+                  target: attrs.target,
+                  class: attrs.class,
+                  rel: attrs.rel,
+                })
+              } else {
+                updateAttributes({
+                  type: 'icon',
+                })
+              }
+            }}
+            className={type === 'icon' ? 'tool-active' : ''}
+          />
+          <ToolbarItem
+            icon={<CarouselViewIcon sx={{ transform: 'rotate(90deg)', fontSize: '1rem' }} />}
+            tip='摘要卡片'
+            onClick={() => {
               editor.commands.deleteNode(node.type)
-              editor.commands.setInlineLink({
+              editor.commands.setBlockLink({
                 title: attrs.title,
                 href: attrs.href,
-                type: 'text',
-              })
-            } else {
-              updateAttributes({
-                type: 'text',
-              })
-            }
-          }}
-          className={type === 'text' ? 'tool-active' : ''}
-        />
-        <ToolbarItem
-          icon={<ScrollToBottomLineIcon sx={{ transform: 'rotate(90deg)', fontSize: '1rem' }} />}
-          tip='图标文字链接'
-          onClick={() => {
-            if (type === 'block') {
-              editor.commands.deleteNode(node.type)
-              editor.commands.setInlineLink({
-                title: attrs.title,
-                href: attrs.href,
-                type: 'icon',
+                type: 'block',
                 target: attrs.target,
                 class: attrs.class,
                 rel: attrs.rel,
               })
-            } else {
-              updateAttributes({
-                type: 'icon',
-              })
-            }
-          }}
-          className={type === 'icon' ? 'tool-active' : ''}
-        />
-        <ToolbarItem
-          icon={<CarouselViewIcon sx={{ transform: 'rotate(90deg)', fontSize: '1rem' }} />}
-          tip='摘要卡片'
-          onClick={() => {
-            editor.commands.deleteNode(node.type)
-            editor.commands.setBlockLink({
-              title: attrs.title,
-              href: attrs.href,
-              type: 'block',
-              target: attrs.target,
-              class: attrs.class,
-              rel: attrs.rel,
-            })
-          }}
-          className={type === 'block' ? 'tool-active' : ''}
-        />
+            }}
+            className={type === 'block' ? 'tool-active' : ''}
+          />
+        </>}
       </Stack>
     </FloatingPopover>
     <FloatingPopover
@@ -312,57 +315,59 @@ const LinkViewWrapper: React.FC<NodeViewProps> = ({
             placeholder="链接标题（可选）"
           />
         </Stack>
-        <FormControl component="fieldset">
-          <Stack direction={'row'} gap={2} alignItems={'center'}>
-            <FormLabel component="legend" sx={{ fontSize: '0.875rem' }}>风格</FormLabel>
-            <RadioGroup
-              row
-              value={type}
-              onChange={(e) => setType(e.target.value as 'text' | 'icon' | 'block')}
-            >
-              <FormControlLabel
-                value="text"
-                control={<Radio size="small" />}
-                label="纯文字"
-              />
-              <FormControlLabel
-                value="icon"
-                control={<Radio size="small" />}
-                label="图标文字"
-              />
-              <FormControlLabel
-                value="block"
-                control={<Radio size="small" />}
-                label="卡片"
-              />
-            </RadioGroup>
-          </Stack>
-        </FormControl>
-        <FormControl component="fieldset">
-          <Stack direction={'row'} gap={2} alignItems={'flex-start'} sx={{
-            '.MuiFormControlLabel-label': {
-              fontSize: '0.875rem'
-            }
-          }}>
-            <FormLabel component="legend" sx={{ fontSize: '0.875rem', flexShrink: 0 }}>打开</FormLabel>
-            <RadioGroup
-              row
-              value={target}
-              onChange={(e) => setTarget(e.target.value as '_blank' | '_self' | '_parent' | '_top')}
-            >
-              <FormControlLabel
-                value="_blank"
-                control={<Radio size="small" />}
-                label="新窗口"
-              />
-              <FormControlLabel
-                value="_self"
-                control={<Radio size="small" />}
-                label="当前窗口"
-              />
-            </RadioGroup>
-          </Stack>
-        </FormControl>
+        {!isMarkdown && <>
+          <FormControl component="fieldset">
+            <Stack direction={'row'} gap={2} alignItems={'center'}>
+              <FormLabel component="legend" sx={{ fontSize: '0.875rem' }}>风格</FormLabel>
+              <RadioGroup
+                row
+                value={type}
+                onChange={(e) => setType(e.target.value as 'text' | 'icon' | 'block')}
+              >
+                <FormControlLabel
+                  value="text"
+                  control={<Radio size="small" />}
+                  label="纯文字"
+                />
+                <FormControlLabel
+                  value="icon"
+                  control={<Radio size="small" />}
+                  label="图标文字"
+                />
+                <FormControlLabel
+                  value="block"
+                  control={<Radio size="small" />}
+                  label="卡片"
+                />
+              </RadioGroup>
+            </Stack>
+          </FormControl>
+          <FormControl component="fieldset">
+            <Stack direction={'row'} gap={2} alignItems={'flex-start'} sx={{
+              '.MuiFormControlLabel-label': {
+                fontSize: '0.875rem'
+              }
+            }}>
+              <FormLabel component="legend" sx={{ fontSize: '0.875rem', flexShrink: 0 }}>打开</FormLabel>
+              <RadioGroup
+                row
+                value={target}
+                onChange={(e) => setTarget(e.target.value as '_blank' | '_self' | '_parent' | '_top')}
+              >
+                <FormControlLabel
+                  value="_blank"
+                  control={<Radio size="small" />}
+                  label="新窗口"
+                />
+                <FormControlLabel
+                  value="_self"
+                  control={<Radio size="small" />}
+                  label="当前窗口"
+                />
+              </RadioGroup>
+            </Stack>
+          </FormControl>
+        </>}
         <Stack direction="row" gap={1}>
           <Button
             variant="outlined"
@@ -379,7 +384,7 @@ const LinkViewWrapper: React.FC<NodeViewProps> = ({
             onClick={handleSave}
             disabled={!href.trim()}
           >
-            插入链接
+            修改链接
           </Button>
         </Stack>
       </Stack>

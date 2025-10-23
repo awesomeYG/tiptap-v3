@@ -5,7 +5,7 @@ import { Box, Divider, Stack, Typography, useTheme } from '@mui/material';
 import DragHandle from '@tiptap/extension-drag-handle-react';
 import { Fragment, Node, Slice } from '@tiptap/pm/model';
 import { NodeSelection } from '@tiptap/pm/state';
-import { Editor } from '@tiptap/react';
+import { Editor, useEditorState } from '@tiptap/react';
 import React, { useCallback, useState } from 'react';
 import { convertNodeAt, downloadFiles, FileInfo, filterResourcesByType, getAllResources, getShortcutKeyText, hasMarksInSelection } from '../../util';
 import Menu from '../Menu';
@@ -63,7 +63,7 @@ const AddIcon = ({ onClick }: { onClick?: (event: React.MouseEvent<HTMLDivElemen
 
 const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: MenuItem[], onTip?: OnTipFunction }) => {
   const theme = useTheme()
-  const [showFormat, setShowFormat] = useState<boolean>(true)
+  const isMarkdown = editor.options.contentType === 'markdown'
 
   const [current, setCurrent] = useState<{
     editor: Editor;
@@ -200,10 +200,17 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
         images,
         attachments,
       })
-      const hasMarks = hasMarksInSelection(current.editor.state)
-      setShowFormat(!hasMarks)
     }
   }, [current.pos, current.node])
+
+  const {
+    hasMarks,
+  } = useEditorState({
+    editor,
+    selector: ctx => ({
+      hasMarks: hasMarksInSelection(ctx.editor.state),
+    })
+  })
 
   return <DragHandle
     editor={editor}
@@ -575,325 +582,349 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
           //   customLabel: <Divider sx={{ my: 0.5 }} />,
           //   key: 'divider1',
           // }] : []),
-          ...(currentNode?.convert ? [{
-            label: '转换',
-            key: 'convert',
-            width: 160,
-            maxHeight: 400,
-            icon: <Repeat2LineIcon sx={{ fontSize: '1rem' }} />,
-            children: [{
-              label: '文本',
-              selected: current.node?.type.name === 'paragraph',
-              key: 'convert-to-paragraph',
-              icon: <TextIcon sx={{ fontSize: '1rem' }} />,
-              onClick: () => {
-                if (!current.node) return
-                const type = current.node.type.name as NodeTypeEnum
-                const groupTypes = [NodeTypeEnum.BulletList, NodeTypeEnum.OrderedList, NodeTypeEnum.TaskList, NodeTypeEnum.Blockquote, NodeTypeEnum.CodeBlock, NodeTypeEnum.Alert]
-                if (groupTypes.includes(type)) {
-                  convertNodeAt(current.editor, current.pos, current.node as any, { type: 'paragraph' })
-                } else {
-                  selectCurrentNode()
-                  cancelNodeType()
-                  current.editor.commands.setParagraph()
-                }
-              }
-            }, {
-              label: '标题1',
-              selected: current.node?.type.name === 'heading' && (current.node?.attrs.level === 1),
-              key: 'convert-to-heading-1',
-              icon: <H1Icon sx={{ fontSize: '1rem' }} />,
-              onClick: () => {
-                if (!current.node) return
-                const type = current.node.type.name as NodeTypeEnum
-                const groupTypes = [NodeTypeEnum.BulletList, NodeTypeEnum.OrderedList, NodeTypeEnum.TaskList, NodeTypeEnum.Blockquote, NodeTypeEnum.CodeBlock, NodeTypeEnum.Alert]
-                if (groupTypes.includes(type)) {
-                  convertNodeAt(current.editor, current.pos, current.node as any, { type: 'heading', level: 1 })
-                } else {
-                  selectCurrentNode()
-                  cancelNodeType()
-                  current.editor.commands.setHeading({ level: 1 })
-                }
-              }
-            }, {
-              label: '标题2',
-              selected: current.node?.type.name === 'heading' && (current.node?.attrs.level === 2),
-              key: 'convert-to-heading-2',
-              icon: <H2Icon sx={{ fontSize: '1rem' }} />,
-              onClick: () => {
-                if (!current.node) return
-                const type = current.node.type.name as NodeTypeEnum
-                const groupTypes = [NodeTypeEnum.BulletList, NodeTypeEnum.OrderedList, NodeTypeEnum.TaskList, NodeTypeEnum.Blockquote, NodeTypeEnum.CodeBlock, NodeTypeEnum.Alert]
-                if (groupTypes.includes(type)) {
-                  convertNodeAt(current.editor, current.pos, current.node as any, { type: 'heading', level: 2 })
-                } else {
-                  selectCurrentNode()
-                  cancelNodeType()
-                  current.editor.commands.setHeading({ level: 2 })
-                }
-              }
-            }, {
-              label: '标题3',
-              selected: current.node?.type.name === 'heading' && (current.node?.attrs.level === 3),
-              key: 'convert-to-heading-3',
-              icon: <H3Icon sx={{ fontSize: '1rem' }} />,
-              onClick: () => {
-                if (!current.node) return
-                const type = current.node.type.name as NodeTypeEnum
-                const groupTypes = [NodeTypeEnum.BulletList, NodeTypeEnum.OrderedList, NodeTypeEnum.TaskList, NodeTypeEnum.Blockquote, NodeTypeEnum.CodeBlock, NodeTypeEnum.Alert]
-                if (groupTypes.includes(type)) {
-                  convertNodeAt(current.editor, current.pos, current.node as any, { type: 'heading', level: 3 })
-                } else {
-                  selectCurrentNode()
-                  cancelNodeType()
-                  current.editor.commands.setHeading({ level: 3 })
-                }
-              }
-            }, {
-              customLabel: <Divider sx={{ my: 0.5 }} />,
-              key: 'divider2',
-            }, {
-              label: '有序列表',
-              selected: current.node?.type.name === 'orderedList',
-              key: 'convert-to-ordered-list',
-              icon: <ListOrdered2Icon sx={{ fontSize: '1rem' }} />,
-              onClick: () => {
-                if (!current.node) return
-                const type = current.node.type.name as NodeTypeEnum
-                const groupTypes = [NodeTypeEnum.BulletList, NodeTypeEnum.OrderedList, NodeTypeEnum.TaskList, NodeTypeEnum.Blockquote, NodeTypeEnum.CodeBlock, NodeTypeEnum.Alert]
-                if (groupTypes.includes(type)) {
-                  convertNodeAt(current.editor, current.pos, current.node as any, { type: 'orderedList' })
-                } else {
-                  selectCurrentNode()
-                  cancelNodeType()
-                  current.editor.commands.toggleOrderedList()
-                }
-              }
-            }, {
-              label: '无序列表',
-              selected: current.node?.type.name === 'bulletList',
-              key: 'convert-to-bullet-list',
-              icon: <ListUnorderedIcon sx={{ fontSize: '1rem' }} />,
-              onClick: () => {
-                if (!current.node) return
-                const type = current.node.type.name as NodeTypeEnum
-                const groupTypes = [NodeTypeEnum.BulletList, NodeTypeEnum.OrderedList, NodeTypeEnum.TaskList, NodeTypeEnum.Blockquote, NodeTypeEnum.CodeBlock, NodeTypeEnum.Alert]
-                if (groupTypes.includes(type)) {
-                  convertNodeAt(current.editor, current.pos, current.node as any, { type: 'bulletList' })
-                } else {
-                  selectCurrentNode()
-                  cancelNodeType()
-                  current.editor.commands.toggleBulletList()
-                }
-              }
-            }, {
-              label: '任务列表',
-              selected: current.node?.type.name === 'taskList',
-              key: 'convert-to-task-list',
-              icon: <ListCheck3Icon sx={{ fontSize: '1rem' }} />,
-              onClick: () => {
-                if (!current.node) return
-                const type = current.node.type.name as NodeTypeEnum
-                const groupTypes = [NodeTypeEnum.BulletList, NodeTypeEnum.OrderedList, NodeTypeEnum.TaskList, NodeTypeEnum.Blockquote, NodeTypeEnum.CodeBlock, NodeTypeEnum.Alert]
-                if (groupTypes.includes(type)) {
-                  convertNodeAt(current.editor, current.pos, current.node as any, { type: 'taskList' })
-                } else {
-                  selectCurrentNode()
-                  cancelNodeType()
-                  current.editor.commands.toggleTaskList()
-                }
-              }
-            }, {
-              customLabel: <Divider sx={{ my: 0.5 }} />,
-              key: 'divider3',
-            }, {
-              label: '引用',
-              selected: current.node?.type.name === 'blockquote',
-              key: 'convert-to-blockquote',
-              icon: <QuoteTextIcon sx={{ fontSize: '1rem' }} />,
-              onClick: () => {
-                if (!current.node) return
-                const type = current.node.type.name as NodeTypeEnum
-                const groupTypes = [NodeTypeEnum.BulletList, NodeTypeEnum.OrderedList, NodeTypeEnum.TaskList, NodeTypeEnum.Blockquote, NodeTypeEnum.CodeBlock, NodeTypeEnum.Alert]
-                if (groupTypes.includes(type)) {
-                  convertNodeAt(current.editor, current.pos, current.node as any, { type: 'blockquote' })
-                } else {
-                  selectCurrentNode()
-                  cancelNodeType()
-                  current.editor.commands.toggleBlockquote()
-                }
-              }
-            }, {
-              label: '警告提示',
-              selected: current.node?.type.name === 'alert',
-              key: 'convert-to-alert',
-              icon: <Information2LineIcon sx={{ fontSize: '1rem' }} />,
-              onClick: () => {
-                if (!current.node) return
-                const type = current.node.type.name as NodeTypeEnum
-                const groupTypes = [NodeTypeEnum.BulletList, NodeTypeEnum.OrderedList, NodeTypeEnum.TaskList, NodeTypeEnum.Blockquote, NodeTypeEnum.CodeBlock, NodeTypeEnum.Alert]
-                if (groupTypes.includes(type)) {
-                  convertNodeAt(current.editor, current.pos, current.node as any, { type: 'alert', attrs: { variant: 'info', type: 'icon' } })
-                } else {
-                  selectCurrentNode()
-                  cancelNodeType()
-                  current.editor.commands.toggleAlert({ type: 'icon', variant: 'info' })
-                }
-              }
-            }]
-          }] : []),
-          ...(currentNode?.download && (current.node?.attrs.src || current.node?.attrs.src) ? [{
-            label: `下载${currentNode?.label}`,
-            key: 'download',
-            icon: <DownloadLineIcon sx={{ fontSize: '1rem' }} />,
-            onClick: async () => {
-              if (current.node && current.pos !== undefined) {
-                if ([
-                  NodeTypeEnum.Video,
-                  NodeTypeEnum.Audio,
-                  NodeTypeEnum.BlockAttachment
-                ].includes(current.node?.type.name as NodeTypeEnum)) {
-                  const node = current.node
-                  const nodeFile = await fetch(node.attrs.src || node.attrs.url)
-                  const nodeBlob = await nodeFile.blob() as Blob
-                  const nodeUrl = URL.createObjectURL(nodeBlob)
-                  const nodeName = node.attrs.title || `${node.type.name}.${node.attrs.src.split('.').pop()}`
-                  const a = document.createElement('a')
-                  a.href = nodeUrl
-                  a.download = nodeName
-                  a.click()
-                  URL.revokeObjectURL(nodeUrl)
+          ...(currentNode?.convert ? [
+            {
+              label: '转换',
+              key: 'convert',
+              width: 160,
+              maxHeight: 400,
+              icon: <Repeat2LineIcon sx={{ fontSize: '1rem' }} />,
+              children: [
+                {
+                  label: '文本',
+                  selected: current.node?.type.name === 'paragraph',
+                  key: 'convert-to-paragraph',
+                  icon: <TextIcon sx={{ fontSize: '1rem' }} />,
+                  onClick: () => {
+                    if (!current.node) return
+                    const type = current.node.type.name as NodeTypeEnum
+                    const groupTypes = [NodeTypeEnum.BulletList, NodeTypeEnum.OrderedList, NodeTypeEnum.TaskList, NodeTypeEnum.Blockquote, NodeTypeEnum.CodeBlock, NodeTypeEnum.Alert]
+                    if (groupTypes.includes(type)) {
+                      convertNodeAt(current.editor, current.pos, current.node as any, { type: 'paragraph' })
+                    } else {
+                      selectCurrentNode()
+                      cancelNodeType()
+                      current.editor.commands.setParagraph()
+                    }
+                  }
+                },
+                {
+                  label: '标题1',
+                  selected: current.node?.type.name === 'heading' && (current.node?.attrs.level === 1),
+                  key: 'convert-to-heading-1',
+                  icon: <H1Icon sx={{ fontSize: '1rem' }} />,
+                  onClick: () => {
+                    if (!current.node) return
+                    const type = current.node.type.name as NodeTypeEnum
+                    const groupTypes = [NodeTypeEnum.BulletList, NodeTypeEnum.OrderedList, NodeTypeEnum.TaskList, NodeTypeEnum.Blockquote, NodeTypeEnum.CodeBlock, NodeTypeEnum.Alert]
+                    if (groupTypes.includes(type)) {
+                      convertNodeAt(current.editor, current.pos, current.node as any, { type: 'heading', level: 1 })
+                    } else {
+                      selectCurrentNode()
+                      cancelNodeType()
+                      current.editor.commands.setHeading({ level: 1 })
+                    }
+                  }
+                },
+                {
+                  label: '标题2',
+                  selected: current.node?.type.name === 'heading' && (current.node?.attrs.level === 2),
+                  key: 'convert-to-heading-2',
+                  icon: <H2Icon sx={{ fontSize: '1rem' }} />,
+                  onClick: () => {
+                    if (!current.node) return
+                    const type = current.node.type.name as NodeTypeEnum
+                    const groupTypes = [NodeTypeEnum.BulletList, NodeTypeEnum.OrderedList, NodeTypeEnum.TaskList, NodeTypeEnum.Blockquote, NodeTypeEnum.CodeBlock, NodeTypeEnum.Alert]
+                    if (groupTypes.includes(type)) {
+                      convertNodeAt(current.editor, current.pos, current.node as any, { type: 'heading', level: 2 })
+                    } else {
+                      selectCurrentNode()
+                      cancelNodeType()
+                      current.editor.commands.setHeading({ level: 2 })
+                    }
+                  }
+                },
+                {
+                  label: '标题3',
+                  selected: current.node?.type.name === 'heading' && (current.node?.attrs.level === 3),
+                  key: 'convert-to-heading-3',
+                  icon: <H3Icon sx={{ fontSize: '1rem' }} />,
+                  onClick: () => {
+                    if (!current.node) return
+                    const type = current.node.type.name as NodeTypeEnum
+                    const groupTypes = [NodeTypeEnum.BulletList, NodeTypeEnum.OrderedList, NodeTypeEnum.TaskList, NodeTypeEnum.Blockquote, NodeTypeEnum.CodeBlock, NodeTypeEnum.Alert]
+                    if (groupTypes.includes(type)) {
+                      convertNodeAt(current.editor, current.pos, current.node as any, { type: 'heading', level: 3 })
+                    } else {
+                      selectCurrentNode()
+                      cancelNodeType()
+                      current.editor.commands.setHeading({ level: 3 })
+                    }
+                  }
+                },
+                {
+                  customLabel: <Divider sx={{ my: 0.5 }} />,
+                  key: 'divider2',
+                },
+                {
+                  label: '有序列表',
+                  selected: current.node?.type.name === 'orderedList',
+                  key: 'convert-to-ordered-list',
+                  icon: <ListOrdered2Icon sx={{ fontSize: '1rem' }} />,
+                  onClick: () => {
+                    if (!current.node) return
+                    const type = current.node.type.name as NodeTypeEnum
+                    const groupTypes = [NodeTypeEnum.BulletList, NodeTypeEnum.OrderedList, NodeTypeEnum.TaskList, NodeTypeEnum.Blockquote, NodeTypeEnum.CodeBlock, NodeTypeEnum.Alert]
+                    if (groupTypes.includes(type)) {
+                      convertNodeAt(current.editor, current.pos, current.node as any, { type: 'orderedList' })
+                    } else {
+                      selectCurrentNode()
+                      cancelNodeType()
+                      current.editor.commands.toggleOrderedList()
+                    }
+                  }
+                },
+                {
+                  label: '无序列表',
+                  selected: current.node?.type.name === 'bulletList',
+                  key: 'convert-to-bullet-list',
+                  icon: <ListUnorderedIcon sx={{ fontSize: '1rem' }} />,
+                  onClick: () => {
+                    if (!current.node) return
+                    const type = current.node.type.name as NodeTypeEnum
+                    const groupTypes = [NodeTypeEnum.BulletList, NodeTypeEnum.OrderedList, NodeTypeEnum.TaskList, NodeTypeEnum.Blockquote, NodeTypeEnum.CodeBlock, NodeTypeEnum.Alert]
+                    if (groupTypes.includes(type)) {
+                      convertNodeAt(current.editor, current.pos, current.node as any, { type: 'bulletList' })
+                    } else {
+                      selectCurrentNode()
+                      cancelNodeType()
+                      current.editor.commands.toggleBulletList()
+                    }
+                  }
+                },
+                {
+                  label: '任务列表',
+                  selected: current.node?.type.name === 'taskList',
+                  key: 'convert-to-task-list',
+                  icon: <ListCheck3Icon sx={{ fontSize: '1rem' }} />,
+                  onClick: () => {
+                    if (!current.node) return
+                    const type = current.node.type.name as NodeTypeEnum
+                    const groupTypes = [NodeTypeEnum.BulletList, NodeTypeEnum.OrderedList, NodeTypeEnum.TaskList, NodeTypeEnum.Blockquote, NodeTypeEnum.CodeBlock, NodeTypeEnum.Alert]
+                    if (groupTypes.includes(type)) {
+                      convertNodeAt(current.editor, current.pos, current.node as any, { type: 'taskList' })
+                    } else {
+                      selectCurrentNode()
+                      cancelNodeType()
+                      current.editor.commands.toggleTaskList()
+                    }
+                  }
+                },
+                {
+                  customLabel: <Divider sx={{ my: 0.5 }} />,
+                  key: 'divider3',
+                },
+                {
+                  label: '引用',
+                  selected: current.node?.type.name === 'blockquote',
+                  key: 'convert-to-blockquote',
+                  icon: <QuoteTextIcon sx={{ fontSize: '1rem' }} />,
+                  onClick: () => {
+                    if (!current.node) return
+                    const type = current.node.type.name as NodeTypeEnum
+                    const groupTypes = [NodeTypeEnum.BulletList, NodeTypeEnum.OrderedList, NodeTypeEnum.TaskList, NodeTypeEnum.Blockquote, NodeTypeEnum.CodeBlock, NodeTypeEnum.Alert]
+                    if (groupTypes.includes(type)) {
+                      convertNodeAt(current.editor, current.pos, current.node as any, { type: 'blockquote' })
+                    } else {
+                      selectCurrentNode()
+                      cancelNodeType()
+                      current.editor.commands.toggleBlockquote()
+                    }
+                  }
+                },
+                ...(!isMarkdown ? [{
+                  label: '警告提示',
+                  selected: current.node?.type.name === 'alert',
+                  key: 'convert-to-alert',
+                  icon: <Information2LineIcon sx={{ fontSize: '1rem' }} />,
+                  onClick: () => {
+                    if (!current.node) return
+                    const type = current.node.type.name as NodeTypeEnum
+                    const groupTypes = [NodeTypeEnum.BulletList, NodeTypeEnum.OrderedList, NodeTypeEnum.TaskList, NodeTypeEnum.Blockquote, NodeTypeEnum.CodeBlock, NodeTypeEnum.Alert]
+                    if (groupTypes.includes(type)) {
+                      convertNodeAt(current.editor, current.pos, current.node as any, { type: 'alert', attrs: { variant: 'info', type: 'icon' } })
+                    } else {
+                      selectCurrentNode()
+                      cancelNodeType()
+                      current.editor.commands.toggleAlert({ type: 'icon', variant: 'info' })
+                    }
+                  }
+                }] : []),
+              ]
+            }
+          ] : []),
+          ...(currentNode?.download && (current.node?.attrs.src || current.node?.attrs.src) ? [
+            {
+              label: `下载${currentNode?.label}`,
+              key: 'download',
+              icon: <DownloadLineIcon sx={{ fontSize: '1rem' }} />,
+              onClick: async () => {
+                if (current.node && current.pos !== undefined) {
+                  if ([
+                    NodeTypeEnum.Video,
+                    NodeTypeEnum.Audio,
+                    NodeTypeEnum.BlockAttachment
+                  ].includes(current.node?.type.name as NodeTypeEnum)) {
+                    const node = current.node
+                    const nodeFile = await fetch(node.attrs.src || node.attrs.url)
+                    const nodeBlob = await nodeFile.blob() as Blob
+                    const nodeUrl = URL.createObjectURL(nodeBlob)
+                    const nodeName = node.attrs.title || `${node.type.name}.${node.attrs.src.split('.').pop()}`
+                    const a = document.createElement('a')
+                    a.href = nodeUrl
+                    a.download = nodeName
+                    a.click()
+                    URL.revokeObjectURL(nodeUrl)
+                  }
                 }
               }
             }
-          }] : [
-            ...(resources.images.length > 0 ? [{
-              label: '下载图片',
-              key: 'download-img',
-              icon: <ImageLineIcon sx={{ fontSize: '1rem' }} />,
-              extra: <Box sx={{
-                lineHeight: '0.75rem',
-                fontSize: '0.75rem',
-                color: 'text.disabled',
-                border: '1px solid',
-                borderColor: 'text.disabled',
-                borderRadius: 'var(--mui-shape-borderRadius)',
-                py: 0,
-                px: 0.5,
-                minWidth: '1.25rem',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>{resources.images.length}</Box>,
-              onClick: async () => {
-                try {
-                  const imageInfos: FileInfo[] = resources.images.map(img => ({
-                    src: img.attrs.src,
-                    filename: img.attrs.alt || img.attrs.title || undefined
-                  }))
-                  await downloadFiles(imageInfos, 'img')
-                } catch (error) {
-                  console.error('下载图片失败:', error)
+          ] : [
+            ...(resources.images.length > 0 ? [
+              {
+                label: '下载图片',
+                key: 'download-img',
+                icon: <ImageLineIcon sx={{ fontSize: '1rem' }} />,
+                extra: <Box sx={{
+                  lineHeight: '0.75rem',
+                  fontSize: '0.75rem',
+                  color: 'text.disabled',
+                  border: '1px solid',
+                  borderColor: 'text.disabled',
+                  borderRadius: 'var(--mui-shape-borderRadius)',
+                  py: 0,
+                  px: 0.5,
+                  minWidth: '1.25rem',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>{resources.images.length}</Box>,
+                onClick: async () => {
+                  try {
+                    const imageInfos: FileInfo[] = resources.images.map(img => ({
+                      src: img.attrs.src,
+                      filename: img.attrs.alt || img.attrs.title || undefined
+                    }))
+                    await downloadFiles(imageInfos, 'img')
+                  } catch (error) {
+                    console.error('下载图片失败:', error)
+                  }
                 }
               }
-            }] : []),
-            ...(resources.videos.length > 0 ? [{
-              label: '下载视频',
-              key: 'download-video',
-              icon: <MovieLineIcon sx={{ fontSize: '1rem' }} />,
-              extra: <Box sx={{
-                lineHeight: '0.75rem',
-                fontSize: '0.75rem',
-                color: 'text.disabled',
-                border: '1px solid',
-                borderColor: 'text.disabled',
-                borderRadius: 'var(--mui-shape-borderRadius)',
-                py: 0,
-                px: 0.5,
-                minWidth: '1.25rem',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>{resources.videos.length}</Box>,
-              onClick: async () => {
-                try {
-                  const videoInfos: FileInfo[] = resources.videos.map(video => ({
-                    src: video.attrs.src,
-                    filename: video.attrs.alt || video.attrs.title || undefined
-                  }))
-                  await downloadFiles(videoInfos, 'video')
-                } catch (error) {
-                  console.error('下载视频失败:', error)
+            ] : []),
+            ...(resources.videos.length > 0 ? [
+              {
+                label: '下载视频',
+                key: 'download-video',
+                icon: <MovieLineIcon sx={{ fontSize: '1rem' }} />,
+                extra: <Box sx={{
+                  lineHeight: '0.75rem',
+                  fontSize: '0.75rem',
+                  color: 'text.disabled',
+                  border: '1px solid',
+                  borderColor: 'text.disabled',
+                  borderRadius: 'var(--mui-shape-borderRadius)',
+                  py: 0,
+                  px: 0.5,
+                  minWidth: '1.25rem',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>{resources.videos.length}</Box>,
+                onClick: async () => {
+                  try {
+                    const videoInfos: FileInfo[] = resources.videos.map(video => ({
+                      src: video.attrs.src,
+                      filename: video.attrs.alt || video.attrs.title || undefined
+                    }))
+                    await downloadFiles(videoInfos, 'video')
+                  } catch (error) {
+                    console.error('下载视频失败:', error)
+                  }
                 }
               }
-            }] : []),
-            ...(resources.audios.length > 0 ? [{
-              label: '下载音频',
-              key: 'download-audio',
-              icon: <Music2LineIcon sx={{ fontSize: '1rem' }} />,
-              extra: <Box sx={{
-                lineHeight: '0.75rem',
-                fontSize: '0.75rem',
-                color: 'text.disabled',
-                border: '1px solid',
-                borderColor: 'text.disabled',
-                borderRadius: 'var(--mui-shape-borderRadius)',
-                py: 0,
-                px: 0.5,
-                minWidth: '1.25rem',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>{resources.audios.length}</Box>,
-              onClick: async () => {
-                try {
-                  const audioInfos: FileInfo[] = resources.audios.map(audio => ({
-                    src: audio.attrs.src,
-                    filename: audio.attrs.alt || audio.attrs.title || undefined
-                  }))
-                  await downloadFiles(audioInfos, 'audio')
-                } catch (error) {
-                  console.error('下载音频失败:', error)
+            ] : []),
+            ...(resources.audios.length > 0 ? [
+              {
+                label: '下载音频',
+                key: 'download-audio',
+                icon: <Music2LineIcon sx={{ fontSize: '1rem' }} />,
+                extra: <Box sx={{
+                  lineHeight: '0.75rem',
+                  fontSize: '0.75rem',
+                  color: 'text.disabled',
+                  border: '1px solid',
+                  borderColor: 'text.disabled',
+                  borderRadius: 'var(--mui-shape-borderRadius)',
+                  py: 0,
+                  px: 0.5,
+                  minWidth: '1.25rem',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>{resources.audios.length}</Box>,
+                onClick: async () => {
+                  try {
+                    const audioInfos: FileInfo[] = resources.audios.map(audio => ({
+                      src: audio.attrs.src,
+                      filename: audio.attrs.alt || audio.attrs.title || undefined
+                    }))
+                    await downloadFiles(audioInfos, 'audio')
+                  } catch (error) {
+                    console.error('下载音频失败:', error)
+                  }
                 }
               }
-            }] : []),
-            ...(resources.attachments.length > 0 ? [{
-              label: '下载附件',
-              key: 'download-attachment',
-              icon: <AttachmentLineIcon sx={{ fontSize: '1rem' }} />,
-              extra: <Box sx={{
-                lineHeight: '0.75rem',
-                fontSize: '0.75rem',
-                color: 'text.disabled',
-                border: '1px solid',
-                borderColor: 'text.disabled',
-                borderRadius: 'var(--mui-shape-borderRadius)',
-                py: 0,
-                px: 0.5,
-                minWidth: '1.25rem',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>{resources.attachments.length}</Box>,
-              onClick: async () => {
-                try {
-                  const attachmentInfos: FileInfo[] = resources.attachments.map(attachment => ({
-                    src: attachment.attrs.url,
-                    filename: attachment.attrs.title || undefined
-                  }))
-                  await downloadFiles(attachmentInfos, 'attachment')
-                } catch (error) {
-                  console.error('下载附件失败:', error)
+            ] : []),
+            ...(resources.attachments.length > 0 ? [
+              {
+                label: '下载附件',
+                key: 'download-attachment',
+                icon: <AttachmentLineIcon sx={{ fontSize: '1rem' }} />,
+                extra: <Box sx={{
+                  lineHeight: '0.75rem',
+                  fontSize: '0.75rem',
+                  color: 'text.disabled',
+                  border: '1px solid',
+                  borderColor: 'text.disabled',
+                  borderRadius: 'var(--mui-shape-borderRadius)',
+                  py: 0,
+                  px: 0.5,
+                  minWidth: '1.25rem',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>{resources.attachments.length}</Box>,
+                onClick: async () => {
+                  try {
+                    const attachmentInfos: FileInfo[] = resources.attachments.map(attachment => ({
+                      src: attachment.attrs.url,
+                      filename: attachment.attrs.title || undefined
+                    }))
+                    await downloadFiles(attachmentInfos, 'attachment')
+                  } catch (error) {
+                    console.error('下载附件失败:', error)
+                  }
                 }
               }
-            }] : [])
+            ] : [])
           ]),
           ...(more ? more : []),
-          ...(showFormat ? [{
+          ...(hasMarks ? [{
             label: '文本格式化',
             key: 'format',
             icon: <EraserLineIcon sx={{ fontSize: '1rem' }} />,
