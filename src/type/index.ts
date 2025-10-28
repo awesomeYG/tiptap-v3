@@ -96,15 +96,14 @@ export type ExtensionRelativeProps = MentionExtensionProps & EditorFnProps & {
   extensions?: Extension[]
   editable: boolean
   youtube?: Partial<YoutubeOptions>
+  contentType?: UseEditorOptions['contentType']
 }
 
 export type UseTiptapProps = {
   onSave?: (editor: Editor) => void
 } & ExtensionRelativeProps
 
-export type GetExtensionsProps = ExtensionRelativeProps & {
-  contentType?: UseEditorOptions['contentType']
-}
+export type GetExtensionsProps = ExtensionRelativeProps
 
 export type UseTiptapReturn = {
   editor: Editor

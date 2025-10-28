@@ -6,7 +6,7 @@ import '../index.css';
 const Reader = () => {
   const { editor } = useTiptap({
     editable: true,
-    // mode: 'markdown',
+    contentType: 'markdown',
     exclude: ['invisibleCharacters'],
     onSave: (editor) => {
       console.log('============= markdown =============');
