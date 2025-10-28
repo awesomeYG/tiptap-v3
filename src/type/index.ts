@@ -107,6 +107,7 @@ export type GetExtensionsProps = ExtensionRelativeProps
 
 export type UseTiptapReturn = {
   editor: Editor
+  setContent: (value: string) => void
   getMarkdown: () => string
   getText: () => string
   getHTML: () => string

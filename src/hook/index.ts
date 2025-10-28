@@ -102,11 +102,16 @@ const useTiptap = ({
 
   return {
     editor,
+    setContent: (value: string) => {
+      editor?.chain()?.focus()?.setContent(value, {
+        contentType: contentType === 'markdown' ? 'markdown' : 'html'
+      })?.run()
+    },
     getMarkdown: () => {
+      if (!editor) return ''
       if (contentType === 'markdown') {
         return editor.getMarkdown()
       }
-      if (!editor) return ''
       return renderToMarkdown({
         extensions: editor.extensionManager.extensions,
         content: editor.getJSON(),

@@ -4,16 +4,17 @@ import React from 'react';
 import '../index.css';
 
 const Reader = () => {
+  const isMarkdown = false;
   const { editor } = useTiptap({
     editable: true,
-    contentType: 'markdown',
+    contentType: isMarkdown ? 'markdown' : 'html',
     exclude: ['invisibleCharacters'],
     onSave: (editor) => {
-      console.log('============= markdown =============');
-      console.log(editor.getMarkdown());
-      console.log('============= html =============');
-      console.log(editor.getHTML());
-      editor.commands.setContent(editor.getHTML())
+      const value = isMarkdown ? editor.getMarkdown() : editor.getHTML();
+      console.log(value)
+      editor.chain().focus().setContent(value, {
+        contentType: isMarkdown ? 'markdown' : 'html'
+      }).run()
     },
     onAiWritingGetSuggestion: async ({ prefix, suffix }: { prefix: string, suffix: string }) => {
       console.log('onAiWritingGetSuggestion', prefix, suffix);
