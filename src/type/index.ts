@@ -1,6 +1,7 @@
 import { PopoverOrigin, SxProps, Theme } from '@mui/material';
 import { Editor, Extension } from '@tiptap/core';
 import { YoutubeOptions } from '@tiptap/extension-youtube';
+import { UseEditorOptions } from '@tiptap/react';
 
 export type { Editor } from '@tiptap/react';
 
@@ -89,10 +90,7 @@ export type MentionExtensionProps = {
   onMentionFilter?: ({ query }: { query: string }) => Promise<MentionItems>;
 }
 
-export type ModeType = 'rich-text' | 'markdown' | 'diff'
-
 export type ExtensionRelativeProps = MentionExtensionProps & EditorFnProps & {
-  contentType?: ModeType
   limit?: number | null
   exclude?: string[]
   extensions?: Extension[]
@@ -104,7 +102,9 @@ export type UseTiptapProps = {
   onSave?: (editor: Editor) => void
 } & ExtensionRelativeProps
 
-export type GetExtensionsProps = ExtensionRelativeProps
+export type GetExtensionsProps = ExtensionRelativeProps & {
+  contentType?: UseEditorOptions['contentType']
+}
 
 export type UseTiptapReturn = {
   editor: Editor
