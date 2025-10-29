@@ -107,6 +107,13 @@ const useTiptap = ({
         contentType: contentType === 'markdown' ? 'markdown' : 'html'
       })?.run()
     },
+    getContent: () => {
+      if (!editor) return ''
+      if (contentType === 'markdown') {
+        return editor.getMarkdown()
+      }
+      return editor.getHTML() || ''
+    },
     getMarkdown: () => {
       if (!editor) return ''
       if (contentType === 'markdown') {
