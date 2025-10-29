@@ -17,7 +17,8 @@ const InsertImage = ({
   attrs,
   updateAttributes,
   onUpload,
-  onError
+  onError,
+  onValidateUrl
 }: InsertImageProps) => {
   const [editSrc, setEditSrc] = useState(attrs.src || '')
   const [insertType, setInsertType] = useState<'upload' | 'link'>(onUpload ? 'upload' : 'link')
@@ -81,9 +82,17 @@ const InsertImage = ({
 
   const handleInsertLink = async () => {
     if (!editSrc.trim()) return
-    // 使用新的更新函数，自动获取图片宽度
-    await updateImageAttributes(editSrc.trim())
-    handleClosePopover()
+    try {
+      let validatedUrl = editSrc.trim()
+      if (onValidateUrl) {
+        validatedUrl = await Promise.resolve(onValidateUrl(validatedUrl, 'image'))
+      }
+      // 使用新的更新函数，自动获取图片宽度
+      await updateImageAttributes(validatedUrl)
+      handleClosePopover()
+    } catch (error) {
+      onError?.(error as Error)
+    }
   }
 
   return <>

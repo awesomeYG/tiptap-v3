@@ -17,21 +17,29 @@ type InsertIframeProps = {
   updateAttributes: (attrs: IframeAttributes) => void
 } & EditorFnProps
 
-const InsertIframe = ({ selected, attrs, updateAttributes }: InsertIframeProps) => {
+const InsertIframe = ({ selected, attrs, updateAttributes, onValidateUrl }: InsertIframeProps) => {
   const [editUrl, setEditUrl] = useState(attrs.src || '')
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null)
 
   const handleShowPopover = (event: React.MouseEvent<HTMLDivElement>) => setAnchorEl(event.currentTarget)
   const handleClosePopover = () => setAnchorEl(null)
 
-  const handleInsert = () => {
+  const handleInsert = async () => {
     if (!editUrl.trim()) return
-    updateAttributes({
-      src: editUrl.trim(),
-      width: attrs.width,
-      height: attrs.height,
-    })
-    handleClosePopover()
+    try {
+      let validatedUrl = editUrl.trim()
+      if (onValidateUrl) {
+        validatedUrl = await Promise.resolve(onValidateUrl(validatedUrl, 'iframe'))
+      }
+      updateAttributes({
+        src: validatedUrl,
+        width: attrs.width,
+        height: attrs.height,
+      })
+      handleClosePopover()
+    } catch (error) {
+      // 错误处理
+    }
   }
 
   return <NodeViewWrapper className={`iframe-wrapper`} data-drag-handle>

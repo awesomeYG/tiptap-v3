@@ -23,15 +23,24 @@ const EditAudioDialog: React.FC<{
   onSave: (value: { src: string, title?: string, poster?: string }) => void
   onUpload?: UploadFunction
   onError?: (error: Error) => void
-}> = ({ attrs, onSave, onUpload, onError }) => {
+  onValidateUrl?: (url: string, type: 'image' | 'video' | 'audio' | 'iframe') => Promise<string> | string
+}> = ({ attrs, onSave, onUpload, onError, onValidateUrl }) => {
   const [src, setSrc] = useState(attrs.src)
   const [title, setTitle] = useState(attrs.title || '')
   const [poster, setPoster] = useState(attrs.poster || '')
   const [uploadingPoster, setUploadingPoster] = useState(false)
   const [uploading, setUploading] = useState(false)
 
-  const handleSave = () => {
-    onSave({ src, title, poster })
+  const handleSave = async () => {
+    try {
+      let validatedSrc = src
+      if (onValidateUrl && src.trim()) {
+        validatedSrc = await Promise.resolve(onValidateUrl(src.trim(), 'audio'))
+      }
+      onSave({ src: validatedSrc, title, poster })
+    } catch (error) {
+      onError?.(error as Error)
+    }
   }
 
   const handleSelectAudio = () => {
@@ -156,7 +165,8 @@ const AudioViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
   deleteNode,
   selected,
   onUpload,
-  onError
+  onError,
+  onValidateUrl
 }) => {
   const attrs = node.attrs as AudioAttributes
   const audioRef = useRef<HTMLAudioElement>(null)
@@ -322,7 +332,7 @@ const AudioViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
   }
 
   if (!attrs.src) {
-    return <InsertAudio selected={selected} attrs={attrs} updateAttributes={updateAttributes} onUpload={onUpload} onError={onError} />
+    return <InsertAudio selected={selected} attrs={attrs} updateAttributes={updateAttributes} onUpload={onUpload} onError={onError} onValidateUrl={onValidateUrl} />
   }
 
   return (
@@ -547,6 +557,7 @@ const AudioViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
           onSave={updateAudioSource}
           onUpload={onUpload}
           onError={onError}
+          onValidateUrl={onValidateUrl}
         />
       </FloatingPopover>
       <FloatingPopover

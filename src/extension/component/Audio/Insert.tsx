@@ -17,7 +17,8 @@ const InsertAudio = ({
   attrs,
   updateAttributes,
   onUpload,
-  onError
+  onError,
+  onValidateUrl
 }: InsertAudioProps) => {
   const [editSrc, setEditSrc] = useState(attrs.src || '')
   const [editTitle, setEditTitle] = useState(attrs.title || '')
@@ -87,18 +88,26 @@ const InsertAudio = ({
     }
   }
 
-  const handleInsertWithPoster = () => {
+  const handleInsertWithPoster = async () => {
     if (!editSrc.trim()) return
-    updateAttributes({
-      src: editSrc.trim(),
-      title: editTitle.trim() || undefined,
-      poster: editPoster.trim() || undefined,
-      controls: attrs.controls,
-      autoplay: attrs.autoplay,
-      loop: attrs.loop,
-      muted: attrs.muted,
-    })
-    handleClosePopover()
+    try {
+      let validatedSrc = editSrc.trim()
+      if (onValidateUrl) {
+        validatedSrc = await Promise.resolve(onValidateUrl(validatedSrc, 'audio'))
+      }
+      updateAttributes({
+        src: validatedSrc,
+        title: editTitle.trim() || undefined,
+        poster: editPoster.trim() || undefined,
+        controls: attrs.controls,
+        autoplay: attrs.autoplay,
+        loop: attrs.loop,
+        muted: attrs.muted,
+      })
+      handleClosePopover()
+    } catch (error) {
+      onError?.(error as Error)
+    }
   }
 
   return <NodeViewWrapper

@@ -171,7 +171,7 @@ export const VideoExtension = (props: VideoExtensionProps) => Node.create({
   },
 
   addNodeView() {
-    return ReactNodeViewRenderer((renderProps) => VideoViewWrapper({ ...renderProps, onUpload: props.onUpload, onError: props.onError }))
+    return ReactNodeViewRenderer((renderProps) => VideoViewWrapper({ ...renderProps, onUpload: props.onUpload, onError: props.onError, onValidateUrl: props.onValidateUrl }))
   },
 
   addProseMirrorPlugins() {

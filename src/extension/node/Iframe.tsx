@@ -106,7 +106,7 @@ export const IframeExtension = (props: IframeExtensionProps) => Node.create({
   },
 
   addNodeView() {
-    return ReactNodeViewRenderer((renderProps) => IframeViewWrapper({ ...renderProps, onError: props.onError }))
+    return ReactNodeViewRenderer((renderProps) => IframeViewWrapper({ ...renderProps, onError: props.onError, onValidateUrl: props.onValidateUrl }))
   },
 })
 
