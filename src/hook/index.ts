@@ -104,9 +104,9 @@ const useTiptap = ({
 
   return {
     editor,
-    setContent: (value: string) => {
+    setContent: (value, type) => {
       editor?.chain()?.focus()?.setContent(value, {
-        contentType: contentType === 'markdown' ? 'markdown' : 'html'
+        contentType: type || (contentType === 'markdown' ? 'markdown' : 'html')
       })?.run()
     },
     getContent: () => {
