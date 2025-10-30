@@ -17,7 +17,8 @@ const InsertVideo = ({
   attrs,
   updateAttributes,
   onUpload,
-  onError
+  onError,
+  onValidateUrl
 }: InsertVideoProps) => {
   const [editSrc, setEditSrc] = useState(attrs.src || '')
   const [insertType, setInsertType] = useState<'upload' | 'link'>(onUpload ? 'upload' : 'link')
@@ -60,18 +61,26 @@ const InsertVideo = ({
     }
   }
 
-  const handleInsertLink = () => {
+  const handleInsertLink = async () => {
     if (!editSrc.trim()) return
-    updateAttributes({
-      src: editSrc.trim(),
-      width: attrs.width,
-      controls: attrs.controls,
-      autoplay: attrs.autoplay,
-      loop: attrs.loop,
-      muted: attrs.muted,
-      poster: attrs.poster,
-    })
-    handleClosePopover()
+    try {
+      let validatedUrl = editSrc.trim()
+      if (onValidateUrl) {
+        validatedUrl = await Promise.resolve(onValidateUrl(validatedUrl, 'video'))
+      }
+      updateAttributes({
+        src: validatedUrl,
+        width: attrs.width,
+        controls: attrs.controls,
+        autoplay: attrs.autoplay,
+        loop: attrs.loop,
+        muted: attrs.muted,
+        poster: attrs.poster,
+      })
+      handleClosePopover()
+    } catch (error) {
+      onError?.(error as Error)
+    }
   }
 
   return <NodeViewWrapper

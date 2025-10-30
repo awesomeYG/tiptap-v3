@@ -77,11 +77,14 @@ export type TocItem = {
 }
 export type TocList = TocItem[]
 
+export type ValidateUrlFunction = (url: string, type: 'image' | 'video' | 'audio' | 'iframe') => Promise<string> | string
+
 export type EditorFnProps = {
   onError?: (error: Error) => void
   onUpload?: UploadFunction
   onTocUpdate?: (toc: TocList) => void
   onAiWritingGetSuggestion?: ({ prefix, suffix }: { prefix: string, suffix: string }) => Promise<string>
+  onValidateUrl?: ValidateUrlFunction
 }
 
 export type MentionItems = string[]

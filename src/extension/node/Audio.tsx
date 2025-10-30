@@ -164,7 +164,7 @@ export const AudioExtension = (props: AudioExtensionProps) => Node.create({
   },
 
   addNodeView() {
-    return ReactNodeViewRenderer((renderProps) => AudioViewWrapper({ ...renderProps, onUpload: props.onUpload, onError: props.onError }))
+    return ReactNodeViewRenderer((renderProps) => AudioViewWrapper({ ...renderProps, onUpload: props.onUpload, onError: props.onError, onValidateUrl: props.onValidateUrl }))
   },
 })
 

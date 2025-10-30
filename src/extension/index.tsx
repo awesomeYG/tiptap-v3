@@ -54,6 +54,7 @@ export const getExtensions = ({
   onError,
   onTocUpdate,
   onAiWritingGetSuggestion,
+  onValidateUrl,
 }: GetExtensionsProps) => {
   const defaultExtensions: any = [
     StarterKit.configure({
@@ -83,7 +84,7 @@ export const getExtensions = ({
     CodeBlockLowlightExtension,
     ...TableExtension({ editable }),
     TableOfContents({ onTocUpdate }),
-    ImageExtension({ onUpload, onError }),
+    ImageExtension({ onUpload, onError, onValidateUrl }),
     CustomBlockMathExtension({ onError }),
     CustomInlineMathExtension({ onError }),
     Highlight.configure({ multicolor: true }),
@@ -131,9 +132,9 @@ export const getExtensions = ({
       AlertExtension,
       BlockLinkExtension,
       InlineUploadProgressExtension,
-      IframeExtension({ onError }),
-      VideoExtension({ onUpload, onError }),
-      AudioExtension({ onUpload, onError }),
+      IframeExtension({ onError, onValidateUrl }),
+      VideoExtension({ onUpload, onError, onValidateUrl }),
+      AudioExtension({ onUpload, onError, onValidateUrl }),
       BlockAttachmentExtension({ onUpload, onError }),
       InlineAttachmentExtension({ onUpload, onError }),
     ])

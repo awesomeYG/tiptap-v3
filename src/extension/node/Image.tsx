@@ -16,7 +16,7 @@ const customImage = (props: ImageExtensionProps) => Image.extend({
     }
   },
   addNodeView() {
-    return ReactNodeViewRenderer((renderProps) => ImageViewWrapper({ ...renderProps, onUpload: props.onUpload, onError: props.onError }))
+    return ReactNodeViewRenderer((renderProps) => ImageViewWrapper({ ...renderProps, onUpload: props.onUpload, onError: props.onError, onValidateUrl: props.onValidateUrl }))
   },
   addProseMirrorPlugins() {
     return [

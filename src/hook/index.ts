@@ -5,7 +5,7 @@ import { useEditor, UseEditorOptions } from '@tiptap/react'
 import { renderToMarkdown } from '@tiptap/static-renderer/pm/markdown'
 
 const useTiptap = ({
-  // extension 
+  // extension
   exclude,
   extensions: extensionsProps,
 
@@ -19,6 +19,7 @@ const useTiptap = ({
   onUpload,
   onTocUpdate,
   onAiWritingGetSuggestion,
+  onValidateUrl,
 
   // editor
   editable = true,
@@ -38,6 +39,7 @@ const useTiptap = ({
     onError,
     onTocUpdate,
     onAiWritingGetSuggestion,
+    onValidateUrl,
   })
 
   const editor = useEditor({
@@ -136,4 +138,4 @@ const useTiptap = ({
   }
 }
 
-export default useTiptap; 
+export default useTiptap;

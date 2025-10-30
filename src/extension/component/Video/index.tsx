@@ -23,7 +23,8 @@ const VideoViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
   deleteNode,
   selected,
   onUpload,
-  onError
+  onError,
+  onValidateUrl
 }) => {
   const attrs = node.attrs as VideoAttributes
   const videoRef = useRef<HTMLVideoElement>(null)
@@ -74,7 +75,7 @@ const VideoViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
   }
 
   if (!attrs.src) {
-    return <InsertVideo selected={selected} attrs={attrs} updateAttributes={updateAttributes} onUpload={onUpload} onError={onError} />
+    return <InsertVideo selected={selected} attrs={attrs} updateAttributes={updateAttributes} onUpload={onUpload} onError={onError} onValidateUrl={onValidateUrl} />
   }
 
   return (

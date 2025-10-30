@@ -9,6 +9,45 @@ const Reader = () => {
     editable: true,
     contentType: isMarkdown ? 'markdown' : 'html',
     exclude: ['invisibleCharacters'],
+    onError: (error: Error) => {
+      console.error('Editor Error:', error)
+      alert(error.message)
+    },
+    onValidateUrl: async (url: string, type: 'image' | 'video' | 'audio' | 'iframe') => {
+      console.log(`验证 ${type} 链接:`, url)
+
+      // 拦截 base64 链接
+      if (url.startsWith('data:')) {
+        throw new Error(`不支持 base64 链接，请使用可访问的 ${type} URL`)
+      }
+
+      // 根据不同类型做不同的验证
+      switch (type) {
+        case 'image':
+          if (!url.match(/\.(jpg|jpeg|png|gif|webp|svg)(\?.*)?$/i)) {
+            console.warn('图片链接可能不是有效的图片格式')
+          }
+          break
+        case 'video':
+          if (!url.match(/\.(mp4|webm|ogg|mov|avi|wmv|flv|mkv)(\?.*)?$/i)) {
+            console.warn('视频链接可能不是有效的视频格式')
+          }
+          break
+        case 'audio':
+          if (!url.match(/\.(mp3|wav|ogg|m4a|flac|aac|wma)(\?.*)?$/i)) {
+            console.warn('音频链接可能不是有效的音频格式')
+          }
+          break
+        case 'iframe':
+          // iframe 可以嵌入任何 URL，但可以检查是否是 HTTPS
+          if (url.startsWith('http://') && !url.includes('localhost')) {
+            console.warn('建议使用 HTTPS 链接以确保安全性')
+          }
+          break
+      }
+
+      return url
+    },
     onSave: (editor) => {
       const value = isMarkdown ? editor.getMarkdown() : editor.getHTML();
       console.log(value)
@@ -121,4 +160,4 @@ const Reader = () => {
   </EditorThemeProvider>
 };
 
-export default Reader; 
+export default Reader;

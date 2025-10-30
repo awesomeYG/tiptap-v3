@@ -13,6 +13,7 @@ const IframeViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
   updateAttributes,
   deleteNode,
   selected,
+  onValidateUrl
 }) => {
   const attrs = node.attrs as IframeAttributes
   const [isHovering, setIsHovering] = useState(false)
@@ -27,9 +28,17 @@ const IframeViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
 
   const handleShowPopover = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget)
   const handleClosePopover = () => setAnchorEl(null)
-  const handleSave = () => {
+  const handleSave = async () => {
     if (editSrc.trim()) {
-      updateAttributes({ src: editSrc.trim(), width: attrs.width, height: attrs.height })
+      try {
+        let validatedUrl = editSrc.trim()
+        if (onValidateUrl) {
+          validatedUrl = await Promise.resolve(onValidateUrl(validatedUrl, 'iframe'))
+        }
+        updateAttributes({ src: validatedUrl, width: attrs.width, height: attrs.height })
+      } catch (error) {
+        // 错误处理已经在 onValidateUrl 中处理
+      }
     }
     handleClosePopover()
   }
@@ -84,7 +93,7 @@ const IframeViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
   }
 
   if (!attrs.src) {
-    return <InsertIframe selected={selected} attrs={attrs} updateAttributes={updateAttributes as any} />
+    return <InsertIframe selected={selected} attrs={attrs} updateAttributes={updateAttributes as any} onValidateUrl={onValidateUrl} />
   }
 
   return (

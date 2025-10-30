@@ -72,7 +72,8 @@ const ImageViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
   deleteNode,
   selected,
   onUpload,
-  onError
+  onError,
+  onValidateUrl
 }) => {
   const attrs = node.attrs as ImageAttributes
   const imageRef = useRef<HTMLImageElement>(null)
@@ -154,15 +155,23 @@ const ImageViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
     setIsCropping(false)
   }
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (editSrc.trim()) {
-      const currentWidth = getCurrentDisplayWidth()
-      updateAttributes({
-        src: editSrc.trim(),
-        width: currentWidth,
-        error: true,
-      })
-      setEditSrc(editSrc.trim())
+      try {
+        let validatedUrl = editSrc.trim()
+        if (onValidateUrl) {
+          validatedUrl = await Promise.resolve(onValidateUrl(validatedUrl, 'image'))
+        }
+        const currentWidth = getCurrentDisplayWidth()
+        updateAttributes({
+          src: validatedUrl,
+          width: currentWidth,
+          error: true,
+        })
+        setEditSrc(validatedUrl)
+      } catch (error) {
+        onError?.(error as Error)
+      }
     }
     handleClosePopover()
   }
@@ -188,7 +197,7 @@ const ImageViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
   }
 
   if (!attrs.src) {
-    return <InsertImage selected={selected} attrs={attrs} onUpload={onUpload} updateAttributes={updateAttributes} />
+    return <InsertImage selected={selected} attrs={attrs} onUpload={onUpload} updateAttributes={updateAttributes} onError={onError} onValidateUrl={onValidateUrl} />
   }
 
   if (isCropping) {
