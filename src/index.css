@@ -191,11 +191,10 @@
 }
 
 .tiptap.ProseMirror pre[data-type="yaml-frontmatter"] {
-  padding: 8px 16px;
   margin-bottom: 20px;
   border-radius: var(--mui-shape-borderRadius);
-  color: var(--mui-palette-text-primary);
-  background-color: var(--mui-palette-background-paper3);
+  color: var(--mui-palette-text-disabled);
+  background-color: transparent;
 }
 
 .tiptap.ProseMirror code {
