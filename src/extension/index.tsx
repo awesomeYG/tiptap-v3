@@ -85,6 +85,7 @@ export const getExtensions = ({
     DetailsContentExtension,
     DetailsSummaryExtension,
     CodeBlockLowlightExtension,
+    InlineUploadProgressExtension,
     YamlFormat,
     CustomHorizontalRule,
     ...TableExtension({ editable }),
@@ -136,7 +137,6 @@ export const getExtensions = ({
     defaultExtensions.push(...[
       AlertExtension,
       BlockLinkExtension,
-      InlineUploadProgressExtension,
       IframeExtension({ onError, onValidateUrl }),
       VideoExtension({ onUpload, onError, onValidateUrl }),
       AudioExtension({ onUpload, onError, onValidateUrl }),
