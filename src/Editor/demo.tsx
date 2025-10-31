@@ -4,7 +4,7 @@ import React from 'react';
 import '../index.css';
 
 const Reader = () => {
-  const isMarkdown = false;
+  const isMarkdown = true;
   const { editor } = useTiptap({
     editable: true,
     contentType: isMarkdown ? 'markdown' : 'html',
@@ -121,7 +121,22 @@ const Reader = () => {
         }, 100);
       })
     },
-    content: '# 标题1\n\n<a target="_blank" type="icon" href="http://localhost:8000/components/editor" title="发生的发">发生的发</a>\n\n## 标题2\n标题*斜体*\n标题**加粗**\n标题~~删除线~~\n标题`代码`\n标题^上标^，标题~下标~\n标题==高亮==飞机的撒路口[fasldkfjasldkjf](http://localhost:8000/components/editor)'
+    content: `---
+issue_key: gitlab://git.in.chaitin.net/dev/board/ai-ready?issue=1
+code_repo: https://git.in.chaitin.net/dev/board/ai-ready.git
+priority: high
+designed_by: jinzhao.liu
+dev_env: n/a
+start_from: main
+merge_to: main
+estimated_loc: 500
+difficulty_level: medium
+---
+
+发啥了见风使舵你看**fjsldk**放假 sd 卡那
+
+# 标题1
+`
   });
 
   return <EditorThemeProvider mode='light'>

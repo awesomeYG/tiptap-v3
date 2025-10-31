@@ -190,6 +190,12 @@
   background-color: #171c19;
 }
 
+.tiptap.ProseMirror pre[data-type="yaml-frontmatter"] {
+  padding: 8px 16px;
+  margin-bottom: 20px;
+  border-radius: var(--mui-shape-borderRadius);
+}
+
 .tiptap.ProseMirror code {
   padding: 2px 8px;
   margin: 0 4px;
@@ -201,6 +207,12 @@
   border-color: var(--mui-palette-divider);
   background-color: var(--mui-palette-background-paper3);
   border-radius: 6px;
+}
+
+.tiptap.ProseMirror pre[data-type="yaml-frontmatter"] code {
+  border: none;
+  margin: 0;
+  display: inline-block;
 }
 
 .tiptap.ProseMirror pre code {

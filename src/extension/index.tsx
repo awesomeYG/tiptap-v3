@@ -19,6 +19,7 @@ import {
   BlockLinkExtension,
   CodeBlockLowlightExtension,
   CustomBlockMathExtension,
+  CustomHorizontalRule,
   CustomInlineMathExtension,
   DetailsContentExtension,
   DetailsExtension,
@@ -38,6 +39,7 @@ import {
   UploadProgressExtension,
   VerticalAlign,
   VideoExtension,
+  YamlFormat,
   YoutubeExtension
 } from './node';
 
@@ -61,6 +63,7 @@ export const getExtensions = ({
       link: false,
       code: false,
       codeBlock: false,
+      horizontalRule: false,
       listItem: false,
       orderedList: false,
       bulletList: false,
@@ -82,6 +85,8 @@ export const getExtensions = ({
     DetailsContentExtension,
     DetailsSummaryExtension,
     CodeBlockLowlightExtension,
+    YamlFormat,
+    CustomHorizontalRule,
     ...TableExtension({ editable }),
     TableOfContents({ onTocUpdate }),
     ImageExtension({ onUpload, onError, onValidateUrl }),
@@ -125,7 +130,7 @@ export const getExtensions = ({
         gfm: true,
         breaks: false,
         pedantic: false,
-      }
+      },
     }))
   } else {
     defaultExtensions.push(...[

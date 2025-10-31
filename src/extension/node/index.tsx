@@ -5,6 +5,7 @@ export * from './CodeBlockLowlight';
 export * from './Details';
 export * from './Emoji';
 export * from './FileHandler';
+export * from './HorizontalRule';
 export * from './Iframe';
 export * from './Image';
 export * from './Indent';
@@ -18,5 +19,6 @@ export * from './TableOfContents';
 export * from './UploadProgress';
 export * from './VerticalAlign';
 export * from './Video';
+export * from './YamlFormat';
 export * from './Youtube';
 
