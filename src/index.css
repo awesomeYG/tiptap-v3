@@ -194,6 +194,8 @@
   padding: 8px 16px;
   margin-bottom: 20px;
   border-radius: var(--mui-shape-borderRadius);
+  color: var(--mui-palette-text-primary);
+  background-color: var(--mui-palette-background-paper3);
 }
 
 .tiptap.ProseMirror code {
