@@ -121,21 +121,13 @@ const Reader = () => {
         }, 100);
       })
     },
-    content: `---
-issue_key: gitlab://git.in.chaitin.net/dev/board/ai-ready?issue=1
-code_repo: https://git.in.chaitin.net/dev/board/ai-ready.git
-priority: high
-designed_by: jinzhao.liu
-dev_env: n/a
-start_from: main
-merge_to: main
-estimated_loc: 500
-difficulty_level: medium
----
+    content: `### Subscript
 
-发啥了见风使舵你看**fjsldk**放假 sd 卡那
+H~2~O
 
-# 标题1
+### Superscript
+
+X^2^
 `
   });
 

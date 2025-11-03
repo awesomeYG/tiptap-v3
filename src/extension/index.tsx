@@ -1,8 +1,6 @@
 
 import Highlight from '@tiptap/extension-highlight';
 import InvisibleCharacters from '@tiptap/extension-invisible-characters';
-import Subscript from '@tiptap/extension-subscript';
-import Superscript from '@tiptap/extension-superscript';
 import TextAlign from '@tiptap/extension-text-align';
 import { TextStyleKit } from '@tiptap/extension-text-style';
 import { CharacterCount, Placeholder } from '@tiptap/extensions';
@@ -21,6 +19,8 @@ import {
   CustomBlockMathExtension,
   CustomHorizontalRule,
   CustomInlineMathExtension,
+  CustomSubscript,
+  CustomSuperscript,
   DetailsContentExtension,
   DetailsExtension,
   DetailsSummaryExtension,
@@ -40,7 +40,7 @@ import {
   VerticalAlign,
   VideoExtension,
   YamlFormat,
-  YoutubeExtension
+  YoutubeExtension,
 } from './node';
 
 export const getExtensions = ({
@@ -74,13 +74,13 @@ export const getExtensions = ({
         width: 2,
       },
     }),
-    Subscript,
-    Superscript,
     TextStyleKit,
     CodeExtension,
     ListExtension,
     EmojiExtension,
+    CustomSubscript,
     DetailsExtension,
+    CustomSuperscript,
     InlineLinkExtension,
     DetailsContentExtension,
     DetailsSummaryExtension,

@@ -14,6 +14,7 @@ export * from './Link';
 export * from './ListKit';
 export * from './Mathematics';
 export * from './Mention';
+export * from './Script';
 export * from './Table';
 export * from './TableOfContents';
 export * from './UploadProgress';
