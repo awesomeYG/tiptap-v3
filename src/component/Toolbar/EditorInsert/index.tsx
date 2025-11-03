@@ -107,7 +107,7 @@ const EditorInsert = ({ editor, isMarkdown }: EditorInsertProps) => {
         extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', '8'], '+')}</Typography>,
         onClick: () => editor.chain().focus().setDetails().run(),
       },
-      ...!isMarkdown ? [{
+      ...isMarkdown ? [{
         label: '警告提示',
         key: 'highlight',
         icon: <Information2LineIcon sx={{ fontSize: '1rem' }} />,

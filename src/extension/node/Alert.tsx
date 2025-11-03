@@ -72,6 +72,56 @@ export const AlertExtension = Node.create<AlertOptions>({
     return ['div', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes, { 'data-node': 'alert' }), 0]
   },
 
+  markdownTokenizer: {
+    name: 'alert',
+    level: 'block',
+    start: (src: string) => src.indexOf(':::alert'),
+    tokenize(src: string, _tokens: any, helpers: any) {
+      const match = /^:::alert(?:\s+([^\s\n]+))?(?:\s+([^\s\n]+))?\s*\n([\s\S]*?)\n?:::(?:\s*\n|$)/.exec(src)
+      if (!match) {
+        return
+      }
+
+      const variant = match[1] || 'info'
+      const alertType = match[2] || 'icon'
+      const body = match[3] || ''
+
+      return {
+        type: 'alert',
+        raw: match[0],
+        variant,
+        alertType,
+        tokens: helpers.blockTokens(body),
+      }
+    },
+  },
+
+  renderMarkdown: (node: any, helpers: any) => {
+    const variant = node.attrs?.variant || 'info'
+    const alertType = node.attrs?.type || 'icon'
+    const headerParts = [':::alert']
+    if (variant && variant !== 'info') {
+      headerParts.push(variant)
+    }
+    if (alertType && alertType !== 'icon') {
+      headerParts.push(alertType)
+    }
+
+    const header = headerParts.join(' ')
+    const content = node.content ? helpers.renderChildren(node.content, '\n\n') : ''
+    const body = content ? `\n${content}` : ''
+
+    return `${header}${body}\n:::`
+  },
+
+  parseMarkdown: (token: any, helpers: any) => {
+    const variant = token.variant || 'info'
+    const alertType = token.alertType || 'icon'
+    const content = helpers.parseChildren(token.tokens || [])
+
+    return helpers.createNode('alert', { variant, type: alertType }, content)
+  },
+
   addCommands() {
     return {
       setAlert:

@@ -1,5 +1,5 @@
 import { Editor, EditorThemeProvider, EditorToolbar, useTiptap } from '@ctzhian/tiptap';
-import { Box, Button } from '@mui/material';
+import { Box } from '@mui/material';
 import React from 'react';
 import '../index.css';
 
@@ -132,14 +132,14 @@ X^2^
   });
 
   return <EditorThemeProvider mode='light'>
-    <Button variant='contained' onClick={() => {
+    {/* <Button variant='contained' onClick={() => {
       editor.commands.insertContent('# 标题1\n\n<a target="_blank" type="icon" href="http://localhost:8000/components/editor" title="发生的发">发生的发</a>\n\n## 标题2\n标题*斜体*\n标题**加粗**\n标题~~删除线~~\n标题`代码`\n标题^上标^，标题~下标~\n标题==高亮==', {
         contentType: 'markdown'
       })
       // editor.commands.setContent('# 标题1\n## 标题2\n标题*斜体*\n标题**加粗**\n标题~~删除线~~\n标题`代码`\n标题^上标^，标题~下标~\n标题==高亮==', {
       //   contentType: 'markdown'
       // })
-    }}>测试一下</Button>
+    }}>测试一下</Button> */}
     <Box sx={{
       border: '1px solid #eee',
       borderRadius: '10px',

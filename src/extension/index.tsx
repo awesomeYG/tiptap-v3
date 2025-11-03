@@ -78,6 +78,7 @@ export const getExtensions = ({
     CodeExtension,
     ListExtension,
     EmojiExtension,
+    AlertExtension,
     CustomSubscript,
     DetailsExtension,
     CustomSuperscript,
