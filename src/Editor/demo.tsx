@@ -121,14 +121,14 @@ const Reader = () => {
         }, 100);
       })
     },
-    content: `### Subscript
+    content: `:::alert
+# 福建师大你看
+副书记看到了发送
+:::
 
-H~2~O
-
-### Superscript
-
-X^2^
-`
+:::alert {variant="warning", type="text"}
+This is a warning message with **bold** text.
+:::`
   });
 
   return <EditorThemeProvider mode='light'>

@@ -1,4 +1,4 @@
-import { mergeAttributes, Node } from '@tiptap/core'
+import { createBlockMarkdownSpec, mergeAttributes, Node } from '@tiptap/core'
 import { ReactNodeViewRenderer } from '@tiptap/react'
 import AlertView from '../component/Alert'
 
@@ -50,9 +50,9 @@ export const AlertExtension = Node.create<AlertOptions>({
         parseHTML: element => (element as HTMLElement).getAttribute('data-id'),
       },
       variant: {
-        default: 'info',
+        default: 'default',
         renderHTML: attributes => ({ 'data-variant': attributes.variant }),
-        parseHTML: element => (element as HTMLElement).getAttribute('data-variant') || 'info',
+        parseHTML: element => (element as HTMLElement).getAttribute('data-variant') || 'default',
       },
       type: {
         default: 'icon',
@@ -72,62 +72,16 @@ export const AlertExtension = Node.create<AlertOptions>({
     return ['div', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes, { 'data-node': 'alert' }), 0]
   },
 
-  markdownTokenizer: {
-    name: 'alert',
-    level: 'block',
-    start: (src: string) => src.indexOf(':::alert'),
-    tokenize(src: string, _tokens: any, helpers: any) {
-      const match = /^:::alert(?:\s+([^\s\n]+))?(?:\s+([^\s\n]+))?\s*\n([\s\S]*?)\n?:::(?:\s*\n|$)/.exec(src)
-      if (!match) {
-        return
-      }
-
-      const variant = match[1] || 'info'
-      const alertType = match[2] || 'icon'
-      const body = match[3] || ''
-
-      return {
-        type: 'alert',
-        raw: match[0],
-        variant,
-        alertType,
-        tokens: helpers.blockTokens(body),
-      }
-    },
-  },
-
-  renderMarkdown: (node: any, helpers: any) => {
-    const variant = node.attrs?.variant || 'info'
-    const alertType = node.attrs?.type || 'icon'
-    const headerParts = [':::alert']
-    if (variant && variant !== 'info') {
-      headerParts.push(variant)
-    }
-    if (alertType && alertType !== 'icon') {
-      headerParts.push(alertType)
-    }
-
-    const header = headerParts.join(' ')
-    const content = node.content ? helpers.renderChildren(node.content, '\n\n') : ''
-    const body = content ? `\n${content}` : ''
-
-    return `${header}${body}\n:::`
-  },
-
-  parseMarkdown: (token: any, helpers: any) => {
-    const variant = token.variant || 'info'
-    const alertType = token.alertType || 'icon'
-    const content = helpers.parseChildren(token.tokens || [])
-
-    return helpers.createNode('alert', { variant, type: alertType }, content)
-  },
+  ...createBlockMarkdownSpec({
+    nodeName: 'alert',
+  }),
 
   addCommands() {
     return {
       setAlert:
         (attrs = {}) => ({ commands }) => {
           const id = `alert_${Math.random().toString(36).slice(2)}`
-          const variant: AlertVariant = (attrs.variant as AlertVariant) || 'info'
+          const variant: AlertVariant = (attrs.variant as AlertVariant) || 'default'
           const type: AlertType = (attrs.type as AlertType) || 'icon'
           return commands.wrapIn(this.name, { id, variant, type })
         },
@@ -145,7 +99,7 @@ export const AlertExtension = Node.create<AlertOptions>({
       toggleAlert:
         (attrs = {}) => ({ commands }) => {
           const id = `alert_${Math.random().toString(36).slice(2)}`
-          const variant: AlertVariant = (attrs.variant as AlertVariant) || 'info'
+          const variant: AlertVariant = (attrs.variant as AlertVariant) || 'default'
           const type: AlertType = (attrs.type as AlertType) || 'icon'
           return commands.toggleWrap(this.name, { id, variant, type })
         },
