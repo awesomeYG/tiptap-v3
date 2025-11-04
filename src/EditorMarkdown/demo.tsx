@@ -1,16 +1,16 @@
-import { Editor, EditorThemeProvider, EditorToolbar, useTiptap } from '@ctzhian/tiptap';
+import { EditorMarkdown, EditorThemeProvider, useTiptap } from '@ctzhian/tiptap';
 import { Box } from '@mui/material';
 import React from 'react';
+import { MARKDOWN_EDITOR_PLACEHOLDER } from '../contants/markdown-placeholder';
 import '../index.css';
 
 const Reader = () => {
-  const isMarkdown = true;
   const { editor } = useTiptap({
-    editable: true,
+    editable: false,
+    contentType: 'markdown',
     exclude: ['invisibleCharacters'],
     onError: (error: Error) => {
       console.error('Editor Error:', error)
-      alert(error.message)
     },
     onValidateUrl: async (url: string, type: 'image' | 'video' | 'audio' | 'iframe') => {
       console.log(`验证 ${type} 链接:`, url)
@@ -48,14 +48,12 @@ const Reader = () => {
       return url
     },
     onSave: (editor) => {
-      const value = isMarkdown ? editor.getMarkdown() : editor.getHTML();
-      console.log(value)
+      const value = editor.getMarkdown();
       editor.chain().focus().setContent(value, {
-        contentType: isMarkdown ? 'markdown' : 'html'
+        contentType: 'markdown'
       }).run()
     },
     onAiWritingGetSuggestion: async ({ prefix, suffix }: { prefix: string, suffix: string }) => {
-      console.log('onAiWritingGetSuggestion', prefix, suffix);
       return new Promise<string>((resolve) => {
         resolve([
           'this is a default suggestion.',
@@ -120,41 +118,20 @@ const Reader = () => {
         }, 100);
       })
     },
-    content: ''
+    content: MARKDOWN_EDITOR_PLACEHOLDER
   });
 
   return <EditorThemeProvider mode='light'>
-    {/* <Button variant='contained' onClick={() => {
-      editor.commands.insertContent('# 标题1\n\n<a target="_blank" type="icon" href="http://localhost:8000/components/editor" title="发生的发">发生的发</a>\n\n## 标题2\n标题*斜体*\n标题**加粗**\n标题~~删除线~~\n标题`代码`\n标题^上标^，标题~下标~\n标题==高亮==', {
-        contentType: 'markdown'
-      })
-      // editor.commands.setContent('# 标题1\n## 标题2\n标题*斜体*\n标题**加粗**\n标题~~删除线~~\n标题`代码`\n标题^上标^，标题~下标~\n标题==高亮==', {
-      //   contentType: 'markdown'
-      // })
-    }}>测试一下</Button> */}
     <Box sx={{
-      border: '1px solid #eee',
-      borderRadius: '10px',
-      padding: '0 10px 10px',
-      bgcolor: 'var(--mui-palette-background-default)',
+      '.tiptap': {
+        minHeight: '500px',
+        '.tableWrapper': {
+          maxWidth: '100%',
+          overflowX: 'auto',
+        },
+      }
     }}>
-      <div style={{
-        borderBottom: '1px solid #eee',
-        marginBottom: '30px',
-      }}>
-        <EditorToolbar editor={editor} />
-      </div>
-      <Box sx={{
-        '.tiptap': {
-          minHeight: '500px',
-          '.tableWrapper': {
-            maxWidth: '100%',
-            overflowX: 'auto',
-          },
-        }
-      }}>
-        <Editor editor={editor} />
-      </Box>
+      <EditorMarkdown editor={editor} height={'500px'} value={MARKDOWN_EDITOR_PLACEHOLDER} />
     </Box>
   </EditorThemeProvider>
 };

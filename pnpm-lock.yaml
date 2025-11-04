@@ -122,6 +122,9 @@ importers:
       '@tiptap/suggestion':
         specifier: ^3.10.1
         version: 3.10.1(@tiptap/core@3.10.1(@tiptap/pm@3.10.1))(@tiptap/pm@3.10.1)
+      ace-builds:
+        specifier: ^1.43.4
+        version: 1.43.4
       core-js:
         specifier: ^3.46.0
         version: 3.46.0
@@ -143,6 +146,9 @@ importers:
       lowlight:
         specifier: ^3.3.0
         version: 3.3.0
+      react-ace:
+        specifier: ^14.0.1
+        version: 14.0.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-colorful:
         specifier: ^5.6.1
         version: 5.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -2672,6 +2678,9 @@ packages:
   accepts@1.3.8:
     resolution: {integrity: sha512-PYAthTa2m2VKxuvSD3DPC/Gy+U+sOA1LAuT8mkmRuvw+NACSaeXEQ+NHcVF7rONl6qcaxV3Uuemwawk+7+SJLw==}
     engines: {node: '>= 0.6'}
+
+  ace-builds@1.43.4:
+    resolution: {integrity: sha512-8hAxVfo2ImICd69BWlZwZlxe9rxDGDjuUhh+WeWgGDvfBCE+r3lkynkQvIovDz4jcMi8O7bsEaFygaDT+h9sBA==}
 
   acorn-import-phases@1.0.4:
     resolution: {integrity: sha512-wKmbr/DDiIXzEOiWrTTUcDm24kQ2vGfZQvM2fwg2vXqR5uW6aapr7ObPtj1th32b9u90/Pf4AItvdTh42fBmVQ==}
@@ -6386,6 +6395,12 @@ packages:
     peerDependencies:
       react: '>=16.9.0'
       react-dom: '>=16.9.0'
+
+  react-ace@14.0.1:
+    resolution: {integrity: sha512-z6YAZ20PNf/FqmYEic//G/UK6uw0rn21g58ASgHJHl9rfE4nITQLqthr9rHMVQK4ezwohJbp2dGrZpkq979PYQ==}
+    peerDependencies:
+      react: ^0.13.0 || ^0.14.0 || ^15.0.1 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+      react-dom: ^0.13.0 || ^0.14.0 || ^15.0.1 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
   react-colorful@5.6.1:
     resolution: {integrity: sha512-1exovf0uGTGyq5mXQT0zgQ80uvj2PCwvF8zY1RN9/vbJVSjSo3fsB/4L3ObbF7u70NduSiK4xu4Y6q1MHoUGEw==}
@@ -10535,6 +10550,8 @@ snapshots:
     dependencies:
       mime-types: 2.1.35
       negotiator: 0.6.3
+
+  ace-builds@1.43.4: {}
 
   acorn-import-phases@1.0.4(acorn@8.15.0):
     dependencies:
@@ -15153,6 +15170,16 @@ snapshots:
       classnames: 2.3.2
       rc-resize-observer: 1.4.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       rc-util: 5.44.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+
+  react-ace@14.0.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+    dependencies:
+      ace-builds: 1.43.4
+      diff-match-patch: 1.0.5
+      lodash.get: 4.4.2
+      lodash.isequal: 4.5.0
+      prop-types: 15.8.1
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
