@@ -31,8 +31,8 @@ const EditorFontSize = ({ editor }: EditorFontSizeProps) => {
       const headingLevel = headingAttrs.level;
 
       switch (headingLevel) {
-        case 1: fontSize = '30'; break;
-        case 2: fontSize = '24'; break;
+        case 1: fontSize = '26'; break;
+        case 2: fontSize = '22'; break;
         case 3: fontSize = '20'; break;
         case 4: fontSize = '18'; break;
         case 5: fontSize = '18'; break;
