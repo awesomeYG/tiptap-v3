@@ -172,7 +172,6 @@ const CodeBlockView: React.FC<NodeViewProps> = (props) => {
           ) : (
             <Box
               sx={{
-                py: 0.5,
                 flex: 1,
                 fontSize: '0.875rem',
                 color: 'text.auxiliary',
@@ -289,7 +288,7 @@ const CodeBlockView: React.FC<NodeViewProps> = (props) => {
                 </MenuItem>
               ))}
             </Select>
-            <Divider orientation="vertical" flexItem sx={{ height: '1.25rem', m: 0.5, alignSelf: 'center', borderColor: 'divider' }} />
+            <Divider orientation="vertical" flexItem sx={{ height: '1.25rem', alignSelf: 'center', borderColor: 'divider' }} />
             <Stack
               direction="row"
               alignItems="center"

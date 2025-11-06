@@ -189,6 +189,7 @@
 .tiptap.ProseMirror pre {
   position: relative;
   border: 1px solid;
+  line-height: 22px;
   border-color: var(--mui-palette-divider);
   border-radius: var(--mui-shape-borderRadius);
   color: var(--mui-palette-text-auxiliary);

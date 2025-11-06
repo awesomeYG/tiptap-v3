@@ -63,7 +63,6 @@ const ReadonlyCodeBlock: React.FC<NodeViewProps> = ({
         >
           <Box
             sx={{
-              py: 0.5,
               flex: 1,
               fontSize: '0.875rem',
               color: 'text.auxiliary',
