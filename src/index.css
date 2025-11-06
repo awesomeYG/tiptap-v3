@@ -67,7 +67,7 @@
 /* blockquote */
 .tiptap.ProseMirror blockquote {
   position: relative;
-  padding-left: 12px;
+  padding: 8px 16px 8px 24px;
   margin: 8px 0;
   line-height: var(--common-row-line-height);
   color: var(--mui-palette-text-tertiary);
