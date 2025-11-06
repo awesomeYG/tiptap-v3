@@ -63,6 +63,7 @@ const light = {
     paper: '#FFFFFF',
     paper2: '#F1F2F8',
     paper3: '#F8F9FA',
+    footer: '#14141B',
   },
   shadows: 'rgba(68, 80 ,91, 0.1)',
   table: {

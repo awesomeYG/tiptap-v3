@@ -71,6 +71,7 @@
   margin: 8px 0;
   line-height: var(--common-row-line-height);
   color: var(--mui-palette-text-tertiary);
+  background-color: var(--mui-palette-background-paper3);
 }
 
 .tiptap.ProseMirror blockquote::after {
