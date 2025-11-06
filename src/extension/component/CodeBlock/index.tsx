@@ -1,10 +1,9 @@
 import {
   ArrowDownSLineIcon,
-  FileCopyLineIcon,
-  TitleIcon
+  FileCopyLineIcon
 } from '@ctzhian/tiptap/component/Icons';
 import { languages } from '@ctzhian/tiptap/contants/highlight';
-import { Box, MenuItem, Select, Stack, TextField } from '@mui/material';
+import { Box, Divider, ListSubheader, MenuItem, Select, Stack, TextField } from '@mui/material';
 import { NodeViewContent, NodeViewProps, NodeViewWrapper } from '@tiptap/react';
 import React, { useCallback, useState } from 'react';
 import ReadonlyCodeBlock from './Readonly';
@@ -19,8 +18,27 @@ const CodeBlockView: React.FC<NodeViewProps> = (props) => {
   const [showTitleInput, setShowTitleInput] = useState(false);
   const [copyText, setCopyText] = useState('复制');
   const [titleValue, setTitleValue] = useState(node.attrs.title || '');
+  const [searchText, setSearchText] = useState('');
+  const menuListRef = React.useRef<HTMLUListElement>(null);
 
   const attrs = node.attrs as CodeBlockAttributes;
+
+  const filteredLanguages = React.useMemo(() => {
+    if (!searchText) return languages;
+    const lowerSearch = searchText.toLowerCase();
+    return languages.filter(
+      (lang) =>
+        lang.label.toLowerCase().includes(lowerSearch) ||
+        lang.value.toLowerCase().includes(lowerSearch),
+    );
+  }, [searchText]);
+
+  // 当搜索文本改变时，重置滚动位置
+  React.useEffect(() => {
+    if (menuListRef.current) {
+      menuListRef.current.scrollTop = 0;
+    }
+  }, [searchText]);
 
   const handleLanguageChange = useCallback(
     (language: string) => {
@@ -92,7 +110,7 @@ const CodeBlockView: React.FC<NodeViewProps> = (props) => {
       <Box
         component="pre"
         sx={{
-          p: '1.75rem 1rem 0.75rem',
+          p: '0.75rem 1rem',
           m: 0,
           borderRadius: showTitleInput
             ? '6px 6px 0 0 !important'
@@ -106,72 +124,172 @@ const CodeBlockView: React.FC<NodeViewProps> = (props) => {
           justifyContent="space-between"
           className="codeblock-toolbar"
           sx={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            px: 0.5,
-            pt: 0.5,
             zIndex: 1,
+            mb: 2,
           }}
         >
-          <Select
-            value={attrs.language || 'auto'}
-            onChange={(e) => handleLanguageChange(e.target.value)}
-            size="small"
-            variant="outlined"
-            sx={{
-              px: 0,
-              height: '1.25rem',
-              fontSize: '0.75rem',
-              bgcolor: 'inherit',
-              color: 'inherit',
-              '&.MuiOutlinedInput-root .MuiSelect-select': {
-                p: 0,
-                pl: 1,
-                pr: 'calc(var(--mui-spacing-unit) * 3) !important',
-              },
-              '& .MuiSelect-icon': {
+          {showTitleInput ? (
+            <Box
+              sx={{
+                py: 0.5,
+                flex: 1,
+                borderRadius: '0 0 4px 4px',
+                bgcolor: 'background.paper3',
+                boxSizing: 'border-box',
+                letterSpacing: '0.01rem',
+              }}
+            >
+              <TextField
+                fullWidth
+                size="small"
+                placeholder="请输入代码块名称"
+                value={titleValue}
+                onChange={handleTitleChange}
+                onKeyDown={handleTitleKeyDown}
+                onBlur={handleTitleSubmit}
+                autoFocus
+                sx={{
+                  '& .MuiInputBase-input': {
+                    p: 0,
+                    height: '0.875rem',
+                    lineHeight: 1,
+                    fontSize: '0.875rem',
+                    color: 'text.auxiliary',
+                  },
+                  '& .MuiInputBase-input::placeholder': {
+                    fontSize: '0.875rem',
+                  },
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': {
+                      border: 'none',
+                      top: 0,
+                      p: 0,
+                    },
+                  },
+                }}
+              />
+            </Box>
+          ) : (
+            <Box
+              sx={{
+                py: 0.5,
+                flex: 1,
+                fontSize: '0.875rem',
+                color: 'text.auxiliary',
+                letterSpacing: '0.01rem',
+              }}
+              onClick={handleTitleToggle}
+            >
+              {attrs.title || '代码块'}
+            </Box>
+          )}
+          <Stack direction="row" alignItems="center" sx={{ flexShrink: 0 }}>
+            <Select
+              value={attrs.language || 'auto'}
+              onChange={(e) => handleLanguageChange(e.target.value)}
+              onClose={() => setSearchText('')}
+              size="small"
+              variant="outlined"
+              sx={{
+                px: 0,
+                height: '1.25rem',
+                fontSize: '0.75rem',
+                bgcolor: 'inherit',
                 color: 'inherit',
-              },
-              '& .MuiOutlinedInput-notchedOutline': {
-                border: 'none',
-              },
-            }}
-            IconComponent={({ className, ...rest }) => {
-              return (
-                <ArrowDownSLineIcon
-                  className={className}
-                  {...rest}
-                  sx={{ fontSize: '1rem' }}
-                />
-              );
-            }}
-            MenuProps={{
-              PaperProps: {
-                style: {
-                  maxHeight: 360,
+                '&.MuiOutlinedInput-root .MuiSelect-select': {
+                  p: 0,
+                  pl: 1,
+                  pr: 'calc(var(--mui-spacing-unit) * 3) !important',
                 },
-              },
-            }}
-          >
-            {attrs.language &&
-              !languages.find((it) => it.value === attrs.language) && (
-                <MenuItem value={attrs.language} sx={{ fontSize: '0.75rem' }}>
-                  {attrs.language}
+                '& .MuiSelect-icon': {
+                  color: 'inherit',
+                },
+                '& .MuiOutlinedInput-notchedOutline': {
+                  border: 'none',
+                },
+              }}
+              IconComponent={({ className, ...rest }) => {
+                return (
+                  <ArrowDownSLineIcon
+                    className={className}
+                    {...rest}
+                    sx={{ fontSize: '1rem' }}
+                  />
+                );
+              }}
+              MenuProps={{
+                PaperProps: {
+                  sx: {
+                    maxHeight: 400,
+                    p: 0,
+                  },
+                },
+                autoFocus: false,
+                MenuListProps: {
+                  ref: menuListRef,
+                },
+              }}
+            >
+              <ListSubheader
+                sx={{
+                  position: 'sticky',
+                  top: 0,
+                  bgcolor: 'background.default',
+                  zIndex: 1,
+                  p: 0.5,
+                  lineHeight: 1,
+                }}
+              >
+                <TextField
+                  size="small"
+                  autoFocus
+                  placeholder="搜索语言..."
+                  fullWidth
+                  value={searchText}
+                  onChange={(e) => setSearchText(e.target.value)}
+                  onKeyDown={(e) => {
+                    e.stopPropagation();
+                  }}
+                  sx={{
+                    '& .MuiInputBase-root': {
+                      fontSize: '0.75rem',
+                    },
+                  }}
+                />
+              </ListSubheader>
+              {searchText && (
+                <MenuItem
+                  value={searchText}
+                  sx={{
+                    fontSize: '0.75rem',
+                    height: '30px',
+                    m: 0.5,
+                    bgcolor: 'action.hover',
+                    fontWeight: 500,
+                  }}
+                >
+                  {searchText}
+                  {filteredLanguages.length === 0 && ' (自定义)'}
                 </MenuItem>
               )}
-            {languages.map((lang) => (
-              <MenuItem
-                key={lang.value}
-                value={lang.value}
-                sx={{ fontSize: '0.75rem' }}
-              >
-                {lang.label}
-              </MenuItem>
-            ))}
-          </Select>
-          <Stack direction="row" sx={{ userSelect: 'none' }}>
+              {!searchText &&
+                attrs.language &&
+                !languages.find((it) => it.value === attrs.language) && (
+                  <MenuItem value={attrs.language} sx={{ fontSize: '0.75rem', height: '30px', m: 0.5 }}>
+                    {attrs.language}
+                  </MenuItem>
+                )}
+              {filteredLanguages.map((lang) => (
+                <MenuItem
+                  key={lang.value}
+                  value={lang.value}
+                  sx={{ fontSize: '0.75rem', height: '30px', m: 0.5 }}
+                >
+                  {lang.label}
+                </MenuItem>
+              ))}
+            </Select>
+            <Divider orientation="vertical" flexItem sx={{ height: '1.25rem', m: 0.5, alignSelf: 'center', borderColor: 'divider' }} />
             <Stack
               direction="row"
               alignItems="center"
@@ -192,91 +310,17 @@ const CodeBlockView: React.FC<NodeViewProps> = (props) => {
               />
               <Box sx={{ fontSize: '0.75rem', lineHeight: 1 }}>{copyText}</Box>
             </Stack>
-            <Stack
-              direction="row"
-              alignItems="center"
-              gap={0.5}
-              onClick={handleTitleToggle}
-              sx={{
-                px: 1,
-                py: 0.5,
-                cursor: 'pointer',
-                bgcolor: 'inherit',
-                color: 'inherit',
-              }}
-            >
-              <TitleIcon
-                sx={{ fontSize: '0.875rem', color: 'inherit' }}
-              />
-              <Box sx={{ fontSize: '0.75rem', lineHeight: 1 }}>标题</Box>
-            </Stack>
           </Stack>
         </Stack>
         <NodeViewContent
           style={{
             margin: 0,
             fontSize: '0.875rem',
-            lineHeight: '1.5',
             whiteSpace: 'pre-wrap',
             wordBreak: 'break-word',
           }}
         />
       </Box>
-      {showTitleInput && (
-        <Box
-          sx={{
-            px: 1,
-            pt: 0.25,
-            pb: 0.5,
-            borderRadius: '0 0 4px 4px',
-            bgcolor: 'background.paper3',
-            borderTop: '1px solid var(--mui-palette-divider)',
-            boxSizing: 'border-box',
-            letterSpacing: '0.01rem',
-          }}
-        >
-          <TextField
-            fullWidth
-            size="small"
-            placeholder="输入代码块标题..."
-            value={titleValue}
-            onChange={handleTitleChange}
-            onKeyDown={handleTitleKeyDown}
-            onBlur={handleTitleSubmit}
-            autoFocus
-            sx={{
-              '& .MuiInputBase-input': {
-                p: 0,
-                height: '1rem',
-                lineHeight: 1,
-                fontSize: '0.875rem',
-                color: 'text.secondary',
-              },
-              '& .MuiOutlinedInput-root': {
-                '& fieldset': {
-                  border: 'none',
-                  top: 0,
-                  p: 0,
-                },
-              },
-            }}
-          />
-        </Box>
-      )}
-      {attrs.title && !showTitleInput && (
-        <Box
-          sx={{
-            px: 1,
-            py: 0.5,
-            fontSize: '0.875rem',
-            color: 'text.secondary',
-            letterSpacing: '0.01rem',
-          }}
-          onClick={handleTitleToggle}
-        >
-          {attrs.title}
-        </Box>
-      )}
     </NodeViewWrapper>
   );
 };

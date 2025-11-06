@@ -136,7 +136,6 @@ export const getExtensions = ({
     }))
   } else {
     defaultExtensions.push(...[
-      AlertExtension,
       BlockLinkExtension,
       IframeExtension({ onError, onValidateUrl }),
       VideoExtension({ onUpload, onError, onValidateUrl }),

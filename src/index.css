@@ -1,9 +1,16 @@
 @import url('./asset/css/index.css');
 
+:root {
+  --common-row-font-size: 16px;
+  --common-row-line-height: 26px;
+  --udtoken-quote-bar-bg: #bbbfc4;
+}
+
 .tiptap.ProseMirror {
   overflow-y: auto;
   outline: none;
   color: var(--mui-palette-text-primary);
+  line-height: 1.8;
 }
 
 /* 节点缩进（依赖 data-indent 属性） */
@@ -51,28 +58,19 @@
   margin-bottom: 0 !important;
 }
 
-.tiptap.ProseMirror a {
-  text-decoration: underline;
-}
-
 .tiptap.ProseMirror p {
-  line-height: 1.625;
-  margin-top: 0;
-  font-size: 16px;
-  margin-bottom: 20px;
-}
-
-.tiptap.ProseMirror blockquote p,
-.tiptap.ProseMirror .node-alert p {
-  margin: 10px;
+  line-height: var(--common-row-line-height);
+  font-size: var(--common-row-font-size);
+  margin: 8px 0;
 }
 
 /* blockquote */
 .tiptap.ProseMirror blockquote {
   position: relative;
-  padding: 8px 16px;
-  margin: 0 0 20px;
-  background-color: var(--mui-palette-background-paper3);
+  padding-left: 12px;
+  margin: 8px 0;
+  line-height: var(--common-row-line-height);
+  color: var(--mui-palette-text-auxiliary);
 }
 
 .tiptap.ProseMirror blockquote::after {
@@ -80,51 +78,58 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 4px;
+  width: 2px;
   height: 100%;
-  background-color: var(--mui-palette-action-selected);
+  background-color: var(--udtoken-quote-bar-bg);
 }
 
 /* list */
 .tiptap.ProseMirror ol,
 .tiptap.ProseMirror ul {
   padding: 0 32px;
-  margin: 20px 16px 20px 0;
+  margin: 8px 0;
   list-style: none;
 }
 
-.tiptap.ProseMirror li ol,
-.tiptap.ProseMirror li ul {
-  margin: 0;
+.tiptap.ProseMirror li {
+  margin: 8px 0;
 }
 
-.tiptap.ProseMirror ol {
+.tiptap.ProseMirror ol ol ol ol {
   list-style: decimal;
-}
-
-.tiptap.ProseMirror ol ol {
-  list-style: lower-alpha;
 }
 
 .tiptap.ProseMirror ol ol ol {
   list-style: lower-roman;
 }
 
+.tiptap.ProseMirror ol ol {
+  list-style: lower-alpha;
+}
+
+.tiptap.ProseMirror ol {
+  list-style: decimal;
+}
+
 .tiptap.ProseMirror ul:not([data-type='taskList']) {
+  list-style: disc;
+}
+
+.tiptap.ProseMirror ul:not([data-type='taskList']) ul {
+  list-style: circle;
+}
+
+.tiptap.ProseMirror ul:not([data-type='taskList']) ul ul {
+  list-style: square;
+}
+
+.tiptap.ProseMirror ul:not([data-type='taskList']) ul ul ul {
   list-style: disc;
 }
 
 .tiptap.ProseMirror ul:not([data-type='taskList']) li {
   position: relative;
   padding-left: 0;
-}
-
-.tiptap.ProseMirror ul:not([data-type='taskList']) ul {
-  list-style: disc;
-}
-
-.tiptap.ProseMirror ul:not([data-type='taskList']) ul ul {
-  list-style: disc;
 }
 
 .tiptap.ProseMirror ul[data-type='taskList'] {
@@ -141,7 +146,7 @@
 .tiptap.ProseMirror ul[data-type='taskList'] li>label {
   flex: 0 0 auto;
   user-select: none;
-  margin-right: 0.5rem;
+  margin-right: 8px;
   height: 28px;
   display: flex;
   align-items: center;
@@ -153,7 +158,8 @@
 }
 
 .tiptap.ProseMirror ul[data-type='taskList'] li[data-checked='true']>div {
-  color: var(--mui-palette-text-disabled);
+  color: var(--mui-palette-text-auxiliary);
+  opacity: 0.7;
   text-decoration: line-through;
 }
 
@@ -169,14 +175,10 @@
   margin: 0;
 }
 
-.tiptap.ProseMirror ul p,
-.tiptap.ProseMirror ol p {
-  margin-top: 0.25rem;
-  margin-bottom: 0.25rem;
-}
-
-.tiptap.ProseMirror ol li::marker {
-  font-family: monospace;
+.tiptap.ProseMirror li::marker {
+  font-size: 16px;
+  line-height: 26px;
+  color: var(--mui-palette-primary-main);
 }
 
 /* code */
@@ -186,8 +188,11 @@
 
 .tiptap.ProseMirror pre {
   position: relative;
-  color: var(--mui-palette-common-white);
-  background-color: #171c19;
+  border: 1px solid;
+  border-color: var(--mui-palette-divider);
+  border-radius: var(--mui-shape-borderRadius);
+  color: var(--mui-palette-text-auxiliary);
+  background-color: var(--mui-palette-background-paper3);
 }
 
 .tiptap.ProseMirror pre[data-type="yaml-frontmatter"] {
@@ -315,48 +320,38 @@
   position: relative;
   color: inherit;
   font-style: inherit;
+  line-height: 1.4;
+  font-weight: 500;
 }
 
 .tiptap.ProseMirror h1 {
-  font-size: 30px;
-  line-height: 36px;
-  font-weight: 700;
-  margin: 48px 0 20px;
+  font-size: 26px;
+  margin: 26px 0 10px;
 }
 
 .tiptap.ProseMirror h2 {
-  font-size: 24px;
-  line-height: 32px;
-  font-weight: 700;
-  margin: 40px 0 20px;
+  font-size: 22px;
+  margin: 22px 0 8px;
 }
 
 .tiptap.ProseMirror h3 {
   font-size: 20px;
-  line-height: 28px;
-  font-weight: 600;
-  margin: 36px 0 20px;
+  margin: 20px 0 8px;
 }
 
 .tiptap.ProseMirror h4 {
   font-size: 18px;
-  line-height: 26px;
-  font-weight: 600;
-  margin: 32px 0 20px;
+  margin: 18px 0 8px;
 }
 
 .tiptap.ProseMirror h5 {
   font-size: 18px;
-  line-height: 26px;
-  font-weight: 600;
-  margin: 32px 0 20px;
+  margin: 16px 0 8px;
 }
 
 .tiptap.ProseMirror h6 {
   font-size: 16px;
-  line-height: 24px;
-  font-weight: 600;
-  margin: 32px 0 20px;
+  margin: 16px 0 8px;
 }
 
 /* horizontal rule */
@@ -534,4 +529,10 @@
 .tiptap.ProseMirror table *[data-placeholder]::before,
 .tiptap.ProseMirror li p[data-placeholder]::before {
   display: none;
+}
+
+.text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

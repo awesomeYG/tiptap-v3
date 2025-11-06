@@ -1,12 +1,12 @@
-import { FloatingPopover } from "@ctzhian/tiptap/component";
-import { Attachment2Icon, CarouselViewIcon, DeleteLineIcon, DownloadLineIcon, EditBoxLineIcon, ScrollToBottomLineIcon } from "@ctzhian/tiptap/component/Icons";
+import { ActionDropdown, FloatingPopover, HoverPopover } from "@ctzhian/tiptap/component";
+import { CarouselViewIcon, DeleteLineIcon, DownloadLineIcon, EditLineIcon, ScrollToBottomLineIcon } from "@ctzhian/tiptap/component/Icons";
 import { ToolbarItem } from "@ctzhian/tiptap/component/Toolbar";
 import { EditorFnProps } from "@ctzhian/tiptap/type";
 import { Box, Button, Divider, Stack, TextField } from "@mui/material";
 import { NodeViewProps, NodeViewWrapper } from "@tiptap/react";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { AttachmentContent } from "./AttachmentContent";
 import InsertAttachment from "./Insert";
-import ReadonlyAttachment from "./Readonly";
 
 export interface AttachmentAttributes {
   url: string
@@ -23,28 +23,111 @@ const AttachmentViewWrapper: React.FC<NodeViewProps & EditorFnProps & { attachme
   selected,
   onUpload,
   onError,
-  attachmentType = 'icon'
+  attachmentType = 'icon',
+  getPos,
 }) => {
+  const isMarkdown = editor.options.contentType === 'markdown'
   const attrs = node.attrs as AttachmentAttributes
   const attachmentDisplayType = attachmentType || attrs.type || 'icon'
 
   const [title, setTitle] = useState('')
   const [extension, setExtension] = useState('')
-  const [opraAnchorEl, setOpraAnchorEl] = useState<HTMLDivElement | null>(null)
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null)
+  const attachmentContentRef = useRef<HTMLDivElement>(null)
 
-  const handleShowOperationPopover = (event: React.MouseEvent<HTMLDivElement>) => setOpraAnchorEl(event.currentTarget)
-  const handleCloseOperationPopover = () => setOpraAnchorEl(null)
+  useEffect(() => {
+    let title = attrs.title || ''
+    setTitle(title.split('.').slice(0, -1).join('.'))
+    setExtension(title.split('.').pop() || '')
+  }, [attrs.title, attachmentDisplayType])
 
-  const handleShowPopover = (event?: React.MouseEvent<HTMLDivElement>) => {
-    if (event) {
-      handleCloseOperationPopover()
-      setAnchorEl(event.currentTarget)
-    } else {
-      setAnchorEl(opraAnchorEl)
-    }
+  const handleShowPopover = () => {
+    setAnchorEl(attachmentContentRef.current)
   }
   const handleClosePopover = () => setAnchorEl(null)
+
+  const handleConvertAttachmentType = (newType: 'icon' | 'block') => {
+    if (attachmentDisplayType === 'block' && newType === 'icon') {
+      const pos = getPos()
+      if (typeof pos === 'number') {
+        editor.chain()
+          .focus()
+          .deleteRange({ from: pos, to: pos + node.nodeSize })
+          .insertContentAt(pos, {
+            type: 'inlineAttachment',
+            attrs: {
+              url: attrs.url,
+              title: attrs.title,
+              type: newType,
+              size: attrs.size,
+            }
+          })
+          .run()
+      }
+    } else if (attachmentDisplayType === 'icon' && newType === 'block') {
+      const pos = getPos()
+      if (typeof pos === 'number') {
+        editor.chain()
+          .focus()
+          .deleteRange({ from: pos, to: pos + node.nodeSize })
+          .insertContentAt(pos, {
+            type: 'blockAttachment',
+            attrs: {
+              url: attrs.url,
+              title: attrs.title,
+              type: newType,
+              size: attrs.size,
+            }
+          })
+          .run()
+      }
+    }
+  }
+
+  const renderOperationActions = () => (
+    <Stack
+      direction={'row'}
+      alignItems={'center'}
+      sx={{ p: 0.5 }}
+    >
+      <ToolbarItem
+        icon={<DownloadLineIcon sx={{ fontSize: '1rem' }} />}
+        tip='下载'
+        onClick={handleDownload}
+      />
+      <ToolbarItem
+        icon={<EditLineIcon sx={{ fontSize: '1rem' }} />}
+        tip='编辑'
+        onClick={handleShowPopover}
+      />
+      <ToolbarItem
+        icon={<DeleteLineIcon sx={{ fontSize: '1rem' }} />}
+        tip='删除'
+        onClick={handleDeleteAttachment}
+      />
+      {!isMarkdown && <>
+        <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'divider' }} />
+        <ActionDropdown
+          id='attachment-type-dropdown'
+          selected={attachmentDisplayType}
+          list={[
+            {
+              key: 'icon',
+              label: '图标文字',
+              icon: <ScrollToBottomLineIcon sx={{ transform: 'rotate(90deg)', fontSize: '1rem' }} />,
+              onClick: () => handleConvertAttachmentType('icon'),
+            },
+            {
+              key: 'block',
+              label: '卡片',
+              icon: <CarouselViewIcon sx={{ transform: 'rotate(90deg)', fontSize: '1rem' }} />,
+              onClick: () => handleConvertAttachmentType('block'),
+            },
+          ]}
+        />
+      </>}
+    </Stack>
+  )
 
   const handleSave = () => {
     updateAttributes?.({
@@ -57,23 +140,26 @@ const AttachmentViewWrapper: React.FC<NodeViewProps & EditorFnProps & { attachme
     deleteNode?.()
   }
 
-  const handleDownload = () => {
+  const handleDownload = useCallback(() => {
     const a = document.createElement('a')
     a.href = attrs.url
     a.target = '_blank'
     a.download = attrs.title
     a.click()
     a.remove()
-  }
-
-  useEffect(() => {
-    let title = attrs.title || ''
-    setTitle(title.split('.').slice(0, -1).join('.'))
-    setExtension(title.split('.').pop() || '')
-  }, [attrs.title, attachmentDisplayType])
+  }, [attrs.url, attrs.title])
 
   if ((!attrs.url || attrs.url === 'error') && !editor.isEditable) {
     return null
+  }
+
+  if (!editor.isEditable) {
+    return <NodeViewWrapper
+      className={`attachment-wrapper${attachmentDisplayType === 'block' ? ' block-attachment-wrapper' : ''}`}
+      as={attachmentDisplayType === 'block' ? 'div' : 'span'}
+    >
+      <AttachmentContent attrs={attrs} type={attachmentDisplayType} editable={false} />
+    </NodeViewWrapper>
   }
 
   if (!attrs.title) {
@@ -88,131 +174,21 @@ const AttachmentViewWrapper: React.FC<NodeViewProps & EditorFnProps & { attachme
     />
   }
 
-  if (!editor.isEditable) {
-    return <ReadonlyAttachment attrs={attrs} type={attachmentDisplayType} />
-  }
-
   return (
     <NodeViewWrapper
-      className={`attachment-wrapper${attachmentDisplayType === 'block' ? ' block-attachment-wrapper' : ''}${selected ? ' ProseMirror-selectednode' : ''}`}
+      className={`attachment-wrapper ${attachmentDisplayType === 'block' ? 'block-attachment-wrapper' : ''}${selected ? ' ProseMirror-selectednode' : ''}`}
       as={attachmentDisplayType === 'block' ? 'div' : 'span'}
       {...(attachmentDisplayType === 'block' ? { 'data-drag-handle': true } : {})}
     >
-      {attachmentDisplayType === 'block' ? <Stack direction={'row'} alignItems={'center'} gap={2}
-        onClick={handleShowOperationPopover}
-        sx={{
-          border: '1px solid',
-          borderColor: attrs.url === 'error' ? 'error.main' : 'divider',
-          cursor: 'pointer',
-          borderRadius: 'var(--mui-shape-borderRadius)',
-          bgcolor: 'background.paper',
-          p: 2,
-          ':hover': {
-            borderColor: attrs.url === 'error' ? 'error.main' : 'primary.main',
-            color: attrs.url === 'error' ? 'error.main' : 'primary.main',
-          },
-        }}>
-        <Attachment2Icon sx={{
-          fontSize: '2rem',
-          cursor: 'grab',
-          color: attrs.url === 'error' ? 'error.main' : 'primary.main',
-          alignSelf: 'center',
-          ':active': {
-            cursor: 'grabbing',
-          }
-        }} />
-        <Stack sx={{ flex: 1 }} gap={0.5}>
-          <Box sx={{ fontSize: '0.875rem', fontWeight: 'bold' }}>
-            {attrs.title}
-          </Box>
-          <Box sx={{ fontSize: '0.75rem', color: 'text.secondary' }}>{attrs.size}</Box>
-        </Stack>
-      </Stack> : <Box
-        component={'span'}
-        onClick={handleShowOperationPopover}
-        sx={{
-          color: 'primary.main',
-          textDecoration: 'none',
-          cursor: 'pointer',
-          borderRadius: 'var(--mui-shape-borderRadius)',
-          transition: 'background-color 0.2s ease',
-          ':hover': {
-            bgcolor: 'background.paper',
-          },
-        }}
-      >
-        <Box component={'span'} sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.5 }}>
-          <Attachment2Icon sx={{
-            fontSize: '0.875rem',
-            cursor: 'grab',
-            color: 'primary.main',
-            alignSelf: 'center',
-            ':active': {
-              cursor: 'grabbing',
-            }
-          }} />
-          {attrs.title}
-        </Box>
-      </Box>}
-      <FloatingPopover
-        open={Boolean(opraAnchorEl)}
-        anchorEl={opraAnchorEl}
-        onClose={handleCloseOperationPopover}
-        placement="top"
-      >
-        <Stack direction={'row'} alignItems={'center'} sx={{
-          p: 0.5,
-        }}>
-          <ToolbarItem
-            icon={<DownloadLineIcon sx={{ fontSize: '1rem' }} />}
-            text='下载'
-            onClick={handleDownload}
-          />
-          <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'divider' }} />
-          <ToolbarItem
-            icon={<EditBoxLineIcon sx={{ fontSize: '1rem' }} />}
-            tip='编辑'
-            onClick={() => {
-              handleCloseOperationPopover()
-              handleShowPopover()
-            }}
-          />
-          <ToolbarItem
-            icon={<DeleteLineIcon sx={{ fontSize: '1rem' }} />}
-            tip='删除'
-            onClick={handleDeleteAttachment}
-          />
-          <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'divider' }} />
-          <ToolbarItem
-            icon={<ScrollToBottomLineIcon sx={{ transform: 'rotate(90deg)', fontSize: '1rem' }} />}
-            tip='图标文字链接'
-            className={attachmentDisplayType === 'icon' ? 'tool-active' : ''}
-            onClick={() => {
-              deleteNode?.()
-              editor.commands.setInlineAttachment({
-                url: attrs.url,
-                title: attrs.title,
-                size: attrs.size,
-              })
-              handleCloseOperationPopover()
-            }}
-          />
-          <ToolbarItem
-            icon={<CarouselViewIcon sx={{ transform: 'rotate(90deg)', fontSize: '1rem' }} />}
-            tip='摘要卡片'
-            className={attachmentDisplayType === 'block' ? 'tool-active' : ''}
-            onClick={() => {
-              deleteNode?.()
-              editor.commands.setBlockAttachment({
-                url: attrs.url,
-                title: attrs.title,
-                size: attrs.size,
-              })
-              handleCloseOperationPopover()
-            }}
-          />
-        </Stack>
-      </FloatingPopover>
+      <div ref={attachmentContentRef}>
+        <HoverPopover
+          actions={renderOperationActions()}
+          hoverDelay={500}
+          placement="top"
+        >
+          <AttachmentContent attrs={attrs} type={attachmentDisplayType} editable={true} />
+        </HoverPopover>
+      </div>
       <FloatingPopover
         open={Boolean(anchorEl)}
         anchorEl={anchorEl}
@@ -251,7 +227,7 @@ const AttachmentViewWrapper: React.FC<NodeViewProps & EditorFnProps & { attachme
               fullWidth
               onClick={handleSave}
             >
-              保存
+              修改附件
             </Button>
           </Stack>
         </Stack>

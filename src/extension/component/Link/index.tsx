@@ -1,12 +1,11 @@
-import { FloatingPopover } from "@ctzhian/tiptap/component"
-import { CarouselViewIcon, CopyIcon, EditBoxLineIcon, LinkIcon, LinkUnlinkIcon, ScrollToBottomLineIcon, ShareBoxLineIcon, TextIcon } from "@ctzhian/tiptap/component/Icons"
+import { ActionDropdown, FloatingPopover, HoverPopover } from "@ctzhian/tiptap/component"
+import { CarouselViewIcon, CopyIcon, EditLineIcon, LinkUnlinkIcon, ScrollToBottomLineIcon, TextIcon } from "@ctzhian/tiptap/component/Icons"
 import { ToolbarItem } from "@ctzhian/tiptap/component/Toolbar"
-import { getLinkTitle } from "@ctzhian/tiptap/util"
-import { Avatar, Box, Button, Divider, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Stack, TextField } from "@mui/material"
+import { Box, Button, Divider, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Stack, TextField } from "@mui/material"
 import { NodeViewProps, NodeViewWrapper } from "@tiptap/react"
 import React, { useCallback, useEffect, useState } from "react"
 import InsertLink from "./Insert"
-import ReadonlyLink from "./Readonly"
+import { LinkContent } from "./LinkContent"
 
 export interface LinkAttributes {
   href: string
@@ -23,6 +22,7 @@ const LinkViewWrapper: React.FC<NodeViewProps> = ({
   updateAttributes,
   deleteNode,
   selected,
+  getPos,
 }) => {
   const isMarkdown = editor.options.contentType === 'markdown'
   const attrs = node.attrs as LinkAttributes
@@ -30,8 +30,8 @@ const LinkViewWrapper: React.FC<NodeViewProps> = ({
   const [href, setHref] = useState(attrs.href || '')
   const [type, setType] = useState(attrs.type || 'icon')
   const [target, setTarget] = useState(attrs.target || '_blank')
-  const [opraAnchorEl, setOpraAnchorEl] = useState<HTMLDivElement | null>(null)
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null)
+  const linkContentRef = React.useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     setTitle(attrs.title || '')
@@ -40,30 +40,133 @@ const LinkViewWrapper: React.FC<NodeViewProps> = ({
     setTarget(attrs.target || '_blank')
   }, [attrs.title, attrs.href, attrs.type, attrs.target])
 
-  const handleShowOperationPopover = (event: React.MouseEvent<HTMLDivElement>) => setOpraAnchorEl(event.currentTarget)
-  const handleCloseOperationPopover = () => setOpraAnchorEl(null)
-
-  const handleShowPopover = (event?: React.MouseEvent<HTMLDivElement>) => {
-    if (event) {
-      handleCloseOperationPopover()
-      setAnchorEl(event.currentTarget)
-    } else {
-      setAnchorEl(opraAnchorEl)
-    }
+  const handleShowPopover = () => {
+    setAnchorEl(linkContentRef.current)
   }
   const handleClosePopover = () => setAnchorEl(null)
 
+  const handleConvertLinkType = (newType: 'text' | 'icon') => {
+    if (type === 'block') {
+      const pos = getPos()
+      if (typeof pos === 'number') {
+        editor.chain()
+          .focus()
+          .deleteRange({ from: pos, to: pos + node.nodeSize })
+          .insertContentAt(pos, {
+            type: 'inlineLink',
+            attrs: {
+              title: attrs.title,
+              href: attrs.href,
+              type: newType,
+              target: attrs.target,
+              class: attrs.class,
+              rel: attrs.rel,
+            }
+          })
+          .run()
+      }
+    } else {
+      updateAttributes({
+        type: newType,
+      })
+    }
+  }
+
+  const renderOperationActions = () => (
+    <Stack
+      direction={'row'}
+      alignItems={'center'}
+      sx={{ p: 0.5 }}
+    >
+      <Box className="text-ellipsis" sx={{ fontSize: '0.875rem', color: 'text.secondary', flexShrink: 0, px: 1, width: 200 }}>
+        {attrs.href}
+      </Box>
+      <ToolbarItem
+        icon={<EditLineIcon sx={{ fontSize: '1rem' }} />}
+        tip='编辑'
+        onClick={handleShowPopover}
+      />
+      <ToolbarItem
+        icon={<CopyIcon sx={{ fontSize: '1rem' }} />}
+        tip='复制'
+        onClick={handleCopyLink}
+      />
+      <ToolbarItem
+        icon={<LinkUnlinkIcon sx={{ fontSize: '1rem' }} />}
+        tip='取消链接'
+        onClick={handleDeleteLink}
+      />
+      {!isMarkdown && <>
+        <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'divider' }} />
+        <ActionDropdown
+          id='link-type-dropdown'
+          selected={type}
+          list={[
+            {
+              key: 'text',
+              label: '文字链接',
+              icon: <TextIcon sx={{ fontSize: '1rem' }} />,
+              onClick: () => handleConvertLinkType('text'),
+            },
+            {
+              key: 'icon',
+              label: '图标文字链接',
+              icon: <ScrollToBottomLineIcon sx={{ transform: 'rotate(90deg)', fontSize: '1rem' }} />,
+              onClick: () => handleConvertLinkType('icon'),
+            },
+            {
+              key: 'block',
+              label: '摘要卡片',
+              icon: <CarouselViewIcon sx={{ transform: 'rotate(90deg)', fontSize: '1rem' }} />,
+              onClick: () => {
+                // 获取当前节点位置，确保在正确位置插入新节点
+                const pos = getPos()
+                if (typeof pos === 'number') {
+                  editor.chain()
+                    .focus()
+                    .deleteRange({ from: pos, to: pos + node.nodeSize })
+                    .insertContentAt(pos, {
+                      type: 'blockLink',
+                      attrs: {
+                        title: attrs.title,
+                        href: attrs.href,
+                        type: 'block',
+                        target: attrs.target,
+                        class: attrs.class,
+                        rel: attrs.rel,
+                      }
+                    })
+                    .run()
+                }
+              },
+            },
+          ]}
+        />
+      </>}
+    </Stack>
+  )
+
   const handleSave = () => {
     if (type === 'block') {
-      editor.commands.deleteNode(node.type)
-      editor.commands.setBlockLink({
-        title,
-        href,
-        type,
-        target,
-        class: attrs.class,
-        rel: attrs.rel,
-      })
+      // 获取当前节点位置，确保在正确位置插入新节点
+      const pos = getPos()
+      if (typeof pos === 'number') {
+        editor.chain()
+          .focus()
+          .deleteRange({ from: pos, to: pos + node.nodeSize })
+          .insertContentAt(pos, {
+            type: 'blockLink',
+            attrs: {
+              title,
+              href,
+              type,
+              target,
+              class: attrs.class,
+              rel: attrs.rel,
+            }
+          })
+          .run()
+      }
     } else {
       updateAttributes?.({
         title,
@@ -76,8 +179,15 @@ const LinkViewWrapper: React.FC<NodeViewProps> = ({
   }
 
   const handleDeleteLink = () => {
-    editor.commands.deleteNode(node.type)
-    editor.chain().insertContent(attrs.title || attrs.href).focus().run()
+    // 获取当前节点位置，确保在正确位置插入文本
+    const pos = getPos()
+    if (typeof pos === 'number') {
+      editor.chain()
+        .focus()
+        .deleteRange({ from: pos, to: pos + node.nodeSize })
+        .insertContentAt(pos, attrs.title || attrs.href)
+        .run()
+    }
   }
 
   const handleCopyLink = useCallback(async (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -89,18 +199,16 @@ const LinkViewWrapper: React.FC<NodeViewProps> = ({
     }
   }, [attrs.href]);
 
-  let favicon = ''
-  try {
-    favicon = attrs.href ? new URL(attrs.href).origin + '/favicon.ico' : ''
-  } catch (err) {
-  }
-
   if (!attrs.href && !editor.isEditable) {
     return null
   }
 
   if (!editor.isEditable) {
-    return <ReadonlyLink attrs={attrs} selected={selected} />
+    return <NodeViewWrapper
+      className={`link-wrapper`}
+    >
+      <LinkContent attrs={attrs} editable={false} />
+    </NodeViewWrapper>
   }
 
   if (!attrs.href) {
@@ -118,167 +226,15 @@ const LinkViewWrapper: React.FC<NodeViewProps> = ({
     as={attrs.type === 'block' ? 'div' : 'span'}
     {...(attrs.type === 'block' ? { 'data-drag-handle': true } : {})}
   >
-    {attrs.type === 'block' ? <Stack
-      direction={'row'}
-      alignItems={'center'}
-      gap={2}
-      onClick={handleShowOperationPopover}
-      sx={{
-        border: '1px solid',
-        borderColor: 'divider',
-        cursor: 'pointer',
-        borderRadius: 'var(--mui-shape-borderRadius)',
-        p: 2,
-        ':hover': {
-          borderColor: 'primary.main',
-          color: 'primary.main',
-        },
-      }}
-    >
-      <Avatar
-        sx={{ width: '2rem', height: '2rem', alignSelf: 'center', bgcolor: '#FFFFFF' }}
-        src={favicon}
+    <div ref={linkContentRef}>
+      <HoverPopover
+        actions={renderOperationActions()}
+        hoverDelay={500}
+        placement="top"
       >
-        <LinkIcon sx={{
-          fontSize: '2rem',
-          cursor: 'grab',
-          color: 'primary.main',
-          alignSelf: 'center',
-          ':active': {
-            cursor: 'grabbing',
-          }
-        }} />
-      </Avatar>
-      <Stack sx={{ flex: 1 }} gap={0.5}>
-        <Box sx={{ fontSize: '0.875rem', fontWeight: 'bold' }}>{attrs.title || getLinkTitle(attrs.href)}</Box>
-        <Box sx={{ fontSize: '0.75rem', color: 'text.secondary' }}>{attrs.href}</Box>
-      </Stack>
-    </Stack> : <Box
-      component={'span'}
-      onClick={handleShowOperationPopover}
-      sx={{
-        color: 'primary.main',
-        cursor: 'pointer',
-        borderRadius: 'var(--mui-shape-borderRadius)',
-        transition: 'background-color 0.2s ease',
-        ':hover': {
-          bgcolor: 'action.hover',
-        },
-      }}
-    >
-      <Box component={'span'} sx={{ textDecoration: 'underline', display: 'inline-flex', alignItems: 'baseline', gap: 0.5, fontWeight: 500 }}>
-        {attrs.type === 'icon' && <Avatar
-          sx={{ width: '1rem', height: '1rem', alignSelf: 'center', bgcolor: '#FFFFFF' }}
-          src={favicon}
-        >
-          <LinkIcon sx={{
-            fontSize: '1rem',
-            cursor: 'grab',
-            color: 'primary.main',
-            alignSelf: 'center',
-            ':active': {
-              cursor: 'grabbing',
-            }
-          }} />
-        </Avatar>}
-        {attrs.title || getLinkTitle(attrs.href)}
-      </Box>
-    </Box>}
-    <FloatingPopover
-      open={Boolean(opraAnchorEl)}
-      anchorEl={opraAnchorEl}
-      onClose={handleCloseOperationPopover}
-      placement="top"
-    >
-      <Stack direction={'row'} alignItems={'center'} sx={{ p: 0.5 }}>
-        <ToolbarItem
-          icon={<ShareBoxLineIcon sx={{ fontSize: '1rem' }} />}
-          text='打开'
-          onClick={() => {
-            window.open(attrs.href, attrs.target)
-          }}
-        />
-        <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'divider' }} />
-        <ToolbarItem
-          icon={<EditBoxLineIcon sx={{ fontSize: '1rem' }} />}
-          tip='编辑'
-          onClick={() => {
-            handleCloseOperationPopover()
-            handleShowPopover()
-          }}
-        />
-        <ToolbarItem
-          icon={<CopyIcon sx={{ fontSize: '1rem' }} />}
-          tip='复制'
-          onClick={handleCopyLink}
-        />
-        <ToolbarItem
-          icon={<LinkUnlinkIcon sx={{ fontSize: '1rem' }} />}
-          tip='取消链接'
-          onClick={handleDeleteLink}
-        />
-        {!isMarkdown && <>
-          <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'divider' }} />
-          <ToolbarItem
-            icon={<TextIcon sx={{ fontSize: '1rem' }} />}
-            tip='文字链接'
-            onClick={() => {
-              if (type === 'block') {
-                editor.commands.deleteNode(node.type)
-                editor.commands.setInlineLink({
-                  title: attrs.title,
-                  href: attrs.href,
-                  type: 'text',
-                })
-              } else {
-                updateAttributes({
-                  type: 'text',
-                })
-              }
-            }}
-            className={type === 'text' ? 'tool-active' : ''}
-          />
-          <ToolbarItem
-            icon={<ScrollToBottomLineIcon sx={{ transform: 'rotate(90deg)', fontSize: '1rem' }} />}
-            tip='图标文字链接'
-            onClick={() => {
-              if (type === 'block') {
-                editor.commands.deleteNode(node.type)
-                editor.commands.setInlineLink({
-                  title: attrs.title,
-                  href: attrs.href,
-                  type: 'icon',
-                  target: attrs.target,
-                  class: attrs.class,
-                  rel: attrs.rel,
-                })
-              } else {
-                updateAttributes({
-                  type: 'icon',
-                })
-              }
-            }}
-            className={type === 'icon' ? 'tool-active' : ''}
-          />
-          <ToolbarItem
-            icon={<CarouselViewIcon sx={{ transform: 'rotate(90deg)', fontSize: '1rem' }} />}
-            tip='摘要卡片'
-            onClick={() => {
-              editor.commands.deleteNode(node.type)
-              editor.commands.setBlockLink({
-                title: attrs.title,
-                href: attrs.href,
-                type: 'block',
-                target: attrs.target,
-                class: attrs.class,
-                rel: attrs.rel,
-              })
-            }}
-            className={type === 'block' ? 'tool-active' : ''}
-          />
-        </>}
-      </Stack>
-    </FloatingPopover>
+        <LinkContent attrs={attrs} editable={true} />
+      </HoverPopover>
+    </div>
     <FloatingPopover
       open={Boolean(anchorEl)}
       anchorEl={anchorEl}

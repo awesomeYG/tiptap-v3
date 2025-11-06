@@ -13,6 +13,8 @@ export interface FloatingPopoverProps {
   offset?: number
   className?: string
   style?: React.CSSProperties
+  onMouseEnter?: (event: React.MouseEvent) => void
+  onMouseLeave?: (event: React.MouseEvent) => void
 }
 
 export const FloatingPopover: React.FC<FloatingPopoverProps> = ({
@@ -24,7 +26,9 @@ export const FloatingPopover: React.FC<FloatingPopoverProps> = ({
   placement = 'bottom',
   offset: offsetValue = 8,
   className,
-  style
+  style,
+  onMouseEnter,
+  onMouseLeave
 }) => {
   const popoverRef = useRef<HTMLDivElement>(null)
   const [position, setPosition] = useState({ x: 0, y: 0 })
@@ -94,6 +98,7 @@ export const FloatingPopover: React.FC<FloatingPopoverProps> = ({
     <>
       {/* 背景遮罩 */}
       <div
+        aria-hidden="true"
         style={{
           position: 'fixed',
           top: 0,
@@ -108,6 +113,9 @@ export const FloatingPopover: React.FC<FloatingPopoverProps> = ({
       <Paper
         ref={popoverRef}
         className={className}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+        aria-hidden={false}
         style={{
           position: strategy,
           left: position.x,

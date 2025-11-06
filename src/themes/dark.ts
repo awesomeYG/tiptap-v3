@@ -1,6 +1,6 @@
 const dark = {
   primary: {
-    main: '#3248F2',
+    main: '#4c88ff',
     contrastText: '#000',
   },
   secondary: {
@@ -57,7 +57,7 @@ const dark = {
     inverseAuxiliary: 'rgba(0,0,0,0.5)',
     inverseDisabled: 'rgba(0,0,0,0.15)',
   },
-  divider: '#ededed',
+  divider: '#505050',
   background: {
     default: '#141923',
     paper: '#141923',

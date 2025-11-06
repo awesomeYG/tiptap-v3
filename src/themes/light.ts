@@ -48,9 +48,9 @@ const light = {
     contrastText: '#FFFFFF',
   },
   text: {
-    primary: '#171c19',
+    primary: '#1f2329',
     secondary: '#3f4441',
-    tertiary: '#717572',
+    auxiliary: '#646a73',
     disabled: '#6e7781',
     slave: 'rgba(33,34,35,0.3)',
     inverse: '#FFFFFF',
