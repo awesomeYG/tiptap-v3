@@ -154,7 +154,7 @@ const CodeBlockView: React.FC<NodeViewProps> = (props) => {
                     height: '0.875rem',
                     lineHeight: 1,
                     fontSize: '0.875rem',
-                    color: 'text.auxiliary',
+                    color: 'text.tertiary',
                   },
                   '& .MuiInputBase-input::placeholder': {
                     fontSize: '0.875rem',
@@ -174,7 +174,7 @@ const CodeBlockView: React.FC<NodeViewProps> = (props) => {
               sx={{
                 flex: 1,
                 fontSize: '0.875rem',
-                color: 'text.auxiliary',
+                color: 'text.tertiary',
                 letterSpacing: '0.01rem',
               }}
               onClick={handleTitleToggle}

@@ -428,7 +428,7 @@ const ImageViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
           <Box component='span' sx={{
             display: 'inline-block',
             fontSize: '0.75rem',
-            color: 'text.auxiliary',
+            color: 'text.tertiary',
           }}>{attrs.title}</Box>
         </>}
       </HoverPopover>

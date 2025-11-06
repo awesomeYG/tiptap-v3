@@ -65,7 +65,7 @@ const ReadonlyCodeBlock: React.FC<NodeViewProps> = ({
             sx={{
               flex: 1,
               fontSize: '0.875rem',
-              color: 'text.auxiliary',
+              color: 'text.tertiary',
               letterSpacing: '0.01rem',
             }}
           >

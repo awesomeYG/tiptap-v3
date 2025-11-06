@@ -50,11 +50,11 @@ const light = {
   text: {
     primary: '#1f2329',
     secondary: '#3f4441',
-    auxiliary: '#646a73',
+    tertiary: '#646a73',
     disabled: '#6e7781',
     slave: 'rgba(33,34,35,0.3)',
     inverse: '#FFFFFF',
-    inverseAuxiliary: 'rgba(255,255,255,0.5)',
+    inversetertiary: 'rgba(255,255,255,0.5)',
     inverseDisabled: 'rgba(255,255,255,0.15)',
   },
   divider: '#ECEEF1',

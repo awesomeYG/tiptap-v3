@@ -41,7 +41,7 @@ const ReadonlyImage = ({
           transform: 'translateX(-50%)',
           display: 'inline-block',
           fontSize: '0.75rem',
-          color: 'text.auxiliary',
+          color: 'text.tertiary',
           mt: 1.5,
 
         }}>{attrs.title}</Box>

@@ -86,7 +86,7 @@ export const MentionList = forwardRef<MentionListRef, MentionListProps>((props, 
             </Box>
           ))
         ) : (
-          <Box sx={{ px: 2, py: 1, color: 'var(--mui-palette-text-auxiliary)' }}>No result</Box>
+          <Box sx={{ px: 2, py: 1, color: 'var(--mui-palette-text-tertiary)' }}>No result</Box>
         )}
       </Stack>
     </Paper>

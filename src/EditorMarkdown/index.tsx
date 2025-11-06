@@ -96,7 +96,7 @@ const EditorMarkdown = forwardRef<MarkdownEditorRef, EditorMarkdownProps>(({
         borderRadius: '4px 4px 0 0',
         fontSize: 12,
         lineHeight: '20px',
-        color: 'text.auxiliary',
+        color: 'text.tertiary',
         '.md-display-mode-active': {
           color: 'primary.main',
           bgcolor: alpha(theme.palette.primary.main, 0.1),
