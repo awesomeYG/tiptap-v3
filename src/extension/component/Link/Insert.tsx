@@ -136,7 +136,7 @@ const InsertLink = ({ updateAttributes, deleteNode, attrs, editor }: InsertLinkP
                 <FormControlLabel
                   value="text"
                   control={<Radio size="small" />}
-                  label="纯文字"
+                  label="文字"
                 />
                 <FormControlLabel
                   value="icon"

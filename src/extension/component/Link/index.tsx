@@ -104,19 +104,19 @@ const LinkViewWrapper: React.FC<NodeViewProps> = ({
           list={[
             {
               key: 'text',
-              label: '文字链接',
+              label: '文字',
               icon: <TextIcon sx={{ fontSize: '1rem' }} />,
               onClick: () => handleConvertLinkType('text'),
             },
             {
               key: 'icon',
-              label: '图标文字链接',
+              label: '图标文字',
               icon: <ScrollToBottomLineIcon sx={{ transform: 'rotate(90deg)', fontSize: '1rem' }} />,
               onClick: () => handleConvertLinkType('icon'),
             },
             {
               key: 'block',
-              label: '摘要卡片',
+              label: '卡片',
               icon: <CarouselViewIcon sx={{ transform: 'rotate(90deg)', fontSize: '1rem' }} />,
               onClick: () => {
                 // 获取当前节点位置，确保在正确位置插入新节点
@@ -283,7 +283,7 @@ const LinkViewWrapper: React.FC<NodeViewProps> = ({
                 <FormControlLabel
                   value="text"
                   control={<Radio size="small" />}
-                  label="纯文字"
+                  label="文字"
                 />
                 <FormControlLabel
                   value="icon"

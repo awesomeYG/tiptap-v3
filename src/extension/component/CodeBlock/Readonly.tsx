@@ -1,5 +1,5 @@
 import { FileCopyLineIcon } from '@ctzhian/tiptap/component/Icons';
-import { Box, Stack } from '@mui/material';
+import { Box, Divider, Stack } from '@mui/material';
 import { NodeViewContent, NodeViewProps, NodeViewWrapper } from '@tiptap/react';
 import React, { useCallback, useState } from 'react';
 
@@ -17,23 +17,27 @@ const ReadonlyCodeBlock: React.FC<NodeViewProps> = ({
 
   const attrs = node.attrs as CodeBlockAttributes;
 
-  const handleCopy = useCallback(async (event: React.MouseEvent<HTMLDivElement>) => {
-    event.stopPropagation();
-    const codeText = node.textContent || '';
-    try {
-      await navigator.clipboard.writeText(codeText);
-      setCopyText('复制成功');
-      setTimeout(() => {
-        setCopyText('复制');
-      }, 2000);
-    } catch (err) {
-      console.error('复制失败:', err);
-    }
-  }, [node]);
+  const handleCopy = useCallback(
+    async (event: React.MouseEvent<HTMLDivElement>) => {
+      event.preventDefault();
+      event.stopPropagation();
+      const codeText = node.textContent || '';
+      try {
+        await navigator.clipboard.writeText(codeText);
+        setCopyText('复制成功');
+        setTimeout(() => {
+          setCopyText('复制');
+        }, 2000);
+      } catch (err) {
+        console.error('复制失败:', err);
+      }
+    },
+    [node],
+  );
 
   return (
     <NodeViewWrapper
-      className={`codeblock-wrapper`}
+      className={`codeblock-wrapper ${selected ? 'ProseMirror-selectednode' : ''}`}
       data-drag-handle
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
@@ -45,39 +49,49 @@ const ReadonlyCodeBlock: React.FC<NodeViewProps> = ({
           m: 0,
           borderRadius: '6px',
           overflow: 'hidden',
-          position: 'relative',
         }}
       >
-        {isHovering && <Stack
+        <Stack
           direction="row"
           alignItems="center"
-          justifyContent="flex-end"
+          justifyContent="space-between"
+          className="codeblock-toolbar"
           sx={{
-            position: 'absolute',
-            top: 0,
-            right: 0,
-            px: 0.5,
-            pt: 0.5,
             zIndex: 1,
+            mb: 2,
           }}
         >
-          <Stack direction="row" alignItems="center" gap={0.5}
-            onClick={handleCopy}
+          <Box
             sx={{
-              px: 1,
               py: 0.5,
-              borderRadius: 'var(--mui-shape-borderRadius)',
-              cursor: 'pointer',
-              userSelect: 'none',
-              bgcolor: 'inherit',
-              color: 'inherit',
-            }}>
-            <FileCopyLineIcon sx={{ fontSize: '0.875rem', color: 'inherit' }} />
-            <Box sx={{ fontSize: '0.75rem', lineHeight: 1 }}>
-              {copyText}
-            </Box>
-          </Stack>
-        </Stack>}
+              flex: 1,
+              fontSize: '0.875rem',
+              color: 'text.auxiliary',
+              letterSpacing: '0.01rem',
+            }}
+          >
+            {attrs.title || '代码块'}
+          </Box>
+          {isHovering && <Stack direction="row" alignItems="center" gap={0.5}>
+            <Box>{attrs.language || 'Auto'}</Box>
+            <Divider orientation="vertical" flexItem sx={{ height: '1rem', mr: 0.5, ml: 1, alignSelf: 'center', borderColor: 'divider' }} />
+            <Stack direction="row" alignItems="center" gap={0.5}
+              onClick={handleCopy}
+              sx={{
+                px: 1,
+                borderRadius: 'var(--mui-shape-borderRadius)',
+                cursor: 'pointer',
+                userSelect: 'none',
+                bgcolor: 'inherit',
+                color: 'inherit',
+              }}>
+              <FileCopyLineIcon sx={{ fontSize: '0.875rem', color: 'inherit' }} />
+              <Box sx={{ fontSize: '0.75rem', lineHeight: 1 }}>
+                {copyText}
+              </Box>
+            </Stack>
+          </Stack>}
+        </Stack>
         <NodeViewContent
           style={{
             margin: 0,
@@ -88,21 +102,6 @@ const ReadonlyCodeBlock: React.FC<NodeViewProps> = ({
           }}
         />
       </Box>
-      {attrs.title && (
-        <Box
-          sx={{
-            pl: 1,
-            pt: 0.5,
-            height: '1rem',
-            lineHeight: 1,
-            fontSize: '0.875rem',
-            color: 'inherit',
-            letterSpacing: '0.01rem',
-          }}
-        >
-          {attrs.title}
-        </Box>
-      )}
     </NodeViewWrapper>
   );
 };
