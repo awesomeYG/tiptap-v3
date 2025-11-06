@@ -1,15 +1,18 @@
 import { FloatingPopover } from "@ctzhian/tiptap/component"
-import { CustomSizeIcon, DeleteLineIcon, EditBoxLineIcon } from "@ctzhian/tiptap/component/Icons"
+import { AlignCenterIcon, AlignLeftIcon, AlignRightIcon, CustomSizeIcon, DeleteLineIcon, EditLineIcon } from "@ctzhian/tiptap/component/Icons"
+import { ToolbarItem } from "@ctzhian/tiptap/component/Toolbar"
 import { EditorFnProps } from "@ctzhian/tiptap/type"
-import { Box, Button, IconButton, Stack, TextField, Tooltip } from "@mui/material"
+import { alpha, Box, Button, Divider, Stack, TextField, useTheme } from "@mui/material"
 import { NodeViewProps, NodeViewWrapper } from "@tiptap/react"
-import React, { useEffect, useRef, useState } from "react"
+import React, { useCallback, useEffect, useRef, useState } from "react"
+import { HoverPopover } from "../../../component/HoverPopover"
 import CropImage from "./Crop"
 import InsertImage from "./Insert"
 import ReadonlyImage from "./Readonly"
 
 export interface ImageAttributes {
   src: string
+  title?: string
   width: number
 }
 
@@ -73,20 +76,24 @@ const ImageViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
   selected,
   onUpload,
   onError,
-  onValidateUrl
+  onValidateUrl,
+  getPos,
 }) => {
   const attrs = node.attrs as ImageAttributes
   const imageRef = useRef<HTMLImageElement>(null)
+  const theme = useTheme()
 
   const [isDragging, setIsDragging] = useState(false)
   const [isHovering, setIsHovering] = useState(false)
   const [isCropping, setIsCropping] = useState(false)
   const [editSrc, setEditSrc] = useState(attrs.src)
-  const [dragStartX, setDragStartX] = useState(0)
-  const [dragStartWidth, setDragStartWidth] = useState(0)
-
-  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
-  const handleShowPopover = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget)
+  const [dragCorner, setDragCorner] = useState<'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | null>(null)
+  const dragStartXRef = useRef(0)
+  const dragStartWidthRef = useRef(0)
+  const [editTitle, setEditTitle] = useState(attrs.title || '')
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
+  const imageContentRef = useRef<HTMLSpanElement>(null)
+  const handleShowPopover = () => setAnchorEl(imageContentRef.current)
   const handleClosePopover = () => setAnchorEl(null)
 
   // 获取当前实际显示的图片宽度
@@ -127,24 +134,39 @@ const ImageViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
     }
   }, [attrs.src, attrs.width, updateAttributes])
 
-  const handleMouseDown = (e: React.MouseEvent) => {
+  const handleMouseDown = (e: React.MouseEvent, corner: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right') => {
     e.preventDefault()
+    e.stopPropagation()
     setIsDragging(true)
-    setDragStartX(e.clientX)
-    // 使用当前实际显示的宽度作为拖拽起始点
-    setDragStartWidth(getCurrentDisplayWidth())
+    setDragCorner(corner)
+    dragStartXRef.current = e.clientX
+    dragStartWidthRef.current = getCurrentDisplayWidth()
   }
 
-  const handleMouseMove = (e: MouseEvent) => {
-    if (!isDragging) return
-    const deltaX = e.clientX - dragStartX
-    const newWidth = Math.max(100, Math.min(1200, dragStartWidth + deltaX))
+  const handleMouseMove = useCallback((e: MouseEvent) => {
+    if (!isDragging || !dragCorner) return
+    const deltaX = e.clientX - dragStartXRef.current
+    let newWidth: number
+
+    // 根据不同的角计算宽度变化
+    if (dragCorner === 'top-right' || dragCorner === 'bottom-right') {
+      // 右侧角：向右拉伸，宽度增加
+      newWidth = dragStartWidthRef.current + deltaX
+    } else {
+      // 左侧角：向左拉伸，宽度增加（deltaX 为负时宽度增加）
+      newWidth = dragStartWidthRef.current - deltaX
+    }
+
+    newWidth = Math.max(100, Math.min(1200, newWidth))
     updateAttributes({
       width: newWidth
     })
-  }
+  }, [isDragging, dragCorner, updateAttributes])
 
-  const handleMouseUp = () => setIsDragging(false)
+  const handleMouseUp = useCallback(() => {
+    setIsDragging(false)
+    setDragCorner(null)
+  }, [])
   const handleCropClick = () => setIsCropping(true)
   const handleCropCancel = () => setIsCropping(false)
 
@@ -167,6 +189,7 @@ const ImageViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
           src: validatedUrl,
           width: currentWidth,
           error: true,
+          title: editTitle.trim(),
         })
         setEditSrc(validatedUrl)
       } catch (error) {
@@ -174,6 +197,15 @@ const ImageViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
       }
     }
     handleClosePopover()
+  }
+
+  const runTextAlignOnImageParagraph = (align: 'left' | 'right' | 'center') => {
+    const pos = typeof getPos === 'function' ? getPos() : null
+    const chain = editor.chain().focus()
+    if (pos != null) {
+      chain.setTextSelection(pos)
+    }
+    chain.toggleTextAlign(align).run()
   }
 
   useEffect(() => {
@@ -186,7 +218,7 @@ const ImageViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
         document.removeEventListener('mouseup', handleMouseUp)
       }
     }
-  }, [isDragging])
+  }, [isDragging, handleMouseMove, handleMouseUp])
 
   if (!attrs.src && !editor.isEditable) {
     return null
@@ -219,119 +251,209 @@ const ImageViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
       as={'span'}
       {...({ 'data-drag-handle': false } as any)}
     >
-      <Box
-        component={'span'}
-        sx={{
-          position: 'relative',
-          display: 'inline-block',
-          border: '1px solid',
-          borderColor: 'divider',
-          borderRadius: 'var(--mui-shape-borderRadius)',
-          p: '0.25rem',
-          bgcolor: 'background.paper',
-          '&:hover .image-controls': {
-            opacity: 1
-          }
-        }}
-        onMouseEnter={() => setIsHovering(true)}
-        onMouseLeave={() => setIsHovering(false)}
+      <HoverPopover
+        actions={
+          <Stack
+            direction={'row'}
+            alignItems={'center'}
+            sx={{ p: 0.5 }}
+          >
+            <ToolbarItem
+              icon={<EditLineIcon sx={{ fontSize: '1rem' }} />}
+              tip="编辑图片"
+              onClick={handleShowPopover}
+            />
+            <ToolbarItem
+              icon={<CustomSizeIcon sx={{ fontSize: '1rem' }} />}
+              tip="裁切图片"
+              onClick={handleCropClick}
+            />
+            <Divider
+              orientation="vertical"
+              flexItem
+              sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'divider' }}
+            />
+            <ToolbarItem
+              icon={<AlignLeftIcon sx={{ fontSize: '1rem' }} />}
+              tip="左侧对齐"
+              onClick={() => {
+                runTextAlignOnImageParagraph('left')
+              }}
+            />
+            <ToolbarItem
+              icon={<AlignCenterIcon sx={{ fontSize: '1rem' }} />}
+              tip="居中对齐"
+              onClick={() => {
+                runTextAlignOnImageParagraph('center')
+              }}
+            />
+            <ToolbarItem
+              icon={<AlignRightIcon sx={{ fontSize: '1rem' }} />}
+              tip="右侧对齐"
+              onClick={() => {
+                runTextAlignOnImageParagraph('right')
+              }}
+            />
+            <Divider
+              orientation="vertical"
+              flexItem
+              sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'divider' }}
+            />
+            <ToolbarItem
+              icon={<DeleteLineIcon sx={{ fontSize: '1rem' }} />}
+              tip="删除图片"
+              onClick={deleteNode}
+            />
+          </Stack>
+        }
+        placement="top"
+        offset={4}
       >
-        <img
-          ref={imageRef}
-          src={attrs.src}
-          width={attrs.width}
-          style={{
-            maxWidth: '100%',
-            height: 'auto',
-            cursor: 'default',
+        <Box
+          component={'span'}
+          ref={imageContentRef}
+          sx={{
+            position: 'relative',
+            display: 'inline-block',
           }}
-          onError={(e) => {
-            onError?.(e as unknown as Error)
-          }}
-        />
-        {(isHovering || isDragging) && (
-          <Box
-            onMouseDown={handleMouseDown}
-            sx={{
-              position: 'absolute',
-              right: -2,
-              top: '50%',
-              transform: 'translateY(-50%)',
-              width: 4,
-              height: 50,
-              bgcolor: isDragging ? 'primary.main' : 'text.primary',
-              cursor: 'ew-resize',
-              borderRadius: 2,
-              '&:hover': {
-                bgcolor: 'primary.main',
-              },
-              transition: 'background-color 0.2s ease',
-              zIndex: 10
+          onMouseEnter={() => setIsHovering(true)}
+          onMouseLeave={() => setIsHovering(false)}
+        >
+          <img
+            ref={imageRef}
+            src={attrs.src}
+            width={attrs.width}
+            style={{
+              maxWidth: '100%',
+              height: 'auto',
+              cursor: 'default',
+              border: '2px solid',
+              borderColor: (isHovering || isDragging) ? alpha(theme.palette.primary.main, 0.3) : 'transparent',
+            }}
+            onError={(e) => {
+              onError?.(e as unknown as Error)
             }}
           />
-        )}
-        {(isHovering || !!anchorEl) && <Box
-          className="image-controls"
-          sx={{
-            position: 'absolute',
-            top: '0.5rem',
-            right: '0.5rem',
-            display: 'flex',
-            gap: '0.25rem',
-          }}
-        >
-          <Tooltip arrow title="更换图片地址">
-            <IconButton
-              size="small"
-              onClick={handleShowPopover}
-              sx={{
-                color: 'text.primary',
-                bgcolor: 'background.paper',
-              }}
-            >
-              <EditBoxLineIcon sx={{ fontSize: 18 }} />
-            </IconButton>
-          </Tooltip>
-          <Tooltip arrow title="裁切图片">
-            <IconButton
-              size="small"
-              onClick={handleCropClick}
-              sx={{
-                color: 'text.primary',
-                bgcolor: 'background.paper',
-              }}
-            >
-              <CustomSizeIcon sx={{ fontSize: 18 }} />
-            </IconButton>
-          </Tooltip>
-          <Tooltip arrow title="删除图片">
-            <IconButton
-              size="small"
-              onClick={deleteNode}
-              sx={{
-                color: 'text.primary',
-                bgcolor: 'background.paper',
-              }}
-            >
-              <DeleteLineIcon sx={{ fontSize: 18 }} />
-            </IconButton>
-          </Tooltip>
-        </Box>}
-      </Box>
+          {(isHovering || isDragging) && (
+            <>
+              {/* 左上角 */}
+              <Box
+                onMouseDown={(e) => handleMouseDown(e, 'top-left')}
+                sx={{
+                  position: 'absolute',
+                  left: -4,
+                  top: -4,
+                  width: 12,
+                  height: 12,
+                  bgcolor: 'background.default',
+                  cursor: 'nwse-resize',
+                  borderRadius: '50%',
+                  border: '2px solid',
+                  borderColor: (isDragging && dragCorner === 'top-left') ? 'primary.main' : alpha(theme.palette.primary.main, 0.3),
+                  '&:hover': {
+                    borderColor: 'primary.main',
+                  },
+                  transition: 'background-color 0.2s ease',
+                  zIndex: 10
+                }}
+              />
+              {/* 右上角 */}
+              <Box
+                onMouseDown={(e) => handleMouseDown(e, 'top-right')}
+                sx={{
+                  position: 'absolute',
+                  right: -4,
+                  top: -4,
+                  width: 12,
+                  height: 12,
+                  bgcolor: 'background.default',
+                  cursor: 'nesw-resize',
+                  borderRadius: '50%',
+                  border: '2px solid',
+                  borderColor: (isDragging && dragCorner === 'top-right') ? 'primary.main' : alpha(theme.palette.primary.main, 0.3),
+                  '&:hover': {
+                    borderColor: 'primary.main',
+                  },
+                  transition: 'background-color 0.2s ease',
+                  zIndex: 10
+                }}
+              />
+              {/* 左下角 */}
+              <Box
+                onMouseDown={(e) => handleMouseDown(e, 'bottom-left')}
+                sx={{
+                  position: 'absolute',
+                  left: -4,
+                  bottom: -2,
+                  width: 12,
+                  height: 12,
+                  cursor: 'nesw-resize',
+                  borderRadius: '50%',
+                  border: '2px solid',
+                  bgcolor: 'background.default',
+                  borderColor: (isDragging && dragCorner === 'bottom-left') ? 'primary.main' : alpha(theme.palette.primary.main, 0.3),
+                  '&:hover': {
+                    borderColor: 'primary.main',
+                  },
+                  transition: 'background-color 0.2s ease',
+                  zIndex: 10
+                }}
+              />
+              {/* 右下角 */}
+              <Box
+                onMouseDown={(e) => handleMouseDown(e, 'bottom-right')}
+                sx={{
+                  position: 'absolute',
+                  right: -4,
+                  bottom: -2,
+                  width: 12,
+                  height: 12,
+                  bgcolor: 'background.default',
+                  cursor: 'nwse-resize',
+                  borderRadius: '50%',
+                  border: '2px solid',
+                  borderColor: (isDragging && dragCorner === 'bottom-right') ? 'primary.main' : alpha(theme.palette.primary.main, 0.3),
+                  '&:hover': {
+                    borderColor: 'primary.main',
+                  },
+                  transition: 'background-color 0.2s ease',
+                  zIndex: 10
+                }}
+              />
+            </>
+          )}
+        </Box>
+        {attrs.title && <>
+          <br />
+          <Box component='span' sx={{
+            display: 'inline-block',
+            fontSize: '0.75rem',
+            color: 'text.auxiliary',
+          }}>{attrs.title}</Box>
+        </>}
+      </HoverPopover>
       <FloatingPopover
         open={Boolean(anchorEl)}
         anchorEl={anchorEl}
         onClose={handleClosePopover}
-        placement="bottom"
+        placement="top"
       >
         <Stack sx={{ p: 2, width: 350 }}>
-          <Box sx={{ fontSize: '0.875rem', color: 'text.secondary', lineHeight: '1.5', mb: 1 }}>图片地址</Box>
+          <Box sx={{ fontSize: '0.75rem', color: 'text.secondary', lineHeight: '1.5', mb: 1 }}>图片地址</Box>
           <TextField
             fullWidth
             size="small"
             value={editSrc}
             onChange={(e) => setEditSrc(e.target.value)}
             placeholder="输入图片的 URL"
+          />
+          <Box sx={{ fontSize: '0.75rem', color: 'text.secondary', lineHeight: '1.5', mb: 1 }}>图片描述</Box>
+          <TextField
+            fullWidth
+            size="small"
+            value={editTitle}
+            onChange={(e) => setEditTitle(e.target.value)}
+            placeholder="输入图片描述（可选）"
           />
           <Stack direction={'row'} gap={1} alignItems={'center'} sx={{ mt: 2 }}>
             <Button

@@ -118,6 +118,13 @@
 .tiptap.ProseMirror .video-wrapper,
 .tiptap.ProseMirror .image-wrapper {
   display: inline-block;
+  box-sizing: border-box;
+  text-align: center;
+  line-height: 1;
+}
+
+.tiptap.ProseMirror .image-wrapper img {
+  line-height: 0;
 }
 
 .tiptap.ProseMirror .codeblock-wrapper.ProseMirror-selectednode>pre,
@@ -126,10 +133,6 @@
 .tiptap.ProseMirror .image-wrapper.ProseMirror-selectednode>span {
   border-color: var(--mui-palette-primary-main);
   background-color: color-mix(in srgb, var(--mui-palette-primary-main) 5%, transparent);
-}
-
-.tiptap.ProseMirror .image-wrapper img {
-  vertical-align: middle;
 }
 
 .tiptap.ProseMirror .custom-placeholder-node {

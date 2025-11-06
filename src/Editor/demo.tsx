@@ -8,12 +8,9 @@ const Reader = () => {
     editable: true,
     exclude: ['invisibleCharacters'],
     onError: (error: Error) => {
-      console.error('Editor Error:', error)
       alert(error.message)
     },
     onValidateUrl: async (url: string, type: 'image' | 'video' | 'audio' | 'iframe') => {
-      console.log(`验证 ${type} 链接:`, url)
-
       // 拦截 base64 链接
       if (url.startsWith('data:')) {
         throw new Error(`不支持 base64 链接，请使用可访问的 ${type} URL`)

@@ -18,10 +18,6 @@ const ReadonlyImage = ({
     <Box component={'span'} sx={{
       position: 'relative',
       display: 'inline-block',
-      border: '1px solid',
-      borderColor: 'divider',
-      borderRadius: 'var(--mui-shape-borderRadius)',
-      p: '0.25rem',
     }}>
       <PhotoView src={attrs.src}>
         <img
@@ -37,6 +33,19 @@ const ReadonlyImage = ({
           }}
         />
       </PhotoView>
+      {attrs.title && <>
+        <br />
+        <Box component='span' sx={{
+          position: 'relative',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          display: 'inline-block',
+          fontSize: '0.75rem',
+          color: 'text.auxiliary',
+          mt: 1.5,
+
+        }}>{attrs.title}</Box>
+      </>}
     </Box>
   </NodeViewWrapper>
 }

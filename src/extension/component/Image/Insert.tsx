@@ -21,6 +21,7 @@ const InsertImage = ({
   onValidateUrl
 }: InsertImageProps) => {
   const [editSrc, setEditSrc] = useState(attrs.src || '')
+  const [editTitle, setEditTitle] = useState(attrs.title || '')
   const [insertType, setInsertType] = useState<'upload' | 'link'>(onUpload ? 'upload' : 'link')
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null)
   const [uploading, setUploading] = useState(false)
@@ -31,19 +32,19 @@ const InsertImage = ({
   const handleChangeInsertType = (event: React.SyntheticEvent, newValue: string) => setInsertType(newValue as 'upload' | 'link')
 
   // 更新图片属性，包含自动获取的宽度
-  const updateImageAttributes = async (src: string) => {
+  const updateImageAttributes = async (src: string, title?: string) => {
     try {
       const dimensions = await getImageDimensions(src)
       updateAttributes({
         src,
         width: dimensions.width,
+        ...(title ? { title } : {}),
       })
     } catch (error) {
-      // 如果无法获取尺寸，使用默认宽度
-      console.warn('无法获取图片尺寸，使用默认宽度:', error)
       updateAttributes({
         src,
         width: attrs.width || 400, // 默认宽度
+        ...(title ? { title } : {}),
       })
     }
   }
@@ -88,7 +89,7 @@ const InsertImage = ({
         validatedUrl = await Promise.resolve(onValidateUrl(validatedUrl, 'image'))
       }
       // 使用新的更新函数，自动获取图片宽度
-      await updateImageAttributes(validatedUrl)
+      await updateImageAttributes(validatedUrl, editTitle.trim())
       handleClosePopover()
     } catch (error) {
       onError?.(error as Error)
@@ -192,6 +193,14 @@ const InsertImage = ({
             onChange={(e) => setEditSrc(e.target.value)}
             placeholder="输入图片的 URL"
             label="图片链接"
+          />
+          <TextField
+            fullWidth
+            size="small"
+            value={editTitle}
+            onChange={(e) => setEditTitle(e.target.value)}
+            placeholder="输入图片描述（可选）"
+            label="图片描述"
           />
           <Button
             variant="contained"
