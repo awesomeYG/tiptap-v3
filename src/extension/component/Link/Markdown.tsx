@@ -1,3 +1,5 @@
+import { ChromeIcon } from "@ctzhian/tiptap/component/Icons";
+import { Avatar, Box } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { MarkViewProps } from "@tiptap/core";
 import { MarkViewContent } from "@tiptap/react";
@@ -24,6 +26,12 @@ const LinkViewWrapper: React.FC<MarkViewProps> = ({ editor, mark }) => {
   const target = mark?.attrs?.target || '_blank';
   const download = mark?.attrs?.download;
 
+  let favicon = ''
+  try {
+    favicon = mark?.attrs?.href ? new URL(mark.attrs.href).origin + '/favicon.ico' : ''
+  } catch (err) {
+  }
+
   return (
     <MarkViewContent
       as="a"
@@ -35,8 +43,34 @@ const LinkViewWrapper: React.FC<MarkViewProps> = ({ editor, mark }) => {
         color: theme.palette.primary.main,
         textDecoration: 'underline',
         cursor: 'pointer',
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: '2px',
       }}
-    />
+    >
+      <Avatar
+        sx={{
+          width: '1rem',
+          height: '1rem',
+          alignSelf: 'center',
+          bgcolor: '#FFFFFF',
+        }}
+        src={favicon}
+      >
+        <ChromeIcon sx={{
+          fontSize: '1rem',
+          cursor: 'grab',
+          color: 'primary.main',
+          alignSelf: 'center',
+          ':active': {
+            cursor: 'grabbing',
+          }
+        }} />
+      </Avatar>
+      <Box>
+        {mark?.attrs?.title}
+      </Box>
+    </MarkViewContent>
   );
 }
 
