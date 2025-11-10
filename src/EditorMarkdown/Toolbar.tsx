@@ -10,9 +10,11 @@ import {
   CloseCircleFillIcon,
   CodeBoxLineIcon,
   CodeLineIcon,
+  CodeSSlashLineIcon,
   DoubleQuotesLIcon,
   ErrorWarningFillIcon,
   Folder2LineIcon,
+  FormulaIcon,
   FunctionsIcon,
   H1Icon,
   H2Icon,
@@ -45,7 +47,6 @@ import Menu from "../component/Menu";
 import { ToolbarItem } from "../component/Toolbar";
 import TableSizePicker from "../component/Toolbar/TableSizePicker";
 import { UploadFunction } from "../type";
-import { getFileType } from "../util/fileHandler";
 
 interface EditorMarkdownToolbarProps {
   aceEditorRef: React.RefObject<AceEditor>
@@ -63,26 +64,15 @@ const EditorMarkdownToolbar = ({ aceEditorRef, isExpend, onUpload }: EditorMarkd
     if (!onUpload) return;
 
     try {
-      const url = await onUpload(file, ({ progress }) => {
-        // 可以在这里显示上传进度
-        console.log('Upload progress:', progress);
-      });
-
-      const fileType = getFileType(file);
+      const url = await onUpload(file);
       let content = '';
-
-      // 根据文件类型插入对应的内容
       if (expectedType === 'image') {
-        // 图片：插入 [file.name](url)
         content = `![${file.name}](${url})`;
       } else if (expectedType === 'video') {
-        // 视频：插入 <video src="url"></video>
         content = `<p>\n<video src="${url}" controls="true"></video>\n</p>`;
       } else if (expectedType === 'audio') {
-        // 音频：插入 <audio src="url"></audio>
         content = `<p>\n<audio src="${url}" controls="true"></audio>\n</p>`;
       } else {
-        // 附件：插入 <a href="url" download="file.name">file.name</a>
         content = `<p>\n<a href="${url}" download="${file.name}">${file.name}</a>\n</p>`;
       }
 
@@ -266,41 +256,75 @@ const EditorMarkdownToolbar = ({ aceEditorRef, isExpend, onUpload }: EditorMarkd
         insertTextAndFocusPositionRow({ text: '- [ ] ', position: 6, block: true });
       }
     },
-    {
-      id: 'divider-2',
-    },
-    {
-      id: 'inline-math',
-      icon: <SquareRootIcon sx={{ fontSize: '1rem' }} />,
-      label: '行内数学公式',
-      onClick: () => {
-        insertTextAndFocusPositionRow({ text: '$$', position: 1 });
-      }
-    },
-    {
-      id: 'block-math',
-      icon: <FunctionsIcon sx={{ fontSize: '1rem' }} />,
-      label: '块级数学公式',
-      onClick: () => {
-        insertTextAndFocusPositionRow({ text: '$$\n\n$$', row: 1, block: true });
-      }
-    },
-    {
-      id: 'code',
-      icon: <CodeLineIcon sx={{ fontSize: '1rem' }} />,
-      label: '代码',
-      onClick: () => {
-        insertTextAndFocusPositionRow({ text: '``', position: 1 });
-      }
-    },
-    {
-      id: 'codeBlock',
-      icon: <CodeBoxLineIcon sx={{ fontSize: '1rem' }} />,
-      label: '代码块',
-      onClick: () => {
-        insertTextAndFocusPositionRow({ text: '```\n\n```', row: 1, block: true });
-      }
-    },
+    ...(isExpend ? [
+      {
+        id: 'divider-2',
+      },
+      {
+        id: 'separator',
+        icon: <SeparatorIcon sx={{ fontSize: '1rem' }} />,
+        label: '分割线',
+        onClick: () => {
+          insertTextAndFocusPositionRow({ text: '---', position: 3, block: true });
+        }
+      },
+      {
+        id: 'blockquote',
+        icon: <DoubleQuotesLIcon sx={{ fontSize: '1rem' }} />,
+        label: '引用',
+        onClick: () => {
+          insertTextAndFocusPositionRow({ text: '> ', position: 2, block: true });
+        }
+      },
+      {
+        id: 'details',
+        icon: <MenuFold2FillIcon sx={{ fontSize: '1rem' }} />,
+        label: '折叠面板',
+        onClick: () => {
+          insertTextAndFocusPositionRow({ text: ':::details\n\n:::detailsSummary\n\n:::\n\n:::detailsContent\n\n:::\n\n:::\n', row: 1, block: true });
+        }
+      },
+      {
+        id: 'alert',
+        icon: <Information2LineIcon sx={{ fontSize: '1rem' }} />,
+        label: '警告块',
+        onClick: () => {
+          insertTextAndFocusPositionRow({ text: ':::alert {variant="info"}\n\n:::', row: -1, block: true });
+        }
+      },
+      {
+        id: 'inline-math',
+        icon: <SquareRootIcon sx={{ fontSize: '1rem' }} />,
+        label: '行内数学公式',
+        onClick: () => {
+          insertTextAndFocusPositionRow({ text: '$$', position: 1 });
+        }
+      },
+      {
+        id: 'block-math',
+        icon: <FunctionsIcon sx={{ fontSize: '1rem' }} />,
+        label: '块级数学公式',
+        onClick: () => {
+          insertTextAndFocusPositionRow({ text: '$$\n\n$$', row: 1, block: true });
+        }
+      },
+      {
+        id: 'code',
+        icon: <CodeLineIcon sx={{ fontSize: '1rem' }} />,
+        label: '代码',
+        onClick: () => {
+          insertTextAndFocusPositionRow({ text: '``', position: 1 });
+        }
+      },
+      {
+        id: 'codeBlock',
+        icon: <CodeBoxLineIcon sx={{ fontSize: '1rem' }} />,
+        label: '代码块',
+        onClick: () => {
+          insertTextAndFocusPositionRow({ text: '```\n\n```', row: 1, block: true });
+        }
+      },
+    ] : []),
     {
       id: 'divider-3',
     },
@@ -461,7 +485,56 @@ const EditorMarkdownToolbar = ({ aceEditorRef, isExpend, onUpload }: EditorMarkd
               },
             }
           ]
-        }
+        },
+
+        {
+          customLabel: <Typography sx={{ px: 1, pt: 2, fontSize: '12px', color: 'text.disabled' }}>
+            程序员专用
+          </Typography>,
+          key: 'programmer',
+        },
+        {
+          label: '代码',
+          key: 'code',
+          icon: <CodeSSlashLineIcon sx={{ fontSize: '1rem' }} />,
+          children: [
+            {
+              label: '行内代码',
+              key: 'inlineCode',
+              icon: <CodeLineIcon sx={{ fontSize: '1rem' }} />,
+              onClick: () => insertTextAndFocusPositionRow({ text: '`', position: 1 }),
+            },
+            {
+              label: '代码块',
+              key: 'codeBlock',
+              icon: <CodeBoxLineIcon sx={{ fontSize: '1rem' }} />,
+              onClick: () => insertTextAndFocusPositionRow({ text: '```\n\n```', row: 1, block: true }),
+            },
+          ]
+        },
+        {
+          label: '数学公式',
+          key: 'math',
+          icon: <FormulaIcon sx={{ fontSize: '1rem' }} />,
+          children: [
+            {
+              label: '行内数学公式',
+              key: 'inline-math',
+              icon: <SquareRootIcon sx={{ fontSize: '1rem' }} />,
+              onClick: () => {
+                insertTextAndFocusPositionRow({ text: '$$', position: 1 });
+              }
+            },
+            {
+              label: '块级数学公式',
+              key: 'block-math',
+              icon: <FunctionsIcon sx={{ fontSize: '1rem' }} />,
+              onClick: () => {
+                insertTextAndFocusPositionRow({ text: '$$\n\n$$', row: 1, block: true });
+              }
+            }
+          ]
+        },
       ]}
     />
     <Divider
@@ -518,6 +591,32 @@ const EditorMarkdownToolbar = ({ aceEditorRef, isExpend, onUpload }: EditorMarkd
           onClick={it?.onClick}
         />
       )))}
+    {isExpend && <Menu
+      context={<ToolbarItem
+        tip={'表格'}
+        icon={<Table2Icon sx={{ fontSize: '1rem' }} />}
+      />}
+      anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+      transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+      arrowIcon={<ArrowDownSLineIcon sx={{ fontSize: '1rem', transform: 'rotate(-90deg)' }} />}
+      zIndex={isExpend ? 2100 : undefined}
+      list={[
+        {
+          key: 'table-size-picker',
+          customLabel: <TableSizePicker
+            onConfirm={(cols, rows) => {
+              const headerRow = `| ${Array.from({ length: cols }).map(() => '').join(' | ')} |\n`;
+              const separatorRow = `| ${Array.from({ length: cols }).map(() => '---').join(' | ')} |\n`;
+              const dataRows = Array.from({ length: rows }).map(() =>
+                `| ${Array.from({ length: cols }).map(() => '').join(' | ')} |\n`
+              ).join('');
+              const tableMarkdown = `${headerRow}${separatorRow}${dataRows}`;
+              insertTextAndFocusPositionRow({ text: tableMarkdown, position: 1, block: true });
+            }}
+          />
+        }
+      ]}
+    />}
     {/* 隐藏的文件输入元素 */}
     <input
       ref={imageInputRef}

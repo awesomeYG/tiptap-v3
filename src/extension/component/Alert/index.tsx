@@ -42,7 +42,10 @@ const AlertView: React.FC<NodeViewProps> = ({ editor, node, updateAttributes, se
   const showIcon = attrs.type !== 'text'
 
   const variantData = useMemo(() => {
-    return VARIANT_DATA[attrs.variant || 'info']
+    if (attrs.variant && VARIANT_DATA[attrs.variant as keyof typeof VARIANT_DATA]) {
+      return VARIANT_DATA[attrs.variant as keyof typeof VARIANT_DATA]
+    }
+    return VARIANT_DATA['default']
   }, [attrs.variant])
 
   const handleShowOperationPopover = (event: React.MouseEvent<HTMLDivElement>) => setAnchorEl(event.currentTarget)
