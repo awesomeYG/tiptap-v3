@@ -43,9 +43,6 @@ export const VideoExtension = (props: VideoExtensionProps) => Node.create({
 
   addAttributes() {
     return {
-      class: {
-        default: 'video-wrapper',
-      },
       src: {
         default: null,
         parseHTML: element => element.getAttribute('src'),

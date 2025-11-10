@@ -4,6 +4,7 @@ import { Editor } from '@tiptap/core';
 import React, { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import AceEditor from "react-ace";
 import { MARKDOWN_EDITOR_PLACEHOLDER } from '../contants/markdown-placeholder';
+import { UploadFunction } from '../type';
 import EditorMarkdownToolbar from './Toolbar';
 
 import 'ace-builds/src-noconflict/ace';
@@ -15,6 +16,7 @@ interface EditorMarkdownProps {
   editor: Editor;
   value?: string;
   height: number | string;
+  onUpload?: UploadFunction;
   onAceChange?: (value: string) => void;
   onTiptapChange?: (value: string) => void;
 }
@@ -30,6 +32,7 @@ const EditorMarkdown = forwardRef<MarkdownEditorRef, EditorMarkdownProps>(({
   value,
   onAceChange,
   height,
+  onUpload
 }, ref) => {
   const theme = useTheme();
   const aceEditorRef = useRef<AceEditor>(null);
@@ -108,7 +111,7 @@ const EditorMarkdown = forwardRef<MarkdownEditorRef, EditorMarkdownProps>(({
         },
       }}
     >
-      <EditorMarkdownToolbar aceEditorRef={aceEditorRef} isExpend={isExpend} />
+      <EditorMarkdownToolbar aceEditorRef={aceEditorRef} isExpend={isExpend} onUpload={onUpload} />
       <Stack direction={'row'} alignItems={'center'} gap={1}>
         <IconButton color='inherit' onClick={() => setIsExpend(!isExpend)}>
           {isExpend ? <CollapseIcon sx={{ fontSize: '16px' }} /> : <ExpendIcon sx={{ fontSize: '16px' }} />}

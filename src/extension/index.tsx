@@ -1,7 +1,6 @@
 
 import Highlight from '@tiptap/extension-highlight';
 import InvisibleCharacters from '@tiptap/extension-invisible-characters';
-import Link from '@tiptap/extension-link';
 import TextAlign from '@tiptap/extension-text-align';
 import { TextStyleKit } from '@tiptap/extension-text-style';
 import { CharacterCount, Placeholder } from '@tiptap/extensions';
@@ -11,6 +10,7 @@ import { PLACEHOLDER } from '../contants/placeholder';
 import { GetExtensionsProps } from '../type';
 import { AiWritingExtension, SlashCommands, StructuredDiffExtension } from './extension';
 import { CodeExtension } from './mark/Code';
+import CustomLink from './mark/Link';
 import {
   AlertExtension,
   AudioExtension,
@@ -89,6 +89,8 @@ export const getExtensions = ({
     InlineUploadProgressExtension,
     YamlFormat,
     CustomHorizontalRule,
+    VideoExtension({ onUpload, onError, onValidateUrl }),
+    AudioExtension({ onUpload, onError, onValidateUrl }),
     ...TableExtension({ editable }),
     TableOfContents({ onTocUpdate }),
     ImageExtension({ onUpload, onError, onValidateUrl }),
@@ -123,8 +125,8 @@ export const getExtensions = ({
   ]
 
   if (contentType === 'markdown') {
-    defaultExtensions.push(...[
-      Link,
+    defaultExtensions.push(
+      CustomLink,
       Markdown.configure({
         indentation: {
           style: 'space',
@@ -136,14 +138,12 @@ export const getExtensions = ({
           pedantic: false,
         },
       })
-    ])
+    )
   } else {
     defaultExtensions.push(...[
       InlineLinkExtension,
       BlockLinkExtension,
       IframeExtension({ onError, onValidateUrl }),
-      VideoExtension({ onUpload, onError, onValidateUrl }),
-      AudioExtension({ onUpload, onError, onValidateUrl }),
       BlockAttachmentExtension({ onUpload, onError }),
       InlineAttachmentExtension({ onUpload, onError }),
     ])

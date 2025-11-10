@@ -1,10 +1,36 @@
-import { EditorMarkdown, EditorThemeProvider, useTiptap } from '@ctzhian/tiptap';
+import { EditorMarkdown, EditorThemeProvider, UploadFunction, useTiptap } from '@ctzhian/tiptap';
 import { Box } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import '../index.css';
 
 const Reader = () => {
   const [mdContent, setMdContent] = useState('');
+
+  const onUpload: UploadFunction = async (file: File, onProgress?: (progress: { progress: number }) => void) => {
+    return new Promise((resolve) => {
+      let progress = 0;
+      const interval = setInterval(() => {
+        progress += Math.random() * 20;
+        if (progress >= 100) {
+          progress = 100;
+          onProgress?.({ progress: progress / 100 });
+          clearInterval(interval);
+          setTimeout(() => {
+            if (file.type.startsWith('image/')) {
+              resolve('https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg')
+            } else if (file.type.startsWith('video/')) {
+              resolve('http://vjs.zencdn.net/v/oceans.mp4')
+            } else {
+              resolve('https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg')
+            }
+          }, 200);
+        } else {
+          onProgress?.({ progress: progress / 100 });
+        }
+      }, 100);
+    })
+  }
+
   const { editor } = useTiptap({
     editable: false,
     contentType: 'markdown',
@@ -48,37 +74,29 @@ const Reader = () => {
       return url
     },
     onSave: (editor) => {
-      // const value = editor.getMarkdown();
+      const value = editor.getMarkdown();
+      console.log(value)
       // editor.chain().focus().setContent(value, {
       //   contentType: 'markdown'
       // }).run()
     },
-    onUpload: async (file: File, onProgress?: (progress: { progress: number }) => void) => {
-      return new Promise((resolve) => {
-        let progress = 0;
-        const interval = setInterval(() => {
-          progress += Math.random() * 20;
-          if (progress >= 100) {
-            progress = 100;
-            onProgress?.({ progress: progress / 100 });
-            clearInterval(interval);
-            setTimeout(() => {
-              if (file.type.startsWith('image/')) {
-                resolve('https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg')
-              } else if (file.type.startsWith('video/')) {
-                resolve('http://vjs.zencdn.net/v/oceans.mp4')
-              } else {
-                resolve('https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg')
-              }
-            }, 200);
-          } else {
-            onProgress?.({ progress: progress / 100 });
-          }
-        }, 100);
-      })
-    },
     content: mdContent
   });
+
+  const handleGlobalSave = useCallback((event: KeyboardEvent) => {
+    if ((event.ctrlKey || event.metaKey) && event.key === 's') {
+      event.preventDefault();
+      const value = editor.getHTML();
+      console.log(value)
+    }
+  }, [editor]);
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleGlobalSave);
+    return () => {
+      document.removeEventListener('keydown', handleGlobalSave);
+    };
+  }, [handleGlobalSave]);
 
   return <EditorThemeProvider mode='light'>
     <Box sx={{
@@ -94,6 +112,7 @@ const Reader = () => {
         editor={editor}
         height={'500px'}
         value={mdContent}
+        onUpload={onUpload}
         onAceChange={setMdContent}
       />
     </Box>

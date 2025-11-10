@@ -4,6 +4,7 @@ import AceEditor from "react-ace";
 import {
   AddCircleFillIcon,
   ArrowDownSLineIcon,
+  AttachmentLineIcon,
   BoldIcon,
   CheckboxCircleFillIcon,
   CloseCircleFillIcon,
@@ -11,6 +12,7 @@ import {
   CodeLineIcon,
   DoubleQuotesLIcon,
   ErrorWarningFillIcon,
+  Folder2LineIcon,
   FunctionsIcon,
   H1Icon,
   H2Icon,
@@ -28,6 +30,8 @@ import {
   ListUnorderedIcon,
   MarkPenLineIcon,
   MenuFold2FillIcon,
+  MovieLineIcon,
+  Music2LineIcon,
   SeparatorIcon,
   SquareRootIcon,
   StrikethroughIcon,
@@ -40,13 +44,62 @@ import {
 import Menu from "../component/Menu";
 import { ToolbarItem } from "../component/Toolbar";
 import TableSizePicker from "../component/Toolbar/TableSizePicker";
+import { UploadFunction } from "../type";
+import { getFileType } from "../util/fileHandler";
 
 interface EditorMarkdownToolbarProps {
   aceEditorRef: React.RefObject<AceEditor>
   isExpend?: boolean
+  onUpload?: UploadFunction;
 }
 
-const EditorMarkdownToolbar = ({ aceEditorRef, isExpend }: EditorMarkdownToolbarProps) => {
+const EditorMarkdownToolbar = ({ aceEditorRef, isExpend, onUpload }: EditorMarkdownToolbarProps) => {
+  const imageInputRef = React.useRef<HTMLInputElement>(null);
+  const videoInputRef = React.useRef<HTMLInputElement>(null);
+  const audioInputRef = React.useRef<HTMLInputElement>(null);
+  const attachmentInputRef = React.useRef<HTMLInputElement>(null);
+
+  const handleFileUpload = async (file: File, expectedType?: 'image' | 'video' | 'audio' | 'attachment') => {
+    if (!onUpload) return;
+
+    try {
+      const url = await onUpload(file, ({ progress }) => {
+        // 可以在这里显示上传进度
+        console.log('Upload progress:', progress);
+      });
+
+      const fileType = getFileType(file);
+      let content = '';
+
+      // 根据文件类型插入对应的内容
+      if (expectedType === 'image') {
+        // 图片：插入 [file.name](url)
+        content = `![${file.name}](${url})`;
+      } else if (expectedType === 'video') {
+        // 视频：插入 <video src="url"></video>
+        content = `<p>\n<video src="${url}" controls="true"></video>\n</p>`;
+      } else if (expectedType === 'audio') {
+        // 音频：插入 <audio src="url"></audio>
+        content = `<p>\n<audio src="${url}" controls="true"></audio>\n</p>`;
+      } else {
+        // 附件：插入 <a href="url" download="file.name">file.name</a>
+        content = `<p>\n<a href="${url}" download="${file.name}">${file.name}</a>\n</p>`;
+      }
+
+      insertTextAndFocusPositionRow({ text: content, block: true });
+    } catch (error) {
+      console.error('文件上传失败:', error);
+    }
+  };
+
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>, expectedType?: 'image' | 'video' | 'audio' | 'attachment') => {
+    const file = event.target.files?.[0];
+    if (file) {
+      handleFileUpload(file, expectedType);
+    }
+    event.target.value = '';
+  };
+
   const insertTextAndFocusPositionRow = (options: {
     text: string;
     position?: number;
@@ -259,6 +312,14 @@ const EditorMarkdownToolbar = ({ aceEditorRef, isExpend }: EditorMarkdownToolbar
         insertTextAndFocusPositionRow({ text: '[]()', position: 1 });
       }
     },
+    {
+      id: 'image',
+      icon: <ImageLineIcon sx={{ fontSize: '1rem' }} />,
+      label: '图片',
+      onClick: () => {
+        insertTextAndFocusPositionRow({ text: '![alt]()', position: 7 });
+      }
+    },
   ]
 
   return <Stack direction={'row'} alignItems={'center'}>
@@ -279,12 +340,6 @@ const EditorMarkdownToolbar = ({ aceEditorRef, isExpend }: EditorMarkdownToolbar
           key: 'current-node',
         },
         {
-          label: '图片',
-          key: 'image',
-          icon: <ImageLineIcon sx={{ fontSize: '1rem' }} />,
-          onClick: () => insertTextAndFocusPositionRow({ text: '![alt]()', position: 7 }),
-        },
-        {
           label: '表格',
           key: 'table',
           icon: <Table2Icon sx={{ fontSize: '1rem' }} />,
@@ -302,6 +357,37 @@ const EditorMarkdownToolbar = ({ aceEditorRef, isExpend }: EditorMarkdownToolbar
                   insertTextAndFocusPositionRow({ text: tableMarkdown, position: 1, block: true });
                 }}
               />
+            },
+          ],
+        },
+        {
+          label: '上传文件',
+          key: 'upload-file',
+          icon: <Folder2LineIcon sx={{ fontSize: '1rem' }} />,
+          children: [
+            {
+              label: '上传图片',
+              key: 'upload-image',
+              icon: <ImageLineIcon sx={{ fontSize: '1rem' }} />,
+              onClick: () => imageInputRef.current?.click(),
+            },
+            {
+              label: '上传视频',
+              key: 'upload-video',
+              icon: <MovieLineIcon sx={{ fontSize: '1rem' }} />,
+              onClick: () => videoInputRef.current?.click(),
+            },
+            {
+              label: '上传音频',
+              key: 'upload-audio',
+              icon: <Music2LineIcon sx={{ fontSize: '1rem' }} />,
+              onClick: () => audioInputRef.current?.click(),
+            },
+            {
+              label: '上传附件',
+              key: 'upload-attachment',
+              icon: <AttachmentLineIcon sx={{ fontSize: '1rem' }} />,
+              onClick: () => attachmentInputRef.current?.click(),
             },
           ],
         },
@@ -432,6 +518,34 @@ const EditorMarkdownToolbar = ({ aceEditorRef, isExpend }: EditorMarkdownToolbar
           onClick={it?.onClick}
         />
       )))}
+    {/* 隐藏的文件输入元素 */}
+    <input
+      ref={imageInputRef}
+      type="file"
+      accept="image/*"
+      style={{ display: 'none' }}
+      onChange={(e) => handleFileSelect(e, 'image')}
+    />
+    <input
+      ref={videoInputRef}
+      type="file"
+      accept="video/*"
+      style={{ display: 'none' }}
+      onChange={(e) => handleFileSelect(e, 'video')}
+    />
+    <input
+      ref={audioInputRef}
+      type="file"
+      accept="audio/*"
+      style={{ display: 'none' }}
+      onChange={(e) => handleFileSelect(e, 'audio')}
+    />
+    <input
+      ref={attachmentInputRef}
+      type="file"
+      style={{ display: 'none' }}
+      onChange={(e) => handleFileSelect(e, 'attachment')}
+    />
   </Stack>
 }
 
