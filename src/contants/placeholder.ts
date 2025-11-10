@@ -8,9 +8,6 @@ export const PLACEHOLDER = {
     6: '六级标题',
   },
   detailsSummary: '输入面板标题',
-  orderedList: '列表',
-  bulletList: '列表',
-  taskList: '列表',
   paragraph: '输入 "/" 插入内容',
   default: '写点什么吧，输入 "/" 插入内容',
 }
