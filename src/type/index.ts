@@ -34,6 +34,7 @@ export interface MenuProps {
     anchorOrigin?: PopoverOrigin;
     transformOrigin?: PopoverOrigin;
   };
+  zIndex?: number;
 }
 
 export type ToolbarItemType = {

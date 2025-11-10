@@ -1,6 +1,7 @@
 
 import Highlight from '@tiptap/extension-highlight';
 import InvisibleCharacters from '@tiptap/extension-invisible-characters';
+import Link from '@tiptap/extension-link';
 import TextAlign from '@tiptap/extension-text-align';
 import { TextStyleKit } from '@tiptap/extension-text-style';
 import { CharacterCount, Placeholder } from '@tiptap/extensions';
@@ -82,7 +83,6 @@ export const getExtensions = ({
     CustomSubscript,
     DetailsExtension,
     CustomSuperscript,
-    InlineLinkExtension,
     DetailsContentExtension,
     DetailsSummaryExtension,
     CodeBlockLowlightExtension,
@@ -123,19 +123,23 @@ export const getExtensions = ({
   ]
 
   if (contentType === 'markdown') {
-    defaultExtensions.push(Markdown.configure({
-      indentation: {
-        style: 'space',
-        size: 2,
-      },
-      markedOptions: {
-        gfm: true,
-        breaks: false,
-        pedantic: false,
-      },
-    }))
+    defaultExtensions.push(...[
+      Link,
+      Markdown.configure({
+        indentation: {
+          style: 'space',
+          size: 2,
+        },
+        markedOptions: {
+          gfm: true,
+          breaks: false,
+          pedantic: false,
+        },
+      })
+    ])
   } else {
     defaultExtensions.push(...[
+      InlineLinkExtension,
       BlockLinkExtension,
       IframeExtension({ onError, onValidateUrl }),
       VideoExtension({ onUpload, onError, onValidateUrl }),

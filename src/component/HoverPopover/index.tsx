@@ -87,7 +87,6 @@ export const HoverPopover: React.FC<HoverPopoverProps> = ({
       return
     }
 
-
     // 清除 hover 定时器
     if (hoverTimerRef.current) {
       clearTimeout(hoverTimerRef.current)

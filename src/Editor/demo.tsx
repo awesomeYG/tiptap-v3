@@ -5,7 +5,7 @@ import '../index.css';
 
 const Reader = () => {
   const { editor } = useTiptap({
-    editable: true,
+    editable: false,
     exclude: ['invisibleCharacters'],
     onError: (error: Error) => {
       alert(error.message)

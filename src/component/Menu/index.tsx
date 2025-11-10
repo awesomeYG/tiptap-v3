@@ -6,7 +6,11 @@ import {
 import React from 'react';
 import NestedList from './NestedList';
 
-const Menu: React.FC<MenuProps> = ({
+export interface MenuRef {
+  close: () => void;
+}
+
+const Menu = React.forwardRef<MenuRef, MenuProps>(({
   id = 'menu-select',
   width,
   arrowIcon,
@@ -30,8 +34,9 @@ const Menu: React.FC<MenuProps> = ({
       vertical: 'top',
       horizontal: 'left',
     }
-  }
-}) => {
+  },
+  zIndex
+}, ref) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -44,6 +49,10 @@ const Menu: React.FC<MenuProps> = ({
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  React.useImperativeHandle(ref, () => ({
+    close: handleClose
+  }));
 
   const handleItemClick = (item: MenuItem) => {
     if (item.onClick) {
@@ -67,6 +76,7 @@ const Menu: React.FC<MenuProps> = ({
       disableAutoFocus
       disableEnforceFocus
       disableRestoreFocus
+      sx={zIndex ? { zIndex } : undefined}
     >
       <Box sx={{ p: 0.5 }}>
         <Box onClick={handleClose}>
@@ -78,10 +88,13 @@ const Menu: React.FC<MenuProps> = ({
           arrowIcon={arrowIcon}
           childrenProps={childrenProps}
           onItemClick={handleItemClick}
+          zIndex={zIndex}
         />
       </Box>
     </Popover>
   </>
-};
+});
+
+Menu.displayName = 'Menu';
 
 export default Menu;

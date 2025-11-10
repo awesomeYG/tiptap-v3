@@ -4,6 +4,7 @@ import { Editor } from '@tiptap/core';
 import React, { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import AceEditor from "react-ace";
 import { MARKDOWN_EDITOR_PLACEHOLDER } from '../contants/markdown-placeholder';
+import EditorMarkdownToolbar from './Toolbar';
 
 import 'ace-builds/src-noconflict/ace';
 import 'ace-builds/src-noconflict/ext-language_tools';
@@ -32,18 +33,18 @@ const EditorMarkdown = forwardRef<MarkdownEditorRef, EditorMarkdownProps>(({
 }, ref) => {
   const theme = useTheme();
   const aceEditorRef = useRef<AceEditor>(null);
-  const [displayMode, setDisplayMode] = useState<DisplayMode>('split');
+  const [displayMode, setDisplayMode] = useState<DisplayMode>('edit');
   const [isExpend, setIsExpend] = useState<boolean>(false);
 
   const EditorHeight = useMemo(() => {
-    return isExpend ? 'calc(100vh - 33px)' : height;
+    return isExpend ? 'calc(100vh - 45px)' : height;
   }, [isExpend, height]);
 
   const onChange = (value: string) => {
     onAceChange?.(value);
-    editor.chain().focus().setContent(value, {
+    editor.commands.setContent(value, {
       contentType: 'markdown'
-    }).run();
+    });
   }
 
   useImperativeHandle(ref, () => ({
@@ -101,42 +102,50 @@ const EditorMarkdown = forwardRef<MarkdownEditorRef, EditorMarkdownProps>(({
           color: 'primary.main',
           bgcolor: alpha(theme.palette.primary.main, 0.1),
         },
-        '& :hover:not(.md-display-mode-active)': {
+        '.md-display-mode:hover': {
           borderRadius: '4px',
           bgcolor: 'background.paper3',
         },
       }}
     >
-      <Stack direction={'row'} alignItems={'center'}>
-        <Box
-          className={
-            displayMode === 'split' ? 'md-display-mode-active' : ''
-          }
-          sx={{ px: 1, py: 0.25, cursor: 'pointer', borderRadius: '4px' }}
-          onClick={() => setDisplayMode('split')}
-        >
-          分屏模式
-        </Box>
-        <Box
-          className={displayMode === 'edit' ? 'md-display-mode-active' : ''}
-          sx={{ px: 1, py: 0.25, cursor: 'pointer', borderRadius: '4px' }}
-          onClick={() => setDisplayMode('edit')}
-        >
-          编辑模式
-        </Box>
-        <Box
-          className={
-            displayMode === 'preview' ? 'md-display-mode-active' : ''
-          }
-          sx={{ px: 1, py: 0.25, cursor: 'pointer', borderRadius: '4px' }}
-          onClick={() => setDisplayMode('preview')}
-        >
-          预览模式
-        </Box>
+      <EditorMarkdownToolbar aceEditorRef={aceEditorRef} isExpend={isExpend} />
+      <Stack direction={'row'} alignItems={'center'} gap={1}>
+        <IconButton color='inherit' onClick={() => setIsExpend(!isExpend)}>
+          {isExpend ? <CollapseIcon sx={{ fontSize: '16px' }} /> : <ExpendIcon sx={{ fontSize: '16px' }} />}
+        </IconButton>
+        <Stack direction={'row'} alignItems={'center'} sx={{
+          p: 0.5,
+          borderRadius: '4px',
+          border: '1px solid',
+          borderColor: 'divider',
+        }}>
+          <Box
+            className={displayMode === 'edit' ? 'md-display-mode-active' : 'md-display-mode'}
+            sx={{ px: 1, py: 0.25, cursor: 'pointer', borderRadius: '4px' }}
+            onClick={() => setDisplayMode('edit')}
+          >
+            编辑模式
+          </Box>
+          <Box
+            className={
+              displayMode === 'preview' ? 'md-display-mode-active' : 'md-display-mode'
+            }
+            sx={{ px: 1, py: 0.25, cursor: 'pointer', borderRadius: '4px' }}
+            onClick={() => setDisplayMode('preview')}
+          >
+            预览模式
+          </Box>
+          <Box
+            className={
+              displayMode === 'split' ? 'md-display-mode-active' : 'md-display-mode'
+            }
+            sx={{ px: 1, py: 0.25, cursor: 'pointer', borderRadius: '4px' }}
+            onClick={() => setDisplayMode('split')}
+          >
+            分屏模式
+          </Box>
+        </Stack>
       </Stack>
-      <IconButton size='small' color='inherit' onClick={() => setIsExpend(!isExpend)}>
-        {isExpend ? <CollapseIcon sx={{ fontSize: '14px' }} /> : <ExpendIcon sx={{ fontSize: '14px' }} />}
-      </IconButton>
     </Stack>
     <Stack direction={'row'} alignItems={'stretch'} sx={{
       border: '1px solid',

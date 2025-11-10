@@ -105,7 +105,7 @@ export const FloatingPopover: React.FC<FloatingPopoverProps> = ({
           left: 0,
           right: 0,
           bottom: 0,
-          zIndex: 1200,
+          zIndex: 5000,
           pointerEvents: 'none'
         }}
       />

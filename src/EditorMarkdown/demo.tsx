@@ -1,10 +1,10 @@
 import { EditorMarkdown, EditorThemeProvider, useTiptap } from '@ctzhian/tiptap';
 import { Box } from '@mui/material';
-import React from 'react';
-import { MARKDOWN_EDITOR_PLACEHOLDER } from '../contants/markdown-placeholder';
+import React, { useState } from 'react';
 import '../index.css';
 
 const Reader = () => {
+  const [mdContent, setMdContent] = useState('');
   const { editor } = useTiptap({
     editable: false,
     contentType: 'markdown',
@@ -48,52 +48,11 @@ const Reader = () => {
       return url
     },
     onSave: (editor) => {
-      const value = editor.getMarkdown();
-      editor.chain().focus().setContent(value, {
-        contentType: 'markdown'
-      }).run()
+      // const value = editor.getMarkdown();
+      // editor.chain().focus().setContent(value, {
+      //   contentType: 'markdown'
+      // }).run()
     },
-    onAiWritingGetSuggestion: async ({ prefix, suffix }: { prefix: string, suffix: string }) => {
-      return new Promise<string>((resolve) => {
-        resolve([
-          'this is a default suggestion.',
-          'we are good.',
-          'what is your name?',
-          'how are you?',
-          'what is your favorite color?',
-          'what is your favorite food?',
-          'what is your favorite animal?',
-          'what is your favorite book?',
-          'what is your favorite movie?',
-          'what is your favorite song?',
-          'what is your favorite artist?',
-          'what is your favorite band?',
-          'what is your favorite city?',
-          'what is your favorite country?',
-          'what is your favorite sport?',
-        ][Math.floor(Math.random() * 10)]);
-      })
-    },
-    // onTocUpdate: handleTocUpdate,
-    // onMentionFilter: async ({ query }: { query: string }) => {
-    //   return new Promise((resolve) => {
-    //     resolve([
-    //       'Winona Ryder',
-    //       'Molly Ringwald',
-    //       'Ally Sheedy',
-    //       'Debbie Harry',
-    //       'Olivia Newton-John',
-    //       'Elton John',
-    //       'Michael J. Fox',
-    //       'Axl Rose',
-    //       'Emilio Estevez',
-    //       'Ralph Macchio',
-    //       'Rob Lowe',
-    //       'Jennifer Grey',
-    //     ].filter(item => item.toLowerCase().startsWith(query.toLowerCase()))
-    //       .slice(0, 5))
-    //   })
-    // },
     onUpload: async (file: File, onProgress?: (progress: { progress: number }) => void) => {
       return new Promise((resolve) => {
         let progress = 0;
@@ -118,7 +77,7 @@ const Reader = () => {
         }, 100);
       })
     },
-    content: MARKDOWN_EDITOR_PLACEHOLDER
+    content: mdContent
   });
 
   return <EditorThemeProvider mode='light'>
@@ -131,7 +90,12 @@ const Reader = () => {
         },
       }
     }}>
-      <EditorMarkdown editor={editor} height={'500px'} value={MARKDOWN_EDITOR_PLACEHOLDER} />
+      <EditorMarkdown
+        editor={editor}
+        height={'500px'}
+        value={mdContent}
+        onAceChange={setMdContent}
+      />
     </Box>
   </EditorThemeProvider>
 };

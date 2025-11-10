@@ -371,26 +371,6 @@ export const InlineLinkExtension = Node.create<LinkOptions>({
     return ['a', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes), title]
   },
 
-  markdownTokenName: 'link',
-  parseMarkdown: (token, helpers) => {
-    const content = helpers.parseInline(token.tokens || [])
-    return {
-      type: 'inlineLink',
-      attrs: {
-        href: token.href,
-        title: token.title || null,
-        type: 'text',
-      },
-      content,
-    }
-  },
-  renderMarkdown: (node, h) => {
-    const href = node.attrs?.href || ''
-    const text = node.attrs?.title || h.renderChildren(node) || ''
-
-    return `[${text}](${href})`
-  },
-
   addCommands() {
     return {
       setInlineLink: (options) => ({ commands }) => {

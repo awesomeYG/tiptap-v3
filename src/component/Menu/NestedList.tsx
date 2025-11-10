@@ -11,6 +11,7 @@ export interface NestedMenuListProps {
     transformOrigin?: PopoverOrigin;
   };
   onItemClick?: (item: MenuItem) => void;
+  zIndex?: number;
 }
 
 const NestedList: React.FC<NestedMenuListProps> = ({
@@ -28,6 +29,7 @@ const NestedList: React.FC<NestedMenuListProps> = ({
     }
   },
   onItemClick,
+  zIndex,
 }) => {
   const [hoveredItem, setHoveredItem] = React.useState<MenuItem | null>(null);
   const [subMenuAnchor, setSubMenuAnchor] = React.useState<HTMLElement | null>(null);
@@ -91,7 +93,10 @@ const NestedList: React.FC<NestedMenuListProps> = ({
               open={Boolean(subMenuAnchor)}
               anchorEl={subMenuAnchor}
               onClose={handleItemLeave}
-              sx={{ pointerEvents: 'none' }}
+              sx={{
+                pointerEvents: 'none',
+                ...(zIndex ? { zIndex } : {})
+              }}
               disableScrollLock
               disableAutoFocus
               disableEnforceFocus
