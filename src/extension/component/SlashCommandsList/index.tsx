@@ -53,7 +53,7 @@ const SlashCommandsList = forwardRef<SlashCommandsListRef, SlashCommandsListProp
               ],
             },
             {
-              label: '警告提示',
+              label: '警告块',
               key: 'highlight',
               icon: <Information2LineIcon sx={{ fontSize: '1rem' }} />,
               children: [
@@ -62,7 +62,7 @@ const SlashCommandsList = forwardRef<SlashCommandsListRef, SlashCommandsListProp
                   key: 'info',
                   icon: <Information2FillIcon sx={{ fontSize: '1rem', color: 'primary.main' }} />,
                   onClick: () => {
-                    const node = items.find(it => it.title === '警告提示')
+                    const node = items.find(it => it.title === '警告块')
                     if (node) command({ ...node, attrs: { type: 'icon', variant: 'info' } })
                   },
                 },
@@ -71,7 +71,7 @@ const SlashCommandsList = forwardRef<SlashCommandsListRef, SlashCommandsListProp
                   key: 'warning',
                   icon: <ErrorWarningFillIcon sx={{ fontSize: '1rem', color: 'warning.main' }} />,
                   onClick: () => {
-                    const node = items.find(it => it.title === '警告提示')
+                    const node = items.find(it => it.title === '警告块')
                     if (node) command({ ...node, attrs: { type: 'icon', variant: 'warning' } })
                   },
                 },
@@ -80,7 +80,7 @@ const SlashCommandsList = forwardRef<SlashCommandsListRef, SlashCommandsListProp
                   key: 'error',
                   icon: <CloseCircleFillIcon sx={{ fontSize: '1rem', color: 'error.main' }} />,
                   onClick: () => {
-                    const node = items.find(it => it.title === '警告提示')
+                    const node = items.find(it => it.title === '警告块')
                     if (node) command({ ...node, attrs: { type: 'icon', variant: 'error' } })
                   },
                 },
@@ -89,7 +89,7 @@ const SlashCommandsList = forwardRef<SlashCommandsListRef, SlashCommandsListProp
                   key: 'success',
                   icon: <CheckboxCircleFillIcon sx={{ fontSize: '1rem', color: 'success.main' }} />,
                   onClick: () => {
-                    const node = items.find(it => it.title === '警告提示')
+                    const node = items.find(it => it.title === '警告块')
                     if (node) command({ ...node, attrs: { type: 'icon', variant: 'success' } })
                   },
                 },
@@ -98,7 +98,7 @@ const SlashCommandsList = forwardRef<SlashCommandsListRef, SlashCommandsListProp
                   key: 'default',
                   icon: <UserSmileFillIcon sx={{ fontSize: '1rem', color: 'text.disabled' }} />,
                   onClick: () => {
-                    const node = items.find(it => it.title === '警告提示')
+                    const node = items.find(it => it.title === '警告块')
                     if (node) command({ ...node, attrs: { type: 'icon', variant: 'default' } })
                   },
                 }

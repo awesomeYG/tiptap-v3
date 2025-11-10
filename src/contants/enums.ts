@@ -36,7 +36,7 @@ export const NODE_TYPE_LABEL: Record<NodeTypeEnum, {
   [NodeTypeEnum.BulletList]: { label: '无序列表', color: true, fontSize: true, align: true, convert: true },
   [NodeTypeEnum.OrderedList]: { label: '有序列表', color: true, fontSize: true, align: true, convert: true },
   [NodeTypeEnum.TaskList]: { label: '任务列表', color: true, fontSize: true, align: true, convert: true },
-  [NodeTypeEnum.Alert]: { label: '警告提示', color: true, fontSize: true, align: true, convert: true },
+  [NodeTypeEnum.Alert]: { label: '警告块', color: true, fontSize: true, align: true, convert: true },
   [NodeTypeEnum.Blockquote]: { label: '引用', color: true, fontSize: true, align: true, convert: true },
   [NodeTypeEnum.CodeBlock]: { label: '代码块', convert: true },
 

@@ -416,7 +416,7 @@ const EditorMarkdownToolbar = ({ aceEditorRef, isExpend, onUpload }: EditorMarkd
           onClick: () => insertTextAndFocusPositionRow({ text: ':::details\n\n:::detailsSummary\n\n:::\n\n:::detailsContent\n\n:::\n\n:::\n', row: 1, block: true }),
         },
         {
-          label: '警告提示',
+          label: '警告块',
           key: 'highlight',
           icon: <Information2LineIcon sx={{ fontSize: '1rem' }} />,
           children: [

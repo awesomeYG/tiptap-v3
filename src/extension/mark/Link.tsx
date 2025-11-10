@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { Link } from "@tiptap/extension-link";
 import { Plugin, PluginKey } from '@tiptap/pm/state';
 import { ReactMarkViewRenderer } from "@tiptap/react";

@@ -742,15 +742,22 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
                     }
                   }
                 },
-                ...(!isMarkdown ? [{
-                  label: '警告提示',
+                {
+                  label: '警告块',
                   selected: current.node?.type.name === 'alert',
                   key: 'convert-to-alert',
                   icon: <Information2LineIcon sx={{ fontSize: '1rem' }} />,
                   onClick: () => {
                     if (!current.node) return
                     const type = current.node.type.name as NodeTypeEnum
-                    const groupTypes = [NodeTypeEnum.BulletList, NodeTypeEnum.OrderedList, NodeTypeEnum.TaskList, NodeTypeEnum.Blockquote, NodeTypeEnum.CodeBlock, NodeTypeEnum.Alert]
+                    const groupTypes = [
+                      NodeTypeEnum.BulletList,
+                      NodeTypeEnum.OrderedList,
+                      NodeTypeEnum.TaskList,
+                      NodeTypeEnum.Blockquote,
+                      NodeTypeEnum.CodeBlock,
+                      NodeTypeEnum.Alert
+                    ]
                     if (groupTypes.includes(type)) {
                       convertNodeAt(current.editor, current.pos, current.node as any, { type: 'alert', attrs: { variant: 'info', type: 'icon' } })
                     } else {
@@ -759,7 +766,7 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
                       current.editor.commands.toggleAlert({ type: 'icon', variant: 'info' })
                     }
                   }
-                }] : []),
+                },
               ]
             }
           ] : []),

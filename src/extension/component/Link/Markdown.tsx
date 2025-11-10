@@ -1,8 +1,10 @@
+import { useTheme } from "@mui/material/styles";
 import { MarkViewProps } from "@tiptap/core";
 import { MarkViewContent } from "@tiptap/react";
 import React, { useCallback } from "react";
 
 const LinkViewWrapper: React.FC<MarkViewProps> = ({ editor, mark }) => {
+  const theme = useTheme();
   const handleClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
     if (mark?.attrs?.download) {
       e.preventDefault();
@@ -30,7 +32,7 @@ const LinkViewWrapper: React.FC<MarkViewProps> = ({ editor, mark }) => {
       download={download || undefined}
       onClick={handleClick}
       style={{
-        color: 'inherit',
+        color: theme.palette.primary.main,
         textDecoration: 'underline',
         cursor: 'pointer',
       }}

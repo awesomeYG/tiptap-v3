@@ -145,7 +145,7 @@ export const slashCommands = [
     },
   },
   {
-    title: '警告提示',
+    title: '警告块',
     icon: <Information2LineIcon sx={{ fontSize: '1rem' }} />,
     command: ({ editor, range, attrs }: { editor: Editor; range: { from: number; to: number }; attrs: any }) => {
       editor.chain().focus().deleteRange(range).toggleAlert({ type: attrs?.type || 'icon', variant: attrs?.variant || 'info' }).run()
