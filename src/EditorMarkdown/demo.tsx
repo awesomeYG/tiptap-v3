@@ -10,7 +10,7 @@ const Reader = () => {
     return new Promise((resolve) => {
       let progress = 0;
       const interval = setInterval(() => {
-        progress += Math.random() * 20;
+        progress += Math.random() * 2;
         if (progress >= 100) {
           progress = 100;
           onProgress?.({ progress: progress / 100 });

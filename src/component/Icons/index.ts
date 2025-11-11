@@ -40,6 +40,7 @@ export { DeleteColumnIcon } from './delete-column-icon';
 export { DeleteLineIcon } from './delete-line-icon';
 export { DeleteRowIcon } from './delete-row-icon';
 export { DoubleQuotesLIcon } from './double-quotes-l-icon';
+export { Download2LineIcon } from './download-2-line-icon';
 export { DownloadLineIcon } from './download-line-icon';
 export { DraggableIcon } from './draggable-icon';
 export { EditBoxLineIcon } from './edit-box-line-icon';

@@ -1,4 +1,4 @@
-import { ChromeIcon } from "@ctzhian/tiptap/component/Icons";
+import { ChromeIcon, Download2LineIcon } from "@ctzhian/tiptap/component/Icons";
 import { Avatar } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { MarkViewProps } from "@tiptap/core";
@@ -54,12 +54,13 @@ const LinkViewWrapper: React.FC<MarkViewProps> = ({ editor, mark }) => {
           verticalAlign: '-0.125em',
           marginRight: '2px',
         }}
-        src={favicon}
+        src={download ? undefined : favicon}
       >
-        <ChromeIcon sx={{
+        {download ? <Download2LineIcon
+          sx={{ fontSize: '1rem', color: 'primary.main' }}
+        /> : <ChromeIcon sx={{
           fontSize: '1rem',
-          color: 'primary.main',
-        }} />
+        }} />}
       </Avatar>
     </MarkViewContent>
   );

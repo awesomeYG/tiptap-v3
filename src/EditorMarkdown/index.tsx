@@ -38,6 +38,7 @@ const EditorMarkdown = forwardRef<MarkdownEditorRef, EditorMarkdownProps>(({
   const aceEditorRef = useRef<AceEditor>(null);
   const [displayMode, setDisplayMode] = useState<DisplayMode>('edit');
   const [isExpend, setIsExpend] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const EditorHeight = useMemo(() => {
     return isExpend ? 'calc(100vh - 45px)' : height;
@@ -111,7 +112,13 @@ const EditorMarkdown = forwardRef<MarkdownEditorRef, EditorMarkdownProps>(({
         },
       }}
     >
-      <EditorMarkdownToolbar aceEditorRef={aceEditorRef} isExpend={isExpend} onUpload={onUpload} />
+      <EditorMarkdownToolbar
+        aceEditorRef={aceEditorRef}
+        isExpend={isExpend}
+        onUpload={onUpload}
+        loading={loading}
+        setLoading={setLoading}
+      />
       <Stack direction={'row'} alignItems={'center'} gap={1}>
         <IconButton color='inherit' onClick={() => setIsExpend(!isExpend)}>
           {isExpend ? <CollapseIcon sx={{ fontSize: '16px' }} /> : <ExpendIcon sx={{ fontSize: '16px' }} />}
@@ -177,6 +184,7 @@ const EditorMarkdown = forwardRef<MarkdownEditorRef, EditorMarkdownProps>(({
             onChange={onChange}
             name='project-doc-editor'
             wrapEnabled={true}
+            readOnly={loading}
             showPrintMargin={false}
             placeholder={MARKDOWN_EDITOR_PLACEHOLDER}
             fontSize={16}

@@ -1,5 +1,5 @@
-import { Box, Divider, Stack, Typography } from "@mui/material";
-import React from "react";
+import { alpha, Box, Divider, Paper, Stack, Typography, useTheme } from "@mui/material";
+import React, { useState } from "react";
 import AceEditor from "react-ace";
 import {
   AddCircleFillIcon,
@@ -51,14 +51,21 @@ import { UploadFunction } from "../type";
 interface EditorMarkdownToolbarProps {
   aceEditorRef: React.RefObject<AceEditor>
   isExpend?: boolean
+  loading?: boolean;
   onUpload?: UploadFunction;
+  setLoading?: (loading: boolean) => void;
 }
 
-const EditorMarkdownToolbar = ({ aceEditorRef, isExpend, onUpload }: EditorMarkdownToolbarProps) => {
+const EditorMarkdownToolbar = ({ aceEditorRef, isExpend, loading, onUpload, setLoading }: EditorMarkdownToolbarProps) => {
+  const theme = useTheme();
+
   const imageInputRef = React.useRef<HTMLInputElement>(null);
   const videoInputRef = React.useRef<HTMLInputElement>(null);
   const audioInputRef = React.useRef<HTMLInputElement>(null);
   const attachmentInputRef = React.useRef<HTMLInputElement>(null);
+
+  const [uplaodProgress, setUplaodProgress] = useState(0);
+  const [fileUploadingName, setFileUploadingName] = useState('');
 
   const insertBlockTool = (options: {
     text: string;
@@ -168,20 +175,28 @@ const EditorMarkdownToolbar = ({ aceEditorRef, isExpend, onUpload }: EditorMarkd
   const handleFileUpload = async (file: File, expectedType?: 'image' | 'video' | 'audio' | 'attachment') => {
     if (!onUpload) return;
     try {
-      const url = await onUpload(file);
+      setLoading?.(true);
+      setFileUploadingName(file.name);
+      const url = await onUpload(file, (progress) => {
+        setUplaodProgress(Math.round(progress.progress * 100));
+      });
       let content = '';
       if (expectedType === 'image') {
         content = `![${file.name}](${url})`;
       } else if (expectedType === 'video') {
-        content = `<p>\n<video src="${url}" controls="true"></video>\n</p>`;
+        content = `<video src="${url}" controls="true"></video>`;
       } else if (expectedType === 'audio') {
-        content = `<p>\n<audio src="${url}" controls="true"></audio>\n</p>`;
+        content = `<audio src="${url}" controls="true"></audio>`;
       } else {
-        content = `<p>\n<a href="${url}" download="${file.name}">${file.name}</a>\n</p>`;
+        content = `<a href="${url}" download="${file.name}">${file.name}</a>`;
       }
       insertBlockTool({ text: content, row: 1, position: 1000 });
     } catch (error) {
       console.error('文件上传失败:', error);
+    } finally {
+      setLoading?.(false);
+      setFileUploadingName('');
+      setUplaodProgress(0);
     }
   };
 
@@ -392,292 +407,322 @@ const EditorMarkdownToolbar = ({ aceEditorRef, isExpend, onUpload }: EditorMarkd
     },
   ]
 
-  return <Stack direction={'row'} alignItems={'center'}>
-    <Menu
-      context={<ToolbarItem
-        text={'插入'}
-        icon={<AddCircleFillIcon sx={{ fontSize: '1rem' }} />}
-      />}
-      anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-      transformOrigin={{ vertical: 'top', horizontal: 'left' }}
-      arrowIcon={<ArrowDownSLineIcon sx={{ fontSize: '1rem', transform: 'rotate(-90deg)' }} />}
-      zIndex={isExpend ? 2100 : undefined}
-      list={[
-        {
-          customLabel: <Typography sx={{ px: 1, pt: 2, fontSize: '12px', color: 'text.disabled' }}>
-            通用
-          </Typography>,
-          key: 'current-node',
+  return <>
+    {loading && (
+      <Paper sx={{
+        position: 'absolute',
+        left: '50%',
+        top: 45,
+        overflow: 'hidden',
+        px: 2,
+        py: 1,
+        transform: 'translateX(-50%)',
+        bgcolor: 'background.default',
+        zIndex: 10,
+        border: '1px solid',
+        borderColor: 'primary.main',
+        color: 'text.disabled',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: `${uplaodProgress}%`,
+          height: '100%',
+          bgcolor: alpha(theme.palette.primary.main, 0.1),
+          transition: 'width 0.3s ease',
         },
-        {
-          label: '表格',
-          key: 'table',
-          icon: <Table2Icon sx={{ fontSize: '1rem' }} />,
-          children: [
-            {
-              key: 'table-size-picker',
-              customLabel: <TableSizePicker
-                onConfirm={(cols, rows) => {
-                  const headerRow = `| ${Array.from({ length: cols }).map(() => '').join(' | ')} |\n`;
-                  const separatorRow = `| ${Array.from({ length: cols }).map(() => '---').join(' | ')} |\n`;
-                  const dataRows = Array.from({ length: rows }).map(() =>
-                    `| ${Array.from({ length: cols }).map(() => '').join(' | ')} |\n`
-                  ).join('');
-                  const tableMarkdown = `${headerRow}${separatorRow}${dataRows}`;
-                  insertBlockTool({ text: tableMarkdown, position: 1, wrap: true });
-                }}
-              />
-            },
-          ],
-        },
-        {
-          label: '上传文件',
-          key: 'upload-file',
-          icon: <Folder2LineIcon sx={{ fontSize: '1rem' }} />,
-          children: [
-            {
-              label: '上传图片',
-              key: 'upload-image',
-              icon: <ImageLineIcon sx={{ fontSize: '1rem' }} />,
-              onClick: () => imageInputRef.current?.click(),
-            },
-            {
-              label: '上传视频',
-              key: 'upload-video',
-              icon: <MovieLineIcon sx={{ fontSize: '1rem' }} />,
-              onClick: () => videoInputRef.current?.click(),
-            },
-            {
-              label: '上传音频',
-              key: 'upload-audio',
-              icon: <Music2LineIcon sx={{ fontSize: '1rem' }} />,
-              onClick: () => audioInputRef.current?.click(),
-            },
-            {
-              label: '上传附件',
-              key: 'upload-attachment',
-              icon: <AttachmentLineIcon sx={{ fontSize: '1rem' }} />,
-              onClick: () => attachmentInputRef.current?.click(),
-            },
-          ],
-        },
-        {
-          customLabel: <Typography sx={{ px: 1, pt: 2, fontSize: '12px', color: 'text.disabled' }}>
-            样式布局
-          </Typography>,
-          key: 'style',
-        },
-        {
-          label: '分割线',
-          key: 'separator',
-          icon: <SeparatorIcon sx={{ fontSize: '1rem' }} />,
-          onClick: () => insertBlockTool({ text: '---\n\n', row: 2 }),
-        },
-        {
-          label: '引用',
-          key: 'blockquote',
-          icon: <DoubleQuotesLIcon sx={{ fontSize: '1rem' }} />,
-          onClick: () => insertBlockTool({ text: '> ', position: 2 }),
-        },
-        {
-          label: '折叠面板',
-          key: 'details',
-          icon: <MenuFold2FillIcon sx={{ fontSize: '1rem' }} />,
-          onClick: () => insertBlockTool({ text: ':::details\n\n:::detailsSummary\n\n:::\n\n:::detailsContent\n\n:::\n\n:::\n', row: 3, wrap: true }),
-        },
-        {
-          label: '警告块',
-          key: 'highlight',
-          icon: <Information2LineIcon sx={{ fontSize: '1rem' }} />,
-          children: [
-            {
-              label: '信息 Info',
-              key: 'info',
-              icon: <Information2FillIcon sx={{ fontSize: '1rem', color: 'primary.main' }} />,
-              onClick: () => insertBlockTool({ text: ':::alert {variant="info"}\n\n:::', row: 1, wrap: true }),
-            },
-            {
-              label: '警告 Warning',
-              key: 'warning',
-              icon: <ErrorWarningFillIcon sx={{ fontSize: '1rem', color: 'warning.main' }} />,
-              onClick: () => insertBlockTool({ text: ':::alert {variant="warning"}\n\n:::', row: 1, wrap: true }),
-            },
-            {
-              label: '错误 Error',
-              key: 'error',
-              icon: <CloseCircleFillIcon sx={{ fontSize: '1rem', color: 'error.main' }} />,
-              onClick: () => insertBlockTool({ text: ':::alert {variant="error"}\n\n:::', row: 1, wrap: true }),
-            },
-            {
-              label: '成功 Success',
-              key: 'success',
-              icon: <CheckboxCircleFillIcon sx={{ fontSize: '1rem', color: 'success.main' }} />,
-              onClick: () => insertBlockTool({ text: ':::alert {variant="success"}\n\n:::', row: 1, wrap: true }),
-            },
-            {
-              label: '默认 Default',
-              key: 'default',
-              icon: <UserSmileFillIcon sx={{ fontSize: '1rem', color: 'text.disabled' }} />,
-              onClick: () => insertBlockTool({ text: ':::alert {variant="default"}\n\n:::', row: 1, wrap: true }),
-            }
-          ]
-        },
+      }}>
+        正在上传文件：{fileUploadingName}
+      </Paper>
+    )}
+    <Stack direction={'row'} alignItems={'center'}>
+      <Menu
+        context={<ToolbarItem
+          text={'插入'}
+          icon={<AddCircleFillIcon sx={{ fontSize: '1rem' }} />}
+        />}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+        arrowIcon={<ArrowDownSLineIcon sx={{ fontSize: '1rem', transform: 'rotate(-90deg)' }} />}
+        zIndex={isExpend ? 2100 : undefined}
+        list={[
+          {
+            customLabel: <Typography sx={{ px: 1, pt: 2, fontSize: '12px', color: 'text.disabled' }}>
+              通用
+            </Typography>,
+            key: 'current-node',
+          },
+          {
+            label: '表格',
+            key: 'table',
+            icon: <Table2Icon sx={{ fontSize: '1rem' }} />,
+            children: [
+              {
+                key: 'table-size-picker',
+                customLabel: <TableSizePicker
+                  onConfirm={(cols, rows) => {
+                    const headerRow = `| ${Array.from({ length: cols }).map(() => '').join(' | ')} |\n`;
+                    const separatorRow = `| ${Array.from({ length: cols }).map(() => '---').join(' | ')} |\n`;
+                    const dataRows = Array.from({ length: rows }).map(() =>
+                      `| ${Array.from({ length: cols }).map(() => '').join(' | ')} |\n`
+                    ).join('');
+                    const tableMarkdown = `${headerRow}${separatorRow}${dataRows}`;
+                    insertBlockTool({ text: tableMarkdown, position: 1, wrap: true });
+                  }}
+                />
+              },
+            ],
+          },
+          {
+            label: '上传文件',
+            key: 'upload-file',
+            icon: <Folder2LineIcon sx={{ fontSize: '1rem' }} />,
+            children: [
+              {
+                label: '上传图片',
+                key: 'upload-image',
+                icon: <ImageLineIcon sx={{ fontSize: '1rem' }} />,
+                onClick: () => imageInputRef.current?.click(),
+              },
+              {
+                label: '上传视频',
+                key: 'upload-video',
+                icon: <MovieLineIcon sx={{ fontSize: '1rem' }} />,
+                onClick: () => videoInputRef.current?.click(),
+              },
+              {
+                label: '上传音频',
+                key: 'upload-audio',
+                icon: <Music2LineIcon sx={{ fontSize: '1rem' }} />,
+                onClick: () => audioInputRef.current?.click(),
+              },
+              {
+                label: '上传附件',
+                key: 'upload-attachment',
+                icon: <AttachmentLineIcon sx={{ fontSize: '1rem' }} />,
+                onClick: () => attachmentInputRef.current?.click(),
+              },
+            ],
+          },
+          {
+            customLabel: <Typography sx={{ px: 1, pt: 2, fontSize: '12px', color: 'text.disabled' }}>
+              样式布局
+            </Typography>,
+            key: 'style',
+          },
+          {
+            label: '分割线',
+            key: 'separator',
+            icon: <SeparatorIcon sx={{ fontSize: '1rem' }} />,
+            onClick: () => insertBlockTool({ text: '---\n\n', row: 2 }),
+          },
+          {
+            label: '引用',
+            key: 'blockquote',
+            icon: <DoubleQuotesLIcon sx={{ fontSize: '1rem' }} />,
+            onClick: () => insertBlockTool({ text: '> ', position: 2 }),
+          },
+          {
+            label: '折叠面板',
+            key: 'details',
+            icon: <MenuFold2FillIcon sx={{ fontSize: '1rem' }} />,
+            onClick: () => insertBlockTool({ text: ':::details\n\n:::detailsSummary\n\n:::\n\n:::detailsContent\n\n:::\n\n:::\n', row: 3, wrap: true }),
+          },
+          {
+            label: '警告块',
+            key: 'highlight',
+            icon: <Information2LineIcon sx={{ fontSize: '1rem' }} />,
+            children: [
+              {
+                label: '信息 Info',
+                key: 'info',
+                icon: <Information2FillIcon sx={{ fontSize: '1rem', color: 'primary.main' }} />,
+                onClick: () => insertBlockTool({ text: ':::alert {variant="info"}\n\n:::', row: 1, wrap: true }),
+              },
+              {
+                label: '警告 Warning',
+                key: 'warning',
+                icon: <ErrorWarningFillIcon sx={{ fontSize: '1rem', color: 'warning.main' }} />,
+                onClick: () => insertBlockTool({ text: ':::alert {variant="warning"}\n\n:::', row: 1, wrap: true }),
+              },
+              {
+                label: '错误 Error',
+                key: 'error',
+                icon: <CloseCircleFillIcon sx={{ fontSize: '1rem', color: 'error.main' }} />,
+                onClick: () => insertBlockTool({ text: ':::alert {variant="error"}\n\n:::', row: 1, wrap: true }),
+              },
+              {
+                label: '成功 Success',
+                key: 'success',
+                icon: <CheckboxCircleFillIcon sx={{ fontSize: '1rem', color: 'success.main' }} />,
+                onClick: () => insertBlockTool({ text: ':::alert {variant="success"}\n\n:::', row: 1, wrap: true }),
+              },
+              {
+                label: '默认 Default',
+                key: 'default',
+                icon: <UserSmileFillIcon sx={{ fontSize: '1rem', color: 'text.disabled' }} />,
+                onClick: () => insertBlockTool({ text: ':::alert {variant="default"}\n\n:::', row: 1, wrap: true }),
+              }
+            ]
+          },
 
-        {
-          customLabel: <Typography sx={{ px: 1, pt: 2, fontSize: '12px', color: 'text.disabled' }}>
-            程序员专用
-          </Typography>,
-          key: 'programmer',
-        },
-        {
-          label: '代码',
-          key: 'code',
-          icon: <CodeSSlashLineIcon sx={{ fontSize: '1rem' }} />,
-          children: [
-            {
-              label: '行内代码',
-              key: 'inlineCode',
-              icon: <CodeLineIcon sx={{ fontSize: '1rem' }} />,
-              onClick: () => insertInlineTool({ single: '`' }),
-            },
-            {
-              label: '代码块',
-              key: 'codeBlock',
-              icon: <CodeBoxLineIcon sx={{ fontSize: '1rem' }} />,
-              onClick: () => insertBlockTool({ text: '```\n\n```', row: 1, wrap: true }),
-            },
-          ]
-        },
-        {
-          label: '数学公式',
-          key: 'math',
-          icon: <FormulaIcon sx={{ fontSize: '1rem' }} />,
-          children: [
-            {
-              label: '行内数学公式',
-              key: 'inline-math',
-              icon: <SquareRootIcon sx={{ fontSize: '1rem' }} />,
-              onClick: () => insertInlineTool({ single: '$' })
-            },
-            {
-              label: '块级数学公式',
-              key: 'block-math',
-              icon: <FunctionsIcon sx={{ fontSize: '1rem' }} />,
-              onClick: () => insertBlockTool({ text: '$$\n\n$$', row: 1, wrap: true })
-            }
-          ]
-        },
-      ]}
-    />
-    <Divider
-      sx={{ mx: 0.5, height: 20, alignSelf: 'center' }}
-      orientation="vertical"
-      flexItem
-    />
-    <Menu
-      context={<ToolbarItem
-        tip={'标题'}
-        text={<Box sx={{ position: 'relative', pr: 1 }}>
-          <Box sx={{ width: '38px', textAlign: 'left' }}>标题</Box>
-          <ArrowDownSLineIcon
-            sx={{
-              position: 'absolute',
-              right: -6,
-              top: '50%',
-              transform: 'translateY(-50%)',
-              flexSelf: 'center',
-              fontSize: '1rem',
-              flexShrink: 0,
-              mr: 0,
-              color: 'text.disabled',
-              cursor: 'pointer',
-              pointerEvents: 'none'
-            }}
-          />
-        </Box>}
-      />}
-      anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-      transformOrigin={{ vertical: 'top', horizontal: 'left' }}
-      arrowIcon={<ArrowDownSLineIcon sx={{ fontSize: '1rem', transform: 'rotate(-90deg)' }} />}
-      zIndex={isExpend ? 2100 : undefined}
-      list={[
-        ...HeadingOptions.map(it => ({
-          label: it.label,
-          key: it.id,
-          icon: it.icon,
-          onClick: it.onClick,
-        })),
-      ]}
-    />
-    {ToolList.map(it => (
-      it.id.includes('divider') ? <Divider
-        key={it.id}
+          {
+            customLabel: <Typography sx={{ px: 1, pt: 2, fontSize: '12px', color: 'text.disabled' }}>
+              程序员专用
+            </Typography>,
+            key: 'programmer',
+          },
+          {
+            label: '代码',
+            key: 'code',
+            icon: <CodeSSlashLineIcon sx={{ fontSize: '1rem' }} />,
+            children: [
+              {
+                label: '行内代码',
+                key: 'inlineCode',
+                icon: <CodeLineIcon sx={{ fontSize: '1rem' }} />,
+                onClick: () => insertInlineTool({ single: '`' }),
+              },
+              {
+                label: '代码块',
+                key: 'codeBlock',
+                icon: <CodeBoxLineIcon sx={{ fontSize: '1rem' }} />,
+                onClick: () => insertBlockTool({ text: '```\n\n```', row: 1, wrap: true }),
+              },
+            ]
+          },
+          {
+            label: '数学公式',
+            key: 'math',
+            icon: <FormulaIcon sx={{ fontSize: '1rem' }} />,
+            children: [
+              {
+                label: '行内数学公式',
+                key: 'inline-math',
+                icon: <SquareRootIcon sx={{ fontSize: '1rem' }} />,
+                onClick: () => insertInlineTool({ single: '$' })
+              },
+              {
+                label: '块级数学公式',
+                key: 'block-math',
+                icon: <FunctionsIcon sx={{ fontSize: '1rem' }} />,
+                onClick: () => insertBlockTool({ text: '$$\n\n$$', row: 1, wrap: true })
+              }
+            ]
+          },
+        ]}
+      />
+      <Divider
         sx={{ mx: 0.5, height: 20, alignSelf: 'center' }}
         orientation="vertical"
         flexItem
-      /> : (
-        <ToolbarItem
+      />
+      <Menu
+        context={<ToolbarItem
+          tip={'标题'}
+          text={<Box sx={{ position: 'relative', pr: 1 }}>
+            <Box sx={{ width: '38px', textAlign: 'left' }}>标题</Box>
+            <ArrowDownSLineIcon
+              sx={{
+                position: 'absolute',
+                right: -6,
+                top: '50%',
+                transform: 'translateY(-50%)',
+                flexSelf: 'center',
+                fontSize: '1rem',
+                flexShrink: 0,
+                mr: 0,
+                color: 'text.disabled',
+                cursor: 'pointer',
+                pointerEvents: 'none'
+              }}
+            />
+          </Box>}
+        />}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+        arrowIcon={<ArrowDownSLineIcon sx={{ fontSize: '1rem', transform: 'rotate(-90deg)' }} />}
+        zIndex={isExpend ? 2100 : undefined}
+        list={[
+          ...HeadingOptions.map(it => ({
+            label: it.label,
+            key: it.id,
+            icon: it.icon,
+            onClick: it.onClick,
+          })),
+        ]}
+      />
+      {ToolList.map(it => (
+        it.id.includes('divider') ? <Divider
           key={it.id}
-          tip={it.label}
-          icon={it.icon}
-          onClick={it?.onClick}
-        />
-      )))}
-    {isExpend && <Menu
-      context={<ToolbarItem
-        tip={'表格'}
-        icon={<Table2Icon sx={{ fontSize: '1rem' }} />}
-      />}
-      anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-      transformOrigin={{ vertical: 'top', horizontal: 'left' }}
-      arrowIcon={<ArrowDownSLineIcon sx={{ fontSize: '1rem', transform: 'rotate(-90deg)' }} />}
-      zIndex={isExpend ? 2100 : undefined}
-      list={[
-        {
-          key: 'table-size-picker',
-          customLabel: <TableSizePicker
-            onConfirm={(cols, rows) => {
-              const headerRow = `| ${Array.from({ length: cols }).map(() => '').join(' | ')} |\n`;
-              const separatorRow = `| ${Array.from({ length: cols }).map(() => '---').join(' | ')} |\n`;
-              const dataRows = Array.from({ length: rows }).map(() =>
-                `| ${Array.from({ length: cols }).map(() => '').join(' | ')} |\n`
-              ).join('');
-              const tableMarkdown = `${headerRow}${separatorRow}${dataRows}`;
-              insertBlockTool({ text: tableMarkdown, position: 1, wrap: true });
-            }}
+          sx={{ mx: 0.5, height: 20, alignSelf: 'center' }}
+          orientation="vertical"
+          flexItem
+        /> : (
+          <ToolbarItem
+            key={it.id}
+            tip={it.label}
+            icon={it.icon}
+            onClick={it?.onClick}
           />
-        }
-      ]}
-    />}
-    {/* 隐藏的文件输入元素 */}
-    <input
-      ref={imageInputRef}
-      type="file"
-      accept="image/*"
-      style={{ display: 'none' }}
-      onChange={(e) => handleFileSelect(e, 'image')}
-    />
-    <input
-      ref={videoInputRef}
-      type="file"
-      accept="video/*"
-      style={{ display: 'none' }}
-      onChange={(e) => handleFileSelect(e, 'video')}
-    />
-    <input
-      ref={audioInputRef}
-      type="file"
-      accept="audio/*"
-      style={{ display: 'none' }}
-      onChange={(e) => handleFileSelect(e, 'audio')}
-    />
-    <input
-      ref={attachmentInputRef}
-      type="file"
-      style={{ display: 'none' }}
-      onChange={(e) => handleFileSelect(e, 'attachment')}
-    />
-  </Stack>
+        )))}
+      {isExpend && <Menu
+        context={<ToolbarItem
+          tip={'表格'}
+          icon={<Table2Icon sx={{ fontSize: '1rem' }} />}
+        />}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+        arrowIcon={<ArrowDownSLineIcon sx={{ fontSize: '1rem', transform: 'rotate(-90deg)' }} />}
+        zIndex={isExpend ? 2100 : undefined}
+        list={[
+          {
+            key: 'table-size-picker',
+            customLabel: <TableSizePicker
+              onConfirm={(cols, rows) => {
+                const headerRow = `| ${Array.from({ length: cols }).map(() => '').join(' | ')} |\n`;
+                const separatorRow = `| ${Array.from({ length: cols }).map(() => '---').join(' | ')} |\n`;
+                const dataRows = Array.from({ length: rows }).map(() =>
+                  `| ${Array.from({ length: cols }).map(() => '').join(' | ')} |\n`
+                ).join('');
+                const tableMarkdown = `${headerRow}${separatorRow}${dataRows}`;
+                insertBlockTool({ text: tableMarkdown, position: 1, wrap: true });
+              }}
+            />
+          }
+        ]}
+      />}
+      {/* 隐藏的文件输入元素 */}
+      <input
+        ref={imageInputRef}
+        type="file"
+        accept="image/*"
+        style={{ display: 'none' }}
+        onChange={(e) => handleFileSelect(e, 'image')}
+      />
+      <input
+        ref={videoInputRef}
+        type="file"
+        accept="video/*"
+        style={{ display: 'none' }}
+        onChange={(e) => handleFileSelect(e, 'video')}
+      />
+      <input
+        ref={audioInputRef}
+        type="file"
+        accept="audio/*"
+        style={{ display: 'none' }}
+        onChange={(e) => handleFileSelect(e, 'audio')}
+      />
+      <input
+        ref={attachmentInputRef}
+        type="file"
+        style={{ display: 'none' }}
+        onChange={(e) => handleFileSelect(e, 'attachment')}
+      />
+    </Stack>
+  </>
 }
 
 export default EditorMarkdownToolbar;
