@@ -45,6 +45,8 @@ const LinkViewWrapper: React.FC<MarkViewProps> = ({ editor, mark }) => {
         display: 'inline-flex',
         alignItems: 'center',
         gap: '2px',
+        verticalAlign: '-0.125em',
+        lineHeight: 1,
       }}
     >
       <Avatar

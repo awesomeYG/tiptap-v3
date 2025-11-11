@@ -175,7 +175,7 @@
   margin: 20px 0;
 }
 
-.tiptap.ProseMirror .mark-link {
+/* .tiptap.ProseMirror .mark-link {
   line-height: 22px;
   vertical-align: middle;
 }
@@ -186,4 +186,4 @@
 
 .tiptap.ProseMirror .mark-link a:hover {
   text-decoration: underline;
-}
+} */
