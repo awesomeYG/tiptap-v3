@@ -1,5 +1,5 @@
 import { ChromeIcon } from "@ctzhian/tiptap/component/Icons";
-import { Avatar, Box } from "@mui/material";
+import { Avatar } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { MarkViewProps } from "@tiptap/core";
 import { MarkViewContent } from "@tiptap/react";
@@ -41,7 +41,6 @@ const LinkViewWrapper: React.FC<MarkViewProps> = ({ editor, mark }) => {
       onClick={handleClick}
       style={{
         color: theme.palette.primary.main,
-        textDecoration: 'underline',
         cursor: 'pointer',
         display: 'inline-flex',
         alignItems: 'center',
@@ -67,9 +66,6 @@ const LinkViewWrapper: React.FC<MarkViewProps> = ({ editor, mark }) => {
           }
         }} />
       </Avatar>
-      <Box>
-        {mark?.attrs?.title}
-      </Box>
     </MarkViewContent>
   );
 }
