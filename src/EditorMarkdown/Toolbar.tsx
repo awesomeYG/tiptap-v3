@@ -60,9 +60,113 @@ const EditorMarkdownToolbar = ({ aceEditorRef, isExpend, onUpload }: EditorMarkd
   const audioInputRef = React.useRef<HTMLInputElement>(null);
   const attachmentInputRef = React.useRef<HTMLInputElement>(null);
 
+  const insertBlockTool = (options: {
+    text: string;
+    position?: number;
+    row?: number;
+    wrap?: boolean
+  }) => {
+    const editor = aceEditorRef.current?.editor;
+    if (!editor) return;
+    const cursor = editor.getCursorPosition();
+    const curRowLength = editor.session.getLine(cursor.row).length;
+    const prevRowLength = editor.session.getLine(cursor.row - 1).length;
+    let text = `\n\n${options.text}`;
+    let plusRow = 2;
+    if (curRowLength === 0 && (prevRowLength === 0 && cursor.row > 1)) {
+      text = `${options.text}`;
+      if (options.wrap) {
+        plusRow = 0;
+      }
+    }
+    if (curRowLength === 0 && cursor.row === 0) {
+      text = options.text;
+      if (options.wrap) {
+        plusRow = 0;
+      }
+    }
+    if (curRowLength === 0 && prevRowLength > 0) {
+      text = `\n${options.text}`;
+      if (options.wrap) {
+        plusRow = 1;
+      }
+    }
+    editor.moveCursorTo(cursor.row, curRowLength)
+    editor.clearSelection();
+    editor.insert(text);
+    editor.moveCursorTo(cursor.row + plusRow + (options.row || 0), options.position || 0);
+    editor.focus();
+  }
+
+  const insertInlineTool = (options: {
+    single?: string;
+    left?: string;
+    right?: string;
+    position?: number;
+    row?: number;
+  }) => {
+    const editor = aceEditorRef.current?.editor;
+    if (!editor) return;
+
+    const left = options.single || options.left || ''
+    const right = options.single || options.right || ''
+
+    const selectedText = editor.getSelectedText();
+    const cursor = editor.getCursorPosition();
+    const selectionRange = editor.getSelectionRange();
+
+    if (selectedText) {
+      const wrappedText = `${left}${selectedText}${right}`;
+      editor.insert(wrappedText);
+      const startRow = selectionRange.start.row;
+      const startColumn = selectionRange.start.column;
+      const endRow = selectionRange.end.row;
+      const endColumn = selectionRange.end.column;
+      editor.moveCursorTo(startRow, startColumn);
+      editor.selection.selectTo(endRow, endColumn + left.length + right.length);
+    } else {
+      const { position = 0, row = 0 } = options;
+      const text = `${left}${right}`;
+      const curRow = cursor.row + row;
+      const curColumn = cursor.column + position;
+      editor.insert(text);
+      editor.moveCursorTo(curRow, curColumn + left.length);
+    }
+    editor.focus();
+  }
+
+  const insertHeadingTool = (options: {
+    level: 1 | 2 | 3 | 4 | 5 | 6;
+  }) => {
+    const editor = aceEditorRef.current?.editor;
+    if (!editor) return;
+
+    // 1. 获取当前行数，在下方创建一行
+    const cursor = editor.getCursorPosition();
+    const currentRow = cursor.row;
+    const isEditorEmpty = editor.getValue().trim().length === 0;
+
+    // 2. 在创建的行中插入标题
+    const headingPrefix = '#'.repeat(options.level) + ' ';
+    let text = `\n\n${headingPrefix}`;
+    let targetRow = currentRow + 2;
+    let targetColumn = headingPrefix.length;
+
+    if (isEditorEmpty) {
+      text = headingPrefix;
+      targetRow = currentRow;
+      targetColumn = headingPrefix.length;
+    }
+
+    editor.insert(text);
+
+    // 3. 将光标置于标题中
+    editor.moveCursorTo(targetRow, targetColumn);
+    editor.focus();
+  }
+
   const handleFileUpload = async (file: File, expectedType?: 'image' | 'video' | 'audio' | 'attachment') => {
     if (!onUpload) return;
-
     try {
       const url = await onUpload(file);
       let content = '';
@@ -75,8 +179,7 @@ const EditorMarkdownToolbar = ({ aceEditorRef, isExpend, onUpload }: EditorMarkd
       } else {
         content = `<p>\n<a href="${url}" download="${file.name}">${file.name}</a>\n</p>`;
       }
-
-      insertTextAndFocusPositionRow({ text: content, block: true });
+      insertBlockTool({ text: content, row: 1, position: 1000 });
     } catch (error) {
       console.error('文件上传失败:', error);
     }
@@ -90,44 +193,13 @@ const EditorMarkdownToolbar = ({ aceEditorRef, isExpend, onUpload }: EditorMarkd
     event.target.value = '';
   };
 
-  const insertTextAndFocusPositionRow = (options: {
-    text: string;
-    position?: number;
-    block?: boolean;
-    row?: number;
-  }) => {
-    const { position = 0, row = 0, block = false } = options;
-    const editor = aceEditorRef.current?.editor;
-    if (!editor) return;
-    const cursor = editor.getCursorPosition();
-    const isEditorEmpty = editor.getValue().length === 0;
-
-    let text = options.text
-    let curRow = cursor.row + row
-    let curColumn = cursor.column + position
-
-    if (block) {
-      curColumn = position
-      text = `\n\n${options.text}`
-      curRow += 2
-    }
-
-    if (isEditorEmpty) {
-      text = `${options.text}`
-    }
-
-    editor.insert(text);
-    editor.moveCursorTo(curRow, curColumn);
-    editor.focus();
-  };
-
   const HeadingOptions = [
     {
       id: '1',
       icon: <H1Icon sx={{ fontSize: '1rem' }} />,
       label: '一级标题',
       onClick: () => {
-        insertTextAndFocusPositionRow({ text: '# ', position: 2, block: true });
+        insertHeadingTool({ level: 1 })
       }
     },
     {
@@ -135,7 +207,7 @@ const EditorMarkdownToolbar = ({ aceEditorRef, isExpend, onUpload }: EditorMarkd
       icon: <H2Icon sx={{ fontSize: '1rem' }} />,
       label: '二级标题',
       onClick: () => {
-        insertTextAndFocusPositionRow({ text: '## ', position: 3, block: true });
+        insertHeadingTool({ level: 2 })
       }
     },
     {
@@ -143,7 +215,7 @@ const EditorMarkdownToolbar = ({ aceEditorRef, isExpend, onUpload }: EditorMarkd
       icon: <H3Icon sx={{ fontSize: '1rem' }} />,
       label: '三级标题',
       onClick: () => {
-        insertTextAndFocusPositionRow({ text: '### ', position: 4, block: true });
+        insertHeadingTool({ level: 3 })
       }
     },
     {
@@ -151,7 +223,7 @@ const EditorMarkdownToolbar = ({ aceEditorRef, isExpend, onUpload }: EditorMarkd
       icon: <H4Icon sx={{ fontSize: '1rem' }} />,
       label: '四级标题',
       onClick: () => {
-        insertTextAndFocusPositionRow({ text: '#### ', position: 5, block: true });
+        insertHeadingTool({ level: 4 })
       }
     },
     {
@@ -159,7 +231,7 @@ const EditorMarkdownToolbar = ({ aceEditorRef, isExpend, onUpload }: EditorMarkd
       icon: <H5Icon sx={{ fontSize: '1rem' }} />,
       label: '五级标题',
       onClick: () => {
-        insertTextAndFocusPositionRow({ text: '##### ', position: 6, block: true });
+        insertHeadingTool({ level: 5 })
       }
     },
     {
@@ -167,7 +239,7 @@ const EditorMarkdownToolbar = ({ aceEditorRef, isExpend, onUpload }: EditorMarkd
       icon: <H6Icon sx={{ fontSize: '1rem' }} />,
       label: '六级标题',
       onClick: () => {
-        insertTextAndFocusPositionRow({ text: '###### ', position: 7, block: true });
+        insertHeadingTool({ level: 6 })
       }
     },
   ]
@@ -178,7 +250,7 @@ const EditorMarkdownToolbar = ({ aceEditorRef, isExpend, onUpload }: EditorMarkd
       icon: <BoldIcon sx={{ fontSize: '1rem' }} />,
       label: '加粗',
       onClick: () => {
-        insertTextAndFocusPositionRow({ text: '****', position: 2 });
+        insertInlineTool({ single: '**' });
       }
     },
     {
@@ -186,7 +258,7 @@ const EditorMarkdownToolbar = ({ aceEditorRef, isExpend, onUpload }: EditorMarkd
       icon: <ItalicIcon sx={{ fontSize: '1rem' }} />,
       label: '斜体',
       onClick: () => {
-        insertTextAndFocusPositionRow({ text: '**', position: 1 });
+        insertInlineTool({ single: '*' });
       }
     },
     {
@@ -194,7 +266,7 @@ const EditorMarkdownToolbar = ({ aceEditorRef, isExpend, onUpload }: EditorMarkd
       icon: <StrikethroughIcon sx={{ fontSize: '1rem' }} />,
       label: '删除线',
       onClick: () => {
-        insertTextAndFocusPositionRow({ text: '~~~~', position: 2 });
+        insertInlineTool({ single: '~~' });
       }
     },
     {
@@ -202,7 +274,7 @@ const EditorMarkdownToolbar = ({ aceEditorRef, isExpend, onUpload }: EditorMarkd
       icon: <UnderlineIcon sx={{ fontSize: '1rem' }} />,
       label: '下划线',
       onClick: () => {
-        insertTextAndFocusPositionRow({ text: '++++', position: 2 });
+        insertInlineTool({ single: '++' });
       }
     },
     {
@@ -210,7 +282,7 @@ const EditorMarkdownToolbar = ({ aceEditorRef, isExpend, onUpload }: EditorMarkd
       icon: <MarkPenLineIcon sx={{ fontSize: '1rem' }} />,
       label: '高亮',
       onClick: () => {
-        insertTextAndFocusPositionRow({ text: '====', position: 2 });
+        insertInlineTool({ single: '==' });
       }
     },
     {
@@ -218,7 +290,7 @@ const EditorMarkdownToolbar = ({ aceEditorRef, isExpend, onUpload }: EditorMarkd
       icon: <SuperscriptIcon sx={{ fontSize: '1rem' }} />,
       label: '上标',
       onClick: () => {
-        insertTextAndFocusPositionRow({ text: '^^', position: 1 });
+        insertInlineTool({ single: '^' });
       }
     },
     {
@@ -226,7 +298,7 @@ const EditorMarkdownToolbar = ({ aceEditorRef, isExpend, onUpload }: EditorMarkd
       icon: <SubscriptIcon sx={{ fontSize: '1rem' }} />,
       label: '下标',
       onClick: () => {
-        insertTextAndFocusPositionRow({ text: '~~', position: 1 });
+        insertInlineTool({ single: '~' });
       }
     },
     {
@@ -236,25 +308,19 @@ const EditorMarkdownToolbar = ({ aceEditorRef, isExpend, onUpload }: EditorMarkd
       id: 'bullet-list',
       icon: <ListUnorderedIcon sx={{ fontSize: '1rem' }} />,
       label: '无序列表',
-      onClick: () => {
-        insertTextAndFocusPositionRow({ text: '- ', position: 2, block: true });
-      }
+      onClick: () => insertBlockTool({ text: '- ', position: 2 })
     },
     {
       id: 'ordered-list',
       icon: <ListOrdered2Icon sx={{ fontSize: '1rem' }} />,
       label: '有序列表',
-      onClick: () => {
-        insertTextAndFocusPositionRow({ text: '1. ', position: 3, block: true });
-      }
+      onClick: () => insertBlockTool({ text: '1. ', position: 3 })
     },
     {
       id: 'task-list',
       icon: <ListCheck3Icon sx={{ fontSize: '1rem' }} />,
       label: '任务列表',
-      onClick: () => {
-        insertTextAndFocusPositionRow({ text: '- [ ] ', position: 6, block: true });
-      }
+      onClick: () => insertBlockTool({ text: '- [ ] ', position: 6 })
     },
     ...(isExpend ? [
       {
@@ -264,65 +330,49 @@ const EditorMarkdownToolbar = ({ aceEditorRef, isExpend, onUpload }: EditorMarkd
         id: 'separator',
         icon: <SeparatorIcon sx={{ fontSize: '1rem' }} />,
         label: '分割线',
-        onClick: () => {
-          insertTextAndFocusPositionRow({ text: '---', position: 3, block: true });
-        }
+        onClick: () => insertBlockTool({ text: '---\n\n', row: 2 })
       },
       {
         id: 'blockquote',
         icon: <DoubleQuotesLIcon sx={{ fontSize: '1rem' }} />,
         label: '引用',
-        onClick: () => {
-          insertTextAndFocusPositionRow({ text: '> ', position: 2, block: true });
-        }
+        onClick: () => insertBlockTool({ text: '> ', position: 2 })
       },
       {
         id: 'details',
         icon: <MenuFold2FillIcon sx={{ fontSize: '1rem' }} />,
         label: '折叠面板',
-        onClick: () => {
-          insertTextAndFocusPositionRow({ text: ':::details\n\n:::detailsSummary\n\n:::\n\n:::detailsContent\n\n:::\n\n:::\n', row: 1, block: true });
-        }
+        onClick: () => insertBlockTool({ text: ':::details\n\n:::detailsSummary\n\n:::\n\n:::detailsContent\n\n:::\n\n:::\n', row: 3, wrap: true })
       },
       {
         id: 'alert',
         icon: <Information2LineIcon sx={{ fontSize: '1rem' }} />,
         label: '警告块',
-        onClick: () => {
-          insertTextAndFocusPositionRow({ text: ':::alert {variant="info"}\n\n:::', row: -1, block: true });
-        }
+        onClick: () => insertBlockTool({ text: ':::alert {variant="info"}\n\n:::', row: 1, wrap: true })
       },
       {
         id: 'inline-math',
         icon: <SquareRootIcon sx={{ fontSize: '1rem' }} />,
         label: '行内数学公式',
-        onClick: () => {
-          insertTextAndFocusPositionRow({ text: '$$', position: 1 });
-        }
+        onClick: () => insertInlineTool({ single: '$' })
       },
       {
         id: 'block-math',
         icon: <FunctionsIcon sx={{ fontSize: '1rem' }} />,
         label: '块级数学公式',
-        onClick: () => {
-          insertTextAndFocusPositionRow({ text: '$$\n\n$$', row: 1, block: true });
-        }
+        onClick: () => insertBlockTool({ text: '$$\n\n$$', row: 1, wrap: true })
       },
       {
         id: 'code',
         icon: <CodeLineIcon sx={{ fontSize: '1rem' }} />,
         label: '代码',
-        onClick: () => {
-          insertTextAndFocusPositionRow({ text: '``', position: 1 });
-        }
+        onClick: () => insertInlineTool({ single: '`' })
       },
       {
         id: 'codeBlock',
         icon: <CodeBoxLineIcon sx={{ fontSize: '1rem' }} />,
         label: '代码块',
-        onClick: () => {
-          insertTextAndFocusPositionRow({ text: '```\n\n```', row: 1, block: true });
-        }
+        onClick: () => insertBlockTool({ text: '```\n\n```', row: 1, wrap: true })
       },
     ] : []),
     {
@@ -332,17 +382,13 @@ const EditorMarkdownToolbar = ({ aceEditorRef, isExpend, onUpload }: EditorMarkd
       id: 'link',
       icon: <LinkIcon sx={{ fontSize: '1rem' }} />,
       label: '链接',
-      onClick: () => {
-        insertTextAndFocusPositionRow({ text: '[]()', position: 1 });
-      }
+      onClick: () => insertInlineTool({ left: '[', right: ']()' })
     },
     {
       id: 'image',
       icon: <ImageLineIcon sx={{ fontSize: '1rem' }} />,
       label: '图片',
-      onClick: () => {
-        insertTextAndFocusPositionRow({ text: '![alt]()', position: 7 });
-      }
+      onClick: () => insertInlineTool({ left: '![', right: ']()' })
     },
   ]
 
@@ -378,7 +424,7 @@ const EditorMarkdownToolbar = ({ aceEditorRef, isExpend, onUpload }: EditorMarkd
                     `| ${Array.from({ length: cols }).map(() => '').join(' | ')} |\n`
                   ).join('');
                   const tableMarkdown = `${headerRow}${separatorRow}${dataRows}`;
-                  insertTextAndFocusPositionRow({ text: tableMarkdown, position: 1, block: true });
+                  insertBlockTool({ text: tableMarkdown, position: 1, wrap: true });
                 }}
               />
             },
@@ -425,19 +471,19 @@ const EditorMarkdownToolbar = ({ aceEditorRef, isExpend, onUpload }: EditorMarkd
           label: '分割线',
           key: 'separator',
           icon: <SeparatorIcon sx={{ fontSize: '1rem' }} />,
-          onClick: () => insertTextAndFocusPositionRow({ text: '---', position: 3, block: true }),
+          onClick: () => insertBlockTool({ text: '---\n\n', row: 2 }),
         },
         {
           label: '引用',
           key: 'blockquote',
           icon: <DoubleQuotesLIcon sx={{ fontSize: '1rem' }} />,
-          onClick: () => insertTextAndFocusPositionRow({ text: '> ', position: 2, block: true }),
+          onClick: () => insertBlockTool({ text: '> ', position: 2 }),
         },
         {
           label: '折叠面板',
           key: 'details',
           icon: <MenuFold2FillIcon sx={{ fontSize: '1rem' }} />,
-          onClick: () => insertTextAndFocusPositionRow({ text: ':::details\n\n:::detailsSummary\n\n:::\n\n:::detailsContent\n\n:::\n\n:::\n', row: 1, block: true }),
+          onClick: () => insertBlockTool({ text: ':::details\n\n:::detailsSummary\n\n:::\n\n:::detailsContent\n\n:::\n\n:::\n', row: 3, wrap: true }),
         },
         {
           label: '警告块',
@@ -448,41 +494,31 @@ const EditorMarkdownToolbar = ({ aceEditorRef, isExpend, onUpload }: EditorMarkd
               label: '信息 Info',
               key: 'info',
               icon: <Information2FillIcon sx={{ fontSize: '1rem', color: 'primary.main' }} />,
-              onClick: () => {
-                insertTextAndFocusPositionRow({ text: ':::alert {variant="info"}\n\n:::', row: -1, block: true });
-              },
+              onClick: () => insertBlockTool({ text: ':::alert {variant="info"}\n\n:::', row: 1, wrap: true }),
             },
             {
               label: '警告 Warning',
               key: 'warning',
               icon: <ErrorWarningFillIcon sx={{ fontSize: '1rem', color: 'warning.main' }} />,
-              onClick: () => {
-                insertTextAndFocusPositionRow({ text: ':::alert {variant="warning"}\n\n:::', row: -1, block: true });
-              },
+              onClick: () => insertBlockTool({ text: ':::alert {variant="warning"}\n\n:::', row: 1, wrap: true }),
             },
             {
               label: '错误 Error',
               key: 'error',
               icon: <CloseCircleFillIcon sx={{ fontSize: '1rem', color: 'error.main' }} />,
-              onClick: () => {
-                insertTextAndFocusPositionRow({ text: ':::alert {variant="error"}\n\n:::', row: -1, block: true });
-              },
+              onClick: () => insertBlockTool({ text: ':::alert {variant="error"}\n\n:::', row: 1, wrap: true }),
             },
             {
               label: '成功 Success',
               key: 'success',
               icon: <CheckboxCircleFillIcon sx={{ fontSize: '1rem', color: 'success.main' }} />,
-              onClick: () => {
-                insertTextAndFocusPositionRow({ text: ':::alert {variant="success"}\n\n:::', row: -1, block: true });
-              },
+              onClick: () => insertBlockTool({ text: ':::alert {variant="success"}\n\n:::', row: 1, wrap: true }),
             },
             {
               label: '默认 Default',
               key: 'default',
               icon: <UserSmileFillIcon sx={{ fontSize: '1rem', color: 'text.disabled' }} />,
-              onClick: () => {
-                insertTextAndFocusPositionRow({ text: ':::alert {variant="default"}\n\n:::', row: -1, block: true });
-              },
+              onClick: () => insertBlockTool({ text: ':::alert {variant="default"}\n\n:::', row: 1, wrap: true }),
             }
           ]
         },
@@ -502,13 +538,13 @@ const EditorMarkdownToolbar = ({ aceEditorRef, isExpend, onUpload }: EditorMarkd
               label: '行内代码',
               key: 'inlineCode',
               icon: <CodeLineIcon sx={{ fontSize: '1rem' }} />,
-              onClick: () => insertTextAndFocusPositionRow({ text: '`', position: 1 }),
+              onClick: () => insertInlineTool({ single: '`' }),
             },
             {
               label: '代码块',
               key: 'codeBlock',
               icon: <CodeBoxLineIcon sx={{ fontSize: '1rem' }} />,
-              onClick: () => insertTextAndFocusPositionRow({ text: '```\n\n```', row: 1, block: true }),
+              onClick: () => insertBlockTool({ text: '```\n\n```', row: 1, wrap: true }),
             },
           ]
         },
@@ -521,17 +557,13 @@ const EditorMarkdownToolbar = ({ aceEditorRef, isExpend, onUpload }: EditorMarkd
               label: '行内数学公式',
               key: 'inline-math',
               icon: <SquareRootIcon sx={{ fontSize: '1rem' }} />,
-              onClick: () => {
-                insertTextAndFocusPositionRow({ text: '$$', position: 1 });
-              }
+              onClick: () => insertInlineTool({ single: '$' })
             },
             {
               label: '块级数学公式',
               key: 'block-math',
               icon: <FunctionsIcon sx={{ fontSize: '1rem' }} />,
-              onClick: () => {
-                insertTextAndFocusPositionRow({ text: '$$\n\n$$', row: 1, block: true });
-              }
+              onClick: () => insertBlockTool({ text: '$$\n\n$$', row: 1, wrap: true })
             }
           ]
         },
@@ -611,7 +643,7 @@ const EditorMarkdownToolbar = ({ aceEditorRef, isExpend, onUpload }: EditorMarkd
                 `| ${Array.from({ length: cols }).map(() => '').join(' | ')} |\n`
               ).join('');
               const tableMarkdown = `${headerRow}${separatorRow}${dataRows}`;
-              insertTextAndFocusPositionRow({ text: tableMarkdown, position: 1, block: true });
+              insertBlockTool({ text: tableMarkdown, position: 1, wrap: true });
             }}
           />
         }
