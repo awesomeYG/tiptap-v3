@@ -105,6 +105,11 @@ export const InlineAttachmentExtension = (props: EditorFnProps) => Node.create({
     return ['span', { 'data-tag': 'attachment', ...mergeAttributes(this.options.HTMLAttributes, HTMLAttributes) }]
   },
 
+  renderMarkdown({ HTMLAttributes }) {
+    const { url, title } = HTMLAttributes as any
+    return `<a href="${url}" target="_blank" download="${title}">${title}</a>`
+  },
+
   addKeyboardShortcuts() {
     return {
       'Mod-5': () => {

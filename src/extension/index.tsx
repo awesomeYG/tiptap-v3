@@ -89,10 +89,12 @@ export const getExtensions = ({
     InlineUploadProgressExtension,
     YamlFormat,
     CustomHorizontalRule,
+    IframeExtension({ onError, onValidateUrl }),
     VideoExtension({ onUpload, onError, onValidateUrl }),
     AudioExtension({ onUpload, onError, onValidateUrl }),
     ...TableExtension({ editable }),
     TableOfContents({ onTocUpdate }),
+    InlineAttachmentExtension({ onUpload, onError }),
     ImageExtension({ onUpload, onError, onValidateUrl }),
     CustomBlockMathExtension({ onError }),
     CustomInlineMathExtension({ onError }),
@@ -143,9 +145,7 @@ export const getExtensions = ({
     defaultExtensions.push(...[
       InlineLinkExtension,
       BlockLinkExtension,
-      IframeExtension({ onError, onValidateUrl }),
       BlockAttachmentExtension({ onUpload, onError }),
-      InlineAttachmentExtension({ onUpload, onError }),
     ])
   }
 

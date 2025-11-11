@@ -63,7 +63,6 @@ const AddIcon = ({ onClick }: { onClick?: (event: React.MouseEvent<HTMLDivElemen
 
 const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: MenuItem[], onTip?: OnTipFunction }) => {
   const theme = useTheme()
-  const isMarkdown = editor.options.contentType === 'markdown'
 
   const [current, setCurrent] = useState<{
     editor: Editor;

@@ -90,6 +90,11 @@ export const IframeExtension = (props: IframeExtensionProps) => Node.create({
     return ['iframe', mergeAttributes(this.options.HTMLAttributes, { ...rest, src, frameborder: '0', allowfullscreen: 'true', autoplay: '0', loop: '0' })]
   },
 
+  renderMarkdown({ HTMLAttributes }) {
+    const { src, ...rest } = HTMLAttributes as any
+    return `<iframe ${rest.src ? `src="${rest.src}"` : ''} ${rest.width ? `width="${rest.width}"` : ''} ${rest.height ? `height="${rest.height}"` : ''} frameborder="0" allowfullscreen="true" autoplay="0" loop="0"></iframe>`
+  },
+
   addCommands() {
     return {
       setIframe: (options) => ({ commands }) => {

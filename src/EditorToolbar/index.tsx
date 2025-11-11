@@ -36,7 +36,6 @@ interface EditorToolbarProps {
 }
 
 const EditorToolbar = ({ editor, menuInToolbarMore }: EditorToolbarProps) => {
-  const isMarkdown = editor.options.contentType === 'markdown'
 
   const {
     isUndo,
@@ -110,7 +109,7 @@ const EditorToolbar = ({ editor, menuInToolbarMore }: EditorToolbarProps) => {
           onClick={() => editor.chain().focus().setAiWriting(!isAiWriting).run()}
           className={isAiWriting ? 'tool-active' : ''}
         />}
-        <EditorInsert editor={editor} isMarkdown={isMarkdown} />
+        <EditorInsert editor={editor} />
         <Divider
           orientation="vertical"
           flexItem
