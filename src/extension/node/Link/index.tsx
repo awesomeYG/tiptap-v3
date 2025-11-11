@@ -242,6 +242,8 @@ export const InlineLinkExtension = Node.create<LinkOptions>({
         target: '_blank',
         class: null,
         type: 'icon',
+        rel: null,
+        title: null,
       },
       isAllowedUri: (url, ctx) => !!isAllowedUri(url, ctx.protocols),
       validate: url => !!url,
