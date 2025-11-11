@@ -132,6 +132,10 @@ export const VideoExtension = (props: VideoExtensionProps) => Node.create({
     return ['video', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes)]
   },
 
+  renderMarkdown({ HTMLAttributes }) {
+    return `<video ${HTMLAttributes.src ? `src="${HTMLAttributes.src}"` : ''} ${HTMLAttributes.width ? `width="${HTMLAttributes.width}"` : ''} ${HTMLAttributes.controls ? 'controls' : ''} ${HTMLAttributes.autoplay ? 'autoplay' : ''} ${HTMLAttributes.loop ? 'loop' : ''} ${HTMLAttributes.muted ? 'muted' : ''} ${HTMLAttributes.poster ? `poster="${HTMLAttributes.poster}"` : ''}></video>`
+  },
+
   addCommands() {
     return {
       setVideo: (options) => ({ commands }) => {
