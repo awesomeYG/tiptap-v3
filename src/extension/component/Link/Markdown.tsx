@@ -42,30 +42,23 @@ const LinkViewWrapper: React.FC<MarkViewProps> = ({ editor, mark }) => {
       style={{
         color: theme.palette.primary.main,
         cursor: 'pointer',
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: '2px',
-        verticalAlign: '-0.125em',
-        lineHeight: 1,
       }}
     >
       <Avatar
+        component='span'
         sx={{
-          width: '1rem',
-          height: '1rem',
-          alignSelf: 'center',
+          width: '16px',
+          height: '16px',
           bgcolor: '#FFFFFF',
+          display: 'inline-flex',
+          verticalAlign: '-0.125em',
+          marginRight: '2px',
         }}
         src={favicon}
       >
         <ChromeIcon sx={{
           fontSize: '1rem',
-          cursor: 'grab',
           color: 'primary.main',
-          alignSelf: 'center',
-          ':active': {
-            cursor: 'grabbing',
-          }
         }} />
       </Avatar>
     </MarkViewContent>
