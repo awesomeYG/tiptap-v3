@@ -41,7 +41,7 @@ import {
   VerticalAlign,
   VideoExtension,
   YamlFormat,
-  YoutubeExtension,
+  YoutubeExtension
 } from './node';
 
 export const getExtensions = ({
@@ -94,7 +94,6 @@ export const getExtensions = ({
     AudioExtension({ onUpload, onError, onValidateUrl }),
     ...TableExtension({ editable }),
     TableOfContents({ onTocUpdate }),
-    InlineAttachmentExtension({ onUpload, onError }),
     ImageExtension({ onUpload, onError, onValidateUrl }),
     CustomBlockMathExtension({ onError }),
     CustomInlineMathExtension({ onError }),
@@ -145,6 +144,7 @@ export const getExtensions = ({
     defaultExtensions.push(...[
       InlineLinkExtension,
       BlockLinkExtension,
+      InlineAttachmentExtension({ onUpload, onError }),
       BlockAttachmentExtension({ onUpload, onError }),
     ])
   }

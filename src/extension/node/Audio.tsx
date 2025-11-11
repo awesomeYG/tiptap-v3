@@ -128,8 +128,10 @@ export const AudioExtension = (props: AudioExtensionProps) => Node.create({
     return ['audio', mergeAttributes(this.options.HTMLAttributes, HTMLAttributes)]
   },
 
-  renderMarkdown({ HTMLAttributes }) {
-    return `<audio ${HTMLAttributes.src ? `src="${HTMLAttributes.src}"` : ''} ${HTMLAttributes.title ? `title="${HTMLAttributes.title}"` : ''} ${HTMLAttributes.poster ? `poster="${HTMLAttributes.poster}"` : ''} ${HTMLAttributes.controls ? 'controls' : ''} ${HTMLAttributes.autoplay ? 'autoplay' : ''} ${HTMLAttributes.loop ? 'loop' : ''} ${HTMLAttributes.muted ? 'muted' : ''}></audio>`
+  renderMarkdown(node) {
+    const { src, title, poster, controls, autoplay, loop, muted } = node.attrs as any
+    if (!src) return ''
+    return `<audio src="${src}" ${title ? `title="${title}"` : ''} ${poster ? `poster="${poster}"` : ''} ${controls ? 'controls' : ''} ${autoplay ? 'autoplay' : ''} ${loop ? 'loop' : ''} ${muted ? 'muted' : ''}></audio>`
   },
 
   addCommands() {

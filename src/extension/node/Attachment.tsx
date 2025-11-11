@@ -105,8 +105,9 @@ export const InlineAttachmentExtension = (props: EditorFnProps) => Node.create({
     return ['span', { 'data-tag': 'attachment', ...mergeAttributes(this.options.HTMLAttributes, HTMLAttributes) }]
   },
 
-  renderMarkdown({ HTMLAttributes }) {
-    const { url, title } = HTMLAttributes as any
+  renderMarkdown(node) {
+    const { url, title } = node.attrs as any
+    if (!url) return ''
     return `<a href="${url}" target="_blank" download="${title}">${title}</a>`
   },
 
