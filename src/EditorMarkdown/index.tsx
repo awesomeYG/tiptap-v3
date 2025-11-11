@@ -15,8 +15,12 @@ import 'ace-builds/src-noconflict/theme-github';
 interface EditorMarkdownProps {
   editor: Editor;
   value?: string;
+  placeholder?: string;
   height: number | string;
   onUpload?: UploadFunction;
+  defaultDisplayMode?: DisplayMode;
+  splitMode?: boolean;
+  showToolbar?: boolean;
   onAceChange?: (value: string) => void;
   onTiptapChange?: (value: string) => void;
 }
@@ -30,13 +34,17 @@ type DisplayMode = 'edit' | 'preview' | 'split';
 const EditorMarkdown = forwardRef<MarkdownEditorRef, EditorMarkdownProps>(({
   editor,
   value,
+  placeholder,
   onAceChange,
   height,
-  onUpload
+  onUpload,
+  splitMode = false,
+  defaultDisplayMode = 'edit',
+  showToolbar = true,
 }, ref) => {
   const theme = useTheme();
   const aceEditorRef = useRef<AceEditor>(null);
-  const [displayMode, setDisplayMode] = useState<DisplayMode>('edit');
+  const [displayMode, setDisplayMode] = useState<DisplayMode>(defaultDisplayMode);
   const [isExpend, setIsExpend] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -89,7 +97,7 @@ const EditorMarkdown = forwardRef<MarkdownEditorRef, EditorMarkdownProps>(({
       zIndex: 2000,
     }),
   }}>
-    <Stack
+    {showToolbar && <Stack
       direction='row'
       alignItems={'center'}
       justifyContent={'space-between'}
@@ -145,7 +153,7 @@ const EditorMarkdown = forwardRef<MarkdownEditorRef, EditorMarkdownProps>(({
           >
             预览模式
           </Box>
-          <Box
+          {splitMode && <Box
             className={
               displayMode === 'split' ? 'md-display-mode-active' : 'md-display-mode'
             }
@@ -153,10 +161,10 @@ const EditorMarkdown = forwardRef<MarkdownEditorRef, EditorMarkdownProps>(({
             onClick={() => setDisplayMode('split')}
           >
             分屏模式
-          </Box>
+          </Box>}
         </Stack>
       </Stack>
-    </Stack>
+    </Stack>}
     <Stack direction={'row'} alignItems={'stretch'} sx={{
       border: '1px solid',
       borderColor: 'divider',
@@ -186,7 +194,7 @@ const EditorMarkdown = forwardRef<MarkdownEditorRef, EditorMarkdownProps>(({
             wrapEnabled={true}
             readOnly={loading}
             showPrintMargin={false}
-            placeholder={MARKDOWN_EDITOR_PLACEHOLDER}
+            placeholder={placeholder || MARKDOWN_EDITOR_PLACEHOLDER}
             fontSize={16}
             editorProps={{ $blockScrolling: true }}
             setOptions={{
