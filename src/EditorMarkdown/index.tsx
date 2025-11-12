@@ -6,6 +6,8 @@ import AceEditor from "react-ace";
 import { MARKDOWN_EDITOR_PLACEHOLDER } from '../contants/markdown-placeholder';
 import { UploadFunction } from '../type';
 import EditorMarkdownToolbar from './Toolbar';
+import UploadProgress from './UploadProgress';
+import { insertInlineTool } from './util';
 
 import 'ace-builds/src-noconflict/ace';
 import 'ace-builds/src-noconflict/ext-language_tools';
@@ -15,12 +17,14 @@ import 'ace-builds/src-noconflict/theme-github';
 interface EditorMarkdownProps {
   editor: Editor;
   value?: string;
+  readOnly?: string;
   placeholder?: string;
   height: number | string;
   onUpload?: UploadFunction;
   defaultDisplayMode?: DisplayMode;
   splitMode?: boolean;
   showToolbar?: boolean;
+  showLineNumbers?: boolean;
   onAceChange?: (value: string) => void;
   onTiptapChange?: (value: string) => void;
 }
@@ -38,15 +42,20 @@ const EditorMarkdown = forwardRef<MarkdownEditorRef, EditorMarkdownProps>(({
   onAceChange,
   height,
   onUpload,
+  readOnly = false,
   splitMode = false,
   defaultDisplayMode = 'edit',
   showToolbar = true,
+  showLineNumbers = true,
 }, ref) => {
   const theme = useTheme();
   const aceEditorRef = useRef<AceEditor>(null);
   const [displayMode, setDisplayMode] = useState<DisplayMode>(defaultDisplayMode);
   const [isExpend, setIsExpend] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+
+  const [progress, setProgress] = useState(0);
+  const [fileName, setFileName] = useState('');
 
   const EditorHeight = useMemo(() => {
     return isExpend ? 'calc(100vh - 45px)' : height;
@@ -57,6 +66,92 @@ const EditorMarkdown = forwardRef<MarkdownEditorRef, EditorMarkdownProps>(({
     editor.commands.setContent(value, {
       contentType: 'markdown'
     });
+  }
+
+  const handleFileUpload = async (file: File, expectedType?: 'image' | 'video' | 'audio' | 'attachment') => {
+    if (!onUpload || !aceEditorRef.current) return;
+    try {
+      setLoading?.(true);
+      setFileName(file.name);
+      const url = await onUpload(file, (progress) => {
+        setProgress(Math.round(progress.progress * 100));
+      });
+      let content = '';
+      if (expectedType === 'image') {
+        content = `![${file.name}](${url})`;
+      } else if (expectedType === 'video') {
+        content = `<video src="${url}" controls="true"></video>`;
+      } else if (expectedType === 'audio') {
+        content = `<audio src="${url}" controls="true"></audio>`;
+      } else {
+        content = `<a href="${url}" download="${file.name}">${file.name}</a>`;
+      }
+      insertInlineTool(aceEditorRef.current, { left: content, position: 1000 });
+    } catch (error) {
+      console.error('文件上传失败:', error);
+    } finally {
+      setLoading?.(false);
+      setFileName('');
+      setProgress(0);
+    }
+  };
+
+  const handlePaste = async (e: React.ClipboardEvent) => {
+    if (!['edit', 'split'].includes(displayMode) || loading || !!readOnly) return;
+    const items = e.clipboardData.items;
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      if (item.type.indexOf('image') !== -1) {
+        e.preventDefault();
+        const file = item.getAsFile();
+        if (file) {
+          await handleFileUpload(file, 'image');
+        }
+        break;
+      }
+    }
+  }
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
+  const handleDrop = async (e: React.DragEvent) => {
+    // 只在编辑模式下处理
+    if (!['edit', 'split'].includes(displayMode)) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    // 先聚焦编辑器，确保光标位置正确
+    if (aceEditorRef.current) {
+      aceEditorRef.current.editor.focus();
+    }
+
+    const files = Array.from(e.dataTransfer.files);
+    const imageFiles = files.filter(file => file.type.startsWith('image/'));
+    const videoFiles = files.filter(file => file.type.startsWith('video/'));
+    const audioFiles = files.filter(file => file.type.startsWith('audio/'));
+    const attachmentFiles = files.filter(file => !file.type.startsWith('image/') && !file.type.startsWith('video/') && !file.type.startsWith('audio/'));
+
+    for (const file of imageFiles) {
+      await handleFileUpload(file, 'image');
+    }
+    for (const file of videoFiles) {
+      await handleFileUpload(file, 'video');
+    }
+    for (const file of audioFiles) {
+      await handleFileUpload(file, 'audio');
+    }
+    for (const file of attachmentFiles) {
+      await handleFileUpload(file, 'attachment');
+    }
   }
 
   useImperativeHandle(ref, () => ({
@@ -97,6 +192,7 @@ const EditorMarkdown = forwardRef<MarkdownEditorRef, EditorMarkdownProps>(({
       zIndex: 2000,
     }),
   }}>
+    {loading && <UploadProgress progress={progress} fileName={fileName} />}
     {showToolbar && <Stack
       direction='row'
       alignItems={'center'}
@@ -121,11 +217,9 @@ const EditorMarkdown = forwardRef<MarkdownEditorRef, EditorMarkdownProps>(({
       }}
     >
       <EditorMarkdownToolbar
-        aceEditorRef={aceEditorRef}
         isExpend={isExpend}
-        onUpload={onUpload}
-        loading={loading}
-        setLoading={setLoading}
+        aceEditorRef={aceEditorRef}
+        onFileUpload={handleFileUpload}
       />
       <Stack direction={'row'} alignItems={'center'} gap={1}>
         <IconButton color='inherit' onClick={() => setIsExpend(!isExpend)}>
@@ -173,6 +267,10 @@ const EditorMarkdown = forwardRef<MarkdownEditorRef, EditorMarkdownProps>(({
       {['edit', 'split'].includes(displayMode) && (
         <Stack
           direction='column'
+          onPaste={handlePaste}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
           sx={{
             flex: 1,
             fontFamily: 'monospace',
@@ -181,6 +279,7 @@ const EditorMarkdown = forwardRef<MarkdownEditorRef, EditorMarkdownProps>(({
               height: '100%',
               overflow: 'auto',
               width: '100%',
+              fontStyle: 'normal',
             },
           }}
         >
@@ -192,7 +291,7 @@ const EditorMarkdown = forwardRef<MarkdownEditorRef, EditorMarkdownProps>(({
             onChange={onChange}
             name='project-doc-editor'
             wrapEnabled={true}
-            readOnly={loading}
+            readOnly={loading || !!readOnly}
             showPrintMargin={false}
             placeholder={placeholder || MARKDOWN_EDITOR_PLACEHOLDER}
             fontSize={16}
@@ -200,7 +299,7 @@ const EditorMarkdown = forwardRef<MarkdownEditorRef, EditorMarkdownProps>(({
             setOptions={{
               enableBasicAutocompletion: true,
               enableLiveAutocompletion: true,
-              showLineNumbers: true,
+              showLineNumbers: showLineNumbers,
               tabSize: 2,
             }}
             style={{

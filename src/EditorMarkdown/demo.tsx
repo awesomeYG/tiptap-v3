@@ -10,7 +10,7 @@ const Reader = () => {
     return new Promise((resolve) => {
       let progress = 0;
       const interval = setInterval(() => {
-        progress += Math.random() * 2;
+        progress += Math.random() * 20;
         if (progress >= 100) {
           progress = 100;
           onProgress?.({ progress: progress / 100 });
@@ -113,8 +113,8 @@ const Reader = () => {
         height={'500px'}
         value={mdContent}
         splitMode={true}
-        showToolbar={false}
-        defaultDisplayMode='edit'
+        // showToolbar={false}
+        defaultDisplayMode='split'
         placeholder='请输入内容'
         onUpload={onUpload}
         onAceChange={setMdContent}

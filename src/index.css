@@ -99,6 +99,7 @@
   margin: 8px 0;
   flex-direction: column;
   position: relative;
+  min-height: var(--common-row-line-height);
 }
 
 .tiptap.ProseMirror ol li {
