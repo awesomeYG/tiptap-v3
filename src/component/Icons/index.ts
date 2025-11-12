@@ -45,6 +45,7 @@ export { DownloadLineIcon } from './download-line-icon';
 export { DraggableIcon } from './draggable-icon';
 export { EditBoxLineIcon } from './edit-box-line-icon';
 export { EditLineIcon } from './edit-line-icon';
+export { EmotionLineIcon } from './emotion-line-icon';
 export { EraserLineIcon } from './eraser-line-icon';
 export { ErrorWarningFillIcon } from './error-warning-fill-icon';
 export { ExpendIcon } from './expend-icon';
