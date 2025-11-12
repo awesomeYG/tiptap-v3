@@ -1,13 +1,13 @@
-import { AddLineIcon, AlignBottomIcon, AlignCenterIcon, AlignJustifyIcon, AlignLeftIcon, AlignRightIcon, AlignTopIcon, ArrowDownSLineIcon, AttachmentLineIcon, BrushLineIcon, DeleteLineIcon, DownloadLineIcon, DraggableIcon, EraserLineIcon, FileCopyLineIcon, FontSizeIcon, H1Icon, H2Icon, H3Icon, ImageLineIcon, IndentDecreaseIcon, IndentIncreaseIcon, Information2LineIcon, ListCheck3Icon, ListOrdered2Icon, ListUnorderedIcon, MovieLineIcon, Music2LineIcon, QuoteTextIcon, Repeat2LineIcon, ScissorsCutLineIcon, SeparatorIcon, TextIcon, TextWrapIcon } from '@ctzhian/tiptap/component/Icons';
+import { AddLineIcon, AlignBottomIcon, AlignCenterIcon, AlignJustifyIcon, AlignLeftIcon, AlignRightIcon, AlignTopIcon, ArrowDownSLineIcon, AttachmentLineIcon, BrushLineIcon, DeleteLineIcon, DownloadLineIcon, DraggableIcon, EraserLineIcon, FileCopyLineIcon, FontSizeIcon, H1Icon, H2Icon, H3Icon, ImageLineIcon, IndentDecreaseIcon, IndentIncreaseIcon, Information2LineIcon, ListCheck3Icon, ListOrdered2Icon, ListUnorderedIcon, MovieLineIcon, Music2LineIcon, QuoteTextIcon, Repeat2LineIcon, ScissorsCutLineIcon, TextIcon, TextWrapIcon } from '@ctzhian/tiptap/component/Icons';
 import { NODE_TYPE_LABEL, NodeTypeEnum } from '@ctzhian/tiptap/contants/enums';
 import { MenuItem, OnTipFunction } from '@ctzhian/tiptap/type';
 import { Box, Divider, Stack, Typography, useTheme } from '@mui/material';
 import DragHandle from '@tiptap/extension-drag-handle-react';
 import { Fragment, Node, Slice } from '@tiptap/pm/model';
 import { NodeSelection } from '@tiptap/pm/state';
-import { Editor, useEditorState } from '@tiptap/react';
+import { Editor } from '@tiptap/react';
 import React, { useCallback, useState } from 'react';
-import { convertNodeAt, downloadFiles, FileInfo, filterResourcesByType, getAllResources, getShortcutKeyText, hasMarksInSelection } from '../../util';
+import { convertNodeAt, downloadFiles, FileInfo, filterResourcesByType, getAllResources, getShortcutKeyText, hasMarksInBlock } from '../../util';
 import Menu from '../Menu';
 import { ToolbarItem } from '../Toolbar';
 
@@ -95,6 +95,8 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
     download?: boolean;
   } | null>(null)
 
+  const [hasMarks, setHasMarks] = useState(false)
+
   const THEME_TEXT_COLOR = [
     { label: '默认色', value: theme.palette.text.primary },
     { label: '主题色', value: theme.palette.primary.main },
@@ -161,14 +163,6 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
     }
   }
 
-  const hasMarksDeep = (node: Node | null | undefined): boolean => {
-    if (!node) return false
-    if ((node as any).marks && (node as any).marks.length > 0) return true
-    const children = (node as any).content?.content as Node[] | undefined
-    if (!children || children.length === 0) return false
-    return children.some(child => hasMarksDeep(child))
-  }
-
   const canCurrentNodeIndent = (): boolean => {
     return !!(current.node && (current.node as any).type)
   }
@@ -199,17 +193,11 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
         images,
         attachments,
       })
+      if (data.node) {
+        setHasMarks(hasMarksInBlock(data.node))
+      }
     }
   }, [current.pos, current.node])
-
-  const {
-    hasMarks,
-  } = useEditorState({
-    editor,
-    selector: ctx => ({
-      hasMarks: hasMarksInSelection(ctx.editor.state),
-    })
-  })
 
   return <DragHandle
     editor={editor}
@@ -253,6 +241,9 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
         transformOrigin={{ vertical: 'top', horizontal: 'left' }}
         arrowIcon={<ArrowDownSLineIcon sx={{ fontSize: '1rem', transform: 'rotate(-90deg)' }} />}
         header={<>
+          <Typography sx={{ p: 1, fontSize: '0.75rem', color: 'text.secondary', fontWeight: 'bold' }}>
+            {currentNode?.label}
+          </Typography>
           <Stack direction={'row'} flexWrap={'wrap'} sx={{ fontSize: 14 }}>
             <ToolbarItem
               key={'indent-decrease'}
@@ -279,14 +270,18 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
               disabled={!canCurrentNodeIndent()}
             />
             <ToolbarItem
-              key={'insert-divider'}
+              key={'format'}
+              disabled={!hasMarks}
               onClick={() => {
                 if (current.node && current.pos !== undefined) {
-                  current.editor.chain().focus().setHorizontalRule().run()
+                  const selection = current.editor.commands.setTextSelection({ from: current.pos, to: current.pos + current.node?.nodeSize })
+                  if (selection) {
+                    current.editor.chain().unsetAllMarks().focus(current.pos - 1).run()
+                  }
                 }
               }}
-              icon={<SeparatorIcon sx={{ fontSize: '1rem' }} />}
-              tip={'分割线'}
+              icon={<EraserLineIcon sx={{ fontSize: '1rem' }} />}
+              tip={'清除格式'}
             />
             <ToolbarItem
               key={'copy'}
@@ -350,12 +345,6 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
           <Divider sx={{ my: 0.5 }} />
         </>}
         list={[
-          {
-            customLabel: <Typography sx={{ p: 1, fontSize: '0.75rem', color: 'text.secondary', fontWeight: 'bold' }}>
-              {currentNode?.label}
-            </Typography>,
-            key: 'current-node',
-          },
           ...(currentNode?.color ? [{
             key: 'color',
             label: '颜色',
@@ -577,10 +566,6 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
               },
             ]
           }] : []),
-          // ...(currentNode?.color || currentNode?.fontSize ? [{
-          //   customLabel: <Divider sx={{ my: 0.5 }} />,
-          //   key: 'divider1',
-          // }] : []),
           ...(currentNode?.convert ? [
             {
               label: '转换',
@@ -930,19 +915,6 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
             ] : [])
           ]),
           ...(more ? more : []),
-          ...(hasMarks ? [{
-            label: '文本格式化',
-            key: 'format',
-            icon: <EraserLineIcon sx={{ fontSize: '1rem' }} />,
-            onClick: () => {
-              if (current.node && current.pos !== undefined) {
-                const selection = current.editor.commands.setTextSelection({ from: current.pos, to: current.pos + current.node?.nodeSize })
-                if (selection) {
-                  current.editor.chain().unsetAllMarks().focus(current.pos - 1).run()
-                }
-              }
-            }
-          }] : []),
         ]}
       /> : <DragIcon />}
     </Stack>

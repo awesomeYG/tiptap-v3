@@ -1,4 +1,4 @@
-import { FileIcon } from "@ctzhian/tiptap/component/Icons"
+import { Download2LineIcon } from "@ctzhian/tiptap/component/Icons"
 import { Box, Stack } from "@mui/material"
 import React from "react"
 import { AttachmentAttributes } from "."
@@ -82,14 +82,10 @@ export const AttachmentContent: React.FC<AttachmentContentProps> = ({ attrs, typ
             sx={blockInnerStyles}
             {...(!editable && { 'data-title': attrs.title, 'data-type': type })}
           >
-            <FileIcon sx={{
+            <Download2LineIcon sx={{
               fontSize: '2rem',
-              cursor: 'grab',
               color: attrs.url === 'error' ? 'error.main' : 'primary.main',
               alignSelf: 'center',
-              ':active': {
-                cursor: 'grabbing',
-              }
             }} />
             <Stack sx={{ flex: 1 }} gap={0.5}>
               <Box sx={{ fontSize: '0.875rem', fontWeight: 'bold' }}>
@@ -114,7 +110,7 @@ export const AttachmentContent: React.FC<AttachmentContentProps> = ({ attrs, typ
               alignItems: 'center',
               gap: 0.5,
             }}>
-              <FileIcon sx={{
+              <Download2LineIcon sx={{
                 fontSize: '0.875rem',
                 cursor: 'grab',
                 color: 'primary.main',
@@ -127,7 +123,7 @@ export const AttachmentContent: React.FC<AttachmentContentProps> = ({ attrs, typ
             </Box>
           ) : (
             <>
-              <FileIcon sx={{
+              <Download2LineIcon sx={{
                 fontSize: '0.875rem',
                 cursor: 'grab',
                 color: 'primary.main',

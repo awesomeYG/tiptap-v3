@@ -2,7 +2,7 @@ import { getShortcutKeyText } from '@ctzhian/tiptap/util';
 import { Typography } from '@mui/material';
 import { Editor } from '@tiptap/react';
 import React from 'react';
-import { AddCircleFillIcon, ArrowDownSLineIcon, AttachmentLineIcon, CheckboxCircleFillIcon, CloseCircleFillIcon, CodeBoxLineIcon, CodeLineIcon, CodeSSlashLineIcon, DoubleQuotesLIcon, ErrorWarningFillIcon, Folder2LineIcon, FormulaIcon, FunctionsIcon, ImageLineIcon, Information2FillIcon, Information2LineIcon, MenuFold2FillIcon, MovieLineIcon, Music2LineIcon, SeparatorIcon, SquareRootIcon, Table2Icon, UserSmileFillIcon, WindowFillIcon } from '../../Icons';
+import { AddCircleFillIcon, ArrowDownSLineIcon, AttachmentLineIcon, CheckboxCircleFillIcon, CloseCircleFillIcon, CodeBoxLineIcon, CodeLineIcon, CodeSSlashLineIcon, DoubleQuotesLIcon, ErrorWarningFillIcon, FormulaIcon, FunctionsIcon, ImageLineIcon, Information2FillIcon, Information2LineIcon, MenuFold2FillIcon, MovieLineIcon, Music2LineIcon, SeparatorIcon, SquareRootIcon, Table2Icon, UserSmileFillIcon, WindowFillIcon } from '../../Icons';
 import Menu from '../../Menu';
 import ToolbarItem from '../Item';
 import TableSizePicker from '../TableSizePicker';
@@ -14,6 +14,7 @@ interface EditorInsertProps {
 const EditorInsert = ({ editor }: EditorInsertProps) => {
   return <Menu
     width={224}
+    maxHeight={'calc(100vh - 312px)'}
     context={<ToolbarItem
       tip={'插入'}
       text={'插入'}
@@ -24,7 +25,7 @@ const EditorInsert = ({ editor }: EditorInsertProps) => {
     arrowIcon={<ArrowDownSLineIcon sx={{ fontSize: '1rem', transform: 'rotate(-90deg)' }} />}
     list={[
       {
-        customLabel: <Typography sx={{ px: 1, pt: 2, fontSize: '12px', color: 'text.disabled' }}>
+        customLabel: <Typography sx={{ px: 1, pt: 1, fontSize: '12px', color: 'text.disabled' }}>
           通用
         </Typography>,
         key: 'current-node',
@@ -35,6 +36,27 @@ const EditorInsert = ({ editor }: EditorInsertProps) => {
         icon: <ImageLineIcon sx={{ fontSize: '1rem' }} />,
         extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', '2'], '+')}</Typography>,
         onClick: () => editor.commands.setImage({ src: '', width: 760 }),
+      },
+      {
+        label: '视频',
+        key: 'video',
+        extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', '3'], '+')}</Typography>,
+        icon: <MovieLineIcon sx={{ fontSize: '1rem' }} />,
+        onClick: () => editor.commands.setVideo({ src: '', width: 760, controls: true, autoplay: false }),
+      },
+      {
+        label: '音频',
+        key: 'audio',
+        extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', '4'], '+')}</Typography>,
+        icon: <Music2LineIcon sx={{ fontSize: '1rem' }} />,
+        onClick: () => editor.commands.setAudio({ src: '', controls: true, autoplay: false }),
+      },
+      {
+        label: '附件',
+        key: 'attachment',
+        extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', '5'], '+')}</Typography>,
+        icon: <AttachmentLineIcon sx={{ fontSize: '1rem' }} />,
+        onClick: () => editor.commands.setInlineAttachment({ url: '', title: '', size: '0' }),
       },
       {
         label: '表格',
@@ -53,36 +75,8 @@ const EditorInsert = ({ editor }: EditorInsertProps) => {
         ],
       },
       {
-        label: '文件',
-        key: 'file',
-        icon: <Folder2LineIcon sx={{ fontSize: '1rem' }} />,
-        children: [
-          {
-            label: '附件',
-            key: 'attachment',
-            extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', '5'], '+')}</Typography>,
-            icon: <AttachmentLineIcon sx={{ fontSize: '1rem' }} />,
-            onClick: () => editor.commands.setInlineAttachment({ url: '', title: '', size: '0' }),
-          },
-          {
-            label: '音频',
-            key: 'audio',
-            extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', '4'], '+')}</Typography>,
-            icon: <Music2LineIcon sx={{ fontSize: '1rem' }} />,
-            onClick: () => editor.commands.setAudio({ src: '', controls: true, autoplay: false }),
-          },
-          {
-            label: '视频',
-            key: 'video',
-            extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', '3'], '+')}</Typography>,
-            icon: <MovieLineIcon sx={{ fontSize: '1rem' }} />,
-            onClick: () => editor.commands.setVideo({ src: '', width: 760, controls: true, autoplay: false }),
-          },
-        ]
-      },
-      {
-        customLabel: <Typography sx={{ px: 1, pt: 2, fontSize: '12px', color: 'text.disabled' }}>
-          样式布局
+        customLabel: <Typography sx={{ px: 1, pt: 1, fontSize: '12px', color: 'text.disabled' }}>
+          模块
         </Typography>,
         key: 'style',
       },
@@ -154,8 +148,8 @@ const EditorInsert = ({ editor }: EditorInsertProps) => {
         ]
       },
       {
-        customLabel: <Typography sx={{ px: 1, pt: 2, fontSize: '12px', color: 'text.disabled' }}>
-          程序员专用
+        customLabel: <Typography sx={{ px: 1, pt: 1, fontSize: '12px', color: 'text.disabled' }}>
+          专业
         </Typography>,
         key: 'programmer',
       },
@@ -206,7 +200,7 @@ const EditorInsert = ({ editor }: EditorInsertProps) => {
         ]
       },
       {
-        customLabel: <Typography sx={{ px: 1, pt: 2, fontSize: '12px', color: 'text.disabled' }}>
+        customLabel: <Typography sx={{ px: 1, pt: 1, fontSize: '12px', color: 'text.disabled' }}>
           其他
         </Typography>,
         key: 'other',

@@ -13,6 +13,7 @@ export interface MenuRef {
 const Menu = React.forwardRef<MenuRef, MenuProps>(({
   id = 'menu-select',
   width,
+  maxHeight,
   arrowIcon,
   list,
   header = null,
@@ -78,7 +79,11 @@ const Menu = React.forwardRef<MenuRef, MenuProps>(({
       disableRestoreFocus
       sx={zIndex ? { zIndex } : undefined}
     >
-      <Box sx={{ p: 0.5 }}>
+      <Box sx={{
+        p: 0.5,
+        maxHeight,
+        overflowY: 'auto',
+      }}>
         <Box onClick={handleClose}>
           {header}
         </Box>

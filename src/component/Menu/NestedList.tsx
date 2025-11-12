@@ -4,7 +4,7 @@ import React from 'react';
 
 export interface NestedMenuListProps {
   list: MenuItem[];
-  width?: number;
+  width?: React.CSSProperties['width'];
   arrowIcon?: React.ReactNode;
   childrenProps?: {
     anchorOrigin?: PopoverOrigin;

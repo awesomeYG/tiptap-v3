@@ -23,7 +23,8 @@ export interface MenuItem {
 
 export interface MenuProps {
   id?: string;
-  width?: number;
+  width?: React.CSSProperties['width'];
+  maxHeight?: React.CSSProperties['maxHeight'];
   arrowIcon?: React.ReactNode;
   list: MenuItem[];
   header?: React.ReactNode;
