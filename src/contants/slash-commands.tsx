@@ -1,6 +1,6 @@
 import { Editor } from '@tiptap/react';
 import * as React from 'react';
-import { AttachmentLineIcon, CodeBoxLineIcon, CodeLineIcon, DoubleQuotesLIcon, EmotionLineIcon, FunctionsIcon, H1Icon, H2Icon, H3Icon, H4Icon, H5Icon, H6Icon, ImageLineIcon, Information2LineIcon, LinkIcon, ListCheck2Icon, ListOrdered2Icon, ListUnorderedIcon, MenuFold2FillIcon, MovieLineIcon, Music2LineIcon, SeparatorIcon, SquareRootIcon, Table2Icon, TextWrapIcon, WindowFillIcon } from '../component/Icons';
+import { AttachmentLineIcon, CodeBoxLineIcon, CodeLineIcon, DoubleQuotesLIcon, EmotionLineIcon, FlowChartIcon, FunctionsIcon, H1Icon, H2Icon, H3Icon, H4Icon, H5Icon, H6Icon, ImageLineIcon, Information2LineIcon, LinkIcon, ListCheck2Icon, ListOrdered2Icon, ListUnorderedIcon, MenuFold2FillIcon, MovieLineIcon, Music2LineIcon, SeparatorIcon, SquareRootIcon, Table2Icon, WindowFillIcon } from '../component/Icons';
 
 export const slashCommands = [
   {
@@ -76,13 +76,6 @@ export const slashCommands = [
     }
   },
   {
-    title: '换行',
-    icon: <TextWrapIcon sx={{ fontSize: '1rem' }} />,
-    command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
-      editor.chain().focus().deleteRange(range).insertContent('<br />').run()
-    }
-  },
-  {
     title: '表情',
     icon: <EmotionLineIcon sx={{ fontSize: '1rem' }} />,
     command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
@@ -134,6 +127,13 @@ export const slashCommands = [
     icon: <MenuFold2FillIcon sx={{ fontSize: '1rem' }} />,
     command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
       editor.chain().focus().deleteRange(range).setDetails().run()
+    }
+  },
+  {
+    title: '流程图',
+    icon: <FlowChartIcon sx={{ fontSize: '1rem' }} />,
+    command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
+      editor.chain().focus().deleteRange(range).setFlow({ code: '', width: '100%' }).run()
     }
   },
   {

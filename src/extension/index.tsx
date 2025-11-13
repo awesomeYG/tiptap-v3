@@ -27,6 +27,7 @@ import {
   DetailsSummaryExtension,
   EmojiExtension,
   FileHandlerExtension,
+  FlowExtension,
   IframeExtension,
   ImageExtension,
   Indent,
@@ -156,7 +157,7 @@ export const getExtensions = ({
         'orderedList', 'bulletList', 'taskList', 'taskItem', 'listItem',
         'details', 'detailsContent', 'detailsSummary',
         'table',
-        'image', 'video', 'audio', 'iframe',
+        'image', 'video', 'audio', 'iframe', 'flow',
         'blockAttachment', 'inlineAttachment', 'blockLink',
         'blockMath', 'inlineMath',
       ],
@@ -198,6 +199,10 @@ export const getExtensions = ({
   if (!exclude?.includes('youtube')) {
     const Youtube = YoutubeExtension(youtube)
     defaultExtensions.push(Youtube)
+  }
+
+  if (!exclude?.includes('flow')) {
+    defaultExtensions.push(FlowExtension({ onError }))
   }
 
   if (extensionsProps && extensionsProps.length > 0) {

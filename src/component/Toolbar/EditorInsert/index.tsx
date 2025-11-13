@@ -2,7 +2,7 @@ import { getShortcutKeyText } from '@ctzhian/tiptap/util';
 import { Typography } from '@mui/material';
 import { Editor } from '@tiptap/react';
 import React from 'react';
-import { AddCircleFillIcon, ArrowDownSLineIcon, AttachmentLineIcon, CheckboxCircleFillIcon, CloseCircleFillIcon, CodeBoxLineIcon, CodeLineIcon, CodeSSlashLineIcon, DoubleQuotesLIcon, EmotionLineIcon, ErrorWarningFillIcon, FormulaIcon, FunctionsIcon, ImageLineIcon, Information2FillIcon, Information2LineIcon, MenuFold2FillIcon, MovieLineIcon, Music2LineIcon, SeparatorIcon, SquareRootIcon, Table2Icon, UserSmileFillIcon, WindowFillIcon } from '../../Icons';
+import { AddCircleFillIcon, ArrowDownSLineIcon, AttachmentLineIcon, CheckboxCircleFillIcon, CloseCircleFillIcon, CodeBoxLineIcon, CodeLineIcon, CodeSSlashLineIcon, DoubleQuotesLIcon, EmotionLineIcon, ErrorWarningFillIcon, FlowChartIcon, FormulaIcon, FunctionsIcon, ImageLineIcon, Information2FillIcon, Information2LineIcon, MenuFold2FillIcon, MovieLineIcon, Music2LineIcon, SeparatorIcon, SquareRootIcon, Table2Icon, UserSmileFillIcon, WindowFillIcon } from '../../Icons';
 import Menu from '../../Menu';
 import ToolbarItem from '../Item';
 import TableSizePicker from '../TableSizePicker';
@@ -67,6 +67,12 @@ const EditorInsert = ({ editor }: EditorInsertProps) => {
         extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', '5'], '+')}</Typography>,
         icon: <AttachmentLineIcon sx={{ fontSize: '1rem' }} />,
         onClick: () => editor.commands.setInlineAttachment({ url: '', title: '', size: '0' }),
+      },
+      {
+        label: '流程图',
+        key: 'flow',
+        icon: <FlowChartIcon sx={{ fontSize: '1rem' }} />,
+        onClick: () => editor.commands.setFlow({}),
       },
       {
         label: '表格',

@@ -29,6 +29,23 @@ const CustomCodeBlock = CodeBlockLowlight.configure({
       },
     }
   },
+  parseMarkdown: (token, helpers) => {
+    if (token.raw?.startsWith('```') === false && token.codeBlockStyle !== 'indented') {
+      return []
+    }
+    if (token.lang === 'mermaid') {
+      return helpers.createNode(
+        'flow',
+        { code: token.text || '', width: '100%' },
+        []
+      )
+    }
+    return helpers.createNode(
+      'codeBlock',
+      { language: token.lang || null },
+      token.text ? [helpers.createTextNode(token.text)] : [],
+    )
+  },
   addNodeView() {
     return ReactNodeViewRenderer(CodeBlockView)
   },
