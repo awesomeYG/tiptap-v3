@@ -112,9 +112,7 @@ const ImageViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
     return attrs.width
   }
 
-  // 自动获取图片尺寸并设置
   useEffect(() => {
-    // 当有 src 但没有 width 时，自动获取图片尺寸
     if (attrs.src && (!attrs.width || attrs.width <= 0)) {
       getImageDimensions(attrs.src)
         .then(dimensions => {
@@ -124,11 +122,9 @@ const ImageViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
           })
         })
         .catch(error => {
-          console.warn('无法获取图片尺寸，使用默认宽度:', error)
-          // 如果无法获取尺寸，设置默认宽度
           updateAttributes({
             src: attrs.src,
-            width: 400 // 默认宽度
+            width: 400
           })
         })
     }

@@ -28,9 +28,6 @@ const ReadonlyImage = ({
             height: 'auto',
             cursor: 'pointer',
           }}
-          onError={(e) => {
-            console.error('Image load error:', e)
-          }}
         />
       </PhotoView>
       {attrs.title && <>

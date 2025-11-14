@@ -85,10 +85,9 @@ const customImage = (props: ImageExtensionProps) => Image.extend({
                     const dimensions = await getImageDimensionsFromFile(file);
                     chain.setImage({
                       src: url,
-                      width: Math.min(dimensions.width, 760) // 使用原始宽度，但不超过760px
+                      width: Math.min(dimensions.width, 760)
                     }).run();
                   } catch (error) {
-                    console.warn('无法获取图片尺寸，使用默认宽度:', error);
                     const fallbackChain = editor.chain().focus();
                     if (progressPos !== null) {
                       fallbackChain.setTextSelection(progressPos);
@@ -99,7 +98,6 @@ const customImage = (props: ImageExtensionProps) => Image.extend({
                     }).run();
                   }
                 } catch (error) {
-                  console.error('图片上传失败:', error);
                   editor.chain().removeInlineUploadProgress(tempId).focus().run();
 
                   const progressPos = findNodePosition('inlineUploadProgress', tempId);

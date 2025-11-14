@@ -80,9 +80,9 @@ const Reader = () => {
       //   contentType: 'markdown'
       // }).run()
     },
-    onTocUpdate: (toc) => {
-      console.log('toc', toc)
-    },
+    // onTocUpdate: (toc) => {
+    //   console.log('toc', toc)
+    // },
     content: mdContent
   });
 
