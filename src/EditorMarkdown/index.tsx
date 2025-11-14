@@ -18,6 +18,8 @@ interface EditorMarkdownProps {
   editor: Editor;
   value?: string;
   readOnly?: string;
+  showAutocomplete?: boolean;
+  highlightActiveLine?: boolean;
   placeholder?: string;
   height: number | string;
   onUpload?: UploadFunction;
@@ -44,6 +46,8 @@ const EditorMarkdown = forwardRef<MarkdownEditorRef, EditorMarkdownProps>(({
   onUpload,
   readOnly = false,
   splitMode = false,
+  showAutocomplete = true,
+  highlightActiveLine = true,
   defaultDisplayMode = 'edit',
   showToolbar = true,
   showLineNumbers = true,
@@ -53,6 +57,7 @@ const EditorMarkdown = forwardRef<MarkdownEditorRef, EditorMarkdownProps>(({
   const [displayMode, setDisplayMode] = useState<DisplayMode>(defaultDisplayMode);
   const [isExpend, setIsExpend] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [isComposing, setIsComposing] = useState<boolean>(false);
 
   const [progress, setProgress] = useState(0);
   const [fileName, setFileName] = useState('');
@@ -181,6 +186,31 @@ const EditorMarkdown = forwardRef<MarkdownEditorRef, EditorMarkdownProps>(({
     }
   }, [editor]);
 
+  useEffect(() => {
+    if (!aceEditorRef.current) return;
+
+    const aceEditor = aceEditorRef.current.editor;
+    const textarea = aceEditor.textInput?.getElement();
+
+    if (!textarea) return;
+
+    const handleCompositionStart = () => {
+      setIsComposing(true);
+    };
+
+    const handleCompositionEnd = () => {
+      setIsComposing(false);
+    };
+
+    textarea.addEventListener('compositionstart', handleCompositionStart);
+    textarea.addEventListener('compositionend', handleCompositionEnd);
+
+    return () => {
+      textarea.removeEventListener('compositionstart', handleCompositionStart);
+      textarea.removeEventListener('compositionend', handleCompositionEnd);
+    };
+  }, [displayMode]);
+
   return <Box sx={{
     position: 'relative',
     bgcolor: 'background.default',
@@ -273,13 +303,15 @@ const EditorMarkdown = forwardRef<MarkdownEditorRef, EditorMarkdownProps>(({
           onDrop={handleDrop}
           sx={{
             flex: 1,
-            fontFamily: 'monospace',
             '.ace_placeholder': {
               transform: 'scale(1)',
               height: '100%',
               overflow: 'auto',
               width: '100%',
               fontStyle: 'normal',
+              ...(isComposing && {
+                display: 'none',
+              }),
             },
           }}
         >
@@ -297,10 +329,12 @@ const EditorMarkdown = forwardRef<MarkdownEditorRef, EditorMarkdownProps>(({
             fontSize={16}
             editorProps={{ $blockScrolling: true }}
             setOptions={{
-              enableBasicAutocompletion: true,
-              enableLiveAutocompletion: true,
-              showLineNumbers: showLineNumbers,
               tabSize: 2,
+              showGutter: showLineNumbers,
+              showLineNumbers: showLineNumbers,
+              enableBasicAutocompletion: showAutocomplete,
+              enableLiveAutocompletion: showAutocomplete,
+              highlightActiveLine: highlightActiveLine,
             }}
             style={{
               width: '100%',

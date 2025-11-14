@@ -1,9 +1,12 @@
-import { Editor, EditorThemeProvider, EditorToolbar, useTiptap } from '@ctzhian/tiptap';
+import { Editor, EditorThemeProvider, EditorToolbar, TocList, useTiptap } from '@ctzhian/tiptap';
 import { Box } from '@mui/material';
 import React from 'react';
 import '../index.css';
 
 const Reader = () => {
+  const handleTocUpdate = (toc: TocList) => {
+    console.log('toc', toc)
+  }
   const { editor } = useTiptap({
     editable: true,
     exclude: ['invisibleCharacters'],
@@ -72,7 +75,7 @@ const Reader = () => {
         ][Math.floor(Math.random() * 10)]);
       })
     },
-    // onTocUpdate: handleTocUpdate,
+    onTocUpdate: handleTocUpdate,
     // onMentionFilter: async ({ query }: { query: string }) => {
     //   return new Promise((resolve) => {
     //     resolve([
@@ -116,7 +119,9 @@ const Reader = () => {
         }, 100);
       })
     },
-    content: `<p>fadsjlfkas</p><div data-type="flow" data-code="C4Context
+    content: `<pre><code>$$ sflsa $$
+
+$fsjadl$</code></pre><p></p><p><span data-latex="x+y=1" data-type="inline-math"></span></p><div data-latex="ssss" data-type="block-math"></div><p></p><p>fadsjlfkas</p><div data-type="flow" data-code="C4Context
     title System Context diagram for Internet Banking System
     Enterprise_Boundary(b0, &quot;BankBoundary0&quot;) {
         Person(customerA, &quot;Banking Customer A&quot;, &quot;A customer of the bank, with personal bank accounts.&quot;)

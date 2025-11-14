@@ -1,6 +1,6 @@
 import { getExtensions } from '@ctzhian/tiptap/extension'
 import { UseTiptapProps, UseTiptapReturn } from '@ctzhian/tiptap/type'
-import { migrateMathStrings } from '@ctzhian/tiptap/util'
+import { migrateMathStrings } from '@tiptap/extension-mathematics'
 import { useEditor, UseEditorOptions } from '@tiptap/react'
 import { renderToMarkdown } from '@tiptap/static-renderer/pm/markdown'
 
