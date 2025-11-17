@@ -26,7 +26,6 @@ const AttachmentViewWrapper: React.FC<NodeViewProps & EditorFnProps & { attachme
   attachmentType = 'icon',
   getPos,
 }) => {
-  const isMarkdown = editor.options.contentType === 'markdown'
   const attrs = node.attrs as AttachmentAttributes
   const attachmentDisplayType = attachmentType || attrs.type || 'icon'
 
@@ -105,27 +104,25 @@ const AttachmentViewWrapper: React.FC<NodeViewProps & EditorFnProps & { attachme
         tip='删除'
         onClick={handleDeleteAttachment}
       />
-      {!isMarkdown && <>
-        <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'divider' }} />
-        <ActionDropdown
-          id='attachment-type-dropdown'
-          selected={attachmentDisplayType}
-          list={[
-            {
-              key: 'icon',
-              label: '图标文字',
-              icon: <ScrollToBottomLineIcon sx={{ transform: 'rotate(90deg)', fontSize: '1rem' }} />,
-              onClick: () => handleConvertAttachmentType('icon'),
-            },
-            {
-              key: 'block',
-              label: '卡片',
-              icon: <CarouselViewIcon sx={{ transform: 'rotate(90deg)', fontSize: '1rem' }} />,
-              onClick: () => handleConvertAttachmentType('block'),
-            },
-          ]}
-        />
-      </>}
+      <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'divider' }} />
+      <ActionDropdown
+        id='attachment-type-dropdown'
+        selected={attachmentDisplayType}
+        list={[
+          {
+            key: 'icon',
+            label: '图标文字',
+            icon: <ScrollToBottomLineIcon sx={{ transform: 'rotate(90deg)', fontSize: '1rem' }} />,
+            onClick: () => handleConvertAttachmentType('icon'),
+          },
+          {
+            key: 'block',
+            label: '卡片',
+            icon: <CarouselViewIcon sx={{ transform: 'rotate(90deg)', fontSize: '1rem' }} />,
+            onClick: () => handleConvertAttachmentType('block'),
+          },
+        ]}
+      />
     </Stack>
   )
 

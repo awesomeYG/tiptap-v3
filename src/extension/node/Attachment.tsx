@@ -97,6 +97,28 @@ export const InlineAttachmentExtension = (props: EditorFnProps) => Node.create({
             size: dom.getAttribute('data-size') || '0',
           }
         }
+      },
+      {
+        tag: 'a[download]',
+        getAttrs: (dom) => {
+          if (!(dom instanceof HTMLElement)) return false
+          const download = dom.getAttribute('download')
+          const type = dom.getAttribute('type')
+
+          // 只解析 type 不是 block 的带 download 的 <a> 标签
+          if (download === null || type === 'block') {
+            return false
+          }
+
+          const href = dom.getAttribute('href') || ''
+          const title = dom.textContent || dom.getAttribute('title') || dom.getAttribute('download') || ''
+
+          return {
+            url: href,
+            title: title,
+            size: '0',
+          }
+        }
       }
     ]
   },
@@ -211,12 +233,40 @@ export const BlockAttachmentExtension = (props: EditorFnProps) => Node.create({
             size: dom.getAttribute('data-size') || '0',
           }
         }
+      },
+      {
+        tag: 'a[download][type="block"]',
+        getAttrs: (dom) => {
+          if (!(dom instanceof HTMLElement)) return false
+          const download = dom.getAttribute('download')
+          const type = dom.getAttribute('type')
+
+          // 只解析 type="block" 的带 download 的 <a> 标签
+          if (download === null || type !== 'block') {
+            return false
+          }
+
+          const href = dom.getAttribute('href') || ''
+          const title = dom.textContent || dom.getAttribute('title') || dom.getAttribute('download') || ''
+
+          return {
+            url: href,
+            title: title,
+            size: '0',
+          }
+        }
       }
     ]
   },
 
   renderHTML({ HTMLAttributes }) {
     return ['div', { 'data-tag': 'attachment', ...mergeAttributes(this.options.HTMLAttributes, HTMLAttributes) }]
+  },
+
+  renderMarkdown(node) {
+    const { url, title } = node.attrs as any
+    if (!url) return ''
+    return `<a href="${url}" type="block" target="_blank" download="${title}">${title}</a>`
   },
 
   addCommands() {

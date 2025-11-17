@@ -1,6 +1,6 @@
 import { getLinkTitle } from '@ctzhian/tiptap/util'
 import { mergeAttributes, Node, nodePasteRule, type PasteRuleMatch } from '@tiptap/core'
-import type { Plugin } from '@tiptap/pm/state'
+import { Plugin, PluginKey } from '@tiptap/pm/state'
 import { ReactNodeViewRenderer } from '@tiptap/react'
 import { find, registerCustomProtocol, reset } from 'linkifyjs'
 import LinkViewWrapper from '../../component/Link'
@@ -141,6 +141,7 @@ declare module '@tiptap/core' {
         class?: string | null
         title?: string | null
         type?: string | null
+        download?: string | null
       }) => ReturnType
       /**
        * Toggle a link mark
@@ -154,6 +155,7 @@ declare module '@tiptap/core' {
         class?: string | null
         title?: string | null
         type?: string | null
+        download?: string | null
       }) => ReturnType
       /**
        * Unset a link mark
@@ -174,6 +176,7 @@ declare module '@tiptap/core' {
         class?: string | null
         title?: string | null
         type?: string | null
+        download?: string | null
       }) => ReturnType
     }
   }
@@ -244,6 +247,7 @@ export const InlineLinkExtension = Node.create<LinkOptions>({
         type: 'icon',
         rel: null,
         title: null,
+        download: null,
       },
       isAllowedUri: (url, ctx) => !!isAllowedUri(url, ctx.protocols),
       validate: url => !!url,
@@ -319,6 +323,18 @@ export const InlineLinkExtension = Node.create<LinkOptions>({
           }
         },
       },
+      download: {
+        default: null,
+        parseHTML: element => element.getAttribute('download'),
+        renderHTML: attributes => {
+          if (!attributes.download) {
+            return {};
+          }
+          return {
+            download: attributes.download,
+          };
+        },
+      },
     }
   },
 
@@ -329,6 +345,13 @@ export const InlineLinkExtension = Node.create<LinkOptions>({
         getAttrs: dom => {
           const href = (dom as HTMLElement).getAttribute('href')
           const dataType = (dom as HTMLElement).getAttribute('type')
+          const download = (dom as HTMLElement).getAttribute('download')
+
+          // 如果存在 download 属性，认为是附件，不解析为链接
+          if (download !== null) {
+            return false
+          }
+
           if (dataType === 'block') {
             return false
           }
@@ -352,6 +375,7 @@ export const InlineLinkExtension = Node.create<LinkOptions>({
             rel: (dom as HTMLElement).getAttribute('rel'),
             title: (dom as HTMLElement).textContent || (dom as HTMLElement).getAttribute('title'),
             type: (dom as HTMLElement).getAttribute('type') || 'icon',
+            download: (dom as HTMLElement).getAttribute('download'),
           }
         },
       },
@@ -431,7 +455,34 @@ export const InlineLinkExtension = Node.create<LinkOptions>({
   },
 
   addProseMirrorPlugins() {
-    const plugins: Plugin[] = []
+    const plugins: Plugin[] = [
+      new Plugin({
+        key: new PluginKey('linkDownloadHandler'),
+        props: {
+          handleDOMEvents: {
+            click: (view, event) => {
+              const target = event.target as HTMLElement;
+              const link = target.closest('a[download]');
+              if (link) {
+                const downloadAttr = link.getAttribute('download');
+                const href = link.getAttribute('href');
+                if (href && downloadAttr !== null) {
+                  event.preventDefault();
+                  const downloadLink = document.createElement('a');
+                  downloadLink.href = href;
+                  downloadLink.download = downloadAttr === '' ? href.split('/').pop() || 'download' : downloadAttr;
+                  document.body.appendChild(downloadLink);
+                  downloadLink.click();
+                  document.body.removeChild(downloadLink);
+                  return true;
+                }
+              }
+              return false;
+            },
+          },
+        },
+      }),
+    ]
     const { protocols, defaultProtocol } = this.options
     if (this.options.autolink) {
       plugins.push(
@@ -495,6 +546,7 @@ export const BlockLinkExtension = Node.create({
         target: '_blank',
         class: null,
         type: 'block',
+        download: null,
       },
     }
   },
@@ -570,6 +622,18 @@ export const BlockLinkExtension = Node.create({
           }
         },
       },
+      download: {
+        default: null,
+        parseHTML: element => element.getAttribute('download'),
+        renderHTML: attributes => {
+          if (!attributes.download) {
+            return {}
+          }
+          return {
+            download: attributes.download,
+          }
+        },
+      },
     }
   },
 
@@ -579,6 +643,13 @@ export const BlockLinkExtension = Node.create({
         tag: 'a[type="block"]',
         getAttrs: (dom) => {
           if (!(dom instanceof HTMLElement)) return false
+          const download = dom.getAttribute('download')
+
+          // 如果存在 download 属性，认为是附件，不解析为链接
+          if (download !== null) {
+            return false
+          }
+
           return {
             href: dom.getAttribute('href') || '',
             target: dom.getAttribute('target') || this.options.HTMLAttributes.target,
@@ -586,6 +657,7 @@ export const BlockLinkExtension = Node.create({
             title: (dom as HTMLElement).textContent || dom.getAttribute('title') || '',
             rel: dom.getAttribute('rel') || '',
             type: dom.getAttribute('type') || 'block',
+            download: dom.getAttribute('download'),
           }
         }
       }

@@ -10,7 +10,6 @@ import { PLACEHOLDER } from '../contants/placeholder';
 import { GetExtensionsProps } from '../type';
 import { AiWritingExtension, SlashCommands, StructuredDiffExtension } from './extension';
 import { CodeExtension } from './mark/Code';
-import CustomLink from './mark/Link';
 import {
   AlertExtension,
   AudioExtension,
@@ -89,6 +88,8 @@ export const getExtensions = ({
     CodeBlockLowlightExtension,
     InlineUploadProgressExtension,
     YamlFormat,
+    InlineLinkExtension,
+    BlockLinkExtension,
     CustomHorizontalRule,
     IframeExtension({ onError, onValidateUrl }),
     VideoExtension({ onUpload, onError, onValidateUrl }),
@@ -98,6 +99,8 @@ export const getExtensions = ({
     ImageExtension({ onUpload, onError, onValidateUrl }),
     CustomBlockMathExtension({ onError }),
     CustomInlineMathExtension({ onError }),
+    InlineAttachmentExtension({ onUpload, onError }),
+    BlockAttachmentExtension({ onUpload, onError }),
     Highlight.configure({ multicolor: true }),
     CharacterCount.configure({ limit: limit ?? null }),
     TextAlign.configure({ types: ['heading', 'paragraph'] }),
@@ -128,7 +131,6 @@ export const getExtensions = ({
 
   if (contentType === 'markdown') {
     defaultExtensions.push(
-      CustomLink,
       Markdown.configure({
         indentation: {
           style: 'space',
@@ -141,13 +143,6 @@ export const getExtensions = ({
         },
       })
     )
-  } else {
-    defaultExtensions.push(...[
-      InlineLinkExtension,
-      BlockLinkExtension,
-      InlineAttachmentExtension({ onUpload, onError }),
-      BlockAttachmentExtension({ onUpload, onError }),
-    ])
   }
 
   if (!exclude?.includes('indent')) {

@@ -91,7 +91,7 @@ export const AttachmentContent: React.FC<AttachmentContentProps> = ({ attrs, typ
               <Box sx={{ fontSize: '0.875rem', fontWeight: 'bold' }}>
                 {attrs.title}
               </Box>
-              <Box sx={{ fontSize: '0.75rem', color: 'text.secondary' }}>{attrs.size}</Box>
+              {Number(attrs.size) > 0 && <Box sx={{ fontSize: '0.75rem', color: 'text.secondary' }}>{attrs.size}</Box>}
             </Stack>
           </Stack>
         </Box>
