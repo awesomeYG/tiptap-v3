@@ -6,14 +6,17 @@ import {
   ArrowGoBackLineIcon,
   ArrowGoForwardLineIcon,
   BoldIcon,
+  CodeBoxLineIcon,
+  CollapseHorizontalLine,
   EraserLineIcon,
+  ExpandHorizontalLineIcon,
   ItalicIcon,
   LinkIcon,
   MarkPenLineIcon,
   StrikethroughIcon,
   SubscriptIcon,
   SuperscriptIcon,
-  UnderlineIcon
+  UnderlineIcon,
 } from '../component/Icons';
 import {
   EditorAlignSelect,
@@ -25,7 +28,7 @@ import {
   EditorListSelect,
   EditorMore,
   EditorVerticalAlignSelect,
-  ToolbarItem
+  ToolbarItem,
 } from '../component/Toolbar';
 import { ToolbarItemType } from '../type';
 import { hasMarksInSelection } from '../util';
@@ -33,9 +36,40 @@ import { hasMarksInSelection } from '../util';
 interface EditorToolbarProps {
   editor: Editor;
   menuInToolbarMore?: ToolbarItemType[];
+  /**
+   * Toolbar 模式
+   * - advanced：展示全部工具
+   * - simple：只展示常用工具，并尽量保持单行
+   */
+  mode?: 'simple' | 'advanced';
+  onModeChange?: (mode: 'simple' | 'advanced') => void;
 }
 
-const EditorToolbar = ({ editor, menuInToolbarMore }: EditorToolbarProps) => {
+const EditorToolbar = ({
+  editor,
+  menuInToolbarMore,
+  mode,
+  onModeChange,
+}: EditorToolbarProps) => {
+  const [toolbarMode, setToolbarMode] = React.useState<'simple' | 'advanced'>(
+    () => mode ?? 'advanced',
+  );
+
+  React.useEffect(() => {
+    if (typeof mode !== 'undefined') {
+      setToolbarMode(mode);
+    }
+  }, [mode]);
+
+  const isSimpleMode = toolbarMode === 'simple';
+
+  const handleToggleMode = React.useCallback(() => {
+    const nextMode: 'simple' | 'advanced' = isSimpleMode
+      ? 'advanced'
+      : 'simple';
+    setToolbarMode(nextMode);
+    onModeChange?.(nextMode);
+  }, [isSimpleMode, onModeChange]);
 
   const {
     isUndo,
@@ -50,9 +84,10 @@ const EditorToolbar = ({ editor, menuInToolbarMore }: EditorToolbarProps) => {
     isLink,
     isAiWriting,
     isHighlight,
+    isCodeBlock,
   } = useEditorState({
     editor,
-    selector: ctx => ({
+    selector: (ctx) => ({
       isUndo: ctx.editor.can().chain().undo().run() ?? false,
       isRedo: ctx.editor.can().chain().redo().run() ?? false,
       isFormat: hasMarksInSelection(ctx.editor.state),
@@ -64,7 +99,8 @@ const EditorToolbar = ({ editor, menuInToolbarMore }: EditorToolbarProps) => {
       isSubscript: ctx.editor.isActive('subscript'),
       isLink: ctx.editor.isActive('link'),
       isHighlight: ctx.editor.isActive('highlight'),
-      isAiWriting: !!(ctx.editor.storage?.aiWriting?.enabled),
+      isAiWriting: !!ctx.editor.storage?.aiWriting?.enabled,
+      isCodeBlock: ctx.editor.isActive('codeBlock'),
     }),
   });
 
@@ -73,10 +109,12 @@ const EditorToolbar = ({ editor, menuInToolbarMore }: EditorToolbarProps) => {
       <Stack
         direction="row"
         alignItems="center"
-        justifyContent="center"
-        flexWrap={'wrap'}
+        justifyContent={isSimpleMode ? 'flex-start' : 'center'}
+        flexWrap={isSimpleMode ? 'nowrap' : 'wrap'}
         sx={{
           minHeight: '44px',
+          overflowX: isSimpleMode ? 'auto' : 'visible',
+          columnGap: 0.5,
           '.MuiSelect-root': {
             minWidth: '36px',
             bgcolor: 'background.paper',
@@ -102,19 +140,28 @@ const EditorToolbar = ({ editor, menuInToolbarMore }: EditorToolbarProps) => {
           },
         }}
       >
-        {editor.options.extensions.find(it => it.name === 'aiWriting') && <ToolbarItem
-          text={'AI 伴写'}
-          tip='开启后按下 Tab 键采纳建议'
-          icon={<AiGenerate2Icon sx={{ fontSize: '1rem' }} />}
-          onClick={() => editor.chain().focus().setAiWriting(!isAiWriting).run()}
-          className={isAiWriting ? 'tool-active' : ''}
-        />}
-        <EditorInsert editor={editor} />
-        <Divider
-          orientation="vertical"
-          flexItem
-          sx={{ mx: 0.5, height: 20, alignSelf: 'center' }}
-        />
+        {!isSimpleMode &&
+          editor.options.extensions.find((it) => it.name === 'aiWriting') && (
+            <ToolbarItem
+              text={'AI 伴写'}
+              tip="开启后按下 Tab 键采纳建议"
+              icon={<AiGenerate2Icon sx={{ fontSize: '1rem' }} />}
+              onClick={() =>
+                editor.chain().focus().setAiWriting(!isAiWriting).run()
+              }
+              className={isAiWriting ? 'tool-active' : ''}
+            />
+          )}
+        {!isSimpleMode && (
+          <>
+            <EditorInsert editor={editor} />
+            <Divider
+              orientation="vertical"
+              flexItem
+              sx={{ mx: 0.5, height: 20, alignSelf: 'center' }}
+            />
+          </>
+        )}
         <ToolbarItem
           tip={'撤销'}
           shortcutKey={['ctrl', 'Z']}
@@ -141,7 +188,7 @@ const EditorToolbar = ({ editor, menuInToolbarMore }: EditorToolbarProps) => {
           sx={{ mx: 0.5, height: 20, alignSelf: 'center' }}
         />
         <EditorHeading editor={editor} />
-        <EditorFontSize editor={editor} />
+        {!isSimpleMode && <EditorFontSize editor={editor} />}
         <Divider
           orientation="vertical"
           flexItem
@@ -161,74 +208,112 @@ const EditorToolbar = ({ editor, menuInToolbarMore }: EditorToolbarProps) => {
           onClick={() => editor.chain().focus().toggleItalic().run()}
           className={isItalic ? 'tool-active' : ''}
         />
-        <ToolbarItem
-          tip={'删除线'}
-          shortcutKey={['ctrl', 'shift', 'S']}
-          icon={<StrikethroughIcon sx={{ fontSize: '1rem' }} />}
-          onClick={() => editor.chain().focus().toggleStrike().run()}
-          className={isStrike ? 'tool-active' : ''}
-        />
-        <ToolbarItem
-          tip={'下划线'}
-          shortcutKey={['ctrl', 'U']}
-          icon={<UnderlineIcon sx={{ fontSize: '1rem' }} />}
-          onClick={() => editor.chain().focus().toggleUnderline().run()}
-          className={isUnderline ? 'tool-active' : ''}
-        />
-        <ToolbarItem
-          tip={'高亮'}
-          shortcutKey={['ctrl', 'shift', 'H']}
-          icon={<MarkPenLineIcon sx={{ fontSize: '1rem' }} />}
-          onClick={() => editor.chain().focus().toggleHighlight().run()}
-          className={isHighlight ? 'tool-active' : ''}
-        />
-        <ToolbarItem
-          tip={'上标'}
-          shortcutKey={['ctrl', '.']}
-          icon={<SuperscriptIcon sx={{ fontSize: '1rem' }} />}
-          onClick={() => editor.chain().focus().toggleSuperscript().run()}
-          className={isSuperscript ? 'tool-active' : ''}
-        />
-        <ToolbarItem
-          tip={'下标'}
-          shortcutKey={['ctrl', ',']}
-          icon={<SubscriptIcon sx={{ fontSize: '1rem' }} />}
-          onClick={() => editor.chain().focus().toggleSubscript().run()}
-          className={isSubscript ? 'tool-active' : ''}
-        />
-        <EditorFontColor editor={editor} />
-        <EditorFontBgColor editor={editor} />
-        <Divider
-          orientation="vertical"
-          flexItem
-          sx={{ mx: 0.5, height: 20, alignSelf: 'center' }}
-        />
+        {!isSimpleMode && (
+          <>
+            <ToolbarItem
+              tip={'删除线'}
+              shortcutKey={['ctrl', 'shift', 'S']}
+              icon={<StrikethroughIcon sx={{ fontSize: '1rem' }} />}
+              onClick={() => editor.chain().focus().toggleStrike().run()}
+              className={isStrike ? 'tool-active' : ''}
+            />
+            <ToolbarItem
+              tip={'下划线'}
+              shortcutKey={['ctrl', 'U']}
+              icon={<UnderlineIcon sx={{ fontSize: '1rem' }} />}
+              onClick={() => editor.chain().focus().toggleUnderline().run()}
+              className={isUnderline ? 'tool-active' : ''}
+            />
+          </>
+        )}
+        {!isSimpleMode && (
+          <>
+            <ToolbarItem
+              tip={'高亮'}
+              shortcutKey={['ctrl', 'shift', 'H']}
+              icon={<MarkPenLineIcon sx={{ fontSize: '1rem' }} />}
+              onClick={() => editor.chain().focus().toggleHighlight().run()}
+              className={isHighlight ? 'tool-active' : ''}
+            />
+            <ToolbarItem
+              tip={'上标'}
+              shortcutKey={['ctrl', '.']}
+              icon={<SuperscriptIcon sx={{ fontSize: '1rem' }} />}
+              onClick={() => editor.chain().focus().toggleSuperscript().run()}
+              className={isSuperscript ? 'tool-active' : ''}
+            />
+            <ToolbarItem
+              tip={'下标'}
+              shortcutKey={['ctrl', ',']}
+              icon={<SubscriptIcon sx={{ fontSize: '1rem' }} />}
+              onClick={() => editor.chain().focus().toggleSubscript().run()}
+              className={isSubscript ? 'tool-active' : ''}
+            />
+            <EditorFontColor editor={editor} />
+            <EditorFontBgColor editor={editor} />
+            <Divider
+              orientation="vertical"
+              flexItem
+              sx={{ mx: 0.5, height: 20, alignSelf: 'center' }}
+            />
+          </>
+        )}
         <EditorListSelect editor={editor} />
-        <ToolbarItem
-          tip={'链接'}
-          shortcutKey={['ctrl', '1']}
-          icon={<LinkIcon sx={{ fontSize: '1rem' }} />}
-          onClick={() => {
-            const selection = editor.state.selection;
-            const start = selection.from;
-            const end = selection.to;
-            const text = editor.state.doc.textBetween(start, end, '');
-            editor
-              .chain()
-              .focus()
-              .setInlineLink({ href: '', title: text })
-              .run();
-          }}
-          className={isLink ? 'tool-active' : ''}
-        />
-        <EditorAlignSelect editor={editor} />
-        <EditorVerticalAlignSelect editor={editor} />
-        <Divider
-          orientation="vertical"
-          flexItem
-          sx={{ mx: 0.5, height: 20, alignSelf: 'center' }}
-        />
-        <EditorMore more={menuInToolbarMore} />
+        {isSimpleMode ? (
+          <ToolbarItem
+            tip={'代码块'}
+            shortcutKey={['ctrl', 'alt', 'C']}
+            icon={<CodeBoxLineIcon sx={{ fontSize: '1rem' }} />}
+            onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+            className={isCodeBlock ? 'tool-active' : ''}
+          />
+        ) : (
+          <ToolbarItem
+            tip={'链接'}
+            shortcutKey={['ctrl', '1']}
+            icon={<LinkIcon sx={{ fontSize: '1rem' }} />}
+            onClick={() => {
+              const selection = editor.state.selection;
+              const start = selection.from;
+              const end = selection.to;
+              const text = editor.state.doc.textBetween(start, end, '');
+              editor
+                .chain()
+                .focus()
+                .setInlineLink({ href: '', title: text })
+                .run();
+            }}
+            className={isLink ? 'tool-active' : ''}
+          />
+        )}
+        {!isSimpleMode && (
+          <>
+            <EditorAlignSelect editor={editor} />
+            <EditorVerticalAlignSelect editor={editor} />
+            <Divider
+              orientation="vertical"
+              flexItem
+              sx={{ mx: 0.5, height: 20, alignSelf: 'center' }}
+            />
+            <EditorMore more={menuInToolbarMore} />
+          </>
+        )}
+        {isSimpleMode && menuInToolbarMore?.length ? (
+          <EditorMore more={menuInToolbarMore} />
+        ) : null}
+        {mode === 'simple' && (
+          <ToolbarItem
+            tip={isSimpleMode ? '切换为复杂模式' : '切换为简单模式'}
+            icon={
+              isSimpleMode ? (
+                <ExpandHorizontalLineIcon sx={{ fontSize: '1rem' }} />
+              ) : (
+                <CollapseHorizontalLine sx={{ fontSize: '1rem' }} />
+              )
+            }
+            onClick={handleToggleMode}
+          />
+        )}
       </Stack>
     </Box>
   );
