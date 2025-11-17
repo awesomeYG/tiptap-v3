@@ -16,7 +16,12 @@ const customImage = (props: ImageExtensionProps) => Image.extend({
     }
   },
   addNodeView() {
-    return ReactNodeViewRenderer((renderProps) => ImageViewWrapper({ ...renderProps, onUpload: props.onUpload, onError: props.onError, onValidateUrl: props.onValidateUrl }))
+    return ReactNodeViewRenderer((renderProps) => ImageViewWrapper({
+      ...renderProps,
+      onUpload: props.onUpload,
+      onError: props.onError,
+      onValidateUrl: props.onValidateUrl
+    }))
   },
   addProseMirrorPlugins() {
     return [
@@ -32,6 +37,28 @@ const customImage = (props: ImageExtensionProps) => Image.extend({
               .filter((file): file is File => file !== null && getFileType(file) === 'image');
 
             if (imageFiles.length === 0) return false;
+
+            const htmlData = event.clipboardData?.getData('text/html');
+            if (htmlData && htmlData.trim().length > 0) {
+              const htmlLower = htmlData.toLowerCase();
+              if (htmlLower.includes('<table') ||
+                htmlLower.includes('<tr') ||
+                htmlLower.includes('<td') ||
+                htmlLower.includes('<th')) {
+                return false;
+              }
+            }
+
+            const textData = event.clipboardData?.getData('text/plain');
+            if (textData && textData.trim().length > 0) {
+              const trimmedText = textData.trim();
+              const hasTab = trimmedText.includes('\t');
+              const lineCount = trimmedText.split('\n').length;
+              const isLikelyFileName = /\.(jpg|jpeg|png|gif|webp|svg|bmp)$/i.test(trimmedText);
+              if ((hasTab || lineCount > 2) && !isLikelyFileName) {
+                return false;
+              }
+            }
 
             const { from } = view.state.selection;
             const editor = this.editor;
