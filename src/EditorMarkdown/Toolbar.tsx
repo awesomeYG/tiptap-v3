@@ -13,6 +13,7 @@ import {
   CodeSSlashLineIcon,
   DoubleQuotesLIcon,
   ErrorWarningFillIcon,
+  FlowChartIcon,
   Folder2LineIcon,
   FormulaIcon,
   FunctionsIcon,
@@ -400,9 +401,15 @@ const EditorMarkdownToolbar = ({ aceEditorRef, isExpend, onFileUpload }: EditorM
 
         {
           customLabel: <Typography sx={{ px: 1, pt: 2, fontSize: '12px', color: 'text.disabled' }}>
-            程序员专用
+            专业
           </Typography>,
-          key: 'programmer',
+          key: 'professional',
+        },
+        {
+          label: '流程图',
+          key: 'flowchart',
+          icon: <FlowChartIcon sx={{ fontSize: '1rem' }} />,
+          onClick: () => handleInsertBlock({ text: '```mermaid\n\n```', row: 1, wrap: true }),
         },
         {
           label: '代码',
