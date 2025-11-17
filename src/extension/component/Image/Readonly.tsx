@@ -32,15 +32,11 @@ const ReadonlyImage = ({
       </PhotoView>
       {attrs.title && <>
         <br />
-        <Box component='span' sx={{
+        <Box component='span' className="editor-image-title" sx={{
           position: 'relative',
-          left: '50%',
-          transform: 'translateX(-50%)',
           display: 'inline-block',
           fontSize: '0.75rem',
           color: 'text.tertiary',
-          mt: 1.5,
-
         }}>{attrs.title}</Box>
       </>}
     </Box>

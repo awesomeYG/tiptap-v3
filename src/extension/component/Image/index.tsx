@@ -421,7 +421,7 @@ const ImageViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
         </Box>
         {attrs.title && <>
           <br />
-          <Box component='span' sx={{
+          <Box component='span' className="editor-image-title" sx={{
             display: 'inline-block',
             fontSize: '0.75rem',
             color: 'text.tertiary',
