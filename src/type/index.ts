@@ -102,6 +102,7 @@ export type ExtensionRelativeProps = MentionExtensionProps & EditorFnProps & {
   editable: boolean
   youtube?: Partial<YoutubeOptions>
   contentType?: UseEditorOptions['contentType']
+  placeholder?: string
 }
 
 export type UseTiptapProps = {

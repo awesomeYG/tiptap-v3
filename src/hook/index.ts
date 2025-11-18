@@ -26,6 +26,7 @@ const useTiptap = ({
   contentType,
 
   // other
+  placeholder,
   ...options
 }: UseTiptapProps & UseEditorOptions): UseTiptapReturn => {
   const extensions = getExtensions({
@@ -40,6 +41,7 @@ const useTiptap = ({
     onTocUpdate,
     onAiWritingGetSuggestion,
     onValidateUrl,
+    placeholder,
   })
 
   const editor = useEditor({
