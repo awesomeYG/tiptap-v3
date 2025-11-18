@@ -58,6 +58,7 @@ export const getExtensions = ({
   onTocUpdate,
   onAiWritingGetSuggestion,
   onValidateUrl,
+  placeholder,
 }: GetExtensionsProps) => {
   const defaultExtensions: any = [
     StarterKit.configure({
@@ -113,7 +114,7 @@ export const getExtensions = ({
       placeholder: ({ editor, node, pos }) => {
         const { type, attrs } = node
         if (pos === 0 && editor.isEmpty) {
-          return PLACEHOLDER.default
+          return placeholder || PLACEHOLDER.default
         }
         const aiWritingEnabled = !!(editor as any)?.storage?.aiWriting?.enabled
         if (!aiWritingEnabled) {
