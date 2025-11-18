@@ -137,3 +137,5 @@ export { UserSmileFillIcon } from './user-smile-fill-icon';
 export { VolumeMuteLineIcon } from './volume-mute-line-icon';
 export { VolumeUpLineIcon } from './volume-up-line-icon';
 export { WindowFillIcon } from './window-fill-icon';
+export { CollapseHorizontalLine } from './collapse-horizontal-line';
+export { ExpandHorizontalLineIcon } from './expand-horizontal-line';

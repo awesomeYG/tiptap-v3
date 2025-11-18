@@ -167,7 +167,7 @@ $fsjadl$</code></pre><p></p><p><span data-latex="x+y=1" data-type="inline-math">
         borderBottom: '1px solid #eee',
         marginBottom: '30px',
       }}>
-        <EditorToolbar editor={editor} />
+        <EditorToolbar editor={editor} mode='advanced' />
       </div>
       <Box sx={{
         '.tiptap': {
