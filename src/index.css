@@ -405,6 +405,7 @@
   table-layout: fixed;
   overflow: hidden;
   caption-side: top;
+  border-left: 1px dotted var(--mui-palette-divider);
 }
 
 .tiptap.ProseMirror table p {
@@ -427,11 +428,6 @@
   position: relative;
   vertical-align: top;
   transition: all 0.2s ease-in-out;
-}
-
-.tiptap.ProseMirror table td:first-child,
-.tiptap.ProseMirror table th:first-child {
-  border-left: 1px dotted var(--mui-palette-divider);
 }
 
 .tiptap.ProseMirror table tbody tr:first-child th,

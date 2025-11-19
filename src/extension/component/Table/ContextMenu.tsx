@@ -7,15 +7,7 @@ import {
 import { Editor } from '@tiptap/core';
 import React from 'react';
 import {
-  DeleteColumnIcon,
   DeleteLineIcon,
-  DeleteRowIcon,
-  InsertColumnLeftIcon,
-  InsertColumnRightIcon,
-  InsertRowBottomIcon,
-  InsertRowTopIcon,
-  LayoutLeft2LineIcon,
-  LayoutTop2LineIcon,
   MergeCellsHorizontalIcon,
   SplitCellsHorizontalIcon
 } from '../../../component/Icons';
@@ -44,30 +36,6 @@ const TableContextMenu: React.FC<TableContextMenuProps> = ({
 
   const menuItems = [
     {
-      label: '在左侧插入列',
-      icon: <InsertColumnLeftIcon sx={{ fontSize: '1rem' }} />,
-      action: () => handleCommand(() => editor.chain().focus().addColumnBefore().run()),
-      show: true
-    },
-    {
-      label: '在右侧插入列',
-      icon: <InsertColumnRightIcon sx={{ fontSize: '1rem' }} />,
-      action: () => handleCommand(() => editor.chain().focus().addColumnAfter().run()),
-      show: true
-    },
-    {
-      label: '在上方插入行',
-      icon: <InsertRowTopIcon sx={{ fontSize: '1rem' }} />,
-      action: () => handleCommand(() => editor.chain().focus().addRowBefore().run()),
-      show: true
-    },
-    {
-      label: '在下方插入行',
-      icon: <InsertRowBottomIcon sx={{ fontSize: '1rem' }} />,
-      action: () => handleCommand(() => editor.chain().focus().addRowAfter().run()),
-      show: true
-    },
-    {
       label: '合并单元格',
       icon: <MergeCellsHorizontalIcon sx={{ fontSize: '1rem' }} />,
       action: () => handleCommand(() => editor.chain().focus().mergeCells().run()),
@@ -78,30 +46,6 @@ const TableContextMenu: React.FC<TableContextMenuProps> = ({
       icon: <SplitCellsHorizontalIcon sx={{ fontSize: '1rem' }} />,
       action: () => handleCommand(() => editor.chain().focus().splitCell().run()),
       show: !hasMultipleSelection && hasMultipleCellElements
-    },
-    {
-      label: '切换表头行',
-      icon: <LayoutTop2LineIcon sx={{ fontSize: '1rem' }} />,
-      action: () => handleCommand(() => editor.chain().focus().toggleHeaderRow().run()),
-      show: true
-    },
-    {
-      label: '切换表头列',
-      icon: <LayoutLeft2LineIcon sx={{ fontSize: '1rem' }} />,
-      action: () => handleCommand(() => editor.chain().focus().toggleHeaderColumn().run()),
-      show: true
-    },
-    {
-      label: '删除当前列',
-      icon: <DeleteColumnIcon sx={{ fontSize: '1rem', color: 'error.main' }} />,
-      action: () => handleCommand(() => editor.chain().focus().deleteColumn().run()),
-      show: true
-    },
-    {
-      label: '删除当前行',
-      icon: <DeleteRowIcon sx={{ fontSize: '1rem', color: 'error.main' }} />,
-      action: () => handleCommand(() => editor.chain().focus().deleteRow().run()),
-      show: true
     },
     {
       label: '删除表格',
