@@ -36,6 +36,8 @@ export interface MenuProps {
     transformOrigin?: PopoverOrigin;
   };
   zIndex?: number;
+  onOpen?: () => void;
+  onClose?: () => void;
 }
 
 export type ToolbarItemType = {
