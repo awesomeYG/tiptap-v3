@@ -366,8 +366,8 @@ export const TableHandleMenu = ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'var(--ct-tt-table-handle-bg-color, rgba(0,0,0,0.05))',
-        borderRadius: 'var(--ct-tt-radius-lg, 4px)',
+        backgroundColor: 'var(--mui-palette-background-paper3)',
+        borderRadius: 'var(--mui-shape-borderRadius)',
         cursor: isDragging ? 'grabbing' : 'pointer',
         padding: 0,
         ...(orientation === 'row'
@@ -380,15 +380,15 @@ export const TableHandleMenu = ({
             width: 'var(--table-handle-ref-width, 100px)',
           }),
         '&.is-dragging': {
-          backgroundColor: 'var(--ct-tt-brand-color-500, #1976d2)',
+          backgroundColor: 'var(--mui-palette-primary-main)',
           '& .MuiSvgIcon-root': {
-            color: '#fff',
+            color: 'var(--mui-palette-common-white)',
           },
         },
         '&:hover': {
-          backgroundColor: 'var(--ct-tt-brand-color-500, #1976d2)',
+          backgroundColor: 'var(--mui-palette-primary-main)',
           '& .MuiSvgIcon-root': {
-            color: '#fff',
+            color: 'var(--mui-palette-common-white)',
           },
         },
       }}

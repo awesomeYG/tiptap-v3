@@ -1,3 +1,4 @@
+import { FloatingPortal } from '@floating-ui/react';
 import { Box } from '@mui/material';
 import type { Node } from '@tiptap/pm/model';
 import { TableMap } from '@tiptap/pm/tables';
@@ -177,8 +178,8 @@ export const TableExtendRowColumnButton: React.FC<
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          backgroundColor: 'var(--ct-tt-table-handle-bg-color, rgba(0,0,0,0.05))',
-          borderRadius: 'var(--ct-tt-radius-lg, 4px)',
+          backgroundColor: 'var(--mui-palette-background-paper3)',
+          borderRadius: 'var(--mui-shape-borderRadius)',
           padding: 0,
           cursor: 'pointer',
           '&.tiptap-table-row-end-add-remove': {
@@ -189,9 +190,9 @@ export const TableExtendRowColumnButton: React.FC<
             width: '0.75rem',
           },
           '&:hover': {
-            backgroundColor: 'var(--ct-tt-brand-color-500, #1976d2)',
+            backgroundColor: 'var(--mui-palette-primary-main)',
             '& .MuiSvgIcon-root': {
-              color: '#fff',
+              color: 'var(--mui-palette-common-white)',
             },
           },
         }}
@@ -201,7 +202,7 @@ export const TableExtendRowColumnButton: React.FC<
             width: '1rem',
             height: '1rem',
             flexShrink: 0,
-            color: 'var(--ct-tt-table-extend-icon-color, rgba(0,0,0,0.4))',
+            color: 'var(--mui-palette-text-disabled)',
           }}
         />
       </Box>
@@ -241,10 +242,11 @@ export const TableExtendRowColumnButtons: React.FC<
 
   if (!state) return null;
 
+  // Insert into .table-controls container (widgetContainer)
   const rootElement = state.widgetContainer || document.body;
 
   return (
-    <>
+    <FloatingPortal root={rootElement}>
       <div ref={rowButton.ref} style={rowButton.style}>
         <TableExtendRowColumnButton
           editor={editor}
@@ -264,7 +266,7 @@ export const TableExtendRowColumnButtons: React.FC<
           onMouseUp={handleUp}
         />
       </div>
-    </>
+    </FloatingPortal>
   );
 };
 

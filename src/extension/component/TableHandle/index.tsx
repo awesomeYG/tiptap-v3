@@ -1,14 +1,15 @@
-import { useCallback, useMemo, useState } from 'react';
-import type { Editor } from '@tiptap/react';
+import { FloatingPortal } from '@floating-ui/react';
 import type { Node } from '@tiptap/pm/model';
+import type { Editor } from '@tiptap/react';
+import React, { useCallback, useMemo, useState } from 'react';
+import type { Orientation } from '../../../util/table-utils';
 import {
   colDragStart,
   rowDragStart,
 } from '../../node/TableHandler/plugin';
+import { TableHandleMenu } from './TableHandleMenu';
 import { useTableHandlePositioning } from './use-table-handle-positioning';
 import { useTableHandleState } from './use-table-handle-state';
-import type { Orientation } from '../../../util/table-utils';
-import { TableHandleMenu } from './TableHandleMenu';
 
 export interface TableHandleButtonProps {
   editor: Editor;
@@ -90,7 +91,7 @@ export function TableHandle({
   const rootElement = state.widgetContainer || document.body;
 
   return (
-    <>
+    <FloatingPortal root={rootElement}>
       {shouldShowRow && (
         <div ref={rowHandle.ref} style={rowHandle.style}>
           <TableHandleMenu
@@ -120,7 +121,7 @@ export function TableHandle({
           />
         </div>
       )}
-    </>
+    </FloatingPortal>
   );
 }
 

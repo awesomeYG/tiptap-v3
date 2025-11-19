@@ -2,13 +2,107 @@
 
 import { Extension } from '@tiptap/core';
 import { Table, TableCell, TableHeader, TableRow } from '@tiptap/extension-table';
-import { Node } from '@tiptap/pm/model';
+import type { Node } from '@tiptap/pm/model';
 import { Plugin, TextSelection } from '@tiptap/pm/state';
+import { TableView } from '@tiptap/pm/tables';
 import { createTableContextMenuPlugin } from '../component/Table';
 import { TableHandleExtension } from './TableHandler';
 
 export const TableExtension = ({ editable }: { editable: boolean }) => [
   Table.extend({
+    addNodeView() {
+      return ({ node, HTMLAttributes }) => {
+        class TiptapTableView extends TableView {
+          private readonly tableWrapper: HTMLDivElement;
+          private readonly innerTableContainer: HTMLDivElement;
+          private readonly widgetsContainer: HTMLDivElement;
+
+          declare readonly node: Node;
+          declare readonly minCellWidth: number;
+          private readonly containerAttributes: Record<string, string>;
+
+          constructor(
+            node: Node,
+            minCellWidth: number,
+            containerAttributes: Record<string, string>
+          ) {
+            super(node, minCellWidth);
+
+            this.containerAttributes = containerAttributes ?? {};
+
+            this.tableWrapper = this.createTableWrapper();
+            this.innerTableContainer = this.createInnerTableContainer();
+            this.widgetsContainer = this.createWidgetsContainer();
+
+            this.setupDOMStructure();
+          }
+
+          private createTableWrapper(): HTMLDivElement {
+            const container = document.createElement('div');
+            container.className = 'tableWrapper';
+            this.applyContainerAttributes(container);
+            return container;
+          }
+
+          private createInnerTableContainer(): HTMLDivElement {
+            const container = document.createElement('div');
+            container.className = 'table-container';
+            return container;
+          }
+
+          private createWidgetsContainer(): HTMLDivElement {
+            const container = document.createElement('div');
+            container.className = 'table-controls';
+            container.style.position = 'relative';
+            return container;
+          }
+
+          private applyContainerAttributes(element: HTMLDivElement): void {
+            Object.entries(this.containerAttributes).forEach(([key, value]) => {
+              if (key !== 'class') {
+                element.setAttribute(key, value);
+              }
+            });
+          }
+
+          private setupDOMStructure(): void {
+            const originalTable = this.dom;
+            const tableElement = originalTable.firstChild!;
+
+            // Move table into inner container
+            this.innerTableContainer.appendChild(tableElement);
+
+            // Build the hierarchy: tableWrapper > innerContainer + widgetsContainer
+            this.tableWrapper.appendChild(this.innerTableContainer);
+            this.tableWrapper.appendChild(this.widgetsContainer);
+
+            this.dom = this.tableWrapper;
+          }
+
+          ignoreMutation(mutation: any): boolean {
+            const target = mutation.target as HTMLElement;
+            const isInsideTable = target.closest('.table-container');
+
+            return !isInsideTable || super.ignoreMutation(mutation);
+          }
+        }
+
+        const cellMinWidth =
+          this.options.cellMinWidth < 100 ? 100 : this.options.cellMinWidth;
+        return new TiptapTableView(node, cellMinWidth, HTMLAttributes);
+      };
+    },
+    renderHTML({ node, HTMLAttributes }: {
+      node: Node;
+      HTMLAttributes: Record<string, any>;
+    }) {
+      const originalRender = this.parent?.({ node, HTMLAttributes });
+      const wrapper = ['div', { class: 'tableWrapper' },
+        ['div', { class: 'table-container' }, originalRender],
+        ['div', { class: 'table-controls' }]
+      ];
+      return wrapper;
+    },
     addCommands() {
       return {
         ...this.parent?.(),
@@ -46,17 +140,6 @@ export const TableExtension = ({ editable }: { editable: boolean }) => [
       return {
         'Mod-9': () => this.editor.chain().insertTable({ rows: 3, cols: 4, withHeaderRow: true }).focus().run(),
       }
-    },
-    renderHTML({ node, HTMLAttributes }: {
-      node: Node;
-      HTMLAttributes: Record<string, any>;
-    }) {
-      const originalRender = this.parent?.({ node, HTMLAttributes });
-      const wrapper = ['div', { class: 'tableWrapper' }, 
-        originalRender,
-        ['div', { class: 'table-controls' }]
-      ];
-      return wrapper;
     },
   }).configure({
     handleWidth: 5,

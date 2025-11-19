@@ -1,29 +1,23 @@
-:root {
-  --ct-tt-table-handle-bg-color: rgba(0, 0, 0, 0.05);
-  --ct-tt-table-extend-icon-color: rgba(0, 0, 0, 0.4);
-}
-
-.dark {
-  --ct-tt-table-handle-bg-color: rgba(255, 255, 255, 0.1);
-  --ct-tt-table-extend-icon-color: rgba(255, 255, 255, 0.4);
-}
-
 .tiptap-table-extend-row-column-button {
   border: none;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--ct-tt-table-handle-bg-color);
-  border-radius: var(--ct-tt-radius-lg, 4px);
+  background-color: var(--mui-palette-background-paper3);
+  border-radius: var(--mui-shape-borderRadius);
   cursor: pointer;
 }
 
+.tiptap-table-extend-row-column-button .tiptap-button-icon {
+  color: var(--mui-palette-text-disabled);
+}
+
 .tiptap-table-extend-row-column-button:hover {
-  background-color: var(--ct-tt-brand-color-500, #1976d2);
+  background-color: var(--mui-palette-primary-main);
 }
 
 .tiptap-table-extend-row-column-button:hover .tiptap-button-icon {
-  color: var(--white);
+  color: var(--mui-palette-common-white);
 }
 
 .tiptap-table-extend-row-column-button.tiptap-table-row-end-add-remove {
