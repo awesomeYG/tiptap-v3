@@ -5,6 +5,7 @@ import { Table, TableCell, TableHeader, TableRow } from '@tiptap/extension-table
 import { Node } from '@tiptap/pm/model';
 import { Plugin, TextSelection } from '@tiptap/pm/state';
 import { createTableContextMenuPlugin } from '../component/Table';
+import { TableHandleExtension } from './TableHandler';
 
 export const TableExtension = ({ editable }: { editable: boolean }) => [
   Table.extend({
@@ -51,7 +52,10 @@ export const TableExtension = ({ editable }: { editable: boolean }) => [
       HTMLAttributes: Record<string, any>;
     }) {
       const originalRender = this.parent?.({ node, HTMLAttributes });
-      const wrapper = ['div', { class: 'tableWrapper' }, originalRender];
+      const wrapper = ['div', { class: 'tableWrapper' }, 
+        originalRender,
+        ['div', { class: 'table-controls' }]
+      ];
       return wrapper;
     },
   }).configure({
@@ -152,8 +156,9 @@ export const TableExtension = ({ editable }: { editable: boolean }) => [
         createTableContextMenuPlugin(this.editor),
       ] : [];
     },
-  })
-  ,
+  }),
+  // 表格 handle 扩展
+  editable ? TableHandleExtension : Extension.create({ name: 'tableHandleExtension' }),
   // Safari 中文输入 deleteCompositionText 修复
   Extension.create({
     name: 'safariCompositionDeleteFix',

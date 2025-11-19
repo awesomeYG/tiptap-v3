@@ -481,6 +481,14 @@
   transition: all 0.2s ease-in-out;
 }
 
+/* 表格拖拽 dropcursor 样式 */
+.tiptap-table-dropcursor {
+  position: absolute !important;
+  z-index: 20;
+  pointer-events: none;
+  background-color: var(--mui-palette-primary-main, #1976d2);
+}
+
 .tiptap.ProseMirror.resize-cursor {
   cursor: col-resize;
 }

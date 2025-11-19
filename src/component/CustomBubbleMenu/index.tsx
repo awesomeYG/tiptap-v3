@@ -108,7 +108,8 @@ const CustomBubbleMenu = ({ editor, more }: CustomBubbleMenuProps) => {
         editor.isActive('horizontalRule') ||
         editor.isActive('iframe') ||
         editor.isActive('yamlFormat') ||
-        editor.isActive('flow')
+        editor.isActive('flow') ||
+        editor.isActive('table')
       ) {
         return false
       }
