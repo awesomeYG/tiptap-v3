@@ -15,7 +15,7 @@ const InsertLink = ({ updateAttributes, deleteNode, attrs, editor }: InsertLinkP
   const isMarkdown = editor.options.contentType === 'markdown'
   const [title, setTitle] = useState(attrs.title || '')
   const [href, setHref] = useState(attrs.href || '')
-  const [type, setType] = useState((isMarkdown ? 'text' : (attrs.type || 'icon')))
+  const [type, setType] = useState(attrs.type || 'icon')
   const [target, setTarget] = useState(attrs.target || '_blank')
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null)
 

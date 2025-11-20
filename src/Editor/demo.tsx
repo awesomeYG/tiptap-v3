@@ -3,7 +3,7 @@ import { Box } from '@mui/material';
 import React from 'react';
 import '../index.css';
 
-const defaultContent = ``
+const defaultContent = `#### tiptap \n[tiptap notion patch](https://tiptap.dev/docs/ui-components/templates/notion-like-editor)`
 
 const Reader = () => {
   const handleTocUpdate = (toc: TocList) => {
@@ -12,6 +12,7 @@ const Reader = () => {
   const { editor } = useTiptap({
     editable: true,
     exclude: ['invisibleCharacters'],
+    contentType: 'markdown',
     onError: (error: Error) => {
       alert(error.message)
     },
@@ -49,11 +50,8 @@ const Reader = () => {
       return url
     },
     onSave: (editor) => {
-      const value = editor.getHTML();
+      const value = editor.getMarkdown();
       console.log(value)
-      editor.chain().focus().setContent(value, {
-        contentType: 'html'
-      }).run()
     },
     onAiWritingGetSuggestion: async ({ prefix, suffix }: { prefix: string, suffix: string }) => {
       console.log('onAiWritingGetSuggestion', prefix, suffix);

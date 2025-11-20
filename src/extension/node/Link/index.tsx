@@ -536,16 +536,15 @@ export const InlineLinkExtension = Node.create<LinkOptions>({
   parseMarkdown: (token, helpers) => {
     return helpers.createNode('inlineLink', {
       href: token.href || '',
-      title: token.title || null,
+      title: token.text || '',
       type: 'icon',
       target: '_blank',
     }, [helpers.createTextNode(token.text || '')])
   },
 
-  renderMarkdown: (node, h) => {
+  renderMarkdown: (node) => {
     const href = node.attrs?.href || ''
-    const text = h.renderChildren(node)
-
+    const text = node.attrs?.title || node.attrs?.href || ''
     return `[${text}](${href})`
   },
 
