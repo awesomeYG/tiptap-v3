@@ -755,3 +755,17 @@ export function getColumnCells(
   return collectCells(editor, 'column', columnIndex, tablePos);
 }
 
+/**
+ * Compare two DOMRects for equality (within a small tolerance)
+ */
+export function rectEq(rect1: DOMRect | null, rect2: DOMRect | null): boolean {
+  if (!rect1 || !rect2) return rect1 === rect2;
+  const tolerance = 0.5;
+  return (
+    Math.abs(rect1.left - rect2.left) < tolerance &&
+    Math.abs(rect1.top - rect2.top) < tolerance &&
+    Math.abs(rect1.width - rect2.width) < tolerance &&
+    Math.abs(rect1.height - rect2.height) < tolerance
+  );
+}
+

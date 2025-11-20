@@ -15,7 +15,6 @@ import {
   LayoutTop2LineIcon,
 } from '@ctzhian/tiptap/component/Icons';
 import { getThemeTextBgColor, getThemeTextColor } from '@ctzhian/tiptap/contants/enums';
-import { getShortcutKeyText } from '@ctzhian/tiptap/util';
 import { Box, Divider, Typography, useTheme } from '@mui/material';
 import type { Node } from '@tiptap/pm/model';
 import type { EditorState, Transaction } from '@tiptap/pm/state';
@@ -341,7 +340,6 @@ export const TableHandleMenu = ({
           },
           {
             label: '左侧对齐',
-            extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', 'shift', 'L'], '+')}</Typography>,
             key: 'align-horizontal-left',
             icon: <AlignLeftIcon sx={{ fontSize: '1rem' }} />,
             onClick: () => {
@@ -351,47 +349,44 @@ export const TableHandleMenu = ({
                 editor
                   .chain()
                   .focus()
-                  .toggleTextAlign('left')
+                  .setCellAttribute('textAlign', 'left')
                   .run();
               }, 0);
             }
           },
           {
             label: '居中对齐',
-            extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', 'shift', 'E'], '+')}</Typography>,
             key: 'align-horizontal-center',
             icon: <AlignCenterIcon sx={{ fontSize: '1rem' }} />,
             onClick: () => {
               if (!editor) return;
               selectRowOrColumn();
               setTimeout(() => {
-                editor.chain().focus().toggleTextAlign('center').run();
+                editor.chain().focus().setCellAttribute('textAlign', 'center').run();
               }, 0);
             }
           },
           {
             label: '右侧对齐',
-            extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', 'shift', 'R'], '+')}</Typography>,
             key: 'align-horizontal-right',
             icon: <AlignRightIcon sx={{ fontSize: '1rem' }} />,
             onClick: () => {
               if (!editor) return;
               selectRowOrColumn();
               setTimeout(() => {
-                editor.chain().focus().toggleTextAlign('right').run();
+                editor.chain().focus().setCellAttribute('textAlign', 'right').run();
               }, 0);
             }
           },
           {
             label: '两端对齐',
-            extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', 'shift', 'J'], '+')}</Typography>,
             key: 'align-horizontal-justify',
             icon: <AlignJustifyIcon sx={{ fontSize: '1rem' }} />,
             onClick: () => {
               if (!editor) return;
               selectRowOrColumn();
               setTimeout(() => {
-                editor.chain().focus().toggleTextAlign('justify').run();
+                editor.chain().focus().setCellAttribute('textAlign', 'justify').run();
               }, 0);
             }
           },
@@ -403,40 +398,37 @@ export const TableHandleMenu = ({
           },
           {
             label: '顶部对齐',
-            extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', 'alt', 'T'], '+')}</Typography>,
             key: 'align-vertical-top',
             icon: <AlignTopIcon sx={{ fontSize: '1rem' }} />,
             onClick: () => {
               if (!editor) return;
               selectRowOrColumn();
               setTimeout(() => {
-                editor.chain().focus().toggleVerticalAlign('top').run();
+                editor.chain().focus().setCellAttribute('verticalAlign', 'top').run();
               }, 0);
             }
           },
           {
             label: '居中对齐',
-            extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', 'alt', 'M'], '+')}</Typography>,
             key: 'align-vertical-center',
             icon: <AlignCenterIcon sx={{ fontSize: '1rem' }} />,
             onClick: () => {
               if (!editor) return;
               selectRowOrColumn();
               setTimeout(() => {
-                editor.chain().focus().toggleVerticalAlign('middle').run();
+                editor.chain().focus().setCellAttribute('verticalAlign', 'middle').run();
               }, 0);
             }
           },
           {
             label: '底部对齐',
-            extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', 'alt', 'B'], '+')}</Typography>,
             key: 'align-vertical-bottom',
             icon: <AlignBottomIcon sx={{ fontSize: '1rem' }} />,
             onClick: () => {
               if (!editor) return;
               selectRowOrColumn();
               setTimeout(() => {
-                editor.chain().focus().toggleVerticalAlign('bottom').run();
+                editor.chain().focus().setCellAttribute('verticalAlign', 'bottom').run();
               }, 0);
             }
           },

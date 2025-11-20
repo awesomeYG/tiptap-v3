@@ -5,7 +5,6 @@ import { Table, TableCell, TableHeader, TableRow } from '@tiptap/extension-table
 import type { Node } from '@tiptap/pm/model';
 import { Plugin, TextSelection } from '@tiptap/pm/state';
 import { TableView } from '@tiptap/pm/tables';
-import { createTableContextMenuPlugin } from '../component/Table';
 import { TableHandleExtension } from './TableHandler';
 
 export const TableExtension = ({ editable }: { editable: boolean }) => [
@@ -153,7 +152,7 @@ export const TableExtension = ({ editable }: { editable: boolean }) => [
       return {
         ...this.parent?.(),
         bgcolor: {
-          default: 'transparent',
+          default: null,
           parseHTML: (element: HTMLElement) => {
             return element.getAttribute('data-background-color') || element.style.backgroundColor;
           },
@@ -174,6 +173,19 @@ export const TableExtension = ({ editable }: { editable: boolean }) => [
             return {
               style: `text-align: ${attributes.textAlign}`,
               'data-text-align': attributes.textAlign,
+            };
+          },
+        },
+        verticalAlign: {
+          default: null,
+          parseHTML: (element: HTMLElement) => {
+            return element.getAttribute('data-vertical-align') || element.style.verticalAlign;
+          },
+          renderHTML: (attributes: Record<string, any>) => {
+            if (!attributes.verticalAlign) return {};
+            return {
+              style: `vertical-align: ${attributes.verticalAlign}`,
+              'data-vertical-align': attributes.verticalAlign,
             };
           },
         },
@@ -220,16 +232,12 @@ export const TableExtension = ({ editable }: { editable: boolean }) => [
       return {
         ...this.parent?.(),
         bgcolor: {
-          default: 'transparent',
-          parseHTML: (element: HTMLElement) => {
-            return element.getAttribute('data-background-color') || element.style.backgroundColor;
-          },
-          renderHTML: (attributes: Record<string, any>) => {
-            return {
-              'data-background-color': attributes.bgcolor,
-              style: `background-color: ${attributes.bgcolor}`,
-            };
-          },
+          default: null,
+          parseHTML: (element: HTMLElement) => element.getAttribute('data-background-color') || element.style.backgroundColor,
+          renderHTML: (attributes: Record<string, any>) => ({
+            'data-background-color': attributes.bgcolor,
+            style: `background-color: ${attributes.bgcolor}`,
+          }),
         },
         textAlign: {
           default: null,
@@ -241,6 +249,19 @@ export const TableExtension = ({ editable }: { editable: boolean }) => [
             return {
               style: `text-align: ${attributes.textAlign}`,
               'data-text-align': attributes.textAlign,
+            };
+          },
+        },
+        verticalAlign: {
+          default: null,
+          parseHTML: (element: HTMLElement) => {
+            return element.getAttribute('data-vertical-align') || element.style.verticalAlign;
+          },
+          renderHTML: (attributes: Record<string, any>) => {
+            if (!attributes.verticalAlign) return {};
+            return {
+              style: `vertical-align: ${attributes.verticalAlign}`,
+              'data-vertical-align': attributes.verticalAlign,
             };
           },
         },
@@ -287,19 +308,7 @@ export const TableExtension = ({ editable }: { editable: boolean }) => [
       };
     },
   }),
-  // 表格右键菜单插件
-  Extension.create({
-    name: 'tableContextMenu',
-
-    addProseMirrorPlugins() {
-      return editable ? [
-        createTableContextMenuPlugin(this.editor),
-      ] : [];
-    },
-  }),
-  // 表格 handle 扩展
   editable ? TableHandleExtension : Extension.create({ name: 'tableHandleExtension' }),
-  // Safari 中文输入 deleteCompositionText 修复
   Extension.create({
     name: 'safariCompositionDeleteFix',
 
