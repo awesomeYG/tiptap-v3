@@ -26,6 +26,9 @@ export interface LinkProtocolOptions {
   optionalSlashes?: boolean
 }
 
+// export const pasteRegex =
+//   /https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z]{2,}\b(?:[-a-zA-Z0-9@:%._+~#=?!&/]*)(?:[-a-zA-Z0-9@:%._+~#=?!&/]*)/gi
+
 /**
  * @deprecated The default behavior is now to open links when the editor is not editable.
  */
@@ -526,6 +529,23 @@ export const InlineLinkExtension = Node.create<LinkOptions>({
         return this.editor.commands.setInlineLink({ href: '', type: 'icon' })
       }
     }
+  },
+
+  markdownTokenName: 'link',
+
+  parseMarkdown: (token, helpers) => {
+    return helpers.createNode('inlineLink', {
+      href: token.href || '',
+      title: token.title || null,
+      type: 'icon',
+    }, [helpers.createTextNode(token.text || '')])
+  },
+
+  renderMarkdown: (node, h) => {
+    const href = node.attrs?.href || ''
+    const text = h.renderChildren(node)
+
+    return `[${text}](${href})`
   },
 
   addNodeView() {
