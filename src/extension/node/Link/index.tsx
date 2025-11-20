@@ -538,6 +538,7 @@ export const InlineLinkExtension = Node.create<LinkOptions>({
       href: token.href || '',
       title: token.title || null,
       type: 'icon',
+      target: '_blank',
     }, [helpers.createTextNode(token.text || '')])
   },
 
