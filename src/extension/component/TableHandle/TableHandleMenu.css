@@ -1,0 +1,36 @@
+.tiptap-table-handle-menu {
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--mui-palette-background-paper3);
+  border-radius: var(--mui-shape-borderRadius);
+  cursor: pointer;
+}
+
+.tiptap-table-handle-menu:hover {
+  background-color: var(--mui-palette-primary-main);
+}
+
+.tiptap-table-handle-menu:hover .tiptap-button-icon {
+  color: var(--mui-palette-common-white);
+}
+
+.tiptap-table-handle-menu.menu-opened {
+  background-color: var(--mui-palette-primary-main);
+}
+
+.tiptap-table-handle-menu.is-dragging {
+  cursor: grabbing;
+  background-color: var(--mui-palette-primary-main);
+}
+
+.tiptap-table-handle-menu.row {
+  width: 0.75rem;
+  height: var(--table-handle-ref-height);
+}
+
+.tiptap-table-handle-menu.column {
+  height: 0.75rem;
+  width: var(--table-handle-ref-width);
+}

@@ -1,3 +1,5 @@
+import { Theme } from "@mui/material";
+
 export enum NodeTypeEnum {
   Alert = 'alert',
   BlockAttachment = 'blockAttachment',
@@ -56,3 +58,29 @@ export const NODE_TYPE_LABEL: Record<NodeTypeEnum, {
 
   [NodeTypeEnum.HorizontalRule]: { label: '分割线' },
 }
+
+
+
+export const getThemeTextColor = (theme: Theme) => [
+  { label: '默认色', value: theme.palette.text.primary },
+  { label: '主题色', value: theme.palette.primary.main },
+  { label: '成功色', value: theme.palette.success.main },
+  { label: '警告色', value: theme.palette.warning.main },
+  { label: '错误色', value: theme.palette.error.main },
+  { label: '黑色', value: theme.palette.common.black },
+  { label: '灰色', value: theme.palette.text.disabled },
+  { label: '白色', value: theme.palette.common.white },
+]
+
+export const getThemeTextBgColor = (theme: Theme) => [
+  { label: '默认背景', value: theme.palette.background.paper },
+  { label: '灰色背景', value: '#f8f8f7' },
+  { label: '棕色背景', value: '#f4eeee' },
+  { label: '橙色背景', value: '#fbecdd' },
+  { label: '黄色背景', value: '#fef9c3' },
+  { label: '绿色背景', value: '#dcfce7' },
+  { label: '蓝色背景', value: '#e0f2fe' },
+  { label: '紫色背景', value: '#f3e8ff' },
+  { label: '粉色背景', value: '#fcf1f6' },
+  { label: '红色背景', value: '#ffe4e6' },
+]

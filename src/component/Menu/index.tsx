@@ -36,7 +36,9 @@ const Menu = React.forwardRef<MenuRef, MenuProps>(({
       horizontal: 'left',
     }
   },
-  zIndex
+  zIndex,
+  onOpen,
+  onClose,
 }, ref) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
 
@@ -45,10 +47,12 @@ const Menu = React.forwardRef<MenuRef, MenuProps>(({
       context.props.onClick(event);
     }
     setAnchorEl(event.currentTarget);
+    onOpen?.();
   };
 
   const handleClose = () => {
     setAnchorEl(null);
+    onClose?.();
   };
 
   React.useImperativeHandle(ref, () => ({

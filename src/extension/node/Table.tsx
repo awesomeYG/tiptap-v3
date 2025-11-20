@@ -2,12 +2,106 @@
 
 import { Extension } from '@tiptap/core';
 import { Table, TableCell, TableHeader, TableRow } from '@tiptap/extension-table';
-import { Node } from '@tiptap/pm/model';
+import type { Node } from '@tiptap/pm/model';
 import { Plugin, TextSelection } from '@tiptap/pm/state';
-import { createTableContextMenuPlugin } from '../component/Table';
+import { TableView } from '@tiptap/pm/tables';
+import { TableHandleExtension } from './TableHandler';
 
 export const TableExtension = ({ editable }: { editable: boolean }) => [
   Table.extend({
+    addNodeView() {
+      return ({ node, HTMLAttributes }) => {
+        class TiptapTableView extends TableView {
+          private readonly tableWrapper: HTMLDivElement;
+          private readonly innerTableContainer: HTMLDivElement;
+          private readonly widgetsContainer: HTMLDivElement;
+
+          declare readonly node: Node;
+          declare readonly minCellWidth: number;
+          private readonly containerAttributes: Record<string, string>;
+
+          constructor(
+            node: Node,
+            minCellWidth: number,
+            containerAttributes: Record<string, string>
+          ) {
+            super(node, minCellWidth);
+
+            this.containerAttributes = containerAttributes ?? {};
+
+            this.tableWrapper = this.createTableWrapper();
+            this.innerTableContainer = this.createInnerTableContainer();
+            this.widgetsContainer = this.createWidgetsContainer();
+
+            this.setupDOMStructure();
+          }
+
+          private createTableWrapper(): HTMLDivElement {
+            const container = document.createElement('div');
+            container.className = 'tableWrapper';
+            this.applyContainerAttributes(container);
+            return container;
+          }
+
+          private createInnerTableContainer(): HTMLDivElement {
+            const container = document.createElement('div');
+            container.className = 'table-container';
+            return container;
+          }
+
+          private createWidgetsContainer(): HTMLDivElement {
+            const container = document.createElement('div');
+            container.className = 'table-controls';
+            container.style.position = 'relative';
+            return container;
+          }
+
+          private applyContainerAttributes(element: HTMLDivElement): void {
+            Object.entries(this.containerAttributes).forEach(([key, value]) => {
+              if (key !== 'class') {
+                element.setAttribute(key, value);
+              }
+            });
+          }
+
+          private setupDOMStructure(): void {
+            const originalTable = this.dom;
+            const tableElement = originalTable.firstChild!;
+
+            // Move table into inner container
+            this.innerTableContainer.appendChild(tableElement);
+
+            // Build the hierarchy: tableWrapper > innerContainer + widgetsContainer
+            this.tableWrapper.appendChild(this.innerTableContainer);
+            this.tableWrapper.appendChild(this.widgetsContainer);
+
+            this.dom = this.tableWrapper;
+          }
+
+          ignoreMutation(mutation: any): boolean {
+            const target = mutation.target as HTMLElement;
+            const isInsideTable = target.closest('.table-container');
+
+            return !isInsideTable || super.ignoreMutation(mutation);
+          }
+        }
+
+        const cellMinWidth =
+          this.options.cellMinWidth < 100 ? 100 : this.options.cellMinWidth;
+        return new TiptapTableView(node, cellMinWidth, HTMLAttributes);
+      };
+    },
+    renderHTML({ node, HTMLAttributes }: {
+      node: Node;
+      HTMLAttributes: Record<string, any>;
+    }) {
+      const originalRender = this.parent?.({ node, HTMLAttributes });
+      const wrapper = ['div', { class: 'tableWrapper' },
+        ['div', { class: 'table-container' }, originalRender],
+        ['div', { class: 'table-controls' }]
+      ];
+      return wrapper;
+    },
     addCommands() {
       return {
         ...this.parent?.(),
@@ -46,14 +140,6 @@ export const TableExtension = ({ editable }: { editable: boolean }) => [
         'Mod-9': () => this.editor.chain().insertTable({ rows: 3, cols: 4, withHeaderRow: true }).focus().run(),
       }
     },
-    renderHTML({ node, HTMLAttributes }: {
-      node: Node;
-      HTMLAttributes: Record<string, any>;
-    }) {
-      const originalRender = this.parent?.({ node, HTMLAttributes });
-      const wrapper = ['div', { class: 'tableWrapper' }, originalRender];
-      return wrapper;
-    },
   }).configure({
     handleWidth: 5,
     cellMinWidth: 100,
@@ -61,22 +147,12 @@ export const TableExtension = ({ editable }: { editable: boolean }) => [
     lastColumnResizable: editable,
     allowTableNodeSelection: editable,
   }),
-  TableHeader.configure({
-    HTMLAttributes: {
-      class: 'table-header',
-    },
-  }),
-  TableRow.configure({
-    HTMLAttributes: {
-      class: 'table-row',
-    },
-  }),
-  TableCell.extend({
+  TableHeader.extend({
     addAttributes() {
       return {
         ...this.parent?.(),
         bgcolor: {
-          default: 'transparent',
+          default: null,
           parseHTML: (element: HTMLElement) => {
             return element.getAttribute('data-background-color') || element.style.backgroundColor;
           },
@@ -97,6 +173,95 @@ export const TableExtension = ({ editable }: { editable: boolean }) => [
             return {
               style: `text-align: ${attributes.textAlign}`,
               'data-text-align': attributes.textAlign,
+            };
+          },
+        },
+        verticalAlign: {
+          default: null,
+          parseHTML: (element: HTMLElement) => {
+            return element.getAttribute('data-vertical-align') || element.style.verticalAlign;
+          },
+          renderHTML: (attributes: Record<string, any>) => {
+            if (!attributes.verticalAlign) return {};
+            return {
+              style: `vertical-align: ${attributes.verticalAlign}`,
+              'data-vertical-align': attributes.verticalAlign,
+            };
+          },
+        },
+        fontSize: {
+          default: null,
+          parseHTML: (element: HTMLElement) => {
+            return element.getAttribute('data-font-size') || element.style.fontSize;
+          },
+          renderHTML: (attributes: Record<string, any>) => {
+            if (!attributes.fontSize) return {};
+            return {
+              style: `font-size: ${attributes.fontSize}`,
+              'data-font-size': attributes.fontSize,
+            };
+          },
+        },
+        fontWeight: {
+          default: null,
+          parseHTML: (element: HTMLElement) => {
+            return element.getAttribute('data-font-weight') || element.style.fontWeight;
+          },
+          renderHTML: (attributes: Record<string, any>) => {
+            if (!attributes.fontWeight) return {};
+            return {
+              style: `font-weight: ${attributes.fontWeight}`,
+              'data-font-weight': attributes.fontWeight,
+            };
+          },
+        },
+      };
+    },
+  }).configure({
+    HTMLAttributes: {
+      class: 'table-header',
+    },
+  }),
+  TableRow.configure({
+    HTMLAttributes: {
+      class: 'table-row',
+    },
+  }),
+  TableCell.extend({
+    addAttributes() {
+      return {
+        ...this.parent?.(),
+        bgcolor: {
+          default: null,
+          parseHTML: (element: HTMLElement) => element.getAttribute('data-background-color') || element.style.backgroundColor,
+          renderHTML: (attributes: Record<string, any>) => ({
+            'data-background-color': attributes.bgcolor,
+            style: `background-color: ${attributes.bgcolor}`,
+          }),
+        },
+        textAlign: {
+          default: null,
+          parseHTML: (element: HTMLElement) => {
+            return element.getAttribute('data-text-align') || element.style.textAlign;
+          },
+          renderHTML: (attributes: Record<string, any>) => {
+            if (!attributes.textAlign) return {};
+            return {
+              style: `text-align: ${attributes.textAlign}`,
+              'data-text-align': attributes.textAlign,
+            };
+          },
+        },
+        verticalAlign: {
+          default: null,
+          parseHTML: (element: HTMLElement) => {
+            return element.getAttribute('data-vertical-align') || element.style.verticalAlign;
+          },
+          renderHTML: (attributes: Record<string, any>) => {
+            if (!attributes.verticalAlign) return {};
+            return {
+              style: `vertical-align: ${attributes.verticalAlign}`,
+              'data-vertical-align': attributes.verticalAlign,
             };
           },
         },
@@ -143,18 +308,7 @@ export const TableExtension = ({ editable }: { editable: boolean }) => [
       };
     },
   }),
-  // 表格右键菜单插件
-  Extension.create({
-    name: 'tableContextMenu',
-
-    addProseMirrorPlugins() {
-      return editable ? [
-        createTableContextMenuPlugin(this.editor),
-      ] : [];
-    },
-  })
-  ,
-  // Safari 中文输入 deleteCompositionText 修复
+  editable ? TableHandleExtension : Extension.create({ name: 'tableHandleExtension' }),
   Extension.create({
     name: 'safariCompositionDeleteFix',
 
