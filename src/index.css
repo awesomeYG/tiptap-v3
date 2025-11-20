@@ -445,6 +445,7 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
   text-align: left;
+  background-color: var(--mui-palette-background-paper3);
 }
 
 .tiptap.ProseMirror[contenteditable="true"] table .selectedCell * {
@@ -453,7 +454,7 @@
 }
 
 .tiptap.ProseMirror[contenteditable="true"] table .selectedCell:after {
-  background-color: color-mix(in srgb, var(--mui-palette-primary-main) 12%, transparent);
+  background-color: color-mix(in srgb, var(--mui-palette-primary-main) 5%, transparent);
   content: '';
   left: 0;
   right: 0;

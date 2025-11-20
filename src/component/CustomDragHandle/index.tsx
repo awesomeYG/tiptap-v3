@@ -1,5 +1,5 @@
 import { AddLineIcon, AlignBottomIcon, AlignCenterIcon, AlignJustifyIcon, AlignLeftIcon, AlignRightIcon, AlignTopIcon, ArrowDownSLineIcon, AttachmentLineIcon, BrushLineIcon, DeleteLineIcon, DownloadLineIcon, DraggableIcon, EraserLineIcon, FileCopyLineIcon, FontSizeIcon, H1Icon, H2Icon, H3Icon, ImageLineIcon, IndentDecreaseIcon, IndentIncreaseIcon, Information2LineIcon, ListCheck3Icon, ListOrdered2Icon, ListUnorderedIcon, MovieLineIcon, Music2LineIcon, QuoteTextIcon, Repeat2LineIcon, ScissorsCutLineIcon, TextIcon, TextWrapIcon } from '@ctzhian/tiptap/component/Icons';
-import { NODE_TYPE_LABEL, NodeTypeEnum } from '@ctzhian/tiptap/contants/enums';
+import { getThemeTextBgColor, getThemeTextColor, NODE_TYPE_LABEL, NodeTypeEnum } from '@ctzhian/tiptap/contants/enums';
 import { MenuItem, OnTipFunction } from '@ctzhian/tiptap/type';
 import { Box, Divider, Stack, Typography, useTheme } from '@mui/material';
 import DragHandle from '@tiptap/extension-drag-handle-react';
@@ -96,30 +96,6 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
   } | null>(null)
 
   const [hasMarks, setHasMarks] = useState(false)
-
-  const THEME_TEXT_COLOR = [
-    { label: '默认色', value: theme.palette.text.primary },
-    { label: '主题色', value: theme.palette.primary.main },
-    { label: '成功色', value: theme.palette.success.main },
-    { label: '警告色', value: theme.palette.warning.main },
-    { label: '错误色', value: theme.palette.error.main },
-    { label: '黑色', value: theme.palette.common.black },
-    { label: '灰色', value: theme.palette.text.disabled },
-    { label: '白色', value: theme.palette.common.white },
-  ]
-
-  const THEME_TEXT_BG_COLOR = [
-    { label: '默认背景', value: theme.palette.background.paper },
-    { label: '灰色背景', value: '#f8f8f7' },
-    { label: '棕色背景', value: '#f4eeee' },
-    { label: '橙色背景', value: '#fbecdd' },
-    { label: '黄色背景', value: '#fef9c3' },
-    { label: '绿色背景', value: '#dcfce7' },
-    { label: '蓝色背景', value: '#e0f2fe' },
-    { label: '紫色背景', value: '#f3e8ff' },
-    { label: '粉色背景', value: '#fcf1f6' },
-    { label: '红色背景', value: '#ffe4e6' },
-  ]
 
   const cancelNodeType = () => {
     const type = current.node?.type.name
@@ -356,7 +332,7 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
                 customLabel: <Typography sx={{ p: 1, fontSize: '0.75rem', color: 'text.secondary', fontWeight: 'bold' }}>文字颜色</Typography>,
                 key: 'text-color',
               },
-              ...(THEME_TEXT_COLOR.map(it => ({
+              ...(getThemeTextColor(theme).map(it => ({
                 label: it.label,
                 key: it.value,
                 icon: <Box sx={{
@@ -383,7 +359,7 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
                 customLabel: <Typography sx={{ p: 1, fontSize: '0.75rem', color: 'text.secondary', fontWeight: 'bold' }}>文字背景颜色</Typography>,
                 key: 'background-color',
               },
-              ...(THEME_TEXT_BG_COLOR.map(it => ({
+              ...(getThemeTextBgColor(theme).map(it => ({
                 label: it.label,
                 key: it.value,
                 icon: <Box sx={{

@@ -1,12 +1,22 @@
 import {
+  AlignBottomIcon,
+  AlignCenterIcon,
+  AlignJustifyIcon,
+  AlignLeftIcon,
+  AlignRightIcon,
+  AlignTopIcon,
+  ArrowDownSLineIcon,
+  BrushLineIcon,
   DeleteColumnIcon, DeleteRowIcon,
   FileCopyLineIcon,
   InsertColumnLeftIcon,
   InsertColumnRightIcon, InsertRowBottomIcon, InsertRowTopIcon,
   LayoutLeft2LineIcon,
-  LayoutTop2LineIcon, MergeCellsHorizontalIcon, MergeCellsVerticalIcon
+  LayoutTop2LineIcon,
 } from '@ctzhian/tiptap/component/Icons';
-import { Box } from '@mui/material';
+import { getThemeTextBgColor, getThemeTextColor } from '@ctzhian/tiptap/contants/enums';
+import { getShortcutKeyText } from '@ctzhian/tiptap/util';
+import { Box, Divider, Typography, useTheme } from '@mui/material';
 import type { Node } from '@tiptap/pm/model';
 import type { EditorState, Transaction } from '@tiptap/pm/state';
 import { addColumnAfter, addRowAfter, CellSelection, TableMap } from '@tiptap/pm/tables';
@@ -41,8 +51,8 @@ export const TableHandleMenu = ({
   onOpenChange,
   dragStart,
 }: TableHandleMenuProps) => {
+  const theme = useTheme();
   const [isDragging, setIsDragging] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const selectRowOrColumn = useCallback(() => {
     if (
@@ -71,7 +81,6 @@ export const TableHandleMenu = ({
     }
   }, [editor, tableNode, tablePos, orientation, index]);
 
-  // Check if row/column can be duplicated (no merged cells)
   const canDuplicate = useMemo(() => {
     if (!editor || typeof index !== 'number' || typeof tablePos !== 'number') {
       return false;
@@ -82,31 +91,26 @@ export const TableHandleMenu = ({
         ? getRowCells(editor, index, tablePos)
         : getColumnCells(editor, index, tablePos);
 
-      // Cannot duplicate if there are merged cells
       return cells.cells.length > 0 && cells.mergedCells.length === 0;
     } catch {
       return false;
     }
   }, [editor, index, orientation, tablePos, tableNode, editor?.state.doc]);
 
-  // Duplicate row/column function
   const duplicateRowOrColumn = useCallback(() => {
     if (!editor || typeof index !== 'number' || typeof tablePos !== 'number' || !canDuplicate) {
       return;
     }
 
     try {
-      // Get original cells before adding new row/column
       const originalCells = orientation === 'row'
         ? getRowCells(editor, index, tablePos)
         : getColumnCells(editor, index, tablePos);
 
       if (originalCells.cells.length === 0) return;
 
-      // First, select the row/column
       selectRowOrColumn();
 
-      // Add new row/column after current one
       let addSuccess = false;
       if (editor.state.selection instanceof CellSelection) {
         addSuccess = orientation === 'row'
@@ -136,30 +140,24 @@ export const TableHandleMenu = ({
 
       if (!addSuccess) return;
 
-      // After adding, get the updated table position and new row/column cells
-      // The tablePos might have changed, so we need to find it again
       const updatedTable = getTable(editor, tablePos);
       if (!updatedTable) return;
 
-      // Get the new row/column cells (at index + 1) using updated state
       const newCells = orientation === 'row'
         ? getRowCells(editor, index + 1, updatedTable.pos)
         : getColumnCells(editor, index + 1, updatedTable.pos);
 
       if (newCells.cells.length === 0) return;
 
-      // Replace each cell in the new row/column with duplicated content
       const { state, view } = editor;
       const tr = state.tr;
 
-      // Process in reverse order to maintain correct positions
       const cellsToReplace = [...newCells.cells].reverse();
       const originalCellsReversed = [...originalCells.cells].reverse();
 
       cellsToReplace.forEach((newCell, reverseIndex) => {
         const originalCell = originalCellsReversed[reverseIndex];
         if (newCell.node && originalCell?.node) {
-          // Create a duplicated cell with the same content, attrs, and marks
           const duplicatedCell = newCell.node.type.create(
             { ...originalCell.node.attrs },
             originalCell.node.content,
@@ -179,8 +177,6 @@ export const TableHandleMenu = ({
     }
   }, [editor, index, orientation, tablePos, canDuplicate, selectRowOrColumn]);
 
-  // Check if current row/column is a header
-  // Use useState and useEffect to ensure it updates when editor state changes
   const [isHeader, setIsHeader] = useState(false);
 
   useEffect(() => {
@@ -199,7 +195,6 @@ export const TableHandleMenu = ({
         return;
       }
 
-      // Check if ALL cells in the row/column are headers
       const allHeaders = cells.cells.every(cell => cell?.node?.type.name === 'tableHeader');
       setIsHeader(allHeaders);
     } catch {
@@ -212,24 +207,31 @@ export const TableHandleMenu = ({
   const menuList = useMemo<MenuItem[]>(() => {
     if (!editor) return [];
 
-    const menuItems: MenuItem[] = [];
+    const menuItems: MenuItem[] = [
+    ];
 
     if (isFirstRowOrColumn) {
-      menuItems.push({
-        key: 'toggle-header',
-        label: isHeader
-          ? (orientation === 'row' ? '取消行表头' : '取消列表头')
-          : (orientation === 'row' ? '切换行表头' : '切换列表头'),
-        icon: isHeader ? <LayoutLeft2LineIcon sx={{ fontSize: '1rem' }} /> : <LayoutTop2LineIcon sx={{ fontSize: '1rem' }} />,
-        onClick: () => {
-          selectRowOrColumn();
-          if (orientation === 'row') {
-            editor.chain().focus().toggleHeaderRow().run();
-          } else {
-            editor.chain().focus().toggleHeaderColumn().run();
-          }
+      menuItems.push(
+        {
+          key: 'toggle-header',
+          label: isHeader
+            ? (orientation === 'row' ? '取消行表头' : '取消列表头')
+            : (orientation === 'row' ? '切换行表头' : '切换列表头'),
+          icon: isHeader ? <LayoutLeft2LineIcon sx={{ fontSize: '1rem' }} /> : <LayoutTop2LineIcon sx={{ fontSize: '1rem' }} />,
+          onClick: () => {
+            selectRowOrColumn();
+            if (orientation === 'row') {
+              editor.chain().focus().toggleHeaderRow().run();
+            } else {
+              editor.chain().focus().toggleHeaderColumn().run();
+            }
+          },
         },
-      });
+        {
+          customLabel: <Divider sx={{ my: 0.5 }} />,
+          key: 'divider2',
+        }
+      );
     }
 
     menuItems.push(
@@ -258,12 +260,191 @@ export const TableHandleMenu = ({
         },
       },
       {
-        key: 'merge-cells',
-        label: orientation === 'row' ? '合并当前行' : '合并当前列',
-        icon: orientation === 'row' ? <MergeCellsHorizontalIcon sx={{ fontSize: '1rem' }} /> : <MergeCellsVerticalIcon sx={{ fontSize: '1rem' }} />,
-        onClick: () => {
-          editor.chain().focus().mergeCells().run();
-        },
+        customLabel: <Divider sx={{ my: 0.5 }} />,
+        key: 'divider1',
+      },
+      {
+        key: 'color',
+        label: '颜色',
+        icon: <BrushLineIcon sx={{ fontSize: '1rem' }} />,
+        children: [
+          {
+            customLabel: <Typography sx={{ p: 1, fontSize: '0.75rem', color: 'text.secondary', fontWeight: 'bold' }}>文字颜色</Typography>,
+            key: 'text-color',
+          },
+          ...(getThemeTextColor(theme).map(it => ({
+            label: it.label,
+            key: it.value,
+            icon: <Box sx={{
+              color: it.value,
+              width: '1rem',
+              height: '1rem',
+              borderRadius: '50%',
+              bgcolor: it.value,
+              border: '1px solid',
+              borderColor: it.value === theme.palette.common.white ? 'divider' : 'transparent'
+            }}></Box>,
+            onClick: () => {
+              if (!editor) return;
+              selectRowOrColumn();
+              setTimeout(() => {
+                editor
+                  .chain()
+                  .focus()
+                  .toggleMark('textStyle', { color: it.value })
+                  .run();
+              }, 0);
+            }
+          }))),
+          {
+            customLabel: <Typography sx={{ p: 1, fontSize: '0.75rem', color: 'text.secondary', fontWeight: 'bold' }}>背景颜色</Typography>,
+            key: 'background-color',
+          },
+          ...(getThemeTextBgColor(theme).map(it => ({
+            label: it.label,
+            key: it.value,
+            icon: <Box sx={{
+              width: '1rem',
+              height: '1rem',
+              borderRadius: '50%',
+              bgcolor: it.value,
+              border: '1px solid',
+              borderColor: 'divider',
+            }}></Box>,
+            onClick: () => {
+              if (!editor) return;
+              selectRowOrColumn();
+              setTimeout(() => {
+                const bgColor = it.value === 'transparent' || it.value === 'var(--mui-palette-background-paper)'
+                  ? 'transparent'
+                  : it.value;
+                editor
+                  .chain()
+                  .focus()
+                  .setCellAttribute('bgcolor', bgColor)
+                  .run();
+              }, 0);
+            }
+          })))
+        ]
+      },
+      {
+        key: 'align',
+        label: '对齐方式',
+        icon: <AlignLeftIcon sx={{ fontSize: '1rem' }} />,
+        children: [
+          {
+            customLabel: <Typography sx={{ p: 1, fontSize: '0.75rem', color: 'text.secondary', fontWeight: 'bold' }}>
+              水平对齐方式
+            </Typography>,
+            key: 'align-horizontal',
+          },
+          {
+            label: '左侧对齐',
+            extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', 'shift', 'L'], '+')}</Typography>,
+            key: 'align-horizontal-left',
+            icon: <AlignLeftIcon sx={{ fontSize: '1rem' }} />,
+            onClick: () => {
+              if (!editor) return;
+              selectRowOrColumn();
+              setTimeout(() => {
+                editor
+                  .chain()
+                  .focus()
+                  .toggleTextAlign('left')
+                  .run();
+              }, 0);
+            }
+          },
+          {
+            label: '居中对齐',
+            extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', 'shift', 'E'], '+')}</Typography>,
+            key: 'align-horizontal-center',
+            icon: <AlignCenterIcon sx={{ fontSize: '1rem' }} />,
+            onClick: () => {
+              if (!editor) return;
+              selectRowOrColumn();
+              setTimeout(() => {
+                editor.chain().focus().toggleTextAlign('center').run();
+              }, 0);
+            }
+          },
+          {
+            label: '右侧对齐',
+            extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', 'shift', 'R'], '+')}</Typography>,
+            key: 'align-horizontal-right',
+            icon: <AlignRightIcon sx={{ fontSize: '1rem' }} />,
+            onClick: () => {
+              if (!editor) return;
+              selectRowOrColumn();
+              setTimeout(() => {
+                editor.chain().focus().toggleTextAlign('right').run();
+              }, 0);
+            }
+          },
+          {
+            label: '两端对齐',
+            extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', 'shift', 'J'], '+')}</Typography>,
+            key: 'align-horizontal-justify',
+            icon: <AlignJustifyIcon sx={{ fontSize: '1rem' }} />,
+            onClick: () => {
+              if (!editor) return;
+              selectRowOrColumn();
+              setTimeout(() => {
+                editor.chain().focus().toggleTextAlign('justify').run();
+              }, 0);
+            }
+          },
+          {
+            customLabel: <Typography sx={{ p: 1, fontSize: '0.75rem', color: 'text.secondary', fontWeight: 'bold' }}>
+              垂直对齐方式
+            </Typography>,
+            key: 'align-vertical',
+          },
+          {
+            label: '顶部对齐',
+            extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', 'alt', 'T'], '+')}</Typography>,
+            key: 'align-vertical-top',
+            icon: <AlignTopIcon sx={{ fontSize: '1rem' }} />,
+            onClick: () => {
+              if (!editor) return;
+              selectRowOrColumn();
+              setTimeout(() => {
+                editor.chain().focus().toggleVerticalAlign('top').run();
+              }, 0);
+            }
+          },
+          {
+            label: '居中对齐',
+            extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', 'alt', 'M'], '+')}</Typography>,
+            key: 'align-vertical-center',
+            icon: <AlignCenterIcon sx={{ fontSize: '1rem' }} />,
+            onClick: () => {
+              if (!editor) return;
+              selectRowOrColumn();
+              setTimeout(() => {
+                editor.chain().focus().toggleVerticalAlign('middle').run();
+              }, 0);
+            }
+          },
+          {
+            label: '底部对齐',
+            extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', 'alt', 'B'], '+')}</Typography>,
+            key: 'align-vertical-bottom',
+            icon: <AlignBottomIcon sx={{ fontSize: '1rem' }} />,
+            onClick: () => {
+              if (!editor) return;
+              selectRowOrColumn();
+              setTimeout(() => {
+                editor.chain().focus().toggleVerticalAlign('bottom').run();
+              }, 0);
+            }
+          },
+        ]
+      },
+      {
+        customLabel: <Divider sx={{ my: 0.5 }} />,
+        key: 'divider2',
       },
       {
         key: 'duplicate',
@@ -291,13 +472,11 @@ export const TableHandleMenu = ({
 
   const handleMenuOpen = useCallback(() => {
     if (!editor) return;
-    setIsMenuOpen(true);
     editor.commands.freezeHandles();
     selectRowOrColumn();
     onToggleOtherHandle?.(false);
     onOpenChange?.(true);
 
-    // Recalculate isHeader when menu opens to ensure it's up to date
     if (typeof index === 'number' && typeof tablePos === 'number') {
       try {
         const cells = orientation === 'row'
@@ -309,14 +488,12 @@ export const TableHandleMenu = ({
           setIsHeader(allHeaders);
         }
       } catch {
-        // Ignore errors
       }
     }
   }, [editor, onOpenChange, onToggleOtherHandle, selectRowOrColumn, index, orientation, tablePos]);
 
   const handleMenuClose = useCallback(() => {
     if (!editor) return;
-    setIsMenuOpen(false);
     editor.commands.unfreezeHandles();
     onToggleOtherHandle?.(true);
     onOpenChange?.(false);
@@ -325,7 +502,6 @@ export const TableHandleMenu = ({
   const handleDragStart = useCallback(
     (e: React.DragEvent) => {
       setIsDragging(true);
-      // Store table info in data attributes for recovery if state is lost
       if (e.currentTarget instanceof HTMLElement) {
         if (typeof index === 'number') {
           e.currentTarget.dataset.tableIndex = String(index);
@@ -408,18 +584,20 @@ export const TableHandleMenu = ({
 
   return (
     <Menu
+      width={216}
       context={handleButton}
       list={menuList}
       anchorOrigin={{
         vertical: orientation === 'row' ? 'top' : 'bottom',
-        horizontal: 'left',
+        horizontal: orientation === 'row' ? 'right' : 'left',
       }}
       transformOrigin={{
-        vertical: orientation === 'row' ? 'bottom' : 'top',
+        vertical: 'top',
         horizontal: 'left',
       }}
       onOpen={handleMenuOpen}
       onClose={handleMenuClose}
+      arrowIcon={<ArrowDownSLineIcon sx={{ fontSize: '1rem', transform: 'rotate(-90deg)' }} />}
     />
   );
 };

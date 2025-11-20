@@ -148,7 +148,64 @@ export const TableExtension = ({ editable }: { editable: boolean }) => [
     lastColumnResizable: editable,
     allowTableNodeSelection: editable,
   }),
-  TableHeader.configure({
+  TableHeader.extend({
+    addAttributes() {
+      return {
+        ...this.parent?.(),
+        bgcolor: {
+          default: 'transparent',
+          parseHTML: (element: HTMLElement) => {
+            return element.getAttribute('data-background-color') || element.style.backgroundColor;
+          },
+          renderHTML: (attributes: Record<string, any>) => {
+            return {
+              'data-background-color': attributes.bgcolor,
+              style: `background-color: ${attributes.bgcolor}`,
+            };
+          },
+        },
+        textAlign: {
+          default: null,
+          parseHTML: (element: HTMLElement) => {
+            return element.getAttribute('data-text-align') || element.style.textAlign;
+          },
+          renderHTML: (attributes: Record<string, any>) => {
+            if (!attributes.textAlign) return {};
+            return {
+              style: `text-align: ${attributes.textAlign}`,
+              'data-text-align': attributes.textAlign,
+            };
+          },
+        },
+        fontSize: {
+          default: null,
+          parseHTML: (element: HTMLElement) => {
+            return element.getAttribute('data-font-size') || element.style.fontSize;
+          },
+          renderHTML: (attributes: Record<string, any>) => {
+            if (!attributes.fontSize) return {};
+            return {
+              style: `font-size: ${attributes.fontSize}`,
+              'data-font-size': attributes.fontSize,
+            };
+          },
+        },
+        fontWeight: {
+          default: null,
+          parseHTML: (element: HTMLElement) => {
+            return element.getAttribute('data-font-weight') || element.style.fontWeight;
+          },
+          renderHTML: (attributes: Record<string, any>) => {
+            if (!attributes.fontWeight) return {};
+            return {
+              style: `font-weight: ${attributes.fontWeight}`,
+              'data-font-weight': attributes.fontWeight,
+            };
+          },
+        },
+      };
+    },
+  }).configure({
     HTMLAttributes: {
       class: 'table-header',
     },

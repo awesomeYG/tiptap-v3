@@ -57,31 +57,6 @@ const TableContextMenu: React.FC<TableContextMenuProps> = ({
 
   return (
     <>
-      {/* <Stack direction={'row'} alignItems={'center'} sx={{ p: 0.5 }}>
-        <ToolbarItem
-          onClick={() => {
-            if (editor.commands.setCellAttribute('align', 'right')) {
-              console.log('right')
-            } else {
-              console.log('left')
-            }
-          }}
-          icon={<BoldIcon sx={{ fontSize: '1rem' }} />}
-        />
-        <ToolbarItem
-          onClick={() => editor.chain().toggleItalic().focus().run()}
-          icon={<ItalicIcon sx={{ fontSize: '1rem' }} />}
-        />
-        <ToolbarItem
-          onClick={() => editor.chain().toggleStrike().focus().run()}
-          icon={<StrikethroughIcon sx={{ fontSize: '1rem' }} />}
-        />
-        <ToolbarItem
-          onClick={() => editor.chain().toggleUnderline().focus().run()}
-          icon={<UnderlineIcon sx={{ fontSize: '1rem' }} />}
-        />
-      </Stack>
-      <Divider /> */}
       <MenuList sx={{ p: 0.5 }}>
         {menuItems.map((item, index) => (
           item.show ? <MenuItem
