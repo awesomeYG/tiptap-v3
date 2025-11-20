@@ -15,6 +15,7 @@ export const TableExtension = ({ editable }: { editable: boolean }) => [
           private readonly tableWrapper: HTMLDivElement;
           private readonly innerTableContainer: HTMLDivElement;
           private readonly widgetsContainer: HTMLDivElement;
+          private readonly selectionOverlayContainer: HTMLDivElement;
 
           declare readonly node: Node;
           declare readonly minCellWidth: number;
@@ -32,13 +33,14 @@ export const TableExtension = ({ editable }: { editable: boolean }) => [
             this.tableWrapper = this.createTableWrapper();
             this.innerTableContainer = this.createInnerTableContainer();
             this.widgetsContainer = this.createWidgetsContainer();
+            this.selectionOverlayContainer = this.createSelectionOverlayContainer();
 
             this.setupDOMStructure();
           }
 
           private createTableWrapper(): HTMLDivElement {
             const container = document.createElement('div');
-            container.className = 'tableWrapper';
+            container.setAttribute("data-content-type", "table")
             this.applyContainerAttributes(container);
             return container;
           }
@@ -56,6 +58,13 @@ export const TableExtension = ({ editable }: { editable: boolean }) => [
             return container;
           }
 
+          private createSelectionOverlayContainer(): HTMLDivElement {
+            const container = document.createElement('div');
+            container.className = 'table-selection-overlay-container';
+            container.style.position = 'relative';
+            return container;
+          }
+
           private applyContainerAttributes(element: HTMLDivElement): void {
             Object.entries(this.containerAttributes).forEach(([key, value]) => {
               if (key !== 'class') {
@@ -65,17 +74,16 @@ export const TableExtension = ({ editable }: { editable: boolean }) => [
           }
 
           private setupDOMStructure(): void {
-            const originalTable = this.dom;
-            const tableElement = originalTable.firstChild!;
+            const originalTable = this.dom
+            const tableElement = originalTable.firstChild!
+            this.innerTableContainer.appendChild(tableElement)
+            originalTable.appendChild(this.innerTableContainer)
+            originalTable.appendChild(this.widgetsContainer)
+            originalTable.appendChild(this.selectionOverlayContainer)
 
-            // Move table into inner container
-            this.innerTableContainer.appendChild(tableElement);
+            this.tableWrapper.appendChild(originalTable)
 
-            // Build the hierarchy: tableWrapper > innerContainer + widgetsContainer
-            this.tableWrapper.appendChild(this.innerTableContainer);
-            this.tableWrapper.appendChild(this.widgetsContainer);
-
-            this.dom = this.tableWrapper;
+            this.dom = this.tableWrapper
           }
 
           ignoreMutation(mutation: any): boolean {
@@ -98,7 +106,8 @@ export const TableExtension = ({ editable }: { editable: boolean }) => [
       const originalRender = this.parent?.({ node, HTMLAttributes });
       const wrapper = ['div', { class: 'tableWrapper' },
         ['div', { class: 'table-container' }, originalRender],
-        ['div', { class: 'table-controls' }]
+        ['div', { class: 'table-controls' }],
+        ['div', { class: 'table-selection-overlay-container' }]
       ];
       return wrapper;
     },

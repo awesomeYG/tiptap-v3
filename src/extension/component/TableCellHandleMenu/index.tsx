@@ -5,6 +5,7 @@ import { getThemeTextBgColor, getThemeTextColor } from '@ctzhian/tiptap/contants
 import { MenuItem } from '@ctzhian/tiptap/type';
 import { Box, Divider, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import { TextSelection } from '@tiptap/pm/state';
 import {
   CellSelection,
   cellAround,
@@ -153,12 +154,74 @@ export const TableCellHandleMenu = forwardRef<
               />
             ),
             onClick: () => {
+              if (!editor) return;
+
+              if (editor.state.storedMarks) {
+                const textStyleMarkType = editor.schema.marks.textStyle;
+                if (textStyleMarkType) {
+                  editor.view.dispatch(
+                    editor.state.tr.removeStoredMark(textStyleMarkType)
+                  );
+                }
+              }
+
               setTimeout(() => {
-                editor
-                  .chain()
-                  .focus()
-                  .toggleMark('textStyle', { color: it.value })
-                  .run();
+                const { selection, doc } = editor.state;
+                const textStyleMark = editor.schema.marks.textStyle;
+                if (!textStyleMark) return;
+
+                if (selection instanceof CellSelection) {
+                  const tr = editor.state.tr;
+                  let hasContent = false;
+
+                  selection.forEachCell((cellNode, cellPos) => {
+                    if (cellNode.content.size > 0) {
+                      hasContent = true;
+                      const from = cellPos + 1;
+                      const to = cellPos + cellNode.nodeSize - 1;
+                      if (from < to) {
+                        const $from = doc.resolve(from);
+                        const $to = doc.resolve(to);
+                        const cellTextSelection = TextSelection.between($from, $to, 1);
+                        if (cellTextSelection) {
+                          const mark = textStyleMark.create({ color: it.value });
+                          tr.addMark(from, to, mark);
+                        }
+                      }
+                    }
+                  });
+
+                  if (hasContent) {
+                    editor.view.dispatch(tr);
+                    editor.commands.focus();
+                  }
+                } else {
+                  const { $anchor } = selection;
+                  const cell = cellAround($anchor);
+                  if (cell) {
+                    const cellNode = doc.nodeAt(cell.pos);
+                    if (cellNode && cellNode.content.size > 0) {
+                      const from = cell.pos + 1;
+                      const to = cell.pos + cellNode.nodeSize - 1;
+                      if (from < to) {
+                        const $from = doc.resolve(from);
+                        const $to = doc.resolve(to);
+                        const newSelection = TextSelection.between($from, $to, 1);
+                        if (newSelection) {
+                          editor.view.dispatch(
+                            editor.state.tr.setSelection(newSelection)
+                          );
+                        }
+                      }
+                    }
+                  }
+
+                  editor
+                    .chain()
+                    .focus()
+                    .toggleMark('textStyle', { color: it.value })
+                    .run();
+                }
               }, 0);
             },
           })),

@@ -1,6 +1,6 @@
 import { FloatingPortal, useFloating } from '@floating-ui/react';
 import type { Node } from '@tiptap/pm/model';
-import type { EditorState, Transaction } from '@tiptap/pm/state';
+import type { EditorState, Selection, Transaction } from '@tiptap/pm/state';
 import {
   CellSelection,
   cellAround,
@@ -47,8 +47,10 @@ const getCellAtCoordinates = (
 
 const getSelectionBoundingRect = (
   view: EditorView,
-  selection: CellSelection
+  selection: Selection
 ): DOMRect | null => {
+  if (!(selection instanceof CellSelection)) return null;
+
   const cells: Element[] = [];
   selection.forEachCell((_node: Node, pos: number) => {
     const dom = view.nodeDOM(pos) as Element | null;
@@ -316,7 +318,6 @@ export const TableSelectionOverlay: React.FC<TableSelectionOverlayProps> = ({
 
   const { refs, floatingStyles, update } = useFloating({
     placement: 'top-start',
-    strategy: 'absolute',
   });
 
   useEffect(() => {
@@ -516,16 +517,7 @@ export const TableSelectionOverlay: React.FC<TableSelectionOverlayProps> = ({
     const c = tableDom?.querySelector(
       '.table-selection-overlay-container'
     ) as HTMLElement | null;
-    if (!c) {
-      // Try to find .table-controls as fallback
-      const wrapper = tableDom?.closest('.tableWrapper');
-      const controls = wrapper?.querySelector('.table-controls') as
-        | HTMLElement
-        | null;
-      containerRef.current = controls ?? null;
-    } else {
-      containerRef.current = c;
-    }
+    containerRef.current = c ?? null;
   }, [tableDom]);
 
   if (!isVisible || !selectionRect) {
@@ -551,10 +543,8 @@ export const TableSelectionOverlay: React.FC<TableSelectionOverlayProps> = ({
     );
   };
 
-  const rootElement = containerRef.current || document.body;
-
   return (
-    <FloatingPortal root={rootElement}>
+    <FloatingPortal root={containerRef.current}>
       <div
         ref={refs.setFloating}
         style={{

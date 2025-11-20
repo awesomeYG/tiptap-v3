@@ -493,7 +493,7 @@ export const TableHandleMenu = ({
       },
       {
         customLabel: <Divider sx={{ my: 0.5 }} />,
-        key: 'divider2',
+        key: 'divider3',
       },
       {
         key: 'duplicate',
