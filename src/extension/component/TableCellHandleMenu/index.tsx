@@ -312,13 +312,8 @@ export const TableCellHandleMenu = forwardRef<
     );
 
     menuItems.push({
-      customLabel: <Divider sx={{ my: 0.5 }} />,
-      key: 'divider2',
-    });
-
-    menuItems.push({
       key: 'clear-content',
-      label: '清空内容',
+      label: '清空单元格内容',
       icon: <DeleteBack2LineIcon sx={{ fontSize: '1rem' }} />,
       onClick: () => {
         if (!editor) return;

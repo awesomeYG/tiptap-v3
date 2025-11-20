@@ -14,11 +14,12 @@ import {
   LayoutLeft2LineIcon,
   LayoutTop2LineIcon,
 } from '@ctzhian/tiptap/component/Icons';
+import { DeleteBack2LineIcon } from '@ctzhian/tiptap/component/Icons/delete-back-2-line-icon';
 import { getThemeTextBgColor, getThemeTextColor } from '@ctzhian/tiptap/contants/enums';
 import { Box, Divider, Typography, useTheme } from '@mui/material';
 import type { Node } from '@tiptap/pm/model';
 import type { EditorState, Transaction } from '@tiptap/pm/state';
-import { addColumnAfter, addRowAfter, CellSelection, TableMap } from '@tiptap/pm/tables';
+import { addColumnAfter, addRowAfter, CellSelection, deleteCellSelection, TableMap } from '@tiptap/pm/tables';
 import type { Editor } from '@tiptap/react';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { MoreLineIcon } from '../../../component/Icons/more-line-icon';
@@ -433,6 +434,62 @@ export const TableHandleMenu = ({
             }
           },
         ]
+      },
+      {
+        key: 'clear-content',
+        label: orientation === 'row' ? '清空当前行内容' : '清空当前列内容',
+        icon: <DeleteBack2LineIcon sx={{ fontSize: '1rem' }} />,
+        onClick: () => {
+          if (!editor || typeof index !== 'number' || typeof tablePos !== 'number' || !tableNode) return;
+          const { state, view } = editor;
+
+          try {
+            const { width, height } = TableMap.get(tableNode);
+            const start =
+              orientation === 'row' ? { row: index, col: 0 } : { row: 0, col: index };
+            const end =
+              orientation === 'row'
+                ? { row: index, col: width - 1 }
+                : { row: height - 1, col: index };
+
+            const stateWithSelection = selectCellsByCoords(editor, tablePos, [start, end], {
+              mode: 'state',
+            }) as EditorState | undefined;
+
+            if (stateWithSelection && stateWithSelection.selection instanceof CellSelection) {
+              deleteCellSelection(stateWithSelection, view.dispatch.bind(view));
+            }
+          } catch (error) {
+            console.warn('Failed to clear row/column content:', error);
+          }
+        },
+        attrs: (() => {
+          if (!editor || typeof index !== 'number' || typeof tablePos !== 'number') {
+            return { disabled: true };
+          }
+
+          try {
+            const cells = orientation === 'row'
+              ? getRowCells(editor, index, tablePos)
+              : getColumnCells(editor, index, tablePos);
+
+            if (cells.cells.length === 0) {
+              return { disabled: true };
+            }
+
+            let hasContent = false;
+            for (const cell of cells.cells) {
+              if (cell.node && cell.node.content.size > 0) {
+                hasContent = true;
+                break;
+              }
+            }
+
+            return hasContent ? {} : { disabled: true };
+          } catch {
+            return { disabled: true };
+          }
+        })(),
       },
       {
         customLabel: <Divider sx={{ my: 0.5 }} />,
