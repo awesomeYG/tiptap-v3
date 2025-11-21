@@ -82,7 +82,6 @@
 
 .tiptap.ProseMirror .react-renderer {
   margin-bottom: 1rem;
-  line-height: 1;
 }
 
 .tiptap.ProseMirror .react-renderer.node-image,
