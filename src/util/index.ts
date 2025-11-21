@@ -69,3 +69,31 @@ export const getLinkTitle = (href: string) => {
   const paths = href.split('/').filter(it => it.trim().length > 0)
   return paths[paths.length - 1]
 }
+
+/**
+ * 获取当前选中文本并返回链接属性
+ * 如果有选中文本，将文本设置为 title
+ * @param editor Tiptap 编辑器实例
+ * @returns 包含 title 的链接属性对象（如果有选中文本）
+ */
+export const getLinkAttributesWithSelectedText = (editor: Editor): { title?: string } => {
+  if (!editor) {
+    return {}
+  }
+
+  const { selection } = editor.state
+  const { from, to } = selection
+
+  if (selection.empty || from === to) {
+    return {}
+  }
+
+  const selectedText = editor.state.doc.textBetween(from, to, '')
+  const trimmedText = selectedText.trim()
+
+  if (trimmedText.length > 0) {
+    return { title: trimmedText }
+  }
+
+  return {}
+}

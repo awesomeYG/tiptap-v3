@@ -1,4 +1,4 @@
-import { getLinkTitle } from '@ctzhian/tiptap/util'
+import { getLinkAttributesWithSelectedText, getLinkTitle } from '@ctzhian/tiptap/util'
 import { mergeAttributes, Node, nodePasteRule, type PasteRuleMatch } from '@tiptap/core'
 import { Plugin, PluginKey } from '@tiptap/pm/state'
 import { ReactNodeViewRenderer } from '@tiptap/react'
@@ -526,7 +526,12 @@ export const InlineLinkExtension = Node.create<LinkOptions>({
   addKeyboardShortcuts() {
     return {
       'Mod-1': () => {
-        return this.editor.commands.setInlineLink({ href: '', type: 'icon' })
+        const linkAttributes = getLinkAttributesWithSelectedText(this.editor)
+        return this.editor.commands.setInlineLink({
+          href: '',
+          type: 'icon',
+          ...linkAttributes
+        })
       }
     }
   },

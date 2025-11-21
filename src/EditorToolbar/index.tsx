@@ -31,7 +31,7 @@ import {
   ToolbarItem,
 } from '../component/Toolbar';
 import { ToolbarItemType } from '../type';
-import { hasMarksInSelection } from '../util';
+import { getLinkAttributesWithSelectedText, hasMarksInSelection } from '../util';
 
 interface EditorToolbarProps {
   editor: Editor;
@@ -273,14 +273,11 @@ const EditorToolbar = ({
             shortcutKey={['ctrl', '1']}
             icon={<LinkIcon sx={{ fontSize: '1rem' }} />}
             onClick={() => {
-              const selection = editor.state.selection;
-              const start = selection.from;
-              const end = selection.to;
-              const text = editor.state.doc.textBetween(start, end, '');
+              const linkAttributes = getLinkAttributesWithSelectedText(editor)
               editor
                 .chain()
                 .focus()
-                .setInlineLink({ href: '', title: text })
+                .setInlineLink({ href: '', ...linkAttributes })
                 .run();
             }}
             className={isLink ? 'tool-active' : ''}

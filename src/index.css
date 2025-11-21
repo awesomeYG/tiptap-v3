@@ -2,15 +2,16 @@
 
 :root {
   --common-row-font-size: 16px;
-  --common-row-line-height: 26px;
+  --common-row-line-height: 1.625;
   --udtoken-quote-bar-bg: #bbbfc4;
 }
 
 .tiptap.ProseMirror {
   overflow-y: auto;
   outline: none;
+  font-size: var(--common-row-font-size);
   color: var(--mui-palette-text-primary);
-  line-height: 1.8;
+  line-height: var(--common-row-line-height);
 }
 
 /* 节点缩进（依赖 data-indent 属性） */
@@ -59,17 +60,13 @@
 }
 
 .tiptap.ProseMirror p {
-  line-height: var(--common-row-line-height);
-  font-size: var(--common-row-font-size);
   margin: 8px 0;
 }
 
-/* blockquote */
 .tiptap.ProseMirror blockquote {
   position: relative;
   padding: 8px 16px 8px 24px;
   margin: 8px 0;
-  line-height: var(--common-row-line-height);
   color: var(--mui-palette-text-tertiary);
   background-color: var(--mui-palette-background-paper3);
 }
@@ -111,8 +108,6 @@
   top: 0;
   left: -24px;
   content: counter(list-counter) '.' !important;
-  font-size: 16px;
-  line-height: 26px;
   color: var(--mui-palette-primary-main);
 }
 
@@ -146,8 +141,6 @@
   position: absolute;
   top: 0;
   left: -24px;
-  font-size: 16px;
-  line-height: 26px;
   font-size: 20px;
   color: var(--mui-palette-primary-main);
 }
@@ -223,7 +216,6 @@
 .tiptap.ProseMirror pre {
   position: relative;
   border: 1px solid;
-  line-height: 22px;
   border-color: var(--mui-palette-divider);
   border-radius: var(--mui-shape-borderRadius);
   color: var(--mui-palette-text-tertiary);
@@ -240,8 +232,6 @@
 .tiptap.ProseMirror code {
   padding: 2px 8px;
   margin: 0 4px;
-  line-height: 1.625;
-  font-size: inherit;
   word-break: break-all;
   /* font-weight: 500; */
   border: 1px solid;
@@ -269,7 +259,6 @@
 .tiptap.ProseMirror .cq-details {
   display: flex;
   gap: 0.25rem;
-  line-height: 1.625;
   margin: 20px 0;
   border: 1px solid var(--mui-palette-divider);
   border-radius: var(--mui-shape-borderRadius);
@@ -355,7 +344,6 @@
   position: relative;
   color: inherit;
   font-style: inherit;
-  line-height: 1.4;
   font-weight: 500;
 }
 
@@ -410,7 +398,6 @@
 
 .tiptap.ProseMirror table p {
   font-size: 14px;
-  line-height: 24px;
 }
 
 .tiptap.ProseMirror table th *,
@@ -569,18 +556,17 @@
   }
 }
 
-.slash-decoration[data-decoration-content].is-empty {
+.tiptap.ProseMirror .slash-decoration[data-decoration-content].is-empty {
   padding: 4px 8px;
   background-color: var(--mui-palette-background-paper2);
   border-radius: var(--mui-shape-borderRadius);
 }
 
-.slash-decoration[data-decoration-content].is-empty::after {
+.tiptap.ProseMirror .slash-decoration[data-decoration-content].is-empty::after {
   content: attr(data-decoration-content);
   color: var(--mui-palette-text-disabled);
   padding-left: 0.25rem;
   font-size: 14px;
-  line-height: 24px;
 }
 
 .tiptap.ProseMirror .ai-writing-suggestion {
