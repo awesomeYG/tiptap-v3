@@ -8,7 +8,7 @@ import { Markdown } from '@tiptap/markdown';
 import StarterKit from '@tiptap/starter-kit';
 import { PLACEHOLDER } from '../contants/placeholder';
 import { GetExtensionsProps } from '../type';
-import { AiWritingExtension, SlashCommands, StructuredDiffExtension } from './extension';
+import { AiWritingExtension, ImeComposition, SlashCommands, StructuredDiffExtension } from './extension';
 import { CodeExtension } from './mark/Code';
 import {
   AlertExtension,
@@ -61,6 +61,7 @@ export const getExtensions = ({
   placeholder,
 }: GetExtensionsProps) => {
   const defaultExtensions: any = [
+    ImeComposition,
     StarterKit.configure({
       link: false,
       code: false,

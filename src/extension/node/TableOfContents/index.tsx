@@ -1,7 +1,32 @@
 import { TocList } from '@ctzhian/tiptap/type'
 import { getHierarchicalIndexes, TableOfContents } from '@tiptap/extension-table-of-contents'
+import { Plugin, PluginKey } from '@tiptap/pm/state'
 
-export const TableOfContentsExtension = ({ onTocUpdate }: { onTocUpdate?: (toc: TocList) => void }) => TableOfContents.configure({
+interface TableOfContentsOptions {
+  onTocUpdate?: (toc: TocList) => void
+}
+
+export const TableOfContentsExtension = ({ onTocUpdate }: TableOfContentsOptions) => TableOfContents.extend({
+  addProseMirrorPlugins() {
+    const imeCompositionPluginKey = new PluginKey('imeComposition')
+
+    return [
+      new Plugin({
+        key: new PluginKey('tableOfContentImeFix'),
+        appendTransaction(transactions, _oldState, newState) {
+          if (transactions.some(tr => tr.getMeta('composition'))) {
+            return null
+          }
+          const imePluginState = imeCompositionPluginKey.getState(newState) as { isComposing?: boolean } | null
+          if (imePluginState?.isComposing) {
+            return null
+          }
+          return null
+        },
+      }),
+    ]
+  }
+}).configure({
   getIndex: getHierarchicalIndexes,
   onUpdate(data) {
     setTimeout(() => {
@@ -15,6 +40,6 @@ export const TableOfContentsExtension = ({ onTocUpdate }: { onTocUpdate?: (toc: 
         pos: content.pos,
         textContent: content.textContent,
       })))
-    }, 0)
+    }, 60)
   }
 })

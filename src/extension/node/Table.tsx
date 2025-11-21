@@ -3,7 +3,7 @@
 import { Extension } from '@tiptap/core';
 import { Table, TableCell, TableHeader, TableRow } from '@tiptap/extension-table';
 import type { Node } from '@tiptap/pm/model';
-import { Plugin, TextSelection } from '@tiptap/pm/state';
+import { TextSelection } from '@tiptap/pm/state';
 import { TableView } from '@tiptap/pm/tables';
 import { TableHandleExtension } from './TableHandler';
 
@@ -318,74 +318,6 @@ export const TableExtension = ({ editable }: { editable: boolean }) => [
     },
   }),
   editable ? TableHandleExtension : Extension.create({ name: 'tableHandleExtension' }),
-  Extension.create({
-    name: 'safariCompositionDeleteFix',
-
-    addProseMirrorPlugins() {
-      if (!editable) return []
-
-      const ZERO_WIDTH_SPACE = '\u200b'
-      const isSafari = (() => {
-        if (typeof navigator === 'undefined') return false
-        const ua = navigator.userAgent
-        const isAppleMobile = /iP(ad|hone|od)/.test(ua)
-        const isMacSafari = /Safari\//.test(ua) && !/Chrome\//.test(ua)
-        return isAppleMobile || isMacSafari
-      })()
-
-      if (!isSafari) return []
-
-      // 注意：这里不能使用上面从 ProseMirror 导入的 Node 类型，需判断 DOM 文本节点
-      const isTextNode = (node: any): node is Text => !!node && (node as any).nodeType === 3
-
-      return [new Plugin({
-        props: {
-          handleDOMEvents: {
-            beforeinput: (_view, event: InputEvent) => {
-              // 仅处理 Safari 在中文合成结束后触发的删除合成文本行为
-              if ((event as any).inputType !== 'deleteCompositionText') {
-                return false
-              }
-              const selection = window.getSelection()
-              if (!selection || selection.rangeCount === 0) return false
-              const range = selection.getRangeAt(0)
-              const { startContainer, endContainer, startOffset, endOffset } = range
-              if (
-                isTextNode(startContainer) &&
-                startContainer === endContainer &&
-                startOffset === 0 &&
-                endOffset === (startContainer as Text).length
-              ) {
-                startContainer.parentElement?.insertBefore(document.createTextNode(ZERO_WIDTH_SPACE), startContainer)
-              }
-              // 让 ProseMirror 照常处理
-              return false
-            },
-            input: (_view, event: InputEvent) => {
-              if ((event as any).inputType !== 'deleteCompositionText') {
-                return false
-              }
-              const selection = window.getSelection()
-              if (!selection || selection.rangeCount === 0) return false
-              const range = selection.getRangeAt(0)
-              const node = range.startContainer as any
-              const parentEl: HTMLElement | null = node?.parentElement || null
-              if (!parentEl) return false
-              const textNodes = Array.from(parentEl.childNodes).filter(isTextNode)
-              for (const textNode of textNodes) {
-                if (textNode.textContent === ZERO_WIDTH_SPACE) {
-                  textNode.remove()
-                } else if (textNode.textContent && textNode.textContent.includes(ZERO_WIDTH_SPACE)) {
-                  textNode.textContent = textNode.textContent.split(ZERO_WIDTH_SPACE).join('')
-                }
-              }
-              return false
-            },
-          },
-        },
-      })]
-    },
-  })
 ]
 
 export default TableExtension
