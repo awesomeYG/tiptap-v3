@@ -14,4 +14,4 @@ export const ExpandHorizontalLineIcon = (props: SvgIconProps) => {
   );
 };
 
-ExpandHorizontalLineIcon.displayName = 'expand-horizontal-line';
+ExpandHorizontalLineIcon.displayName = 'icon-expand-horizontal-line';

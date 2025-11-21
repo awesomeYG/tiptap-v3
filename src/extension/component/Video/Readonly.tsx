@@ -15,18 +15,9 @@ const ReadonlyVideo = ({
   return <NodeViewWrapper
     className={`video-wrapper`}
   >
-    <Box
-      sx={{
-        position: 'relative',
-        display: 'inline-block',
-        border: '1px solid',
-        borderColor: 'divider',
-        borderRadius: 'var(--mui-shape-borderRadius)',
-        p: '0.25rem',
-        '&:hover .video-controls': {
-          opacity: 1
-        }
-      }}>
+    <Box sx={{
+      textAlign: attrs.align || undefined,
+    }}>
       <video
         src={attrs.src}
         poster={attrs.poster || undefined}
@@ -34,11 +25,12 @@ const ReadonlyVideo = ({
         autoPlay={attrs.autoplay}
         loop={attrs.loop}
         muted={attrs.muted}
-        width={attrs.width}
+        width={attrs.width || undefined}
         style={{
           maxWidth: '100%',
+          cursor: 'pointer',
           height: 'auto',
-          display: 'block'
+          display: 'inline-block'
         }}
         onError={(e) => {
           onError?.(e as unknown as Error)

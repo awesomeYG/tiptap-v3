@@ -28,6 +28,11 @@ export interface ActionDropdownProps {
   anchorOrigin?: PopoverOrigin;
   /** Popover 变换位置 */
   transformOrigin?: PopoverOrigin;
+  /** 当没有选中值时的默认显示内容 */
+  defaultDisplay?: {
+    icon?: React.ReactNode;
+    label?: string;
+  };
 }
 
 const ActionDropdown: React.FC<ActionDropdownProps> = ({
@@ -46,6 +51,7 @@ const ActionDropdown: React.FC<ActionDropdownProps> = ({
     vertical: 'top',
     horizontal: 'left',
   },
+  defaultDisplay,
 }) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
 
@@ -53,6 +59,10 @@ const ActionDropdown: React.FC<ActionDropdownProps> = ({
   const selectedItem = React.useMemo(() => {
     return list.find(item => item.key === selected);
   }, [list, selected]);
+
+  // 获取显示的图标和标签
+  const displayIcon = selectedItem?.icon || defaultDisplay?.icon;
+  const displayLabel = selectedItem?.label || defaultDisplay?.label || '';
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
@@ -82,10 +92,10 @@ const ActionDropdown: React.FC<ActionDropdownProps> = ({
   return (
     <>
       <ToolbarItem
-        icon={selectedItem?.icon}
+        icon={displayIcon}
         text={
           <Stack direction="row" alignItems="center" gap={0.5}>
-            <Box component="span">{selectedItem?.label}</Box>
+            <Box component="span">{displayLabel}</Box>
             <ArrowDownSLineIcon
               sx={{
                 fontSize: 16,

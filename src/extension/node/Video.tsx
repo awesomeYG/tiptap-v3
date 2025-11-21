@@ -14,6 +14,7 @@ declare module '@tiptap/core' {
       setVideo: (options: {
         src: string
         width?: number
+        align?: 'left' | 'center' | 'right'
         controls?: boolean
         autoplay?: boolean
         loop?: boolean
@@ -92,13 +93,28 @@ export const VideoExtension = (props: VideoExtensionProps) => Node.create({
         },
       },
       width: {
-        default: 760,
+        default: null,
         parseHTML: element => {
           const width = element.getAttribute('width')
-          return width ? parseInt(width, 10) : 760
+          if (width) {
+            if (width.endsWith('%')) return width
+            const numWidth = parseInt(width, 10)
+            return isNaN(numWidth) ? null : numWidth
+          }
+          return null
         },
         renderHTML: attributes => {
           return { width: attributes.width }
+        },
+      },
+      align: {
+        default: null,
+        parseHTML: element => {
+          return element.getAttribute('data-align')
+        },
+        renderHTML: attributes => {
+          if (!attributes.align) return {}
+          return { 'data-align': attributes.align }
         },
       },
     }
@@ -114,6 +130,19 @@ export const VideoExtension = (props: VideoExtensionProps) => Node.create({
           const src = dom.getAttribute('src')
           if (!src) return false
 
+          const widthAttr = dom.getAttribute('width')
+          let width: number | string = 760
+          if (widthAttr) {
+            // 如果是百分比，保留字符串格式
+            if (widthAttr.endsWith('%')) {
+              width = widthAttr
+            } else {
+              // 否则解析为数字
+              const numWidth = parseInt(widthAttr, 10)
+              width = isNaN(numWidth) ? 760 : numWidth
+            }
+          }
+
           return {
             src,
             controls: dom.hasAttribute('controls'),
@@ -121,7 +150,8 @@ export const VideoExtension = (props: VideoExtensionProps) => Node.create({
             loop: dom.hasAttribute('loop'),
             muted: dom.hasAttribute('muted'),
             poster: dom.getAttribute('poster'),
-            width: dom.getAttribute('width') ? parseInt(dom.getAttribute('width')!, 10) : 760,
+            width,
+            align: dom.getAttribute('data-align') || dom.getAttribute('align'),
           }
         },
       }
@@ -133,9 +163,9 @@ export const VideoExtension = (props: VideoExtensionProps) => Node.create({
   },
 
   renderMarkdown(node) {
-    const { src, width, controls, autoplay, loop, muted, poster } = node.attrs as any
+    const { src, width, controls, autoplay, loop, muted, poster, 'data-align': align } = node.attrs as any
     if (!src) return ''
-    return `<video src="${src}" ${width ? `width="${width}"` : ''} ${controls ? 'controls' : ''} ${autoplay ? 'autoplay' : ''} ${loop ? 'loop' : ''} ${muted ? 'muted' : ''} ${poster ? `poster="${poster}"` : ''}></video>`
+    return `<video src="${src}" ${width ? `width="${width}"` : ''} ${controls ? 'controls' : ''} ${autoplay ? 'autoplay' : ''} ${loop ? 'loop' : ''} ${muted ? 'muted' : ''} ${poster ? `poster="${poster}"` : ''} ${align ? `data-align="${align}"` : ''}></video>`
   },
 
   addCommands() {
@@ -151,6 +181,7 @@ export const VideoExtension = (props: VideoExtensionProps) => Node.create({
             loop: options.loop || false,
             muted: options.muted || false,
             poster: options.poster || null,
+            align: options.align || null,
           },
         })
       },

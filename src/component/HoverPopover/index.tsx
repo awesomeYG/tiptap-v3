@@ -22,8 +22,6 @@ export interface HoverPopoverProps {
   style?: React.CSSProperties
   /** 是否保持打开状态（用于点击 action 按钮触发弹框时保持打开） */
   keepOpen?: boolean
-  /** 当需要保持打开状态时的回调 */
-  onKeepOpenChange?: (keepOpen: boolean) => void
 }
 
 /**
@@ -43,7 +41,6 @@ export const HoverPopover: React.FC<HoverPopoverProps> = ({
   className,
   style,
   keepOpen = false,
-  onKeepOpenChange,
 }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
   const hoverTimerRef = useRef<NodeJS.Timeout | null>(null)
@@ -169,7 +166,7 @@ export const HoverPopover: React.FC<HoverPopoverProps> = ({
         ref={childRef}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        className={className}
+        className={`hover-popover-child ${className || ''}`}
         style={style}
       >
         {children}

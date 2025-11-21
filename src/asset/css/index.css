@@ -80,10 +80,6 @@
   border-color: var(--mui-palette-text-disabled);
 }
 
-.tiptap.ProseMirror .react-renderer {
-  margin-bottom: 1rem;
-}
-
 .tiptap.ProseMirror .react-renderer.node-image,
 .tiptap.ProseMirror .react-renderer.node-inlineLink,
 .tiptap.ProseMirror .react-renderer.node-inlineAttachment,
@@ -116,10 +112,13 @@
 
 .tiptap.ProseMirror .video-wrapper,
 .tiptap.ProseMirror .image-wrapper {
-  display: inline-block;
   box-sizing: border-box;
-  text-align: center;
   line-height: 1;
+
+}
+
+.tiptap.ProseMirror .image-wrapper {
+  display: inline-block;
 }
 
 .tiptap.ProseMirror .image-wrapper img {

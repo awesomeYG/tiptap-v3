@@ -88,7 +88,7 @@ const LinkViewWrapper: React.FC<NodeViewProps> = ({
       />
       <ToolbarItem
         icon={<CopyIcon sx={{ fontSize: '1rem' }} />}
-        tip='复制'
+        tip='复制链接'
         onClick={handleCopyLink}
       />
       <ToolbarItem
