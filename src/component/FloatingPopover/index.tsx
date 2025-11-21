@@ -1,4 +1,4 @@
-import { autoUpdate, computePosition, flip, offset, shift, Strategy, VirtualElement } from '@floating-ui/dom'
+import { autoUpdate, computePosition, flip, offset, Placement, shift, Strategy, VirtualElement } from '@floating-ui/dom'
 import { Paper } from '@mui/material'
 import React, { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
@@ -9,7 +9,7 @@ export interface FloatingPopoverProps {
   onClose: () => void
   children: React.ReactNode
   strategy?: Strategy
-  placement?: 'top' | 'bottom' | 'left' | 'right'
+  placement?: Placement
   offset?: number
   className?: string
   style?: React.CSSProperties

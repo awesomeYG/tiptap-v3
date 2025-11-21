@@ -28,23 +28,22 @@ const FlowViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
   const [isHovering, setIsHovering] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
+  const [keepHoverPopoverOpen, setKeepHoverPopoverOpen] = useState(false)
   const [dragCorner, setDragCorner] = useState<'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | null>(null)
   const dragStartXRef = useRef(0)
   const dragStartWidthRef = useRef(0)
   const flowWrapperRef = useRef<HTMLDivElement>(null)
   const flowContentRef = useRef<HTMLDivElement>(null)
+  const editButtonRef = useRef<HTMLButtonElement>(null)
 
-  // 获取当前实际显示的流程图宽度
   const getCurrentDisplayWidth = (): number => {
     if (flowWrapperRef.current) {
       return flowWrapperRef.current.offsetWidth
     }
-    // 如果 ref 不存在，使用容器宽度计算
     const containerWidth = 800
     return getPixelValue(attrs.width, containerWidth)
   }
 
-  // 将 width 转换为像素值
   const getPixelValue = (value: string | number | undefined, containerSize: number, defaultPercent: number = 100): number => {
     if (!value) return containerSize * (defaultPercent / 100)
     if (typeof value === 'number') return value
@@ -69,7 +68,7 @@ const FlowViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
       const percent = Math.round((pixels / containerWidth) * 100)
       return `${percent}%`
     }
-    return Math.round(pixels)
+    return `${Math.round(pixels)}px`
   }
 
   const handleMouseDown = (e: React.MouseEvent, corner: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right') => {
@@ -86,12 +85,9 @@ const FlowViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
     const deltaX = e.clientX - dragStartXRef.current
     let newWidth: number
 
-    // 根据不同的角计算宽度变化
     if (dragCorner === 'top-right' || dragCorner === 'bottom-right') {
-      // 右侧角：向右拉伸，宽度增加
       newWidth = dragStartWidthRef.current + deltaX
     } else {
-      // 左侧角：向左拉伸，宽度增加（deltaX 为负时宽度增加）
       newWidth = dragStartWidthRef.current - deltaX
     }
 
@@ -119,7 +115,15 @@ const FlowViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
     }
   }, [isDragging, handleMouseMove, handleMouseUp])
 
-  const handleShowPopover = () => setIsEditing(true)
+  const handleShowPopover = () => {
+    setKeepHoverPopoverOpen(true)
+    setIsEditing(true)
+  }
+
+  const handleEditCancel = () => {
+    setIsEditing(false)
+    setKeepHoverPopoverOpen(false)
+  }
 
   if (!editor.isEditable) {
     return <ReadonlyFlow attrs={attrs} onError={onError} />
@@ -158,6 +162,7 @@ const FlowViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
             style={{
               width: '100%',
             }}
+            keepOpen={keepHoverPopoverOpen}
             actions={
               <Stack
                 direction={'row'}
@@ -165,6 +170,7 @@ const FlowViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
                 sx={{ p: 0.5 }}
               >
                 <ToolbarItem
+                  ref={editButtonRef}
                   icon={<EditLineIcon sx={{ fontSize: '1rem' }} />}
                   tip="编辑流程图"
                   onClick={handleShowPopover}
@@ -286,13 +292,13 @@ const FlowViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
       </Box>
       {isEditing && (
         <EditFlow
-          anchorEl={flowContentRef.current}
+          anchorEl={editButtonRef.current}
           attrs={attrs}
           updateAttributes={(newAttrs) => {
             updateAttributes(newAttrs)
-            setIsEditing(false)
+            handleEditCancel()
           }}
-          onCancel={() => setIsEditing(false)}
+          onCancel={handleEditCancel}
         />
       )}
     </NodeViewWrapper>

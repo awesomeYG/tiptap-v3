@@ -6,9 +6,6 @@ import FlowViewWrapper from '../../component/Flow'
 declare module '@tiptap/core' {
   interface Commands<ReturnType> {
     flow: {
-      /**
-       * Insert a flow diagram
-       */
       setFlow: (options: {
         code?: string
         width?: string | number
@@ -28,6 +25,9 @@ export const FlowExtension = (props: FlowExtensionProps) => Node.create({
 
   addAttributes() {
     return {
+      class: {
+        default: 'flow-wrapper',
+      },
       code: {
         default: '',
         parseHTML: element => element.getAttribute('data-code') || '',
@@ -37,8 +37,8 @@ export const FlowExtension = (props: FlowExtensionProps) => Node.create({
         },
       },
       width: {
-        default: '100%',
-        parseHTML: element => element.getAttribute('data-width') || '100%',
+        default: null,
+        parseHTML: element => element.getAttribute('data-width') || null,
         renderHTML: attributes => {
           if (!attributes.width) return {}
           return { 'data-width': String(attributes.width) }
@@ -54,7 +54,7 @@ export const FlowExtension = (props: FlowExtensionProps) => Node.create({
         getAttrs: (dom) => {
           if (!(dom instanceof HTMLElement)) return false
           const code = dom.getAttribute('data-code') || ''
-          const width = dom.getAttribute('data-width') || '100%'
+          const width = dom.getAttribute('data-width') || null
           return { code, width }
         },
       }
@@ -85,7 +85,7 @@ export const FlowExtension = (props: FlowExtensionProps) => Node.create({
           type: this.name,
           attrs: {
             code: options.code || '',
-            width: options.width || '100%',
+            width: options.width || null,
           },
         })
       },

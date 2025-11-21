@@ -20,6 +20,10 @@ export interface HoverPopoverProps {
   className?: string
   /** 样式对象 */
   style?: React.CSSProperties
+  /** 是否保持打开状态（用于点击 action 按钮触发弹框时保持打开） */
+  keepOpen?: boolean
+  /** 当需要保持打开状态时的回调 */
+  onKeepOpenChange?: (keepOpen: boolean) => void
 }
 
 /**
@@ -38,11 +42,20 @@ export const HoverPopover: React.FC<HoverPopoverProps> = ({
   disabled = false,
   className,
   style,
+  keepOpen = false,
+  onKeepOpenChange,
 }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
   const hoverTimerRef = useRef<NodeJS.Timeout | null>(null)
   const closeTimerRef = useRef<NodeJS.Timeout | null>(null)
   const childRef = useRef<HTMLDivElement>(null)
+
+  // 当 keepOpen 为 true 时，确保 anchorEl 不为 null
+  useEffect(() => {
+    if (keepOpen && !anchorEl && childRef.current) {
+      setAnchorEl(childRef.current)
+    }
+  }, [keepOpen, anchorEl])
 
   // 清理定时器
   useEffect(() => {
@@ -83,7 +96,7 @@ export const HoverPopover: React.FC<HoverPopoverProps> = ({
   }
 
   const handleMouseLeave = () => {
-    if (disabled) {
+    if (disabled || keepOpen) {
       return
     }
 
@@ -123,11 +136,21 @@ export const HoverPopover: React.FC<HoverPopoverProps> = ({
   const handlePopoverMouseLeave = (event: React.MouseEvent) => {
     event.stopPropagation();
 
+    // 如果 keepOpen 为 true，不关闭
+    if (keepOpen) {
+      return
+    }
+
     // 鼠标离开 popover，延迟关闭
     handleMouseLeave()
   }
 
   const handleForceClose = () => {
+    // 如果 keepOpen 为 true，不关闭
+    if (keepOpen) {
+      return
+    }
+
     // 强制关闭，清除所有定时器
     if (hoverTimerRef.current) {
       clearTimeout(hoverTimerRef.current)
