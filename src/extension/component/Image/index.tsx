@@ -5,6 +5,8 @@ import { EditorFnProps } from "@ctzhian/tiptap/type"
 import { alpha, Box, Button, Divider, Stack, TextField, useTheme } from "@mui/material"
 import { NodeViewProps, NodeViewWrapper } from "@tiptap/react"
 import React, { useCallback, useEffect, useRef, useState } from "react"
+import { PhotoView } from "react-photo-view"
+import 'react-photo-view/dist/react-photo-view.css'
 import { HoverPopover } from "../../../component/HoverPopover"
 import CropImage from "./Crop"
 import InsertImage from "./Insert"
@@ -137,6 +139,16 @@ const ImageViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
     setDragCorner(corner)
     dragStartXRef.current = e.clientX
     dragStartWidthRef.current = getCurrentDisplayWidth()
+  }
+
+  const handleImageClick = (e: React.MouseEvent) => {
+    // 如果正在拖拽调整大小，阻止预览
+    if (isDragging || dragCorner) {
+      e.preventDefault()
+      e.stopPropagation()
+      return
+    }
+    // 允许 PhotoView 处理点击事件进行预览
   }
 
   const handleMouseMove = useCallback((e: MouseEvent) => {
@@ -315,21 +327,24 @@ const ImageViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}
         >
-          <img
-            ref={imageRef}
-            src={attrs.src}
-            width={attrs.width}
-            style={{
-              maxWidth: '100%',
-              height: 'auto',
-              cursor: 'default',
-              border: '2px solid',
-              borderColor: (isHovering || isDragging) ? alpha(theme.palette.primary.main, 0.3) : 'transparent',
-            }}
-            onError={(e) => {
-              onError?.(e as unknown as Error)
-            }}
-          />
+          <PhotoView src={attrs.src}>
+            <img
+              ref={imageRef}
+              src={attrs.src}
+              width={attrs.width}
+              style={{
+                maxWidth: '100%',
+                height: 'auto',
+                cursor: isDragging ? 'default' : 'pointer',
+                border: '2px solid',
+                borderColor: (isHovering || isDragging) ? alpha(theme.palette.primary.main, 0.3) : 'transparent',
+              }}
+              onClick={handleImageClick}
+              onError={(e) => {
+                onError?.(e as unknown as Error)
+              }}
+            />
+          </PhotoView>
           {(isHovering || isDragging) && (
             <>
               {/* 左上角 */}
