@@ -118,19 +118,39 @@ const ImageViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
     if (attrs.src && (!attrs.width || attrs.width <= 0)) {
       getImageDimensions(attrs.src)
         .then(dimensions => {
-          updateAttributes({
-            src: attrs.src,
-            width: dimensions.width
-          })
+          try {
+            const pos = typeof getPos === 'function' ? getPos() : null
+            if (pos === null || pos === undefined) return
+
+            const currentNode = editor.state.doc.nodeAt(pos)
+            if (!currentNode || currentNode.type.name !== 'image') return
+
+            updateAttributes({
+              src: attrs.src,
+              width: dimensions.width
+            })
+          } catch (error) {
+            console.warn('Failed to update image dimensions:', error)
+          }
         })
         .catch(error => {
-          updateAttributes({
-            src: attrs.src,
-            width: 400
-          })
+          try {
+            const pos = typeof getPos === 'function' ? getPos() : null
+            if (pos === null || pos === undefined) return
+
+            const currentNode = editor.state.doc.nodeAt(pos)
+            if (!currentNode || currentNode.type.name !== 'image') return
+
+            updateAttributes({
+              src: attrs.src,
+              width: 400
+            })
+          } catch (updateError) {
+            console.warn('Failed to update image attributes with fallback width:', updateError)
+          }
         })
     }
-  }, [attrs.src, attrs.width, updateAttributes])
+  }, [attrs.src, attrs.width, updateAttributes, getPos, editor])
 
   const handleMouseDown = (e: React.MouseEvent, corner: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right') => {
     e.preventDefault()

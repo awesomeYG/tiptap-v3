@@ -10,7 +10,7 @@ const Reader = () => {
     return new Promise((resolve) => {
       let progress = 0;
       const interval = setInterval(() => {
-        progress += Math.random() * 2;
+        progress += Math.random() * 5;
         if (progress >= 100) {
           progress = 100;
           onProgress?.({ progress: progress / 100 });
@@ -76,14 +76,8 @@ const Reader = () => {
     onSave: (editor) => {
       const value = editor.getMarkdown();
       console.log(value)
-      // editor.chain().focus().setContent(value, {
-      //   contentType: 'markdown'
-      // }).run()
     },
-    // onTocUpdate: (toc) => {
-    //   console.log('toc', toc)
-    // },
-    content: mdContent
+    content: ''
   });
 
   const handleGlobalSave = useCallback((event: KeyboardEvent) => {
@@ -100,6 +94,12 @@ const Reader = () => {
       document.removeEventListener('keydown', handleGlobalSave);
     };
   }, [handleGlobalSave]);
+
+  useEffect(() => {
+    editor.commands.setContent(mdContent, {
+      contentType: 'markdown'
+    });
+  }, [mdContent, editor])
 
   return <EditorThemeProvider mode='light'>
     <Box sx={{

@@ -520,11 +520,9 @@ export const TableSelectionOverlay: React.FC<TableSelectionOverlayProps> = ({
     containerRef.current = c ?? null;
   }, [tableDom]);
 
-  if (!isVisible || !selectionRect) {
+  if (!isVisible || !selectionRect || !editor || !editor.isEditable) {
     return null;
   }
-
-  if (!editor) return null;
 
   const renderCellMenu = () => {
     if (!CellMenu) return null;
