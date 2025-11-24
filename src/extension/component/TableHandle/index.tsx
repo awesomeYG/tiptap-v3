@@ -7,6 +7,7 @@ import {
   colDragStart,
   rowDragStart,
 } from '../../node/TableHandler/plugin';
+import { TableHandleAddButton } from './TableHandleAddButton';
 import { TableHandleMenu } from './TableHandleMenu';
 import { useTableHandlePositioning } from './use-table-handle-positioning';
 import { useTableHandleState } from './use-table-handle-state';
@@ -94,34 +95,91 @@ export function TableHandle({
     <FloatingPortal root={rootElement}>
       {shouldShowRow && (
         <div ref={rowHandle.ref} style={rowHandle.style}>
-          <TableHandleMenu
-            editor={editor}
-            orientation="row"
-            index={state.rowIndex}
-            tablePos={state.blockPos}
-            tableNode={state.block}
-            onToggleOtherHandle={toggleColumnVisibility}
-            dragStart={rowDragStart}
-            onOpenChange={(open) => handleMenuOpenChange('row', open)}
-          />
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.125rem',
+              width: '0.75rem',
+              height: 'var(--table-handle-ref-height, 40px)',
+            }}
+          >
+            <TableHandleAddButton
+              editor={editor}
+              orientation="row"
+              index={state.rowIndex}
+              tablePos={state.blockPos}
+              tableNode={state.block}
+              direction="before"
+            />
+            <TableHandleMenu
+              editor={editor}
+              orientation="row"
+              index={state.rowIndex}
+              tablePos={state.blockPos}
+              tableNode={state.block}
+              onToggleOtherHandle={toggleColumnVisibility}
+              dragStart={rowDragStart}
+              onOpenChange={(open) => handleMenuOpenChange('row', open)}
+            />
+            <TableHandleAddButton
+              editor={editor}
+              orientation="row"
+              index={state.rowIndex}
+              tablePos={state.blockPos}
+              tableNode={state.block}
+              direction="after"
+            />
+          </div>
         </div>
-      )}
+      )
+      }
 
-      {shouldShowColumn && (
-        <div ref={colHandle.ref} style={colHandle.style}>
-          <TableHandleMenu
-            editor={editor}
-            orientation="column"
-            index={state.colIndex}
-            tablePos={state.blockPos}
-            tableNode={state.block}
-            onToggleOtherHandle={toggleRowVisibility}
-            dragStart={colDragStart}
-            onOpenChange={(open) => handleMenuOpenChange('column', open)}
-          />
-        </div>
-      )}
-    </FloatingPortal>
+      {
+        shouldShowColumn && (
+          <div ref={colHandle.ref} style={colHandle.style}>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                gap: '0.125rem',
+                height: '0.75rem',
+                width: 'var(--table-handle-ref-width, 100px)',
+              }}
+            >
+              <TableHandleAddButton
+                editor={editor}
+                orientation="column"
+                index={state.colIndex}
+                tablePos={state.blockPos}
+                tableNode={state.block}
+                direction="before"
+              />
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <TableHandleMenu
+                  editor={editor}
+                  orientation="column"
+                  index={state.colIndex}
+                  tablePos={state.blockPos}
+                  tableNode={state.block}
+                  onToggleOtherHandle={toggleRowVisibility}
+                  dragStart={colDragStart}
+                  onOpenChange={(open) => handleMenuOpenChange('column', open)}
+                />
+              </div>
+              <TableHandleAddButton
+                editor={editor}
+                orientation="column"
+                index={state.colIndex}
+                tablePos={state.blockPos}
+                tableNode={state.block}
+                direction="after"
+              />
+            </div>
+          </div>
+        )
+      }
+    </FloatingPortal >
   );
 }
 

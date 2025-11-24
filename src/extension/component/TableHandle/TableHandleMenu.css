@@ -32,5 +32,4 @@
 
 .tiptap-table-handle-menu.column {
   height: 0.75rem;
-  width: var(--table-handle-ref-width);
 }

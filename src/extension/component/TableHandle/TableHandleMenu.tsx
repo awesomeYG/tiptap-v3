@@ -577,7 +577,7 @@ export const TableHandleMenu = ({
 
   if (!editor?.isEditable) return null;
 
-  const handleButton = (
+  const menuButton = (
     <Box
       component="button"
       className={`tiptap-table-handle-menu ${isDragging ? 'is-dragging' : ''} ${orientation}`}
@@ -598,12 +598,13 @@ export const TableHandleMenu = ({
         ...(orientation === 'row'
           ? {
             width: '0.75rem',
-            height: 'var(--table-handle-ref-height, 40px)',
+            height: '0.75rem',
           }
           : {
+            width: '100%',
             height: '0.75rem',
-            width: 'var(--table-handle-ref-width, 100px)',
           }),
+        transition: 'background-color 0.2s ease-in-out',
         '&.is-dragging': {
           backgroundColor: 'var(--mui-palette-primary-main)',
           '& .MuiSvgIcon-root': {
@@ -634,7 +635,7 @@ export const TableHandleMenu = ({
   return (
     <Menu
       width={216}
-      context={handleButton}
+      context={menuButton}
       list={menuList}
       anchorOrigin={{
         vertical: orientation === 'row' ? 'top' : 'bottom',
