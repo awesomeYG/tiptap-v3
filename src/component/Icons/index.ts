@@ -137,6 +137,7 @@ export { UnderlineIcon } from './underline-icon';
 export { UploadCloud2LineIcon } from './upload-cloud-2-line-icon';
 export { UploadIcon } from './upload-icon';
 export { UserSmileFillIcon } from './user-smile-fill-icon';
+export { VolumeDownLineIcon } from './volume-down-line-icon';
 export { VolumeMuteLineIcon } from './volume-mute-line-icon';
 export { VolumeUpLineIcon } from './volume-up-line-icon';
 export { WindowFillIcon } from './window-fill-icon';
