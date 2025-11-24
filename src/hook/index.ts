@@ -54,7 +54,7 @@ const useTiptap = ({
     editorProps: {
       handleKeyDown: (view, event) => {
         // 编辑模式下保存
-        if (event.key === 's' && (event.metaKey || event.ctrlKey) && editable) {
+        if (event.key === 's' && (event.metaKey || event.ctrlKey) && editable && onSave) {
           event.preventDefault()
           onSave?.(editor)
           return true
