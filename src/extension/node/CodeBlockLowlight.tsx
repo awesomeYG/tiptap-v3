@@ -30,9 +30,13 @@ const CustomCodeBlock = CodeBlockLowlight.configure({
     }
   },
   parseMarkdown: (token, helpers) => {
-    if (token.raw?.startsWith('```') === false && token.codeBlockStyle !== 'indented') {
+    const isFenced = token.codeBlockStyle === 'fenced' ||
+      (token.raw && /^\s*```/.test(token.raw));
+    const isIndented = token.codeBlockStyle === 'indented';
+    if (!isFenced && !isIndented) {
       return []
     }
+
     if (token.lang === 'mermaid') {
       return helpers.createNode(
         'flow',
