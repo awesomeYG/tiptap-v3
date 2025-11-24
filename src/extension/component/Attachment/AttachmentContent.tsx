@@ -1,12 +1,11 @@
-import { Download2LineIcon } from "@ctzhian/tiptap/component/Icons"
-import { Box, Stack } from "@mui/material"
-import React from "react"
+import { Download2LineIcon, FileIcon } from "@ctzhian/tiptap/component/Icons"
+import { Box, IconButton, Stack } from "@mui/material"
+import React, { useState } from "react"
 import { AttachmentAttributes } from "."
 
 interface AttachmentContentProps {
   attrs: AttachmentAttributes
   type: 'icon' | 'block'
-  /** 是否为编辑模式 */
   editable?: boolean
 }
 
@@ -15,7 +14,7 @@ interface AttachmentContentProps {
  * 用于渲染附件的实际内容，支持编辑和只读模式
  */
 export const AttachmentContent: React.FC<AttachmentContentProps> = ({ attrs, type, editable = false }) => {
-  // 编辑模式和只读模式的样式差异
+  const [isHovered, setIsHovered] = useState(false)
   const blockStyles = editable ? {
     display: 'flex',
     border: '1px solid',
@@ -74,6 +73,8 @@ export const AttachmentContent: React.FC<AttachmentContentProps> = ({ attrs, typ
           download={attrs.title}
           {...(!editable && { 'data-title': attrs.title, 'data-type': attrs.type })}
           sx={blockStyles}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
         >
           <Stack
             direction={'row'}
@@ -82,8 +83,8 @@ export const AttachmentContent: React.FC<AttachmentContentProps> = ({ attrs, typ
             sx={blockInnerStyles}
             {...(!editable && { 'data-title': attrs.title, 'data-type': type })}
           >
-            <Download2LineIcon sx={{
-              fontSize: '2rem',
+            <FileIcon sx={{
+              fontSize: '1.625rem',
               color: attrs.url === 'error' ? 'error.main' : 'primary.main',
               alignSelf: 'center',
             }} />
@@ -93,6 +94,14 @@ export const AttachmentContent: React.FC<AttachmentContentProps> = ({ attrs, typ
               </Box>
               {Number(attrs.size) > 0 && <Box sx={{ fontSize: '0.75rem', color: 'text.secondary' }}>{attrs.size}</Box>}
             </Stack>
+            {isHovered && <IconButton size="small"
+              sx={{
+                color: attrs.url === 'error' ? 'error.main' : 'text.disabled',
+                alignSelf: 'center',
+              }}
+            >
+              <Download2LineIcon sx={{ fontSize: '1rem' }} />
+            </IconButton>}
           </Stack>
         </Box>
       ) : (

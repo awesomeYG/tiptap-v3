@@ -93,8 +93,8 @@
   user-select: none;
 }
 
-.tiptap.ProseMirror .react-renderer.node-blockLink:has(.block-link-wrapper),
-.tiptap.ProseMirror .react-renderer.node-attachment:has(.block-attachment-wrapper) {
+.tiptap.ProseMirror .react-renderer.node-blockLink,
+.tiptap.ProseMirror .react-renderer.node-blockAttachment {
   display: block;
   margin: 1rem 0;
 }

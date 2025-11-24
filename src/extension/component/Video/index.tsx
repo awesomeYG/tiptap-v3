@@ -247,6 +247,11 @@ const VideoViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
                   document.body.removeChild(video)
                 }}
               />
+              <Divider
+                orientation="vertical"
+                flexItem
+                sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'divider' }}
+              />
               <ToolbarItem
                 icon={<AlignLeftIcon sx={{ fontSize: '1rem' }} />}
                 tip="左侧对齐"

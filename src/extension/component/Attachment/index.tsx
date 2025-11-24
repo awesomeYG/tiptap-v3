@@ -90,19 +90,14 @@ const AttachmentViewWrapper: React.FC<NodeViewProps & EditorFnProps & { attachme
       sx={{ p: 0.5 }}
     >
       <ToolbarItem
-        icon={<DownloadLineIcon sx={{ fontSize: '1rem' }} />}
-        tip='下载'
-        onClick={handleDownload}
-      />
-      <ToolbarItem
         icon={<EditLineIcon sx={{ fontSize: '1rem' }} />}
         tip='编辑'
         onClick={handleShowPopover}
       />
       <ToolbarItem
-        icon={<DeleteLineIcon sx={{ fontSize: '1rem' }} />}
-        tip='删除'
-        onClick={handleDeleteAttachment}
+        icon={<DownloadLineIcon sx={{ fontSize: '1rem' }} />}
+        tip='下载'
+        onClick={handleDownload}
       />
       <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'divider' }} />
       <ActionDropdown
@@ -122,6 +117,12 @@ const AttachmentViewWrapper: React.FC<NodeViewProps & EditorFnProps & { attachme
             onClick: () => handleConvertAttachmentType('block'),
           },
         ]}
+      />
+      <Divider orientation='vertical' flexItem sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'divider' }} />
+      <ToolbarItem
+        icon={<DeleteLineIcon sx={{ fontSize: '1rem' }} />}
+        tip='删除'
+        onClick={handleDeleteAttachment}
       />
     </Stack>
   )
@@ -152,7 +153,7 @@ const AttachmentViewWrapper: React.FC<NodeViewProps & EditorFnProps & { attachme
 
   if (!editor.isEditable) {
     return <NodeViewWrapper
-      className={`attachment-wrapper${attachmentDisplayType === 'block' ? ' block-attachment-wrapper' : ''}`}
+      className={`attachment-wrapper ${attachmentDisplayType === 'block' ? 'block-attachment-wrapper' : ''}`}
       as={attachmentDisplayType === 'block' ? 'div' : 'span'}
     >
       <AttachmentContent attrs={attrs} type={attachmentDisplayType} editable={false} />

@@ -27,6 +27,7 @@ export const LinkContent: React.FC<LinkContentProps> = ({ attrs, editable = fals
     border: '1px solid',
     borderColor: 'divider',
     cursor: 'pointer',
+    textAlign: 'left',
     borderRadius: 'var(--mui-shape-borderRadius)',
     p: 2,
     textDecoration: 'none',
@@ -45,6 +46,7 @@ export const LinkContent: React.FC<LinkContentProps> = ({ attrs, editable = fals
     borderColor: 'divider',
     color: 'text.primary',
     cursor: 'pointer',
+    textAlign: 'left',
     borderRadius: 'var(--mui-shape-borderRadius)',
     p: 2,
     ':hover': {

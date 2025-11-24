@@ -424,7 +424,7 @@
 
 .tiptap.ProseMirror table td>*,
 .tiptap.ProseMirror table th>* {
-  margin-bottom: 0;
+  margin-bottom: 0 !important;
 }
 
 .tiptap.ProseMirror table th {
