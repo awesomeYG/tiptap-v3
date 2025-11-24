@@ -50,6 +50,7 @@ const InsertVideo = ({
             loop: attrs.loop,
             muted: attrs.muted,
             poster: attrs.poster,
+            align: attrs.align,
           })
         }
       } catch (error) {
@@ -76,6 +77,7 @@ const InsertVideo = ({
         loop: attrs.loop,
         muted: attrs.muted,
         poster: attrs.poster,
+        align: attrs.align,
       })
       handleClosePopover()
     } catch (error) {
