@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 export interface ImageViewerProviderProps {
   children: ReactNode;
@@ -22,28 +22,21 @@ export interface ImageViewerProviderProps {
 export interface ImageViewerItemProps {
   src: string;
   children?: ReactNode;
-  render?: (props: { attrs: Partial<React.HTMLAttributes<HTMLElement>>; scale: number; rotate: number }) => ReactNode;
-  overlay?: ReactNode;
-  width?: number;
-  height?: number;
   triggers?: Array<'onClick' | 'onDoubleClick'>;
 }
 
 export interface ImageViewerContextType {
-  setCurrentSrc: (src: string) => void;
+  currentSrc: string;
   visible: boolean;
-  setVisible: (visible: boolean) => void;
-  scale: number;
-  setScale: (scale: number) => void;
-  rotate: number;
-  setRotate: (rotate: number) => void;
+  currentIndex: number;
+  totalImages: number;
   getScale: () => number;
   getRotate: () => number;
-  onScale: ((scale: number) => void) | null;
-  setOnScale: (fn: ((scale: number) => void) | null) => void;
-  onRotate: ((rotate: number) => void) | null;
-  setOnRotate: (fn: ((rotate: number) => void) | null) => void;
-  onClose: (() => void) | null;
-  setOnClose: (fn: (() => void) | null) => void;
+  getOnScale: () => ((scale: number) => void) | null;
+  getOnRotate: () => ((rotate: number) => void) | null;
+  getOnClose: () => (() => void) | null;
+  onImageClick: (src: string) => void;
+  onPrevImage: () => void;
+  onNextImage: () => void;
 }
 

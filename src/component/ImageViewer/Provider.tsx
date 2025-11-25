@@ -1,10 +1,9 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { PhotoProvider } from 'react-photo-view';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { PhotoSlider } from 'react-photo-view';
 import { ImageViewerContext } from './context';
-import { ImageViewerItem } from './Item';
 import { customStyles } from './styles';
 import { CustomToolbar } from './Toolbar';
-import { ImageViewerItemProps, ImageViewerProviderProps } from './types';
+import { ImageViewerProviderProps } from './types';
 
 export const ImageViewerProvider: React.FC<ImageViewerProviderProps> = ({
   children,
@@ -24,41 +23,26 @@ export const ImageViewerProvider: React.FC<ImageViewerProviderProps> = ({
   brokenElement,
   portalContainer,
 }) => {
-  const [currentSrc, setCurrentSrc] = useState<string>('');
+  const [currentSrc, setCurrentSrc] = useState('');
   const [visible, setVisible] = useState(false);
-  const [scale, setScale] = useState(1);
-  const [rotate, setRotate] = useState(0);
-  const [onScale, setOnScale] = useState<((scale: number) => void) | null>(null);
-  const [onRotate, setOnRotate] = useState<((rotate: number) => void) | null>(null);
-  const [onClose, setOnClose] = useState<(() => void) | null>(null);
-  const imageSrcsRef = useRef<string[]>([]);
+  const [viewIndex, setViewIndex] = useState(0);
+  const [totalImages, setTotalImages] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
   const overlayStateRef = useRef<{
     scale: number;
     rotate: number;
-    visible: boolean;
     onScale: ((scale: number) => void) | null;
     onRotate: ((rotate: number) => void) | null;
     onClose: (() => void) | null;
-    index: number | undefined;
   }>({
     scale: 1,
     rotate: 0,
-    visible: false,
-    onScale: null,
-    onRotate: null,
-    onClose: null,
-    index: undefined,
-  });
-  const callbacksRef = useRef<{
-    onScale: ((scale: number) => void) | null;
-    onRotate: ((rotate: number) => void) | null;
-    onClose: (() => void) | null;
-  }>({
     onScale: null,
     onRotate: null,
     onClose: null,
   });
 
+  // 注入自定义样式
   useEffect(() => {
     if (typeof document !== 'undefined' && !document.getElementById('image-viewer-custom-styles')) {
       const styleElement = document.createElement('style');
@@ -68,66 +52,105 @@ export const ImageViewerProvider: React.FC<ImageViewerProviderProps> = ({
     }
   }, []);
 
-  useLayoutEffect(() => {
-    const state = overlayStateRef.current;
-    setScale(state.scale);
-    setRotate(state.rotate);
-    setVisible(state.visible);
+  // 从 DOM 中动态收集所有图片数据（按照 DOM 顺序）
+  const collectImagesFromDOM = useCallback((): { src: string; key: string }[] => {
+    if (!containerRef.current) return [];
 
-    callbacksRef.current.onScale = state.onScale;
-    callbacksRef.current.onRotate = state.onRotate;
-    callbacksRef.current.onClose = state.onClose;
+    const items = containerRef.current.querySelectorAll('[data-image-viewer-item]');
+    const result: { src: string; key: string }[] = [];
 
-    setOnScale(() => state.onScale);
-    setOnRotate(() => state.onRotate);
-    setOnClose(() => state.onClose);
-
-    if (state.visible && state.index !== undefined) {
-      const src = imageSrcsRef.current[state.index];
+    items.forEach((item) => {
+      const src = item.getAttribute('data-src');
       if (src) {
-        setCurrentSrc(src);
-      }
-    }
-  });
-
-  useEffect(() => {
-    const srcs: string[] = [];
-    React.Children.forEach(children, (child) => {
-      if (React.isValidElement(child) && child.type === ImageViewerItem) {
-        const src = (child.props as ImageViewerItemProps).src;
-        if (src) {
-          srcs.push(src);
-        }
+        result.push({ src, key: src });
       }
     });
-    imageSrcsRef.current = srcs;
-  }, [children]);
 
-  const contextValue = {
-    setCurrentSrc,
-    visible,
-    setVisible,
-    scale,
-    setScale,
-    rotate,
-    setRotate,
-    getScale: () => overlayStateRef.current.scale,
-    getRotate: () => overlayStateRef.current.rotate,
-    onScale: callbacksRef.current.onScale,
-    setOnScale,
-    onRotate: callbacksRef.current.onRotate,
-    setOnRotate,
-    onClose: callbacksRef.current.onClose,
-    setOnClose,
-  };
+    return result;
+  }, []);
 
-  const handleSpeed = typeof speed === 'function'
-    ? speed
-    : () => (typeof speed === 'number' ? speed : 500);
+  // 处理图片点击
+  const handleImageClick = useCallback((src: string) => {
+    // 每次点击时动态从 DOM 收集图片列表
+    const images = collectImagesFromDOM();
+    const index = images.findIndex((img) => img.src === src);
+
+    if (index !== -1) {
+      setViewIndex(index);
+      setCurrentSrc(src);
+      setTotalImages(images.length);
+      setVisible(true);
+      onVisibleChange?.(true, index);
+    }
+  }, [collectImagesFromDOM, onVisibleChange]);
+
+  // 上一张
+  const handlePrevImage = useCallback(() => {
+    const images = collectImagesFromDOM();
+    if (images.length === 0) return;
+
+    const newIndex = viewIndex > 0 ? viewIndex - 1 : images.length - 1;
+    setViewIndex(newIndex);
+    setCurrentSrc(images[newIndex].src);
+    onIndexChange?.(newIndex);
+  }, [viewIndex, collectImagesFromDOM, onIndexChange]);
+
+  // 下一张
+  const handleNextImage = useCallback(() => {
+    const images = collectImagesFromDOM();
+    if (images.length === 0) return;
+
+    const newIndex = viewIndex < images.length - 1 ? viewIndex + 1 : 0;
+    setViewIndex(newIndex);
+    setCurrentSrc(images[newIndex].src);
+    onIndexChange?.(newIndex);
+  }, [viewIndex, collectImagesFromDOM, onIndexChange]);
+
+  const contextValue = React.useMemo(
+    () => ({
+      currentSrc,
+      visible,
+      currentIndex: viewIndex,
+      totalImages,
+      getScale: () => overlayStateRef.current.scale,
+      getRotate: () => overlayStateRef.current.rotate,
+      getOnScale: () => overlayStateRef.current.onScale,
+      getOnRotate: () => overlayStateRef.current.onRotate,
+      getOnClose: () => overlayStateRef.current.onClose,
+      onImageClick: handleImageClick,
+      onPrevImage: handlePrevImage,
+      onNextImage: handleNextImage,
+    }),
+    [currentSrc, visible, viewIndex, totalImages, handleImageClick, handlePrevImage, handleNextImage]
+  );
+
+  const handleSpeed = typeof speed === 'function' ? speed : () => speed;
+
+  // 当需要显示时，动态获取图片列表
+  const displayImages = React.useMemo(() => {
+    if (visible) {
+      return collectImagesFromDOM();
+    }
+    return [];
+  }, [visible, collectImagesFromDOM]);
 
   return (
     <ImageViewerContext.Provider value={contextValue}>
-      <PhotoProvider
+      <div ref={containerRef}>{children}</div>
+      <PhotoSlider
+        images={displayImages}
+        visible={visible}
+        index={viewIndex}
+        onClose={() => {
+          setVisible(false);
+          onVisibleChange?.(false, viewIndex);
+        }}
+        onIndexChange={(index) => {
+          setViewIndex(index);
+          const src = displayImages[index]?.src;
+          if (src) setCurrentSrc(src);
+          onIndexChange?.(index);
+        }}
         bannerVisible={false}
         speed={handleSpeed}
         maskOpacity={maskOpacity}
@@ -142,50 +165,12 @@ export const ImageViewerProvider: React.FC<ImageViewerProviderProps> = ({
         loadingElement={loadingElement}
         brokenElement={brokenElement}
         portalContainer={portalContainer}
-        overlayRender={({
-          onScale: overlayOnScale,
-          scale: overlayScale,
-          rotate: overlayRotate,
-          onRotate: overlayOnRotate,
-          onClose: overlayOnClose,
-          index,
-          visible: overlayVisible
-        }) => {
-          overlayStateRef.current = {
-            scale: overlayScale,
-            rotate: overlayRotate,
-            visible: overlayVisible,
-            onScale: overlayOnScale,
-            onRotate: overlayOnRotate,
-            onClose: overlayOnClose,
-            index,
-          };
-
+        overlayRender={({ onScale, scale, rotate, onRotate, onClose }) => {
+          overlayStateRef.current = { scale, rotate, onScale, onRotate, onClose };
           return null;
         }}
-        onVisibleChange={(visible, index) => {
-          setVisible(visible);
-          if (visible && index !== undefined) {
-            const src = imageSrcsRef.current[index];
-            if (src) {
-              setCurrentSrc(src);
-            }
-          }
-          onVisibleChange?.(visible, index);
-        }}
-        onIndexChange={(index) => {
-          if (index !== undefined) {
-            const src = imageSrcsRef.current[index];
-            if (src) {
-              setCurrentSrc(src);
-            }
-          }
-          onIndexChange?.(index);
-        }}
-      >
-        {children as any}
-      </PhotoProvider>
-      <CustomToolbar currentSrc={currentSrc} />
+      />
+      <CustomToolbar />
     </ImageViewerContext.Provider>
   );
 };

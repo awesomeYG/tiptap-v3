@@ -2,20 +2,17 @@ import React from 'react';
 import { ImageViewerContextType } from './types';
 
 export const ImageViewerContext = React.createContext<ImageViewerContextType>({
-  setCurrentSrc: () => { },
+  currentSrc: '',
   visible: false,
-  setVisible: () => { },
-  scale: 1,
-  setScale: () => { },
-  rotate: 0,
-  setRotate: () => { },
+  currentIndex: 0,
+  totalImages: 0,
   getScale: () => 1,
   getRotate: () => 0,
-  onScale: null,
-  setOnScale: () => { },
-  onRotate: null,
-  setOnRotate: () => { },
-  onClose: null,
-  setOnClose: () => { },
+  getOnScale: () => null,
+  getOnRotate: () => null,
+  getOnClose: () => null,
+  onImageClick: () => { },
+  onPrevImage: () => { },
+  onNextImage: () => { },
 });
 

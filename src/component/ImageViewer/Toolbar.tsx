@@ -9,23 +9,52 @@ import {
   FullscreenExitLineIcon,
   FullscreenLineIcon,
   ResetLeftFillIcon,
+  SkipLeftIcon,
+  SkipRightIcon,
 } from '../Icons';
 import { ImageViewerContext } from './context';
 
-interface CustomToolbarProps {
-  currentSrc?: string;
-}
+const iconButtonSx = {
+  color: 'white',
+  '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.1)' },
+};
 
-export const CustomToolbar: React.FC<CustomToolbarProps> = ({ currentSrc }) => {
+const Divider = () => (
+  <Box
+    sx={{
+      width: '1px',
+      height: '24px',
+      backgroundColor: 'rgba(255, 255, 255, 0.3)',
+      mx: 0.5,
+    }}
+  />
+);
+
+const ZoomInIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 768 768" fill="currentColor">
+    <path d="M384 640.5q105 0 180.75-75.75t75.75-180.75-75.75-180.75-180.75-75.75-180.75 75.75-75.75 180.75 75.75 180.75 180.75 75.75zM384 64.5q132 0 225.75 93.75t93.75 225.75-93.75 225.75-225.75 93.75-225.75-93.75-93.75-225.75 93.75-225.75 225.75-93.75zM415.5 223.5v129h129v63h-129v129h-63v-129h-129v-63h129v-129h63z" />
+  </svg>
+);
+
+const ZoomOutIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 768 768" fill="currentColor">
+    <path d="M384 640.5q105 0 180.75-75.75t75.75-180.75-75.75-180.75-180.75-75.75-180.75 75.75-75.75 180.75 75.75 180.75 180.75 75.75zM384 64.5q132 0 225.75 93.75t93.75 225.75-93.75 225.75-225.75 93.75-225.75-93.75-93.75-225.75 93.75-225.75 225.75-93.75zM223.5 352.5h321v63h-321v-63z" />
+  </svg>
+);
+
+export const CustomToolbar: React.FC = () => {
   const {
     visible,
-    scale,
-    rotate,
+    currentSrc,
+    currentIndex,
+    totalImages,
     getScale,
     getRotate,
-    onScale,
-    onRotate,
-    onClose,
+    getOnScale,
+    getOnRotate,
+    getOnClose,
+    onPrevImage,
+    onNextImage,
   } = useContext(ImageViewerContext);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
@@ -59,14 +88,39 @@ export const CustomToolbar: React.FC<CustomToolbarProps> = ({ currentSrc }) => {
     }
   }, []);
 
-  const handleReset = useCallback(() => {
-    if (onScale) onScale(1);
-    if (onRotate) onRotate(0);
-  }, [onScale, onRotate]);
+  const handleZoom = useCallback(
+    (delta: number) => {
+      const onScaleFn = getOnScale();
+      if (onScaleFn) {
+        const currentScale = getScale();
+        const newScale = Math.max(0.5, Math.min(5, currentScale + delta));
+        onScaleFn(newScale);
+      }
+    },
+    [getOnScale, getScale]
+  );
 
-  if (!visible) {
-    return null;
-  }
+  const handleRotate = useCallback(
+    (delta: number) => {
+      const onRotateFn = getOnRotate();
+      if (onRotateFn) {
+        const currentRotate = getRotate();
+        onRotateFn(currentRotate + delta);
+      }
+    },
+    [getOnRotate, getRotate]
+  );
+
+  const handleReset = useCallback(() => {
+    getOnScale()?.(1);
+    getOnRotate()?.(0);
+  }, [getOnScale, getOnRotate]);
+
+  const handleClose = useCallback(() => {
+    getOnClose()?.();
+  }, [getOnClose]);
+
+  if (!visible) return null;
 
   const toolbarContent = (
     <Box
@@ -98,170 +152,79 @@ export const CustomToolbar: React.FC<CustomToolbarProps> = ({ currentSrc }) => {
           backdropFilter: 'blur(10px)',
         }}
       >
-        <Tooltip title="放大" placement="top">
+        <Tooltip title="上一张" placement="top">
           <IconButton
-            onClick={() => {
-              if (onScale) {
-                const currentScale = getScale();
-                onScale(Math.min(currentScale + 0.5, 5));
-              }
-            }}
-            sx={{
-              color: 'white',
-              '&:hover': {
-                backgroundColor: 'rgba(255, 255, 255, 0.1)',
-              },
-            }}
+            onClick={onPrevImage}
+            sx={iconButtonSx}
             size="small"
+            disabled={totalImages <= 1}
           >
-            <svg width="20" height="20" viewBox="0 0 768 768" fill="currentColor">
-              <path d="M384 640.5q105 0 180.75-75.75t75.75-180.75-75.75-180.75-180.75-75.75-180.75 75.75-75.75 180.75 75.75 180.75 180.75 75.75zM384 64.5q132 0 225.75 93.75t93.75 225.75-93.75 225.75-225.75 93.75-225.75-93.75-93.75-225.75 93.75-225.75 225.75-93.75zM415.5 223.5v129h129v63h-129v129h-63v-129h-129v-63h129v-129h63z"></path>
-            </svg>
+            <SkipLeftIcon sx={{ fontSize: '20px' }} />
+          </IconButton>
+        </Tooltip>
+
+        <Tooltip title="下一张" placement="top">
+          <IconButton
+            onClick={onNextImage}
+            sx={iconButtonSx}
+            size="small"
+            disabled={totalImages <= 1}
+          >
+            <SkipRightIcon sx={{ fontSize: '20px' }} />
+          </IconButton>
+        </Tooltip>
+
+        <Divider />
+
+        <Tooltip title="放大" placement="top">
+          <IconButton onClick={() => handleZoom(0.5)} sx={iconButtonSx} size="small">
+            <ZoomInIcon />
           </IconButton>
         </Tooltip>
 
         <Tooltip title="缩小" placement="top">
-          <IconButton
-            onClick={() => {
-              if (onScale) {
-                const currentScale = getScale();
-                onScale(Math.max(currentScale - 0.5, 0.5));
-              }
-            }}
-            sx={{
-              color: 'white',
-              '&:hover': {
-                backgroundColor: 'rgba(255, 255, 255, 0.1)',
-              },
-            }}
-            size="small"
-          >
-            <svg width="20" height="20" viewBox="0 0 768 768" fill="currentColor">
-              <path d="M384 640.5q105 0 180.75-75.75t75.75-180.75-75.75-180.75-180.75-75.75-180.75 75.75-75.75 180.75 75.75 180.75 180.75 75.75zM384 64.5q132 0 225.75 93.75t93.75 225.75-93.75 225.75-225.75 93.75-225.75-93.75-93.75-225.75 93.75-225.75 225.75-93.75zM223.5 352.5h321v63h-321v-63z"></path>
-            </svg>
+          <IconButton onClick={() => handleZoom(-0.5)} sx={iconButtonSx} size="small">
+            <ZoomOutIcon />
           </IconButton>
         </Tooltip>
 
-        <Box
-          sx={{
-            width: '1px',
-            height: '24px',
-            backgroundColor: 'rgba(255, 255, 255, 0.3)',
-            mx: 0.5,
-          }}
-        />
+        <Divider />
 
         <Tooltip title="逆时针旋转" placement="top">
-          <IconButton
-            onClick={() => {
-              if (onRotate) {
-                const currentRotate = getRotate();
-                onRotate(currentRotate - 90);
-              }
-            }}
-            sx={{
-              color: 'white',
-              '&:hover': {
-                backgroundColor: 'rgba(255, 255, 255, 0.1)',
-              },
-            }}
-            size="small"
-          >
+          <IconButton onClick={() => handleRotate(-90)} sx={iconButtonSx} size="small">
             <AnticlockwiseLineIcon sx={{ fontSize: '20px' }} />
           </IconButton>
         </Tooltip>
 
         <Tooltip title="顺时针旋转" placement="top">
-          <IconButton
-            onClick={() => {
-              if (onRotate) {
-                const currentRotate = getRotate();
-                onRotate(currentRotate + 90);
-              }
-            }}
-            sx={{
-              color: 'white',
-              '&:hover': {
-                backgroundColor: 'rgba(255, 255, 255, 0.1)',
-              },
-            }}
-            size="small"
-          >
+          <IconButton onClick={() => handleRotate(90)} sx={iconButtonSx} size="small">
             <ClockwiseLineIcon sx={{ fontSize: '20px' }} />
           </IconButton>
         </Tooltip>
 
-        <Box
-          sx={{
-            width: '1px',
-            height: '24px',
-            backgroundColor: 'rgba(255, 255, 255, 0.3)',
-            mx: 0.5,
-          }}
-        />
+        <Divider />
 
         <Tooltip title="重置" placement="top">
-          <IconButton
-            onClick={handleReset}
-            sx={{
-              color: 'white',
-              '&:hover': {
-                backgroundColor: 'rgba(255, 255, 255, 0.1)',
-              },
-            }}
-            size="small"
-          >
+          <IconButton onClick={handleReset} sx={iconButtonSx} size="small">
             <ResetLeftFillIcon sx={{ fontSize: '20px' }} />
           </IconButton>
         </Tooltip>
 
         {currentSrc && (
           <>
-            <Box
-              sx={{
-                width: '1px',
-                height: '24px',
-                backgroundColor: 'rgba(255, 255, 255, 0.3)',
-                mx: 0.5,
-              }}
-            />
+            <Divider />
             <Tooltip title="下载" placement="top">
-              <IconButton
-                onClick={handleDownload}
-                sx={{
-                  color: 'white',
-                  '&:hover': {
-                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                  },
-                }}
-                size="small"
-              >
+              <IconButton onClick={handleDownload} sx={iconButtonSx} size="small">
                 <Download2LineIcon sx={{ fontSize: '20px' }} />
               </IconButton>
             </Tooltip>
           </>
         )}
 
-        <Box
-          sx={{
-            width: '1px',
-            height: '24px',
-            backgroundColor: 'rgba(255, 255, 255, 0.3)',
-            mx: 0.5,
-          }}
-        />
+        <Divider />
 
         <Tooltip title={isFullscreen ? '退出全屏' : '全屏'} placement="top">
-          <IconButton
-            onClick={handleFullscreen}
-            sx={{
-              color: 'white',
-              '&:hover': {
-                backgroundColor: 'rgba(255, 255, 255, 0.1)',
-              },
-            }}
-            size="small"
-          >
+          <IconButton onClick={handleFullscreen} sx={iconButtonSx} size="small">
             {isFullscreen ? (
               <FullscreenExitLineIcon sx={{ fontSize: '20px' }} />
             ) : (
@@ -270,26 +233,10 @@ export const CustomToolbar: React.FC<CustomToolbarProps> = ({ currentSrc }) => {
           </IconButton>
         </Tooltip>
 
-        <Box
-          sx={{
-            width: '1px',
-            height: '24px',
-            backgroundColor: 'rgba(255, 255, 255, 0.3)',
-            mx: 0.5,
-          }}
-        />
+        <Divider />
 
         <Tooltip title="关闭" placement="top">
-          <IconButton
-            onClick={() => onClose && onClose()}
-            sx={{
-              color: 'white',
-              '&:hover': {
-                backgroundColor: 'rgba(255, 255, 255, 0.1)',
-              },
-            }}
-            size="small"
-          >
+          <IconButton onClick={handleClose} sx={iconButtonSx} size="small">
             <CloseCircleFillIcon sx={{ fontSize: '20px' }} />
           </IconButton>
         </Tooltip>

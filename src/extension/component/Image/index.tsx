@@ -167,7 +167,7 @@ const ImageViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
       e.stopPropagation()
       return
     }
-    // 允许 PhotoView 处理点击事件进行预览
+    // 事件会冒泡到 ImageViewerItem 处理
   }
 
   const handleMouseMove = useCallback((e: MouseEvent) => {
