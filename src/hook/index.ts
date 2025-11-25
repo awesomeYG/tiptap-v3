@@ -2,7 +2,6 @@ import { getExtensions } from '@ctzhian/tiptap/extension'
 import { UseTiptapProps, UseTiptapReturn } from '@ctzhian/tiptap/type'
 import { migrateMathStrings } from '@tiptap/extension-mathematics'
 import { useEditor, UseEditorOptions } from '@tiptap/react'
-import { renderToMarkdown } from '@tiptap/static-renderer/pm/markdown'
 
 const useTiptap = ({
   // extension
@@ -120,13 +119,7 @@ const useTiptap = ({
     },
     getMarkdown: () => {
       if (!editor) return ''
-      if (contentType === 'markdown') {
-        return editor.getMarkdown()
-      }
-      return renderToMarkdown({
-        extensions: editor.extensionManager.extensions,
-        content: editor.getJSON(),
-      })
+      return editor.getMarkdown()
     },
     getText: () => {
       return editor?.getText() || ''
