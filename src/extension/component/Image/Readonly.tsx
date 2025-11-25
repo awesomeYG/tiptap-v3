@@ -1,9 +1,8 @@
 import { Box } from "@mui/material"
 import { NodeViewWrapper } from "@tiptap/react"
 import React from "react"
-import { PhotoView } from "react-photo-view"
-import 'react-photo-view/dist/react-photo-view.css'
 import { ImageAttributes } from "."
+import { ImageViewerItem } from "../../../component/ImageViewer"
 
 interface ReadonlyImageProps {
   attrs: ImageAttributes
@@ -19,7 +18,7 @@ const ReadonlyImage = ({
       position: 'relative',
       display: 'inline-block',
     }}>
-      <PhotoView src={attrs.src}>
+      <ImageViewerItem src={attrs.src}>
         <img
           src={attrs.src}
           width={attrs.width}
@@ -29,7 +28,7 @@ const ReadonlyImage = ({
             cursor: 'pointer',
           }}
         />
-      </PhotoView>
+      </ImageViewerItem>
       {attrs.title && <>
         <br />
         <Box component='span' className="editor-image-title" sx={{

@@ -5,9 +5,8 @@ import { EditorFnProps } from "@ctzhian/tiptap/type"
 import { alpha, Box, Button, Divider, Stack, TextField, useTheme } from "@mui/material"
 import { NodeViewProps, NodeViewWrapper } from "@tiptap/react"
 import React, { useCallback, useEffect, useRef, useState } from "react"
-import { PhotoView } from "react-photo-view"
-import 'react-photo-view/dist/react-photo-view.css'
 import { HoverPopover } from "../../../component/HoverPopover"
+import { ImageViewerItem } from "../../../component/ImageViewer"
 import CropImage from "./Crop"
 import InsertImage from "./Insert"
 import ReadonlyImage from "./Readonly"
@@ -347,7 +346,7 @@ const ImageViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}
         >
-          <PhotoView src={attrs.src}>
+          <ImageViewerItem src={attrs.src}>
             <img
               ref={imageRef}
               src={attrs.src}
@@ -364,7 +363,7 @@ const ImageViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
                 onError?.(e as unknown as Error)
               }}
             />
-          </PhotoView>
+          </ImageViewerItem>
           {(isHovering || isDragging) && (
             <>
               {/* 左上角 */}
