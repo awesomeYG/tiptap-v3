@@ -199,8 +199,8 @@ export const TableExtendRowColumnButton: React.FC<
       >
         <AddLineIcon
           sx={{
-            width: '1rem',
-            height: '1rem',
+            width: '0.75rem',
+            height: '0.75rem',
             flexShrink: 0,
             color: 'var(--mui-palette-text-disabled)',
           }}
