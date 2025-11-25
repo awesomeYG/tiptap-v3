@@ -106,6 +106,17 @@ export const getExtensions = ({
     Highlight.configure({ multicolor: true }),
     CharacterCount.configure({ limit: limit ?? null }),
     TextAlign.configure({ types: ['heading', 'paragraph'] }),
+    Markdown.configure({
+      indentation: {
+        style: 'space',
+        size: 2,
+      },
+      markedOptions: {
+        gfm: true,
+        breaks: false,
+        pedantic: false,
+      },
+    }),
     VerticalAlign.configure({ types: ['textStyle'], defaultAlignment: null }),
     Placeholder.configure({
       emptyNodeClass: 'custom-placeholder-node',
@@ -130,22 +141,6 @@ export const getExtensions = ({
       },
     }),
   ]
-
-  if (contentType === 'markdown') {
-    defaultExtensions.push(
-      Markdown.configure({
-        indentation: {
-          style: 'space',
-          size: 2,
-        },
-        markedOptions: {
-          gfm: true,
-          breaks: false,
-          pedantic: false,
-        },
-      })
-    )
-  }
 
   if (!exclude?.includes('indent')) {
     defaultExtensions.push(Indent.configure({
