@@ -7,6 +7,7 @@ import '../index.css';
 const EDITABLE = true
 const DEFAULT_CONTENT_TYPE = 'html'
 const DEFAULT_HTML_CONTENT = `<p></p>
+<pre data-title=\"安装目录\"><code>var a = 1;</code></pre>
 <p><img src=\"https://fuss10.elemecdn.com/8/27/f01c15bb73e1ef3793e64e6b7bbccjpeg.jpeg\" width=\"100\"></p>
 <p><img src=\"https://fuss10.elemecdn.com/3/28/bbf893f792f03a54408b3b7a7ebf0jpeg.jpeg\" width=\"100\"></p>
 <h6 id="4b8d8c4e-29dc-4674-928b-b9ded0e363ae" data-toc-id="4b8d8c4e-29dc-4674-928b-b9ded0e363ae"><span data-name="watch" data-type="emoji">⌚</span> 表格操作</h6>

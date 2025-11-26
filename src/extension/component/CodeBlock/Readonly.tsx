@@ -1,14 +1,14 @@
 import { FileCopyLineIcon } from '@ctzhian/tiptap/component/Icons';
 import { Box, Divider, Stack } from '@mui/material';
 import { NodeViewContent, NodeViewProps, NodeViewWrapper } from '@tiptap/react';
-import React, { useCallback, useState } from 'react';
+import React, { memo, useCallback, useState } from 'react';
 
 interface CodeBlockAttributes {
   language?: string;
   title?: string;
 }
 
-const ReadonlyCodeBlock: React.FC<NodeViewProps> = ({
+const ReadonlyCodeBlock: React.FC<NodeViewProps> = memo(({
   node,
   selected
 }) => {
@@ -25,9 +25,10 @@ const ReadonlyCodeBlock: React.FC<NodeViewProps> = ({
       try {
         await navigator.clipboard.writeText(codeText);
         setCopyText('复制成功');
-        setTimeout(() => {
+        const timer = setTimeout(() => {
           setCopyText('复制');
         }, 2000);
+        return () => clearTimeout(timer);
       } catch (err) {
         console.error('复制失败:', err);
       }
@@ -42,67 +43,85 @@ const ReadonlyCodeBlock: React.FC<NodeViewProps> = ({
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
     >
-      <Box
-        component="pre"
-        sx={{
-          p: '0.75rem 1rem',
-          m: 0,
-          borderRadius: '6px',
-          overflow: 'hidden',
-        }}
-      >
+      <Box sx={{
+        position: 'relative',
+        border: '1px solid',
+        borderColor: 'divider',
+        borderRadius: 'var(--mui-shape-borderRadius)',
+        overflow: 'hidden',
+      }}>
         <Stack
           direction="row"
           alignItems="center"
           justifyContent="space-between"
           className="codeblock-toolbar"
           sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '1.25rem',
+            lineHeight: '1.25rem',
+            px: 2.5,
+            py: 2,
             zIndex: 1,
-            mb: 2,
+            color: 'text.tertiary',
+            borderBottom: '1px solid',
+            borderColor: 'divider',
           }}
         >
           <Box
             sx={{
               flex: 1,
               fontSize: '0.875rem',
-              color: 'text.tertiary',
               letterSpacing: '0.01rem',
             }}
           >
             {attrs.title || '代码块'}
           </Box>
-          {isHovering && <Stack direction="row" alignItems="center" gap={0.5}>
+          {isHovering && <Stack direction="row" alignItems="center" gap={0.5} sx={{
+            fontSize: '0.75rem',
+          }}>
             <Box>{attrs.language || 'Auto'}</Box>
-            <Divider orientation="vertical" flexItem sx={{ height: '1rem', mr: 0.5, ml: 1, alignSelf: 'center', borderColor: 'divider' }} />
+            <Divider orientation="vertical" flexItem sx={{ height: '0.75rem', ml: 1, alignSelf: 'center', borderColor: 'divider' }} />
             <Stack direction="row" alignItems="center" gap={0.5}
               onClick={handleCopy}
               sx={{
                 px: 1,
+                py: 0.5,
                 borderRadius: 'var(--mui-shape-borderRadius)',
                 cursor: 'pointer',
                 userSelect: 'none',
                 bgcolor: 'inherit',
                 color: 'inherit',
               }}>
-              <FileCopyLineIcon sx={{ fontSize: '0.875rem', color: 'inherit' }} />
-              <Box sx={{ fontSize: '0.75rem', lineHeight: 1 }}>
+              <FileCopyLineIcon sx={{ fontSize: '0.75rem', color: 'inherit' }} />
+              <Box sx={{ lineHeight: 1 }}>
                 {copyText}
               </Box>
             </Stack>
           </Stack>}
         </Stack>
-        <NodeViewContent
-          style={{
-            margin: 0,
-            fontSize: '0.875rem',
-            lineHeight: '1.5',
-            whiteSpace: 'pre-wrap',
-            wordBreak: 'break-word',
-          }}
-        />
+        <Box component={'pre'} sx={{
+          m: 0,
+        }}>
+          <NodeViewContent<'code'>
+            as="code"
+            className='hljs'
+            style={{
+              padding: '3rem 1.25rem 0.75rem 1.25rem',
+              fontSize: '0.875rem',
+              lineHeight: '1.5',
+              whiteSpace: 'pre-wrap',
+              wordBreak: 'break-word',
+            }}
+          />
+        </Box>
       </Box>
     </NodeViewWrapper>
   );
-};
+});
+
+ReadonlyCodeBlock.displayName = 'ReadonlyCodeBlock';
 
 export default ReadonlyCodeBlock;

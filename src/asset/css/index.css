@@ -1,4 +1,4 @@
-@import 'highlight.js/styles/atom-one-dark.css';
+@import 'highlight.js/styles/atom-one-light.css';
 @import 'katex/dist/katex.min.css';
 
 :root {
@@ -27,6 +27,17 @@
 
 .tiptap.ProseMirror a {
   text-decoration: none;
+}
+
+.tiptap.ProseMirror *:not(pre)>code {
+  background-color: var(--mui-palette-background-paper3);
+  border: 1px solid var(--mui-palette-divider);
+  border-radius: 4px;
+  font-size: 90%;
+  white-space: break-spaces;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  padding: 0.125rem 0.25rem;
 }
 
 .tiptap.ProseMirror label:has(input[type="checkbox"]) {
@@ -93,6 +104,7 @@
   user-select: none;
 }
 
+.tiptap.ProseMirror .react-renderer.node-codeBlock,
 .tiptap.ProseMirror .react-renderer.node-blockLink,
 .tiptap.ProseMirror .react-renderer.node-blockAttachment {
   display: block;

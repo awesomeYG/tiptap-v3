@@ -6,7 +6,7 @@ import { all, createLowlight } from 'lowlight';
 import CodeBlockView from "../component/CodeBlock";
 
 const lowlight = createLowlight(all)
-
+console.log(lowlight.listLanguages())
 const CustomCodeBlock = CodeBlockLowlight.configure({
   enableTabIndentation: true,
   tabSize: 1,

@@ -5,7 +5,7 @@ import {
 import { languages } from '@ctzhian/tiptap/contants/highlight';
 import { Box, Divider, ListSubheader, MenuItem, Select, Stack, TextField } from '@mui/material';
 import { NodeViewContent, NodeViewProps, NodeViewWrapper } from '@tiptap/react';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import ReadonlyCodeBlock from './Readonly';
 
 interface CodeBlockAttributes {
@@ -19,11 +19,11 @@ const CodeBlockView: React.FC<NodeViewProps> = (props) => {
   const [copyText, setCopyText] = useState('复制');
   const [titleValue, setTitleValue] = useState(node.attrs.title || '');
   const [searchText, setSearchText] = useState('');
-  const menuListRef = React.useRef<HTMLUListElement>(null);
+  const menuListRef = useRef<HTMLUListElement>(null);
 
   const attrs = node.attrs as CodeBlockAttributes;
 
-  const filteredLanguages = React.useMemo(() => {
+  const filteredLanguages = useMemo(() => {
     if (!searchText) return languages;
     const lowerSearch = searchText.toLowerCase();
     return languages.filter(
@@ -34,7 +34,7 @@ const CodeBlockView: React.FC<NodeViewProps> = (props) => {
   }, [searchText]);
 
   // 当搜索文本改变时，重置滚动位置
-  React.useEffect(() => {
+  useEffect(() => {
     if (menuListRef.current) {
       menuListRef.current.scrollTop = 0;
     }
@@ -55,9 +55,10 @@ const CodeBlockView: React.FC<NodeViewProps> = (props) => {
       try {
         await navigator.clipboard.writeText(codeText);
         setCopyText('复制成功');
-        setTimeout(() => {
+        const timer = setTimeout(() => {
           setCopyText('复制');
         }, 2000);
+        return () => clearTimeout(timer);
       } catch (err) {
         console.error('复制失败:', err);
       }
@@ -89,8 +90,10 @@ const CodeBlockView: React.FC<NodeViewProps> = (props) => {
   const handleTitleKeyDown = useCallback(
     (event: React.KeyboardEvent) => {
       if (event.key === 'Enter') {
+        event.preventDefault();
         handleTitleSubmit();
       } else if (event.key === 'Escape') {
+        event.preventDefault();
         setTitleValue(attrs.title || '');
         setShowTitleInput(false);
       }
@@ -107,33 +110,40 @@ const CodeBlockView: React.FC<NodeViewProps> = (props) => {
       className={`codeblock-wrapper ${selected ? 'ProseMirror-selectednode' : ''}`}
       data-drag-handle
     >
-      <Box
-        component="pre"
-        sx={{
-          p: '0.75rem 1rem',
-          m: 0,
-          borderRadius: showTitleInput
-            ? '6px 6px 0 0 !important'
-            : '6px',
-          overflow: 'hidden',
-        }}
-      >
+      <Box sx={{
+        position: 'relative',
+        border: '1px solid',
+        borderColor: 'divider',
+        borderRadius: 'var(--mui-shape-borderRadius)',
+        overflow: 'hidden',
+      }}>
         <Stack
           direction="row"
           alignItems="center"
           justifyContent="space-between"
           className="codeblock-toolbar"
           sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '1.25rem',
+            lineHeight: '1.25rem',
+            px: 2.5,
+            py: 2,
             zIndex: 1,
-            mb: 2,
+            color: 'text.tertiary',
+            borderBottom: '1px solid',
+            borderColor: 'divider',
           }}
         >
           {showTitleInput ? (
             <Box
               sx={{
-                py: 0.5,
                 flex: 1,
-                borderRadius: '0 0 4px 4px',
+                height: '1.25rem',
+                lineHeight: '1.25rem',
+                borderRadius: '4px',
                 bgcolor: 'background.paper3',
                 boxSizing: 'border-box',
                 letterSpacing: '0.01rem',
@@ -151,8 +161,8 @@ const CodeBlockView: React.FC<NodeViewProps> = (props) => {
                 sx={{
                   '& .MuiInputBase-input': {
                     p: 0,
-                    height: '0.875rem',
-                    lineHeight: 1,
+                    height: '1.25rem',
+                    lineHeight: '1.25rem',
                     fontSize: '0.875rem',
                     color: 'text.tertiary',
                   },
@@ -174,7 +184,6 @@ const CodeBlockView: React.FC<NodeViewProps> = (props) => {
               sx={{
                 flex: 1,
                 fontSize: '0.875rem',
-                color: 'text.tertiary',
                 letterSpacing: '0.01rem',
               }}
               onClick={handleTitleToggle}
@@ -182,7 +191,7 @@ const CodeBlockView: React.FC<NodeViewProps> = (props) => {
               {attrs.title || '代码块'}
             </Box>
           )}
-          <Stack direction="row" alignItems="center" sx={{ flexShrink: 0 }}>
+          <Stack direction="row" alignItems="center" sx={{ fontSize: '0.75rem', flexShrink: 0 }}>
             <Select
               value={attrs.language || 'auto'}
               onChange={(e) => handleLanguageChange(e.target.value)}
@@ -288,37 +297,38 @@ const CodeBlockView: React.FC<NodeViewProps> = (props) => {
                 </MenuItem>
               ))}
             </Select>
-            <Divider orientation="vertical" flexItem sx={{ height: '1.25rem', alignSelf: 'center', borderColor: 'divider' }} />
-            <Stack
-              direction="row"
-              alignItems="center"
-              gap={0.5}
+            <Divider orientation="vertical" flexItem sx={{ height: '1rem', alignSelf: 'center', borderColor: 'divider' }} />
+            <Stack direction="row" alignItems="center" gap={0.5}
               onClick={handleCopy}
               sx={{
                 px: 1,
                 py: 0.5,
                 borderRadius: 'var(--mui-shape-borderRadius)',
                 cursor: 'pointer',
-                '&:hover': {
-                  bgcolor: 'action.hover',
-                },
-              }}
-            >
-              <FileCopyLineIcon
-                sx={{ fontSize: '0.875rem', color: 'inherit' }}
-              />
-              <Box sx={{ fontSize: '0.75rem', lineHeight: 1 }}>{copyText}</Box>
+                userSelect: 'none',
+                bgcolor: 'inherit',
+                color: 'inherit',
+              }}>
+              <FileCopyLineIcon sx={{ fontSize: '0.75rem', color: 'inherit' }} />
+              <Box sx={{ lineHeight: 1 }}>
+                {copyText}
+              </Box>
             </Stack>
           </Stack>
         </Stack>
-        <NodeViewContent
-          style={{
-            margin: 0,
-            fontSize: '0.875rem',
-            whiteSpace: 'pre-wrap',
-            wordBreak: 'break-word',
-          }}
-        />
+        <Box component={'pre'} sx={{ m: 0 }}>
+          <NodeViewContent<'code'>
+            as="code"
+            className='hljs'
+            style={{
+              padding: '3rem 1.25rem 0.75rem 1.25rem',
+              fontSize: '0.875rem',
+              lineHeight: '1.5',
+              whiteSpace: 'pre-wrap',
+              wordBreak: 'break-word',
+            }}
+          />
+        </Box>
       </Box>
     </NodeViewWrapper>
   );
