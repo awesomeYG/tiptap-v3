@@ -137,12 +137,15 @@
 }
 
 .tiptap.ProseMirror ul:not([data-type='taskList']) li::before {
-  content: '•' !important;
+  content: '' !important;
+  display: inline-block;
+  width: 8px;
+  height: 8px !important;
   position: absolute;
-  top: 0;
+  top: 0.5rem;
   left: -24px;
-  font-size: 20px;
-  color: var(--mui-palette-primary-main);
+  background: var(--mui-palette-primary-main);
+  border-radius: 50%;
 }
 
 .tiptap.ProseMirror ul:not([data-type='taskList']) ul {
@@ -150,18 +153,27 @@
 }
 
 .tiptap.ProseMirror ul:not([data-type='taskList']) ul li::before {
-  content: '◦' !important;
-  font-size: 15px;
+  width: 5px;
+  height: 5px !important;
+  background: transparent;
+  border: 1.5px solid var(--mui-palette-primary-main);
+  border-radius: 50%;
 }
 
 .tiptap.ProseMirror ul:not([data-type='taskList']) ul ul li::before {
-  content: '▪' !important;
-  font-size: 20px;
+  width: 4px;
+  height: 4px !important;
+  background: var(--mui-palette-primary-main);
+  border-radius: 0;
 }
 
 .tiptap.ProseMirror ul:not([data-type='taskList']) ul ul ul li::before {
-  content: '•' !important;
-  font-size: 20px;
+  width: 4px;
+  height: 4px !important;
+  background: transparent;
+  border: 1.5px solid var(--mui-palette-primary-main);
+  border-radius: 0;
+  transform: rotate(45deg);
 }
 
 .tiptap.ProseMirror ul[data-type='taskList'] {
@@ -190,7 +202,7 @@
   flex-grow: 1;
 }
 
-.tiptap.ProseMirror ul[data-type='taskList'] li[data-checked='true']>div {
+.tiptap.ProseMirror ul[data-type='taskList'] li[data-checked='true']>div>*:not(ul) {
   color: var(--mui-palette-text-tertiary);
   opacity: 0.7;
   text-decoration: line-through;
