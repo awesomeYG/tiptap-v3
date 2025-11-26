@@ -448,7 +448,6 @@
   position: relative;
   overflow: visible;
   pointer-events: none;
-  z-index: 10;
 }
 
 .tiptap.ProseMirror .table-controls>* {
@@ -459,7 +458,6 @@
   position: relative;
   overflow: visible;
   pointer-events: none;
-  z-index: 10;
 }
 
 .tiptap.ProseMirror .table-selection-overlay-container>* {

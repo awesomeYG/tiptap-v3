@@ -18,7 +18,6 @@ const UploadProgress = ({ progress, fileName }: UploadProgressProps) => {
     py: 1,
     transform: 'translateX(-50%)',
     bgcolor: 'background.default',
-    zIndex: 10,
     fontSize: 12,
     color: 'text.disabled',
     boxShadow: `0px 4px 20px ${alpha(theme.palette.info.main, 0.25)}, 0px 0px 10px ${alpha(theme.palette.info.main, 0.15)}`,

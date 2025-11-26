@@ -370,7 +370,6 @@ const VideoViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
                       borderColor: 'primary.main',
                     },
                     transition: 'background-color 0.2s ease',
-                    zIndex: 10
                   }}
                 />
                 {/* 右上角 */}
@@ -391,7 +390,6 @@ const VideoViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
                       borderColor: 'primary.main',
                     },
                     transition: 'background-color 0.2s ease',
-                    zIndex: 10
                   }}
                 />
                 {/* 左下角 */}
@@ -412,7 +410,6 @@ const VideoViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
                       borderColor: 'primary.main',
                     },
                     transition: 'background-color 0.2s ease',
-                    zIndex: 10
                   }}
                 />
                 {/* 右下角 */}
@@ -433,7 +430,6 @@ const VideoViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
                       borderColor: 'primary.main',
                     },
                     transition: 'background-color 0.2s ease',
-                    zIndex: 10
                   }}
                 />
               </>

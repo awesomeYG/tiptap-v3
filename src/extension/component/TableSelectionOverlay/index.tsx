@@ -192,7 +192,6 @@ const createHandleStyles = (): React.CSSProperties => ({
   justifyContent: 'center',
   background: 'transparent',
   pointerEvents: 'auto',
-  zIndex: 10,
 });
 
 const createCornerHandleStyles = (
@@ -548,7 +547,6 @@ export const TableSelectionOverlay: React.FC<TableSelectionOverlayProps> = ({
         style={{
           ...floatingStyles,
           pointerEvents: 'none',
-          zIndex: 10,
         }}
       >
         <div className="tiptap-table-selection-overlay">

@@ -147,7 +147,6 @@ const IframeViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
               borderRadius: 2,
               '&:hover': { bgcolor: 'primary.main' },
               transition: 'background-color 0.2s ease',
-              zIndex: 10
             }}
           />
         )}
@@ -166,7 +165,6 @@ const IframeViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
               borderRadius: 2,
               '&:hover': { bgcolor: 'primary.main' },
               transition: 'background-color 0.2s ease',
-              zIndex: 10
             }}
           />
         )}
