@@ -146,6 +146,7 @@
   left: -24px;
   background: var(--mui-palette-primary-main);
   border-radius: 50%;
+  box-sizing: initial;
 }
 
 .tiptap.ProseMirror ul:not([data-type='taskList']) ul {
