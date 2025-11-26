@@ -321,6 +321,8 @@ const CodeBlockView: React.FC<NodeViewProps> = (props) => {
             as="code"
             className='hljs'
             style={{
+              backgroundColor: 'var(--mui-palette-background-paper3)',
+              color: 'var(--mui-palette-text-primary)',
               padding: '3rem 1.25rem 0.75rem 1.25rem',
               fontSize: '0.875rem',
               lineHeight: '1.5',
