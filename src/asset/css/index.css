@@ -91,6 +91,10 @@
   border-color: var(--mui-palette-text-disabled);
 }
 
+.tiptap.ProseMirror .react-renderer.node-flow {
+  line-height: normal;
+}
+
 .tiptap.ProseMirror .react-renderer.node-image,
 .tiptap.ProseMirror .react-renderer.node-inlineLink,
 .tiptap.ProseMirror .react-renderer.node-inlineAttachment,
@@ -104,6 +108,7 @@
   user-select: none;
 }
 
+.tiptap.ProseMirror .react-renderer.node-alert,
 .tiptap.ProseMirror .react-renderer.node-codeBlock,
 .tiptap.ProseMirror .react-renderer.node-blockLink,
 .tiptap.ProseMirror .react-renderer.node-blockAttachment {

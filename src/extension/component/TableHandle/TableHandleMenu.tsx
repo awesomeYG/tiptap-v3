@@ -240,6 +240,16 @@ export const TableHandleMenu = ({
         label: orientation === 'row' ? '上方插入行' : '左侧插入列',
         icon: orientation === 'row' ? <InsertRowTopIcon sx={{ fontSize: '1rem' }} /> : <InsertColumnLeftIcon sx={{ fontSize: '1rem' }} />,
         onClick: () => {
+          if (typeof index === 'number' && typeof tablePos === 'number') {
+            const cellCoord = orientation === 'row'
+              ? { row: index, col: 0 }
+              : { row: 0, col: index };
+            selectCellsByCoords(editor, tablePos, [cellCoord], {
+              mode: 'dispatch',
+              dispatch: editor.view.dispatch.bind(editor.view),
+            });
+          }
+
           if (orientation === 'row') {
             editor.chain().focus().addRowBefore().run();
           } else {
@@ -252,6 +262,16 @@ export const TableHandleMenu = ({
         label: orientation === 'row' ? '下方插入行' : '右侧插入列',
         icon: orientation === 'row' ? <InsertRowBottomIcon sx={{ fontSize: '1rem' }} /> : <InsertColumnRightIcon sx={{ fontSize: '1rem' }} />,
         onClick: () => {
+          if (typeof index === 'number' && typeof tablePos === 'number') {
+            const cellCoord = orientation === 'row'
+              ? { row: index, col: 0 }
+              : { row: 0, col: index };
+            selectCellsByCoords(editor, tablePos, [cellCoord], {
+              mode: 'dispatch',
+              dispatch: editor.view.dispatch.bind(editor.view),
+            });
+          }
+
           if (orientation === 'row') {
             editor.chain().focus().addRowAfter().run();
           } else {

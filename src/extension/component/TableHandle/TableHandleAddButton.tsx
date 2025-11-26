@@ -1,7 +1,6 @@
 import { SkipDownIcon, SkipLeftIcon, SkipRightIcon, SkipUpIcon } from '@ctzhian/tiptap/component/Icons';
 import { Box } from '@mui/material';
 import type { Node } from '@tiptap/pm/model';
-import { TableMap } from '@tiptap/pm/tables';
 import type { Editor } from '@tiptap/react';
 import React, { useCallback } from 'react';
 import type { Orientation } from '../../../util/table-utils';
@@ -35,22 +34,15 @@ export const TableHandleAddButton = ({
     }
 
     try {
-      // 先选中当前行/列
-      const { width, height } = TableMap.get(tableNode);
-      const start =
-        orientation === 'row' ? { row: index, col: 0 } : { row: 0, col: index };
-      const end =
-        orientation === 'row'
-          ? { row: index, col: width - 1 }
-          : { row: height - 1, col: index };
+      const cellCoord = orientation === 'row'
+        ? { row: index, col: 0 }
+        : { row: 0, col: index };
 
-      // 选中行/列
-      selectCellsByCoords(editor, tablePos, [start, end], {
+      selectCellsByCoords(editor, tablePos, [cellCoord], {
         mode: 'dispatch',
         dispatch: editor.view.dispatch.bind(editor.view),
       });
 
-      // 执行插入操作
       if (orientation === 'row') {
         editor.chain().focus()[direction === 'before' ? 'addRowBefore' : 'addRowAfter']().run();
       } else {
@@ -62,12 +54,6 @@ export const TableHandleAddButton = ({
   }, [editor, orientation, index, tableNode, tablePos, direction]);
 
   if (!editor?.isEditable) return null;
-
-  const iconStyle = {
-    width: '0.75rem',
-    height: '0.75rem',
-    flexShrink: 0,
-  };
 
   const Icon = orientation === 'row'
     ? (direction === 'before' ? SkipUpIcon : SkipDownIcon)
@@ -102,7 +88,7 @@ export const TableHandleAddButton = ({
       }}
       aria-label={ariaLabel}
     >
-      <Icon sx={iconStyle} />
+      <Icon sx={{ width: '0.75rem', height: '0.75rem', flexShrink: 0 }} />
     </Box>
   );
 };
