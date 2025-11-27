@@ -514,7 +514,7 @@ export const TableSelectionOverlay: React.FC<TableSelectionOverlayProps> = ({
 
   useEffect(() => {
     const c = tableDom?.querySelector(
-      ':scope > .table-selection-overlay-container'
+      ':scope > .tableWrapper > .table-selection-overlay-container'
     ) as HTMLElement | null;
     containerRef.current = c ?? null;
   }, [tableDom]);

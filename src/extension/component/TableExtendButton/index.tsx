@@ -75,9 +75,9 @@ export const TableExtendRowColumnButton: React.FC<
         selectLastCell(editor, state.block, state.blockPos, orientation);
 
         if (isRowOrientation) {
-          editor.commands.addRowAfter();
+          editor.chain().focus().addRowAfter().run();
         } else {
-          editor.commands.addColumnAfter();
+          editor.chain().focus().addColumnAfter().run();
         }
       });
     }, [editor, isRowOrientation, orientation, state]);
