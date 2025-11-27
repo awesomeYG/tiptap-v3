@@ -266,7 +266,7 @@ class TableHandleView implements PluginView {
     this.tableId = blockInfo.node.attrs.id;
 
     const wrapper = safeClosest<HTMLElement>(around.domNode, '.tableWrapper');
-    const widgetContainer = wrapper?.querySelector('.table-controls') as
+    const widgetContainer = wrapper?.querySelector(':scope > .table-controls') as
       | HTMLElement
       | undefined;
 

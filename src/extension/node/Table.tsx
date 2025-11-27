@@ -88,9 +88,9 @@ export const TableExtension = ({ editable }: { editable: boolean }) => [
 
           ignoreMutation(mutation: any): boolean {
             const target = mutation.target as HTMLElement;
-            const isInsideTable = target.closest('.table-container');
+            const isInsideThisTable = this.innerTableContainer.contains(target);
 
-            return !isInsideTable || super.ignoreMutation(mutation);
+            return !isInsideThisTable || super.ignoreMutation(mutation);
           }
         }
 
