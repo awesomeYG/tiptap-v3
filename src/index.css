@@ -381,6 +381,7 @@
   position: relative;
   vertical-align: top;
   transition: all 0.2s ease-in-out;
+  min-width: var(--default-cell-min-width, 100px);
 }
 
 .tiptap.ProseMirror table tbody tr:first-child th,

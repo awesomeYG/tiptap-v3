@@ -103,13 +103,21 @@ export const TableExtension = ({ editable }: { editable: boolean }) => [
       node: Node;
       HTMLAttributes: Record<string, any>;
     }) {
-      const originalRender = this.parent?.({ node, HTMLAttributes });
-      const wrapper = ['div', { class: 'tableWrapper' },
-        ['div', { class: 'table-container' }, originalRender],
-        ['div', { class: 'table-controls' }],
-        ['div', { class: 'table-selection-overlay-container' }]
-      ];
-      return wrapper;
+      const firstRow = node.content.firstChild;
+      const colCount = firstRow ? firstRow.childCount : 0;
+
+      const style = `--default-cell-min-width: 100px; min-width: ${colCount * 100}px;`;
+      const attrs = {
+        ...HTMLAttributes,
+        style: HTMLAttributes.style ? `${HTMLAttributes.style} ${style}` : style,
+      };
+
+      const cols: any[] = [];
+      for (let i = 0; i < colCount; i++) {
+        cols.push(['col', {}]);
+      }
+
+      return ['table', attrs, ['colgroup', {}, ...cols], ['tbody', 0]];
     },
     addCommands() {
       return {

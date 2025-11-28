@@ -69,12 +69,9 @@ export function TableHandle({
     setIsColumnVisible(visible);
   }, []);
 
-  const handleMenuOpenChange = useCallback(
-    (type: 'row' | 'column', open: boolean) => {
-      setMenuOpen(open ? type : null);
-    },
-    []
-  );
+  const handleMenuOpenChange = useCallback((type: 'row' | 'column', open: boolean) => {
+    setMenuOpen(open ? type : null);
+  }, []);
 
   if (!editor || !state) return null;
 
@@ -132,53 +129,49 @@ export function TableHandle({
             />
           </div>
         </div>
-      )
-      }
-
-      {
-        shouldShowColumn && (
-          <div ref={colHandle.ref} style={colHandle.style}>
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                gap: '0.125rem',
-                height: '0.75rem',
-                width: 'var(--table-handle-ref-width, 100px)',
-              }}
-            >
-              <TableHandleAddButton
+      )}
+      {shouldShowColumn && (
+        <div ref={colHandle.ref} style={colHandle.style}>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              gap: '0.125rem',
+              height: '0.75rem',
+              width: 'var(--table-handle-ref-width, 100px)',
+            }}
+          >
+            <TableHandleAddButton
+              editor={editor}
+              orientation="column"
+              index={state.colIndex}
+              tablePos={state.blockPos}
+              tableNode={state.block}
+              direction="before"
+            />
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <TableHandleMenu
                 editor={editor}
                 orientation="column"
                 index={state.colIndex}
                 tablePos={state.blockPos}
                 tableNode={state.block}
-                direction="before"
-              />
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <TableHandleMenu
-                  editor={editor}
-                  orientation="column"
-                  index={state.colIndex}
-                  tablePos={state.blockPos}
-                  tableNode={state.block}
-                  onToggleOtherHandle={toggleRowVisibility}
-                  dragStart={colDragStart}
-                  onOpenChange={(open) => handleMenuOpenChange('column', open)}
-                />
-              </div>
-              <TableHandleAddButton
-                editor={editor}
-                orientation="column"
-                index={state.colIndex}
-                tablePos={state.blockPos}
-                tableNode={state.block}
-                direction="after"
+                onToggleOtherHandle={toggleRowVisibility}
+                dragStart={colDragStart}
+                onOpenChange={(open) => handleMenuOpenChange('column', open)}
               />
             </div>
+            <TableHandleAddButton
+              editor={editor}
+              orientation="column"
+              index={state.colIndex}
+              tablePos={state.blockPos}
+              tableNode={state.block}
+              direction="after"
+            />
           </div>
-        )
-      }
+        </div>
+      )}
     </FloatingPortal >
   );
 }
