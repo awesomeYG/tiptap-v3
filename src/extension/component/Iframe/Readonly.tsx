@@ -18,7 +18,7 @@ const ReadonlyIframe = ({ attrs }: { attrs: IframeAttributes }) => {
         width={typeof attrs.width === 'number' ? attrs.width : undefined}
         height={attrs.height}
         style={{
-          display: 'block',
+          display: 'inline-block',
           border: 0,
           width: typeof attrs.width === 'string' && attrs.width.endsWith('%') ? attrs.width : undefined,
           maxWidth: '100%'
