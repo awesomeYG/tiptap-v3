@@ -1,6 +1,6 @@
 import { Editor } from '@tiptap/react';
 import * as React from 'react';
-import { AttachmentLineIcon, CodeBoxLineIcon, CodeLineIcon, DoubleQuotesLIcon, EmotionLineIcon, FlowChartIcon, FunctionsIcon, H1Icon, H2Icon, H3Icon, H4Icon, H5Icon, H6Icon, ImageLineIcon, Information2LineIcon, LinkIcon, ListCheck2Icon, ListOrdered2Icon, ListUnorderedIcon, MenuFold2FillIcon, MovieLineIcon, Music2LineIcon, SeparatorIcon, SquareRootIcon, Table2Icon, WindowFillIcon } from '../component/Icons';
+import { AttachmentLineIcon, BilibiliLineIcon, CodeBoxLineIcon, CodeLineIcon, DoubleQuotesLIcon, EmotionLineIcon, FlowChartIcon, FunctionsIcon, H1Icon, H2Icon, H3Icon, ImageLineIcon, Information2LineIcon, LinkIcon, ListCheck2Icon, ListOrdered2Icon, ListUnorderedIcon, MenuFold2FillIcon, MovieLineIcon, Music2LineIcon, SeparatorIcon, SquareRootIcon, Table2Icon, WindowFillIcon } from '../component/Icons';
 
 export const slashCommands = [
   {
@@ -27,30 +27,30 @@ export const slashCommands = [
       editor.chain().focus().deleteRange(range).setNode('heading', { level: 3 }).run()
     }
   },
-  {
-    title: '标题4',
-    shortcutKey: ['ctrl', 'alt', '4'],
-    icon: <H4Icon sx={{ fontSize: '1rem' }} />,
-    command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
-      editor.chain().focus().deleteRange(range).setNode('heading', { level: 4 }).run()
-    }
-  },
-  {
-    title: '标题5',
-    shortcutKey: ['ctrl', 'alt', '5'],
-    icon: <H5Icon sx={{ fontSize: '1rem' }} />,
-    command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
-      editor.chain().focus().deleteRange(range).setNode('heading', { level: 5 }).run()
-    }
-  },
-  {
-    title: '标题6',
-    shortcutKey: ['ctrl', 'alt', '6'],
-    icon: <H6Icon sx={{ fontSize: '1rem' }} />,
-    command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
-      editor.chain().focus().deleteRange(range).setNode('heading', { level: 6 }).run()
-    }
-  },
+  // {
+  //   title: '标题4',
+  //   shortcutKey: ['ctrl', 'alt', '4'],
+  //   icon: <H4Icon sx={{ fontSize: '1rem' }} />,
+  //   command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
+  //     editor.chain().focus().deleteRange(range).setNode('heading', { level: 4 }).run()
+  //   }
+  // },
+  // {
+  //   title: '标题5',
+  //   shortcutKey: ['ctrl', 'alt', '5'],
+  //   icon: <H5Icon sx={{ fontSize: '1rem' }} />,
+  //   command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
+  //     editor.chain().focus().deleteRange(range).setNode('heading', { level: 5 }).run()
+  //   }
+  // },
+  // {
+  //   title: '标题6',
+  //   shortcutKey: ['ctrl', 'alt', '6'],
+  //   icon: <H6Icon sx={{ fontSize: '1rem' }} />,
+  //   command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
+  //     editor.chain().focus().deleteRange(range).setNode('heading', { level: 6 }).run()
+  //   }
+  // },
   {
     title: '有序列表',
     shortcutKey: ['ctrl', 'shift', '7'],
@@ -76,25 +76,11 @@ export const slashCommands = [
     }
   },
   {
-    title: '表情',
-    icon: <EmotionLineIcon sx={{ fontSize: '1rem' }} />,
+    title: '链接',
+    shortcutKey: ['ctrl', '1'],
+    icon: <LinkIcon sx={{ fontSize: '1rem' }} />,
     command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
-      editor.chain().deleteRange(range).insertContentAt(range.from, ' : ').focus(range.from + 2).run()
-    }
-  },
-  {
-    title: '分割线',
-    icon: <SeparatorIcon sx={{ fontSize: '1rem' }} />,
-    command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
-      editor.chain().focus().deleteRange(range).setHorizontalRule().run()
-    }
-  },
-  {
-    title: '引用',
-    shortcutKey: ['ctrl', 'shift', 'B'],
-    icon: <DoubleQuotesLIcon sx={{ fontSize: '1rem' }} />,
-    command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
-      editor.chain().focus().deleteRange(range).toggleBlockquote().run()
+      editor.chain().focus().deleteRange(range).setInlineLink({ href: '' }).run()
     }
   },
   {
@@ -114,19 +100,19 @@ export const slashCommands = [
     }
   },
   {
-    title: '链接',
-    shortcutKey: ['ctrl', '1'],
-    icon: <LinkIcon sx={{ fontSize: '1rem' }} />,
-    command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
-      editor.chain().focus().deleteRange(range).setInlineLink({ href: '' }).run()
-    }
-  },
-  {
     title: '折叠面板',
     shortcutKey: ['ctrl', '8'],
     icon: <MenuFold2FillIcon sx={{ fontSize: '1rem' }} />,
     command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
       editor.chain().focus().deleteRange(range).setDetails().run()
+    }
+  },
+  {
+    title: '引用',
+    shortcutKey: ['ctrl', 'shift', 'B'],
+    icon: <DoubleQuotesLIcon sx={{ fontSize: '1rem' }} />,
+    command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
+      editor.chain().focus().deleteRange(range).toggleBlockquote().run()
     }
   },
   {
@@ -137,10 +123,31 @@ export const slashCommands = [
     }
   },
   {
-    title: 'iframe',
+    title: '表情',
+    icon: <EmotionLineIcon sx={{ fontSize: '1rem' }} />,
+    command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
+      editor.chain().deleteRange(range).insertContentAt(range.from, ' : ').focus(range.from + 2).run()
+    }
+  },
+  {
+    title: '分割线',
+    icon: <SeparatorIcon sx={{ fontSize: '1rem' }} />,
+    command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
+      editor.chain().focus().deleteRange(range).setHorizontalRule().run()
+    }
+  },
+  {
+    title: 'Bilibili 视频',
+    icon: <BilibiliLineIcon sx={{ fontSize: '1rem' }} />,
+    command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
+      editor.chain().focus().deleteRange(range).setIframe({ src: '', width: '100%', height: 400, type: 'bilibili' }).run()
+    }
+  },
+  {
+    title: 'Iframe',
     icon: <WindowFillIcon sx={{ fontSize: '1rem' }} />,
     command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
-      editor.chain().focus().deleteRange(range).setIframe({ src: '', width: 760, height: 400 }).run()
+      editor.chain().focus().deleteRange(range).setIframe({ src: '', width: '100%', height: 400, type: 'iframe' }).run()
     }
   },
   {

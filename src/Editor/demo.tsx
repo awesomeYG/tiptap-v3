@@ -7,6 +7,7 @@ import '../index.css';
 const EDITABLE = true
 const DEFAULT_CONTENT_TYPE = 'html'
 const DEFAULT_HTML_CONTENT = `<p></p>
+<iframe class=\"iframe-wrapper\" src=\"//player.bilibili.com/player.html?isOutside=true&amp;aid=115377065630872&amp;bvid=BV1SQ4izBERf&amp;cid=33090306788&amp;p=1\" frameborder=\"0\" allowfullscreen=\"true\" autoplay=\"0\" loop=\"0\"></iframe>
 <table style=\"min-width: 400px;\"><colgroup><col style=\"min-width: 100px;\"><col style=\"min-width: 100px;\"><col style=\"min-width: 100px;\"><col style=\"min-width: 100px;\"></colgroup><tbody><tr class=\"table-row\"><th class=\"table-header\" colspan=\"1\" rowspan=\"1\" style=\"\"><p></p></th><th class=\"table-header\" colspan=\"1\" rowspan=\"1\" style=\"\"><p></p></th><th class=\"table-header\" colspan=\"1\" rowspan=\"1\" style=\"\"><p></p></th><th class=\"table-header\" colspan=\"1\" rowspan=\"1\" style=\"\"><p></p></th></tr><tr class=\"table-row\"><td colspan=\"1\" rowspan=\"1\" style=\"\"><p></p></td><td colspan=\"1\" rowspan=\"1\" style=\"\"><p></p></td><td colspan=\"1\" rowspan=\"1\" style=\"\">
   <table style=\"min-width: 200px;\"><colgroup><col style=\"min-width: 100px;\"><col style=\"min-width: 100px;\"></colgroup><tbody><tr class=\"table-row\"><th class=\"table-header\" colspan=\"1\" rowspan=\"1\" style=\"\"><p></p></th><th class=\"table-header\" colspan=\"1\" rowspan=\"1\" style=\"\"><p></p></th></tr><tr class=\"table-row\"><td colspan=\"1\" rowspan=\"1\" style=\"\"><p></p></td><td colspan=\"1\" rowspan=\"1\" style=\"\"><p></p></td></tr></tbody></table>
 </td><td colspan=\"1\" rowspan=\"1\" style=\"\"><p></p></td></tr><tr class=\"table-row\"><td colspan=\"1\" rowspan=\"1\" style=\"\"><p></p></td><td colspan=\"1\" rowspan=\"1\" style=\"\"><p></p></td><td colspan=\"1\" rowspan=\"1\" style=\"\"><p></p></td><td colspan=\"1\" rowspan=\"1\" style=\"\"><p></p></td></tr></tbody></table>
@@ -206,12 +207,12 @@ const Reader = () => {
       padding: '0 10px 10px',
       bgcolor: 'var(--mui-palette-background-default)',
     }}>
-      <div style={{
+      {EDITABLE && <div style={{
         borderBottom: '1px solid #eee',
         marginBottom: '30px',
       }}>
         <EditorToolbar editor={editor} mode='advanced' />
-      </div>
+      </div>}
       <Box sx={{
         '.tiptap': {
           minHeight: '500px',

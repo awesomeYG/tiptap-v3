@@ -108,7 +108,9 @@
   user-select: none;
 }
 
+.tiptap.ProseMirror div[data-content-type="table"],
 .tiptap.ProseMirror .react-renderer.node-alert,
+.tiptap.ProseMirror .react-renderer.node-iframe,
 .tiptap.ProseMirror .react-renderer.node-codeBlock,
 .tiptap.ProseMirror .react-renderer.node-blockLink,
 .tiptap.ProseMirror .react-renderer.node-blockAttachment {
@@ -127,11 +129,11 @@
   line-height: 0;
 }
 
+.tiptap.ProseMirror .react-renderer.node-iframe,
 .tiptap.ProseMirror .video-wrapper,
 .tiptap.ProseMirror .image-wrapper {
   box-sizing: border-box;
   line-height: 1;
-
 }
 
 .tiptap.ProseMirror .image-wrapper {

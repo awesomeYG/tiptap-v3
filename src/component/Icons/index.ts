@@ -20,6 +20,7 @@ export { ArrowLeftWideLineIcon } from './arrow-left-wide-line-icon';
 export { AtLineIcon } from './at-line-icon';
 export { Attachment2Icon } from './attachment-2-icon';
 export { AttachmentLineIcon } from './attachment-line-icon';
+export { BilibiliLineIcon } from './bilibili-line-icon';
 export { BoldIcon } from './bold-icon';
 export { BrushLineIcon } from './brush-line-icon';
 export { CarouselViewIcon } from './carousel-view-icon';

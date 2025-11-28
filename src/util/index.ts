@@ -97,3 +97,13 @@ export const getLinkAttributesWithSelectedText = (editor: Editor): { title?: str
 
   return {}
 }
+
+export const extractSrcFromIframe = (input: string): string => {
+  const trimmed = input.trim()
+  const iframeMatch = trimmed.match(/<iframe[^>]*\ssrc\s*=\s*["']([^"']+)["'][^>]*>/i) ||
+    trimmed.match(/<iframe[^>]*\ssrc\s*=\s*([^\s>]+)[^>]*>/i)
+  if (iframeMatch && iframeMatch[1]) {
+    return iframeMatch[1].trim()
+  }
+  return trimmed
+}

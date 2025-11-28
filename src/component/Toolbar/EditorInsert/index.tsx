@@ -2,7 +2,7 @@ import { getShortcutKeyText } from '@ctzhian/tiptap/util';
 import { Typography } from '@mui/material';
 import { Editor } from '@tiptap/react';
 import React from 'react';
-import { AddCircleFillIcon, ArrowDownSLineIcon, AttachmentLineIcon, CheckboxCircleFillIcon, CloseCircleFillIcon, CodeBoxLineIcon, CodeLineIcon, CodeSSlashLineIcon, DoubleQuotesLIcon, EmotionLineIcon, ErrorWarningFillIcon, FlowChartIcon, FormulaIcon, FunctionsIcon, ImageLineIcon, Information2FillIcon, Information2LineIcon, MenuFold2FillIcon, MovieLineIcon, Music2LineIcon, SeparatorIcon, SquareRootIcon, Table2Icon, UserSmileFillIcon, WindowFillIcon } from '../../Icons';
+import { AddCircleFillIcon, ArrowDownSLineIcon, AttachmentLineIcon, BilibiliLineIcon, CheckboxCircleFillIcon, CloseCircleFillIcon, CodeBoxLineIcon, CodeLineIcon, CodeSSlashLineIcon, DoubleQuotesLIcon, EmotionLineIcon, ErrorWarningFillIcon, FlowChartIcon, FormulaIcon, FunctionsIcon, ImageLineIcon, Information2FillIcon, Information2LineIcon, MenuFold2FillIcon, MovieLineIcon, Music2LineIcon, SeparatorIcon, SquareRootIcon, Table2Icon, UserSmileFillIcon, WindowFillIcon } from '../../Icons';
 import Menu from '../../Menu';
 import ToolbarItem from '../Item';
 import TableSizePicker from '../TableSizePicker';
@@ -222,10 +222,16 @@ const EditorInsert = ({ editor }: EditorInsertProps) => {
         key: 'other',
       },
       {
+        label: 'Bilibili 视频',
+        key: 'bilibili',
+        icon: <BilibiliLineIcon sx={{ fontSize: '1rem' }} />,
+        onClick: () => editor.commands.setIframe({ src: '', width: '100%', height: 400, type: 'bilibili' }),
+      },
+      {
         label: 'Iframe 链接',
         key: 'iframe',
         icon: <WindowFillIcon sx={{ fontSize: '1rem' }} />,
-        onClick: () => editor.commands.setIframe({ src: '', width: 760, height: 400 }),
+        onClick: () => editor.commands.setIframe({ src: '', width: '100%', height: 400, type: 'iframe' }),
       },
     ]}
   />

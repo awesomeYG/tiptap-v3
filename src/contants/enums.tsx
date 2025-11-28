@@ -1,4 +1,6 @@
+import { BilibiliLineIcon, WindowFillIcon } from "@ctzhian/tiptap/component/Icons";
 import { Theme } from "@mui/material";
+import React from "react";
 
 export enum NodeTypeEnum {
   Alert = 'alert',
@@ -84,3 +86,17 @@ export const getThemeTextBgColor = (theme: Theme) => [
   { label: '粉色背景', value: '#fcf1f6' },
   { label: '红色背景', value: '#ffe4e6' },
 ]
+
+export const IframeTypeEnums: Record<string, {
+  label: string;
+  icon: React.ReactNode;
+}> = {
+  iframe: {
+    label: 'Iframe 链接',
+    icon: <WindowFillIcon sx={{ fontSize: '1rem', position: 'relative', flexShrink: 0 }} />,
+  },
+  bilibili: {
+    label: 'Bilibili 视频',
+    icon: <BilibiliLineIcon sx={{ fontSize: '1rem', position: 'relative', flexShrink: 0 }} />,
+  },
+}
