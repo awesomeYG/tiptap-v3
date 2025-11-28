@@ -448,7 +448,6 @@
   overflow-x: auto;
   overflow-y: hidden;
   position: relative;
-  margin: 20px 0;
 }
 
 .tiptap.ProseMirror[contenteditable="true"] .tableWrapper {
