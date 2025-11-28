@@ -1,5 +1,5 @@
 import { Menu } from '@ctzhian/tiptap/component';
-import { AlignBottomIcon, AlignCenterIcon, AlignJustifyIcon, AlignLeftIcon, AlignRightIcon, AlignTopIcon, ArrowDownSLineIcon, BrushLineIcon, MergeCellsVerticalIcon, MoreLineIcon, SplitCellsVerticalIcon } from '@ctzhian/tiptap/component/Icons';
+import { AlignBottomIcon, AlignCenterIcon, AlignJustifyIcon, AlignLeftIcon, AlignRightIcon, AlignTopIcon, ArrowDownSLineIcon, BrushLineIcon, DeleteLineIcon, MergeCellsVerticalIcon, MoreLineIcon, SplitCellsVerticalIcon } from '@ctzhian/tiptap/component/Icons';
 import { DeleteBack2LineIcon } from '@ctzhian/tiptap/component/Icons/delete-back-2-line-icon';
 import { getThemeTextBgColor, getThemeTextColor } from '@ctzhian/tiptap/contants/enums';
 import { MenuItem } from '@ctzhian/tiptap/type';
@@ -422,6 +422,14 @@ export const TableCellHandleMenu = forwardRef<
           return { disabled: true };
         }
       })(),
+    }, {
+      key: 'delete-table',
+      label: '删除表格',
+      icon: <DeleteLineIcon sx={{ fontSize: '1rem' }} />,
+      onClick: () => {
+        if (!editor) return;
+        editor.chain().focus().deleteTable().run();
+      },
     });
 
     return menuItems;

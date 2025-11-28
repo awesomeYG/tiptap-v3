@@ -7,7 +7,7 @@ import {
   AlignTopIcon,
   ArrowDownSLineIcon,
   BrushLineIcon,
-  DeleteColumnIcon, DeleteRowIcon,
+  DeleteColumnIcon, DeleteLineIcon, DeleteRowIcon,
   FileCopyLineIcon,
   InsertColumnLeftIcon,
   InsertColumnRightIcon, InsertRowBottomIcon, InsertRowTopIcon,
@@ -532,6 +532,15 @@ export const TableHandleMenu = ({
           } else {
             editor.chain().focus().deleteColumn().run();
           }
+        },
+      },
+      {
+        key: 'delete-table',
+        label: '删除表格',
+        icon: <DeleteLineIcon sx={{ fontSize: '1rem' }} />,
+        onClick: () => {
+          if (!editor || typeof tablePos !== 'number' || !tableNode) return;
+          editor.chain().focus().deleteTable().run();
         },
       }
     );
