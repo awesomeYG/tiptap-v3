@@ -26,7 +26,7 @@ const useTiptap = ({
 
   // other
   placeholder,
-  scrollParent,
+  tableOfContentsOptions,
   ...options
 }: UseTiptapProps & UseEditorOptions): UseTiptapReturn => {
   const extensions = getExtensions({
@@ -42,7 +42,7 @@ const useTiptap = ({
     onAiWritingGetSuggestion,
     onValidateUrl,
     placeholder,
-    scrollParent,
+    tableOfContentsOptions,
   })
 
   const editor = useEditor({

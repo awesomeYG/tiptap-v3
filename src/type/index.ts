@@ -1,5 +1,6 @@
 import { PopoverOrigin, SxProps, Theme } from '@mui/material';
 import { Editor, Extension } from '@tiptap/core';
+import { TableOfContentsOptions } from '@tiptap/extension-table-of-contents';
 import { YoutubeOptions } from '@tiptap/extension-youtube';
 import { UseEditorOptions } from '@tiptap/react';
 
@@ -105,7 +106,7 @@ export type ExtensionRelativeProps = MentionExtensionProps & EditorFnProps & {
   youtube?: Partial<YoutubeOptions>
   contentType?: UseEditorOptions['contentType']
   placeholder?: string
-  scrollParent?: () => HTMLElement | Window
+  tableOfContentsOptions?: TableOfContentsOptions
 }
 
 export type UseTiptapProps = {
