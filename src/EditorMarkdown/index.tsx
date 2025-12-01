@@ -294,74 +294,72 @@ const EditorMarkdown = forwardRef<MarkdownEditorRef, EditorMarkdownProps>(({
       borderColor: 'divider',
       borderRadius: '0 0 4px 4px',
     }}>
-      {['edit', 'split'].includes(displayMode) && (
-        <Stack
-          direction='column'
-          onPaste={handlePaste}
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          onDrop={handleDrop}
-          sx={{
-            flex: 1,
-            '.ace_placeholder': {
-              transform: 'scale(1)',
-              height: '100%',
-              overflow: 'auto',
-              width: '100%',
-              fontStyle: 'normal',
-              ...(isComposing && {
-                display: 'none',
-              }),
-            },
+      <Stack
+        direction='column'
+        onPaste={handlePaste}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+        sx={{
+          display: ['edit', 'split'].includes(displayMode) ? 'flex' : 'none',
+          flex: 1,
+          '.ace_placeholder': {
+            transform: 'scale(1)',
+            height: '100%',
+            overflow: 'auto',
+            width: '100%',
+            fontStyle: 'normal',
+            ...(isComposing && {
+              display: 'none',
+            }),
+          },
+        }}
+      >
+        <AceEditor
+          ref={aceEditorRef}
+          mode='markdown'
+          theme='github'
+          value={value}
+          onChange={onChange}
+          name='project-doc-editor'
+          wrapEnabled={true}
+          readOnly={loading || !!readOnly}
+          showPrintMargin={false}
+          placeholder={placeholder || MARKDOWN_EDITOR_PLACEHOLDER}
+          fontSize={16}
+          editorProps={{ $blockScrolling: true }}
+          setOptions={{
+            tabSize: 2,
+            showGutter: showLineNumbers,
+            showLineNumbers: showLineNumbers,
+            enableBasicAutocompletion: showAutocomplete,
+            enableLiveAutocompletion: showAutocomplete,
+            highlightActiveLine: highlightActiveLine,
           }}
-        >
-          <AceEditor
-            ref={aceEditorRef}
-            mode='markdown'
-            theme='github'
-            value={value}
-            onChange={onChange}
-            name='project-doc-editor'
-            wrapEnabled={true}
-            readOnly={loading || !!readOnly}
-            showPrintMargin={false}
-            placeholder={placeholder || MARKDOWN_EDITOR_PLACEHOLDER}
-            fontSize={16}
-            editorProps={{ $blockScrolling: true }}
-            setOptions={{
-              tabSize: 2,
-              showGutter: showLineNumbers,
-              showLineNumbers: showLineNumbers,
-              enableBasicAutocompletion: showAutocomplete,
-              enableLiveAutocompletion: showAutocomplete,
-              highlightActiveLine: highlightActiveLine,
-            }}
-            style={{
-              width: '100%',
-              height: EditorHeight,
-            }}
-          />
-        </Stack>
-      )}
+          style={{
+            width: '100%',
+            height: EditorHeight,
+          }}
+        />
+      </Stack>
       {displayMode === 'split' && (
         <Divider orientation='vertical' flexItem />
       )}
-      {['split', 'preview'].includes(displayMode) && (
-        <Box
-          id='markdown-preview-container'
-          sx={{
-            overflowY: 'scroll',
-            flex: 1,
-            p: 2,
-            height: EditorHeight,
-            ...(displayMode === 'preview' && isExpend && {
-              px: '10%',
-            })
-          }}
-        >
-          <TiptapEditor editor={editor} />
-        </Box>
-      )}
+      <Box
+        id='markdown-preview-container'
+        sx={{
+          overflowY: 'scroll',
+          flex: 1,
+          p: 2,
+          height: EditorHeight,
+          display: ['split', 'preview'].includes(displayMode) ? 'block' : 'none',
+          ...(displayMode === 'preview' && isExpend && {
+            px: '10%',
+          })
+        }}
+      >
+        <TiptapEditor editor={editor} />
+      </Box>
     </Stack>
   </Box>
 });
