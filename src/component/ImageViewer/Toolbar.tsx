@@ -1,4 +1,4 @@
-import { Box, IconButton, Stack, Tooltip } from '@mui/material';
+import { Box, IconButton, Stack } from '@mui/material';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import {
@@ -152,94 +152,74 @@ export const CustomToolbar: React.FC = () => {
           backdropFilter: 'blur(10px)',
         }}
       >
-        <Tooltip title="上一张" placement="top">
-          <IconButton
-            onClick={onPrevImage}
-            sx={iconButtonSx}
-            size="small"
-            disabled={totalImages <= 1}
-          >
-            <SkipLeftIcon sx={{ fontSize: '20px' }} />
-          </IconButton>
-        </Tooltip>
+        <IconButton
+          onClick={onPrevImage}
+          sx={iconButtonSx}
+          size="small"
+          disabled={totalImages <= 1}
+        >
+          <SkipLeftIcon sx={{ fontSize: '20px' }} />
+        </IconButton>
 
-        <Tooltip title="下一张" placement="top">
-          <IconButton
-            onClick={onNextImage}
-            sx={iconButtonSx}
-            size="small"
-            disabled={totalImages <= 1}
-          >
-            <SkipRightIcon sx={{ fontSize: '20px' }} />
-          </IconButton>
-        </Tooltip>
+        <IconButton
+          onClick={onNextImage}
+          sx={iconButtonSx}
+          size="small"
+          disabled={totalImages <= 1}
+        >
+          <SkipRightIcon sx={{ fontSize: '20px' }} />
+        </IconButton>
 
         <Divider />
 
-        <Tooltip title="放大" placement="top">
-          <IconButton onClick={() => handleZoom(0.5)} sx={iconButtonSx} size="small">
-            <ZoomInIcon />
-          </IconButton>
-        </Tooltip>
+        <IconButton onClick={() => handleZoom(0.5)} sx={iconButtonSx} size="small">
+          <ZoomInIcon />
+        </IconButton>
 
-        <Tooltip title="缩小" placement="top">
-          <IconButton onClick={() => handleZoom(-0.5)} sx={iconButtonSx} size="small">
-            <ZoomOutIcon />
-          </IconButton>
-        </Tooltip>
+        <IconButton onClick={() => handleZoom(-0.5)} sx={iconButtonSx} size="small">
+          <ZoomOutIcon />
+        </IconButton>
 
         <Divider />
 
-        <Tooltip title="逆时针旋转" placement="top">
-          <IconButton onClick={() => handleRotate(-90)} sx={iconButtonSx} size="small">
-            <AnticlockwiseLineIcon sx={{ fontSize: '20px' }} />
-          </IconButton>
-        </Tooltip>
+        <IconButton onClick={() => handleRotate(-90)} sx={iconButtonSx} size="small">
+          <AnticlockwiseLineIcon sx={{ fontSize: '20px' }} />
+        </IconButton>
 
-        <Tooltip title="顺时针旋转" placement="top">
-          <IconButton onClick={() => handleRotate(90)} sx={iconButtonSx} size="small">
-            <ClockwiseLineIcon sx={{ fontSize: '20px' }} />
-          </IconButton>
-        </Tooltip>
+        <IconButton onClick={() => handleRotate(90)} sx={iconButtonSx} size="small">
+          <ClockwiseLineIcon sx={{ fontSize: '20px' }} />
+        </IconButton>
 
         <Divider />
 
-        <Tooltip title="重置" placement="top">
-          <IconButton onClick={handleReset} sx={iconButtonSx} size="small">
-            <ResetLeftFillIcon sx={{ fontSize: '20px' }} />
-          </IconButton>
-        </Tooltip>
+        <IconButton onClick={handleReset} sx={iconButtonSx} size="small">
+          <ResetLeftFillIcon sx={{ fontSize: '20px' }} />
+        </IconButton>
 
         {currentSrc && (
           <>
             <Divider />
-            <Tooltip title="下载" placement="top">
-              <IconButton onClick={handleDownload} sx={iconButtonSx} size="small">
-                <Download2LineIcon sx={{ fontSize: '20px' }} />
-              </IconButton>
-            </Tooltip>
+            <IconButton onClick={handleDownload} sx={iconButtonSx} size="small">
+              <Download2LineIcon sx={{ fontSize: '20px' }} />
+            </IconButton>
           </>
         )}
 
         <Divider />
 
-        <Tooltip title={isFullscreen ? '退出全屏' : '全屏'} placement="top">
-          <IconButton onClick={handleFullscreen} sx={iconButtonSx} size="small">
-            {isFullscreen ? (
-              <FullscreenExitLineIcon sx={{ fontSize: '20px' }} />
-            ) : (
-              <FullscreenLineIcon sx={{ fontSize: '20px' }} />
-            )}
-          </IconButton>
-        </Tooltip>
+        <IconButton onClick={handleFullscreen} sx={iconButtonSx} size="small">
+          {isFullscreen ? (
+            <FullscreenExitLineIcon sx={{ fontSize: '20px' }} />
+          ) : (
+            <FullscreenLineIcon sx={{ fontSize: '20px' }} />
+          )}
+        </IconButton>
 
         <Divider />
 
-        <Tooltip title="关闭" placement="top">
-          <IconButton onClick={handleClose} sx={iconButtonSx} size="small">
-            <CloseCircleFillIcon sx={{ fontSize: '20px' }} />
-          </IconButton>
-        </Tooltip>
+        <IconButton onClick={handleClose} sx={iconButtonSx} size="small">
+          <CloseCircleFillIcon sx={{ fontSize: '20px' }} />
+        </IconButton>
       </Stack>
     </Box>
   );
