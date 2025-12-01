@@ -4,7 +4,7 @@ import { Editor as TiptapEditor } from '@tiptap/core';
 import React from 'react';
 import '../index.css';
 
-const EDITABLE = false
+const EDITABLE = true
 const DEFAULT_CONTENT_TYPE = 'html'
 const DEFAULT_HTML_CONTENT = `<p></p>
 <iframe class=\"iframe-wrapper\" width=\"50%\" height=\"400\" data-type=\"iframe\" data-align=\"right\" src=\"//player.bilibili.com/player.html?isOutside=true&amp;aid=115377065630872&amp;bvid=BV1SQ4izBERf&amp;cid=33090306788&amp;p=1\" frameborder=\"0\" allowfullscreen=\"true\" autoplay=\"0\" loop=\"0\"></iframe>

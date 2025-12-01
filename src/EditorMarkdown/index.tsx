@@ -67,10 +67,13 @@ const EditorMarkdown = forwardRef<MarkdownEditorRef, EditorMarkdownProps>(({
   }, [isExpend, height]);
 
   const onChange = (value: string) => {
-    onAceChange?.(value);
-    editor.commands.setContent(value, {
-      contentType: 'markdown'
-    });
+    // flush sync execution
+    setTimeout(() => {
+      onAceChange?.(value);
+      editor.commands.setContent(value, {
+        contentType: 'markdown'
+      });
+    }, 0);
   }
 
   const handleFileUpload = async (file: File, expectedType?: 'image' | 'video' | 'audio' | 'attachment') => {
