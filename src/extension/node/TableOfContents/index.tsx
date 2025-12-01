@@ -4,9 +4,10 @@ import { Plugin, PluginKey } from '@tiptap/pm/state'
 
 interface TableOfContentsOptions {
   onTocUpdate?: (toc: TocList) => void
+  scrollParent?: () => HTMLElement | Window
 }
 
-export const TableOfContentsExtension = ({ onTocUpdate }: TableOfContentsOptions) => TableOfContents.extend({
+export const TableOfContentsExtension = ({ onTocUpdate, scrollParent }: TableOfContentsOptions) => TableOfContents.extend({
   addProseMirrorPlugins() {
     const imeCompositionPluginKey = new PluginKey('imeComposition')
 
@@ -28,6 +29,7 @@ export const TableOfContentsExtension = ({ onTocUpdate }: TableOfContentsOptions
   }
 }).configure({
   getIndex: getHierarchicalIndexes,
+  scrollParent,
   onUpdate(data) {
     setTimeout(() => {
       onTocUpdate?.(data.map(content => ({

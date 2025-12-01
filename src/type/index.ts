@@ -105,6 +105,7 @@ export type ExtensionRelativeProps = MentionExtensionProps & EditorFnProps & {
   youtube?: Partial<YoutubeOptions>
   contentType?: UseEditorOptions['contentType']
   placeholder?: string
+  scrollParent?: () => HTMLElement | Window
 }
 
 export type UseTiptapProps = {
