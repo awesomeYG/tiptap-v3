@@ -1,12 +1,13 @@
 import { TocList } from '@ctzhian/tiptap/type'
-import { getHierarchicalIndexes, TableOfContents } from '@tiptap/extension-table-of-contents'
+import { getHierarchicalIndexes, TableOfContents, TableOfContentsOptions } from '@tiptap/extension-table-of-contents'
 import { Plugin, PluginKey } from '@tiptap/pm/state'
 
-interface TableOfContentsOptions {
+interface Props {
   onTocUpdate?: (toc: TocList) => void
+  tableOfContentsOptions?: TableOfContentsOptions
 }
 
-export const TableOfContentsExtension = ({ onTocUpdate }: TableOfContentsOptions) => TableOfContents.extend({
+export const TableOfContentsExtension = ({ onTocUpdate, tableOfContentsOptions }: Props) => TableOfContents.extend({
   addProseMirrorPlugins() {
     const imeCompositionPluginKey = new PluginKey('imeComposition')
 
@@ -28,7 +29,12 @@ export const TableOfContentsExtension = ({ onTocUpdate }: TableOfContentsOptions
   }
 }).configure({
   getIndex: getHierarchicalIndexes,
-  onUpdate(data) {
+  ...(tableOfContentsOptions || {}),
+  onUpdate(data, isCreate) {
+    // 先调用用户传入的 onUpdate 回调（如果存在）
+    tableOfContentsOptions?.onUpdate?.(data, isCreate)
+
+    // 然后调用我们的 onTocUpdate 回调
     setTimeout(() => {
       onTocUpdate?.(data.map(content => ({
         id: content.id,

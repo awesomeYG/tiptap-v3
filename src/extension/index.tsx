@@ -59,6 +59,7 @@ export const getExtensions = ({
   onAiWritingGetSuggestion,
   onValidateUrl,
   placeholder,
+  tableOfContentsOptions,
 }: GetExtensionsProps) => {
   const defaultExtensions: any = [
     ImeComposition,
@@ -97,7 +98,7 @@ export const getExtensions = ({
     VideoExtension({ onUpload, onError, onValidateUrl }),
     AudioExtension({ onUpload, onError, onValidateUrl }),
     ...TableExtension({ editable }),
-    TableOfContentsExtension({ onTocUpdate }),
+    TableOfContentsExtension({ onTocUpdate, tableOfContentsOptions }),
     ImageExtension({ onUpload, onError, onValidateUrl }),
     CustomBlockMathExtension({ onError }),
     CustomInlineMathExtension({ onError }),
