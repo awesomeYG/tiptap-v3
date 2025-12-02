@@ -22,6 +22,21 @@ declare module '@mui/material/Button' {
     neutral: true;
   }
 }
+declare module '@mui/material/styles' {
+  interface PaletteOptions {
+    table?: Partial<TypeTable>;
+  }
+}
+declare module '@mui/material/styles' {
+  interface TypeTable {
+    head: {
+      background: string;
+    };
+    cell: {
+      border: string;
+    };
+  }
+}
 
 export const theme = <T extends string = 'dark' | 'light'>({
   mode,
