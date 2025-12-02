@@ -68,15 +68,11 @@ const light = {
   shadows: 'rgba(68, 80 ,91, 0.1)',
   table: {
     head: {
-      backgroundColor: '#FFFFFF',
-      color: '#000',
-    },
-    row: {
-      hoverColor: '#F8F9FA',
+      background: '#f2f3f5',
     },
     cell: {
-      borderColor: '#ECEEF1',
-    },
+      border: '#dee0e3',
+    }
   },
   charts: {
     color: ['#673AB7', '#36B37E'],

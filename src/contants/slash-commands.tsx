@@ -155,7 +155,7 @@ export const slashCommands = [
     shortcutKey: ['ctrl', '9'],
     icon: <Table2Icon sx={{ fontSize: '1rem' }} />,
     command: ({ editor, range, attrs }: { editor: Editor; range: { from: number; to: number }; attrs: any }) => {
-      editor.chain().focus().deleteRange(range).insertTable({ rows: attrs.rows || 3, cols: attrs.cols || 4, withHeaderRow: true }).run()
+      editor.chain().focus().deleteRange(range).insertTable({ rows: attrs.rows || 3, cols: attrs.cols || 4, withHeaderRow: false }).run()
     },
   },
   {

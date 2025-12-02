@@ -154,7 +154,7 @@ export const TableExtension = ({ editable }: { editable: boolean }) => [
     },
     addKeyboardShortcuts() {
       return {
-        'Mod-9': () => this.editor.chain().insertTable({ rows: 3, cols: 4, withHeaderRow: true }).focus().run(),
+        'Mod-9': () => this.editor.chain().insertTable({ rows: 3, cols: 4, withHeaderRow: false }).focus().run(),
       }
     },
   }).configure({

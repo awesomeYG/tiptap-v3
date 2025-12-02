@@ -67,15 +67,11 @@ const dark = {
   shadows: 'transparent',
   table: {
     head: {
-      backgroundColor: '#2a2a2a',
-      color: '#fff',
-    },
-    row: {
-      hoverColor: 'rgba(255, 255, 255, 0.05)',
+      background: '#292929',
     },
     cell: {
-      borderColor: '#404040',
-    },
+      border: '#434343',
+    }
   },
   charts: {
     color: ['#7267EF', '#36B37E'],

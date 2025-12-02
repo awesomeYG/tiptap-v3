@@ -84,7 +84,7 @@ const EditorInsert = ({ editor }: EditorInsertProps) => {
             key: 'table-size-picker',
             customLabel: <TableSizePicker
               onConfirm={(cols, rows) => {
-                editor.commands.insertTable({ rows, cols, withHeaderRow: true });
+                editor.commands.insertTable({ rows, cols, withHeaderRow: false });
               }}
             />
           },

@@ -68,7 +68,7 @@
 //         <ToolItem
 //           icon={<Table2Icon />}
 //           size='small'
-//           onClick={() => editor.chain().focus().insertTable({ rows: 3, cols: 4, withHeaderRow: true }).run()}
+//           onClick={() => editor.chain().focus().insertTable({ rows: 3, cols: 4, withHeaderRow: false }).run()}
 //           isActive={editor.isActive('table')}
 //         />
 //         <ToolItem
