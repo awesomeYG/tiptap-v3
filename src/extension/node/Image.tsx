@@ -1,13 +1,26 @@
 import { EditorFnProps } from "@ctzhian/tiptap/type";
-import { getFileType } from "@ctzhian/tiptap/util";
+import { getFileType, removeBaseUrl, withBaseUrl } from "@ctzhian/tiptap/util";
 import Image from "@tiptap/extension-image";
 import { Plugin, PluginKey } from "@tiptap/pm/state";
 import { ReactNodeViewRenderer } from "@tiptap/react";
 import ImageViewWrapper, { getImageDimensionsFromFile } from "../component/Image";
 
-export type ImageExtensionProps = EditorFnProps
+export type ImageExtensionProps = EditorFnProps & { baseUrl: string }
 
 const customImage = (props: ImageExtensionProps) => Image.extend({
+  addAttributes() {
+    return {
+      ...this.parent?.(),
+      src: {
+        default: null,
+        parseHTML: element => withBaseUrl(element.getAttribute('src') || '', props.baseUrl),
+        renderHTML: attributes => {
+          if (!attributes.src) return {}
+          return { src: removeBaseUrl(attributes.src, props.baseUrl) }
+        },
+      },
+    }
+  },
   addKeyboardShortcuts() {
     return {
       'Mod-2': () => {

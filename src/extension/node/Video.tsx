@@ -1,5 +1,5 @@
 import { EditorFnProps } from '@ctzhian/tiptap/type'
-import { getFileType } from '@ctzhian/tiptap/util'
+import { getFileType, removeBaseUrl, withBaseUrl } from '@ctzhian/tiptap/util'
 import { InputRule, mergeAttributes, Node } from '@tiptap/core'
 import { Plugin, PluginKey } from '@tiptap/pm/state'
 import { ReactNodeViewRenderer } from '@tiptap/react'
@@ -25,7 +25,7 @@ declare module '@tiptap/core' {
   }
 }
 
-export type VideoExtensionProps = EditorFnProps
+export type VideoExtensionProps = EditorFnProps & { baseUrl: string }
 
 export const VideoExtension = (props: VideoExtensionProps) => Node.create({
   name: 'video',
@@ -46,10 +46,10 @@ export const VideoExtension = (props: VideoExtensionProps) => Node.create({
     return {
       src: {
         default: null,
-        parseHTML: element => element.getAttribute('src'),
+        parseHTML: element => withBaseUrl(element.getAttribute('src') || '', props.baseUrl),
         renderHTML: attributes => {
           if (!attributes.src) return {}
-          return { src: attributes.src }
+          return { src: removeBaseUrl(attributes.src, props.baseUrl) }
         },
       },
       controls: {

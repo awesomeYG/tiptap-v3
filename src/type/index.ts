@@ -147,6 +147,10 @@ export type BaseExtensionOptions = {
    * 占位符
    */
   placeholder?: string
+  /**
+   * 静态资源基础路径
+   */
+  baseUrl?: string
 }
 
 export type ExtensionRelativeProps =

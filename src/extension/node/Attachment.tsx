@@ -1,4 +1,5 @@
 import { EditorFnProps } from "@ctzhian/tiptap/type";
+import { removeBaseUrl, withBaseUrl } from "@ctzhian/tiptap/util";
 import { mergeAttributes, Node } from "@tiptap/core";
 import { ReactNodeViewRenderer } from "@tiptap/react";
 import AttachmentViewWrapper from "../component/Attachment";
@@ -28,8 +29,10 @@ declare module '@tiptap/core' {
   }
 }
 
+export type AttachmentExtensionProps = EditorFnProps & { baseUrl: string }
+
 // 内联附件扩展
-export const InlineAttachmentExtension = (props: EditorFnProps) => Node.create({
+export const InlineAttachmentExtension = (props: AttachmentExtensionProps) => Node.create({
   name: 'inlineAttachment',
   group: 'inline',
   inline: true,
@@ -37,31 +40,19 @@ export const InlineAttachmentExtension = (props: EditorFnProps) => Node.create({
   draggable: true,
   selectable: true,
 
-  addOptions() {
-    return {
-      HTMLAttributes: {
-        url: '',
-        title: '',
-        size: '0',
-      },
-    }
-  },
-
   addAttributes() {
     return {
       url: {
-        default: this.options.HTMLAttributes.url,
-        parseHTML: (element) => {
-          return element.getAttribute('data-url')
-        },
+        default: '',
+        parseHTML: element => withBaseUrl(element.getAttribute('data-url') || '', props.baseUrl),
         renderHTML: (attributes) => {
           return {
-            'data-url': attributes.url,
+            'data-url': removeBaseUrl(attributes.url, props.baseUrl),
           }
         },
       },
       title: {
-        default: this.options.HTMLAttributes.title,
+        default: '',
         parseHTML: (element) => {
           return element.getAttribute('data-title')
         },
@@ -72,7 +63,7 @@ export const InlineAttachmentExtension = (props: EditorFnProps) => Node.create({
         },
       },
       size: {
-        default: this.options.HTMLAttributes.size,
+        default: '0',
         parseHTML: (element) => {
           return element.getAttribute('data-size') || '0'
         },
@@ -166,38 +157,25 @@ export const InlineAttachmentExtension = (props: EditorFnProps) => Node.create({
 });
 
 // 块级附件扩展
-export const BlockAttachmentExtension = (props: EditorFnProps) => Node.create({
+export const BlockAttachmentExtension = (props: AttachmentExtensionProps) => Node.create({
   name: 'blockAttachment',
   group: 'block',
   atom: true,
   draggable: true,
   selectable: true,
 
-  addOptions() {
-    return {
-      HTMLAttributes: {
-        url: '',
-        title: '',
-        size: '0',
-      },
-    }
-  },
-
   addAttributes() {
     return {
       url: {
-        default: this.options.HTMLAttributes.url,
-        parseHTML: (element) => {
-          return element.getAttribute('data-url')
-        },
-        renderHTML: (attributes) => {
-          return {
-            'data-url': attributes.url,
-          }
+        default: '',
+        parseHTML: element => withBaseUrl(element.getAttribute('data-url') || '', props.baseUrl),
+        renderHTML: attributes => {
+          if (!attributes.url) return {}
+          return { 'data-url': removeBaseUrl(attributes.url, props.baseUrl) }
         },
       },
       title: {
-        default: this.options.HTMLAttributes.title,
+        default: '',
         parseHTML: (element) => {
           return element.getAttribute('data-title')
         },
@@ -208,7 +186,7 @@ export const BlockAttachmentExtension = (props: EditorFnProps) => Node.create({
         },
       },
       size: {
-        default: this.options.HTMLAttributes.size,
+        default: '0',
         parseHTML: (element) => {
           return element.getAttribute('data-size') || '0'
         },

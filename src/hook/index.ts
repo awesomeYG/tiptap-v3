@@ -1,5 +1,6 @@
 import { getExtensions } from '@ctzhian/tiptap/extension'
-import { UseTiptapProps, UseTiptapReturn } from '@ctzhian/tiptap/type'
+import { UploadFunction, UseTiptapProps, UseTiptapReturn } from '@ctzhian/tiptap/type'
+import { withBaseUrl } from '@ctzhian/tiptap/util'
 import { migrateMathStrings } from '@tiptap/extension-mathematics'
 import { useEditor, UseEditorOptions } from '@tiptap/react'
 
@@ -8,11 +9,22 @@ const useTiptap = ({
   contentType = 'html',
   onSave,
   onError,
+  onUpload,
+  baseUrl = '',
   ...options
 }: UseTiptapProps & UseEditorOptions): UseTiptapReturn => {
+
+  const handleUpload: UploadFunction | undefined = onUpload
+    ? (file, onProgress, abortSignal) =>
+      onUpload(file, onProgress, abortSignal).then((url) => withBaseUrl(url, baseUrl))
+    : undefined
+
+
   const extensions = getExtensions({
     editable,
     onError,
+    baseUrl,
+    onUpload: handleUpload,
     ...options
   })
 

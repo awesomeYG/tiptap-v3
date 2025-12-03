@@ -1,4 +1,5 @@
 import { EditorFnProps } from '@ctzhian/tiptap/type'
+import { removeBaseUrl, withBaseUrl } from '@ctzhian/tiptap/util'
 import { InputRule, mergeAttributes, Node } from '@tiptap/core'
 import { ReactNodeViewRenderer } from '@tiptap/react'
 import AudioViewWrapper from '../component/Audio'
@@ -22,7 +23,7 @@ declare module '@tiptap/core' {
   }
 }
 
-export type AudioExtensionProps = EditorFnProps
+export type AudioExtensionProps = EditorFnProps & { baseUrl: string }
 
 export const AudioExtension = (props: AudioExtensionProps) => Node.create({
   name: 'audio',
@@ -43,10 +44,10 @@ export const AudioExtension = (props: AudioExtensionProps) => Node.create({
     return {
       src: {
         default: null,
-        parseHTML: element => element.getAttribute('src'),
+        parseHTML: element => withBaseUrl(element.getAttribute('src') || '', props.baseUrl),
         renderHTML: attributes => {
           if (!attributes.src) return {}
-          return { src: attributes.src }
+          return { src: removeBaseUrl(attributes.src, props.baseUrl) }
         },
       },
       title: {
