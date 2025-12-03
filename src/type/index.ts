@@ -85,10 +85,25 @@ export type TocList = TocItem[]
 export type ValidateUrlFunction = (url: string, type: 'image' | 'video' | 'audio' | 'iframe') => Promise<string> | string
 
 export type EditorFnProps = {
+  /**
+   * 错误处理
+   */
   onError?: (error: Error) => void
+  /**
+   * 上传处理
+   */
   onUpload?: UploadFunction
+  /**
+   * 目录更新
+   */
   onTocUpdate?: (toc: TocList) => void
+  /**
+   * AI 写作建议
+   */
   onAiWritingGetSuggestion?: ({ prefix, suffix }: { prefix: string, suffix: string }) => Promise<string>
+  /**
+   * 验证 URL
+   */
   onValidateUrl?: ValidateUrlFunction
 }
 
@@ -98,16 +113,47 @@ export type MentionExtensionProps = {
   onMentionFilter?: ({ query }: { query: string }) => Promise<MentionItems>;
 }
 
-export type ExtensionRelativeProps = MentionExtensionProps & EditorFnProps & {
-  limit?: number | null
-  exclude?: string[]
-  extensions?: Extension[]
-  editable: boolean
-  youtube?: Partial<YoutubeOptions>
-  contentType?: UseEditorOptions['contentType']
-  placeholder?: string
-  tableOfContentsOptions?: TableOfContentsOptions
+export type NodeOrMetaOrSuggestionOrExtensionOptions = {
+  youtubeOptions?: Partial<YoutubeOptions>
+  tableOfContentsOptions?: Partial<TableOfContentsOptions>
 }
+
+export type BaseExtensionOptions = {
+  /**
+   * 字数限制
+   */
+  limit?: number | null
+  /**
+   * 排除的扩展
+   */
+  exclude?: string[]
+  /**
+   * 扩展
+   * @default []
+   */
+  extensions?: Extension[]
+  /**
+   * 是否可编辑
+   * @default true
+   */
+  editable: boolean
+  /**
+   * 内容类型
+   * @default 'html'
+   * @description 支持 'html' 和 'markdown' 和 'json'
+   */
+  contentType?: UseEditorOptions['contentType']
+  /**
+   * 占位符
+   */
+  placeholder?: string
+}
+
+export type ExtensionRelativeProps =
+  MentionExtensionProps &
+  NodeOrMetaOrSuggestionOrExtensionOptions &
+  EditorFnProps &
+  BaseExtensionOptions
 
 export type UseTiptapProps = {
   onSave?: (editor: Editor) => void

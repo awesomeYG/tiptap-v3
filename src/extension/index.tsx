@@ -45,11 +45,9 @@ import {
 } from './node';
 
 export const getExtensions = ({
-  contentType,
   limit,
   exclude,
   extensions: extensionsProps,
-  youtube,
   editable,
   mentionItems,
   onMentionFilter,
@@ -59,6 +57,7 @@ export const getExtensions = ({
   onAiWritingGetSuggestion,
   onValidateUrl,
   placeholder,
+  youtubeOptions,
   tableOfContentsOptions,
 }: GetExtensionsProps) => {
   const defaultExtensions: any = [
@@ -78,6 +77,7 @@ export const getExtensions = ({
         width: 2,
       },
     }),
+    YamlFormat,
     TextStyleKit,
     CodeExtension,
     ListExtension,
@@ -90,18 +90,17 @@ export const getExtensions = ({
     DetailsSummaryExtension,
     CodeBlockLowlightExtension,
     InlineUploadProgressExtension,
-    YamlFormat,
+    CustomHorizontalRule,
+    ...TableExtension({ editable }),
+    CustomBlockMathExtension({ onError }),
+    CustomInlineMathExtension({ onError }),
+    TableOfContents({ onTocUpdate, tableOfContentsOptions }),
     InlineLinkExtension,
     BlockLinkExtension,
-    CustomHorizontalRule,
     IframeExtension({ onError, onValidateUrl }),
     VideoExtension({ onUpload, onError, onValidateUrl }),
     AudioExtension({ onUpload, onError, onValidateUrl }),
-    ...TableExtension({ editable }),
-    TableOfContents({ onTocUpdate, tableOfContentsOptions }),
     ImageExtension({ onUpload, onError, onValidateUrl }),
-    CustomBlockMathExtension({ onError }),
-    CustomInlineMathExtension({ onError }),
     InlineAttachmentExtension({ onUpload, onError }),
     BlockAttachmentExtension({ onUpload, onError }),
     Highlight.configure({ multicolor: true }),
@@ -190,7 +189,7 @@ export const getExtensions = ({
   }
 
   if (!exclude?.includes('youtube')) {
-    const Youtube = YoutubeExtension(youtube)
+    const Youtube = YoutubeExtension(youtubeOptions)
     defaultExtensions.push(Youtube)
   }
 
