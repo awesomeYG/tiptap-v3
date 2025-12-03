@@ -4,6 +4,9 @@
   --common-row-font-size: 16px;
   --common-row-line-height: 1.625;
   --udtoken-quote-bar-bg: #bbbfc4;
+
+  --table-head-background-color: #f2f3f5;
+  --table-cell-border-color: #dee0e3;
 }
 
 .tiptap.ProseMirror {
@@ -359,7 +362,7 @@
   table-layout: fixed;
   overflow: hidden;
   caption-side: top;
-  border-left: 1px dotted var(--mui-palette-table-cell-border);
+  border-left: 1px dotted var(--mui-palette-table-cell-border, --table-cell-border-color);
 }
 
 .tiptap.ProseMirror table p {
@@ -374,8 +377,8 @@
 .tiptap.ProseMirror table td,
 .tiptap.ProseMirror table th {
   border: none;
-  border-bottom: 1px solid var(--mui-palette-table-cell-border);
-  border-right: 1px dotted var(--mui-palette-table-cell-border);
+  border-bottom: 1px solid var(--mui-palette-table-cell-border, --table-cell-border-color);
+  border-right: 1px dotted var(--mui-palette-table-cell-border, --table-cell-border-color);
   box-sizing: border-box;
   padding: 12px 16px;
   position: relative;
@@ -386,7 +389,7 @@
 
 .tiptap.ProseMirror table tbody tr:first-child th,
 .tiptap.ProseMirror table tbody tr:first-child td {
-  border-top: 1px solid var(--mui-palette-table-cell-border);
+  border-top: 1px solid var(--mui-palette-table-cell-border, --table-cell-border-color);
 }
 
 .tiptap.ProseMirror table td>*,
@@ -399,7 +402,7 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
   text-align: left;
-  background-color: var(--mui-palette-table-head-background);
+  background-color: var(--mui-palette-table-head-background, --table-head-background-color);
 }
 
 .tiptap.ProseMirror[contenteditable="true"] table .selectedCell * {
