@@ -13,6 +13,7 @@ export interface CustomBubbleMenuProps {
 }
 
 const CustomBubbleMenu = ({ editor, more }: CustomBubbleMenuProps) => {
+
   // const theme = useTheme()
 
   // const THEME_TEXT_COLOR = [
@@ -81,19 +82,11 @@ const CustomBubbleMenu = ({ editor, more }: CustomBubbleMenuProps) => {
       offset: 8,
       flip: true,
     }}
-    shouldShow={() => {
-      // 表格多选单元格时禁止弹出气泡菜单
-      // if (editor.state.selection.constructor.name === '_CellSelection') {
-      //   const cellSelection = editor.state.selection as any;
-      //   if (cellSelection.ranges.length > 1) {
-      //     return false
-      //   }
-      //   if (cellSelection.$anchorCell && cellSelection.$headCell) {
-      //     return cellSelection.$anchorCell.pos !== cellSelection.$headCell.pos;
-      //   }
-      // }
+    shouldShow={({ editor }) => {
+      // 在某些特定节点类型时不显示
       if (
         editor.state.selection.empty ||
+        editor.isEmpty ||
         editor.isActive('image') ||
         editor.isActive('video') ||
         editor.isActive('audio') ||
@@ -113,6 +106,7 @@ const CustomBubbleMenu = ({ editor, more }: CustomBubbleMenuProps) => {
       ) {
         return false
       }
+
       return true
     }}
   >

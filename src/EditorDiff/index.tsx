@@ -9,16 +9,19 @@ import 'core-js/actual/array/find-last'
 interface EditorDiffProps {
   oldHtml: string
   newHtml: string
+  baseUrl?: string
 }
 
 const EditorDiff = ({
   oldHtml,
-  newHtml
+  newHtml,
+  baseUrl
 }: EditorDiffProps) => {
   const editorRef = useTiptap({
     editable: false,
     content: newHtml,
-    exclude: ['youtube', 'mention']
+    baseUrl,
+    exclude: ['youtube', 'mention',]
   })
 
   useEffect(() => {
