@@ -198,11 +198,11 @@ const EditorMarkdown = forwardRef<MarkdownEditorRef, EditorMarkdownProps>(({
     if (!textarea) return;
 
     const handleCompositionStart = () => {
-      setIsComposing(true);
+      setTimeout(() => setIsComposing(true), 0);
     };
 
     const handleCompositionEnd = () => {
-      setIsComposing(false);
+      setTimeout(() => setIsComposing(false), 0);
     };
 
     textarea.addEventListener('compositionstart', handleCompositionStart);
@@ -212,7 +212,7 @@ const EditorMarkdown = forwardRef<MarkdownEditorRef, EditorMarkdownProps>(({
       textarea.removeEventListener('compositionstart', handleCompositionStart);
       textarea.removeEventListener('compositionend', handleCompositionEnd);
     };
-  }, [displayMode]);
+  }, []);
 
   return <Box sx={{
     position: 'relative',
