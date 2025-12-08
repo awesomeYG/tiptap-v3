@@ -69,11 +69,24 @@ const EditorInsert = ({ editor }: EditorInsertProps) => {
         onClick: () => editor.commands.setInlineAttachment({ url: '', title: '', size: '0' }),
       },
       {
-        label: '流程图',
-        key: 'flow',
-        icon: <FlowChartIcon sx={{ fontSize: '1rem' }} />,
-        onClick: () => editor.commands.setFlow({}),
+        customLabel: <Typography sx={{ px: 1, pt: 1, fontSize: '12px', color: 'text.disabled' }}>
+          模块
+        </Typography>,
+        key: 'style',
       },
+      {
+        label: '引用',
+        key: 'blockquote',
+        icon: <DoubleQuotesLIcon sx={{ fontSize: '1rem' }} />,
+        extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', 'shift', 'B'], '+')}</Typography>,
+        onClick: () => editor.chain().focus().toggleBlockquote().run(),
+      },
+      // {
+      //   label: '分栏',
+      //   key: 'flipGrid',
+      //   icon: <FlipGridIcon sx={{ fontSize: '1rem' }} />,
+      //   onClick: () => editor.chain().focus().setFlipGrid().run(),
+      // },
       {
         label: '表格',
         key: 'table',
@@ -89,32 +102,6 @@ const EditorInsert = ({ editor }: EditorInsertProps) => {
             />
           },
         ],
-      },
-      {
-        customLabel: <Typography sx={{ px: 1, pt: 1, fontSize: '12px', color: 'text.disabled' }}>
-          模块
-        </Typography>,
-        key: 'style',
-      },
-      {
-        label: '分割线',
-        key: 'separator',
-        icon: <SeparatorIcon sx={{ fontSize: '1rem' }} />,
-        onClick: () => editor.chain().focus().setHorizontalRule().run(),
-      },
-      {
-        label: '引用',
-        key: 'blockquote',
-        icon: <DoubleQuotesLIcon sx={{ fontSize: '1rem' }} />,
-        extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', 'shift', 'B'], '+')}</Typography>,
-        onClick: () => editor.chain().focus().toggleBlockquote().run(),
-      },
-      {
-        label: '折叠面板',
-        key: 'details',
-        icon: <MenuFold2FillIcon sx={{ fontSize: '1rem' }} />,
-        extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', '8'], '+')}</Typography>,
-        onClick: () => editor.chain().focus().setDetails().run(),
       },
       {
         label: '警告块',
@@ -164,10 +151,29 @@ const EditorInsert = ({ editor }: EditorInsertProps) => {
         ]
       },
       {
+        label: '折叠面板',
+        key: 'details',
+        icon: <MenuFold2FillIcon sx={{ fontSize: '1rem' }} />,
+        extra: <Typography sx={{ fontSize: '12px', color: 'text.disabled' }}>{getShortcutKeyText(['ctrl', '8'], '+')}</Typography>,
+        onClick: () => editor.chain().focus().setDetails().run(),
+      },
+      {
+        label: '分割线',
+        key: 'separator',
+        icon: <SeparatorIcon sx={{ fontSize: '1rem' }} />,
+        onClick: () => editor.chain().focus().setHorizontalRule().run(),
+      },
+      {
         customLabel: <Typography sx={{ px: 1, pt: 1, fontSize: '12px', color: 'text.disabled' }}>
           专业
         </Typography>,
         key: 'programmer',
+      },
+      {
+        label: '流程图',
+        key: 'flow',
+        icon: <FlowChartIcon sx={{ fontSize: '1rem' }} />,
+        onClick: () => editor.commands.setFlow({}),
       },
       {
         label: '代码',
