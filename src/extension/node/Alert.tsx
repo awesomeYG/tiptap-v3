@@ -1,5 +1,6 @@
 import { createBlockMarkdownSpec, mergeAttributes, Node } from '@tiptap/core'
 import { ReactNodeViewRenderer } from '@tiptap/react'
+import { v4 as uuid } from 'uuid'
 import AlertView from '../component/Alert'
 
 export type AlertVariant = 'info' | 'warning' | 'error' | 'success' | 'default'
@@ -80,7 +81,7 @@ export const AlertExtension = Node.create<AlertOptions>({
     return {
       setAlert:
         (attrs = {}) => ({ commands }) => {
-          const id = `alert_${Math.random().toString(36).slice(2)}`
+          const id = `alert_${uuid()}`
           const variant: AlertVariant = (attrs.variant as AlertVariant) || 'default'
           const type: AlertType = (attrs.type as AlertType) || 'icon'
           return commands.wrapIn(this.name, { id, variant, type })
@@ -98,10 +99,9 @@ export const AlertExtension = Node.create<AlertOptions>({
 
       toggleAlert:
         (attrs = {}) => ({ commands }) => {
-          const id = `alert_${Math.random().toString(36).slice(2)}`
           const variant: AlertVariant = (attrs.variant as AlertVariant) || 'default'
           const type: AlertType = (attrs.type as AlertType) || 'icon'
-          return commands.toggleWrap(this.name, { id, variant, type })
+          return commands.toggleWrap(this.name, { variant, type })
         },
     }
   },
