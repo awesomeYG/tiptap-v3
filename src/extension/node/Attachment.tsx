@@ -44,7 +44,10 @@ export const InlineAttachmentExtension = (props: AttachmentExtensionProps) => No
     return {
       url: {
         default: '',
-        parseHTML: element => withBaseUrl(element.getAttribute('data-url') || '', props.baseUrl),
+        parseHTML: element => withBaseUrl(
+          element.getAttribute('data-url') || element.getAttribute('href') || '',
+          props.baseUrl
+        ),
         renderHTML: (attributes) => {
           return {
             'data-url': removeBaseUrl(attributes.url, props.baseUrl),
@@ -55,6 +58,9 @@ export const InlineAttachmentExtension = (props: AttachmentExtensionProps) => No
         default: '',
         parseHTML: (element) => {
           return element.getAttribute('data-title')
+            || element.getAttribute('title')
+            || element.getAttribute('aria-label')
+            || element.textContent
         },
         renderHTML: (attributes) => {
           return {
@@ -168,7 +174,10 @@ export const BlockAttachmentExtension = (props: AttachmentExtensionProps) => Nod
     return {
       url: {
         default: '',
-        parseHTML: element => withBaseUrl(element.getAttribute('data-url') || '', props.baseUrl),
+        parseHTML: element => withBaseUrl(
+          element.getAttribute('data-url') || element.getAttribute('href') || '',
+          props.baseUrl
+        ),
         renderHTML: attributes => {
           if (!attributes.url) return {}
           return { 'data-url': removeBaseUrl(attributes.url, props.baseUrl) }
@@ -178,6 +187,9 @@ export const BlockAttachmentExtension = (props: AttachmentExtensionProps) => Nod
         default: '',
         parseHTML: (element) => {
           return element.getAttribute('data-title')
+            || element.getAttribute('title')
+            || element.getAttribute('aria-label')
+            || element.textContent
         },
         renderHTML: (attributes) => {
           return {
