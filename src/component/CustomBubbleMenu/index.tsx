@@ -102,7 +102,9 @@ const CustomBubbleMenu = ({ editor, more }: CustomBubbleMenuProps) => {
         editor.isActive('iframe') ||
         editor.isActive('yamlFormat') ||
         editor.isActive('flow') ||
-        editor.isActive('table')
+        editor.isActive('table') ||
+        editor.isActive('flipGrid') ||
+        editor.isActive('flipGridColumn')
       ) {
         return false
       }

@@ -58,6 +58,8 @@ export { FileCopyLineIcon } from './file-copy-line-icon';
 export { FileIcon } from './file-icon';
 export { FileUploadLineIcon } from './file-upload-line-icon';
 export { FlipGridIcon } from './flip-grid-icon';
+export { FlipLeftLineIcon } from './flip-left-line-icon';
+export { FlipRightLineIcon } from './flip-right-line-icon';
 export { FlowChartIcon } from './flow-chart-icon';
 export { Folder2LineIcon } from './folder-2-line-icon';
 export { FontColorIcon } from './font-color-icon';
