@@ -13,6 +13,7 @@ export enum NodeTypeEnum {
   TaskList = 'taskList',
   Blockquote = 'blockquote',
   CodeBlock = 'codeBlock',
+  FlipGrid = 'flipGrid',
   HorizontalRule = 'horizontalRule',
   Details = 'details',
   Table = 'table',
@@ -42,6 +43,7 @@ export const NODE_TYPE_LABEL: Record<NodeTypeEnum, {
   [NodeTypeEnum.TaskList]: { label: '任务列表', color: true, fontSize: true, align: true, convert: true },
   [NodeTypeEnum.Alert]: { label: '警告块', color: true, fontSize: true, align: true, convert: true },
   [NodeTypeEnum.Blockquote]: { label: '引用', color: true, fontSize: true, align: true, convert: true },
+  [NodeTypeEnum.FlipGrid]: { label: '分栏', color: true, fontSize: true, align: true, convert: true },
   [NodeTypeEnum.CodeBlock]: { label: '代码块', convert: true },
 
   [NodeTypeEnum.Details]: { label: '折叠面板', align: true },

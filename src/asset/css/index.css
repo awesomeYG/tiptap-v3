@@ -113,6 +113,7 @@
 .tiptap.ProseMirror .react-renderer.node-iframe,
 .tiptap.ProseMirror .react-renderer.node-codeBlock,
 .tiptap.ProseMirror .react-renderer.node-blockLink,
+.tiptap.ProseMirror .react-renderer.node-flipGrid,
 .tiptap.ProseMirror .react-renderer.node-blockAttachment {
   display: block;
   margin: 1rem 0;
@@ -194,4 +195,19 @@
 
 .tiptap.ProseMirror .mark-link a:hover {
   text-decoration: underline;
+}
+
+.tiptap.ProseMirror[contenteditable="true"] .node-flipGrid:hover .node-flipGridColumn,
+.tiptap.ProseMirror.ProseMirror-focused[contenteditable="true"] .node-flipGrid .node-flipGridColumn {
+  background-color: var(--mui-palette-background-paper3);
+}
+
+.tiptap.ProseMirror[contenteditable="true"] .node-flipGrid .node-flipGridColumn {
+  border-radius: var(--mui-shape-borderRadius);
+  padding: 4px;
+}
+
+.tiptap.ProseMirror[contenteditable="true"] .node-flipGrid .hover-popover-child,
+.tiptap.ProseMirror[contenteditable="true"] .node-flipGrid .flip-grid-column-inner {
+  height: 100%;
 }

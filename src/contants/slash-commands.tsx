@@ -1,6 +1,6 @@
 import { Editor } from '@tiptap/react';
 import * as React from 'react';
-import { AttachmentLineIcon, BilibiliLineIcon, CodeBoxLineIcon, CodeLineIcon, DoubleQuotesLIcon, EmotionLineIcon, FlowChartIcon, FunctionsIcon, H1Icon, H2Icon, H3Icon, ImageLineIcon, Information2LineIcon, LinkIcon, ListCheck2Icon, ListOrdered2Icon, ListUnorderedIcon, MenuFold2FillIcon, MovieLineIcon, Music2LineIcon, SeparatorIcon, SquareRootIcon, Table2Icon, WindowFillIcon } from '../component/Icons';
+import { AttachmentLineIcon, BilibiliLineIcon, CodeBoxLineIcon, CodeLineIcon, DoubleQuotesLIcon, EmotionLineIcon, FlipGridIcon, FlowChartIcon, FunctionsIcon, H1Icon, H2Icon, H3Icon, ImageLineIcon, Information2LineIcon, LinkIcon, ListCheck2Icon, ListOrdered2Icon, ListUnorderedIcon, MenuFold2FillIcon, MovieLineIcon, Music2LineIcon, SeparatorIcon, SquareRootIcon, Table2Icon, WindowFillIcon } from '../component/Icons';
 
 export const slashCommands = [
   {
@@ -76,11 +76,25 @@ export const slashCommands = [
     }
   },
   {
+    title: '分割线',
+    icon: <SeparatorIcon sx={{ fontSize: '1rem' }} />,
+    command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
+      editor.chain().focus().deleteRange(range).setHorizontalRule().run()
+    }
+  },
+  {
     title: '链接',
     shortcutKey: ['ctrl', '1'],
     icon: <LinkIcon sx={{ fontSize: '1rem' }} />,
     command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
       editor.chain().focus().deleteRange(range).setInlineLink({ href: '' }).run()
+    }
+  },
+  {
+    title: '表情',
+    icon: <EmotionLineIcon sx={{ fontSize: '1rem' }} />,
+    command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
+      editor.chain().deleteRange(range).insertContentAt(range.from, ' : ').focus(range.from + 2).run()
     }
   },
   {
@@ -100,14 +114,6 @@ export const slashCommands = [
     }
   },
   {
-    title: '折叠面板',
-    shortcutKey: ['ctrl', '8'],
-    icon: <MenuFold2FillIcon sx={{ fontSize: '1rem' }} />,
-    command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
-      editor.chain().focus().deleteRange(range).setDetails().run()
-    }
-  },
-  {
     title: '引用',
     shortcutKey: ['ctrl', 'shift', 'B'],
     icon: <DoubleQuotesLIcon sx={{ fontSize: '1rem' }} />,
@@ -116,24 +122,25 @@ export const slashCommands = [
     }
   },
   {
+    title: '分栏',
+    icon: <FlipGridIcon sx={{ fontSize: '1rem' }} />,
+    command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
+      editor.chain().focus().deleteRange(range).setFlipGrid().run()
+    }
+  },
+  {
+    title: '折叠面板',
+    shortcutKey: ['ctrl', '8'],
+    icon: <MenuFold2FillIcon sx={{ fontSize: '1rem' }} />,
+    command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
+      editor.chain().focus().deleteRange(range).setDetails().run()
+    }
+  },
+  {
     title: '流程图',
     icon: <FlowChartIcon sx={{ fontSize: '1rem' }} />,
     command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
       editor.chain().focus().deleteRange(range).setFlow({ code: '', width: '100%' }).run()
-    }
-  },
-  {
-    title: '表情',
-    icon: <EmotionLineIcon sx={{ fontSize: '1rem' }} />,
-    command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
-      editor.chain().deleteRange(range).insertContentAt(range.from, ' : ').focus(range.from + 2).run()
-    }
-  },
-  {
-    title: '分割线',
-    icon: <SeparatorIcon sx={{ fontSize: '1rem' }} />,
-    command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
-      editor.chain().focus().deleteRange(range).setHorizontalRule().run()
     }
   },
   {

@@ -5,6 +5,7 @@ export * from './CodeBlockLowlight';
 export * from './Details';
 export * from './Emoji';
 export * from './FileHandler';
+export * from './FlipGrid';
 export * from './Flow';
 export * from './HorizontalRule';
 export * from './Iframe';

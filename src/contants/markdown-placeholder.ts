@@ -103,7 +103,7 @@ $$
 
 :::
 
-折叠块 Details：
+折叠面板 Details：
 :::details {indent="0" open}
 
 :::detailsSummary {indent="0"}
