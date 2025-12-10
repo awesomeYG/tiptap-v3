@@ -1,5 +1,6 @@
 @import 'highlight.js/styles/an-old-hope.css';
 @import 'katex/dist/katex.min.css';
+@import 'react-photo-view/dist/react-photo-view.css';
 
 :root {
   --mui-shape-borderRadius: 10px;
