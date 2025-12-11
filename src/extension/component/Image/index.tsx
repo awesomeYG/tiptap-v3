@@ -129,7 +129,7 @@ const ImageViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
               width: dimensions.width
             })
           } catch (error) {
-            console.warn('Failed to update image dimensions:', error)
+            // console.warn('Failed to update image dimensions:', error)
           }
         })
         .catch(error => {
@@ -145,7 +145,7 @@ const ImageViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
               width: 400
             })
           } catch (updateError) {
-            console.warn('Failed to update image attributes with fallback width:', updateError)
+            // console.warn('Failed to update image attributes with fallback width:', updateError)
           }
         })
     }
