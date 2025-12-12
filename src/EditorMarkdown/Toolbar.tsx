@@ -406,12 +406,6 @@ const EditorMarkdownToolbar = ({ aceEditorRef, isExpend, onFileUpload }: EditorM
           key: 'professional',
         },
         {
-          label: '流程图',
-          key: 'flowchart',
-          icon: <FlowChartIcon sx={{ fontSize: '1rem' }} />,
-          onClick: () => handleInsertBlock({ text: '```mermaid\n\n```', row: 1, wrap: true }),
-        },
-        {
           label: '代码',
           key: 'code',
           icon: <CodeSSlashLineIcon sx={{ fontSize: '1rem' }} />,
@@ -448,6 +442,12 @@ const EditorMarkdownToolbar = ({ aceEditorRef, isExpend, onFileUpload }: EditorM
               onClick: () => handleInsertBlock({ text: '$$\n\n$$', row: 1, wrap: true })
             }
           ]
+        },
+        {
+          label: 'Mermaid 流程图',
+          key: 'flowchart',
+          icon: <FlowChartIcon sx={{ fontSize: '1rem' }} />,
+          onClick: () => handleInsertBlock({ text: '```mermaid\n\n```', row: 1, wrap: true }),
         },
       ]}
     />

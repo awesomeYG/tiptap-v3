@@ -137,7 +137,7 @@ export const slashCommands = [
     }
   },
   {
-    title: '流程图',
+    title: 'Mermaid 流程图',
     icon: <FlowChartIcon sx={{ fontSize: '1rem' }} />,
     command: ({ editor, range }: { editor: Editor; range: { from: number; to: number } }) => {
       editor.chain().focus().deleteRange(range).setFlow({ code: '', width: '100%' }).run()

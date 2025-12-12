@@ -60,7 +60,7 @@ const InsertFlow = ({
       >
         <FlowChartIcon sx={{ fontSize: '1rem', position: 'relative', flexShrink: 0 }} />
         <Box sx={{ fontSize: '0.875rem', position: 'relative', flexGrow: 1, textAlign: 'left' }}>
-          点击此处嵌入或粘贴流程图代码
+          点击此处输入或粘贴 Mermaid 流程图代码
         </Box>
       </Stack>
       <FloatingPopover

@@ -170,7 +170,7 @@ const EditorInsert = ({ editor }: EditorInsertProps) => {
         key: 'programmer',
       },
       {
-        label: '流程图',
+        label: 'Mermaid 流程图',
         key: 'flow',
         icon: <FlowChartIcon sx={{ fontSize: '1rem' }} />,
         onClick: () => editor.commands.setFlow({}),

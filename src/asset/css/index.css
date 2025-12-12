@@ -115,6 +115,7 @@
 .tiptap.ProseMirror .react-renderer.node-codeBlock,
 .tiptap.ProseMirror .react-renderer.node-blockLink,
 .tiptap.ProseMirror .react-renderer.node-flipGrid,
+.tiptap.ProseMirror .react-renderer.node-flow,
 .tiptap.ProseMirror .react-renderer.node-blockAttachment {
   display: block;
   margin: 1rem 0;
