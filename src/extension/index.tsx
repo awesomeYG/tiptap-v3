@@ -60,6 +60,7 @@ export const getExtensions = ({
   onAiWritingGetSuggestion,
   onValidateUrl,
   placeholder,
+  mermaidOptions,
   youtubeOptions,
   tableOfContentsOptions,
 }: GetExtensionsProps) => {
@@ -83,6 +84,7 @@ export const getExtensions = ({
     YamlFormat,
     TextStyleKit,
     CodeExtension,
+    FlowExtension({ mermaidOptions }),
     ListExtension,
     EmojiExtension,
     AlertExtension,

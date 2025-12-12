@@ -1,18 +1,20 @@
-import { DeleteLineIcon, EditLineIcon } from "@ctzhian/tiptap/component/Icons"
+import { ActionDropdown } from "@ctzhian/tiptap/component"
+import { AlignCenterIcon, AlignLeftIcon, AlignRightIcon, DeleteLineIcon, EditLineIcon } from "@ctzhian/tiptap/component/Icons"
 import { ToolbarItem } from "@ctzhian/tiptap/component/Toolbar"
 import { EditorFnProps } from "@ctzhian/tiptap/type"
-import { alpha, Box, Stack, useTheme } from "@mui/material"
+import { alpha, Box, Divider, Stack, useTheme } from "@mui/material"
 import { NodeViewProps, NodeViewWrapper } from '@tiptap/react'
 import React, { useCallback, useEffect, useRef, useState } from "react"
 import { HoverPopover } from "../../../component/HoverPopover"
 import EditFlow from "./Edit"
+import FlowDiagram from "./FlowDiagram"
 import InsertFlow from "./Insert"
 import ReadonlyFlow from "./Readonly"
-import { useMermaidRender } from "./useMermaidRender"
 
 export interface FlowAttributes {
   code: string
   width?: string | number
+  align?: 'left' | 'center' | 'right' | null
 }
 
 const FlowViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
@@ -35,6 +37,25 @@ const FlowViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
   const flowWrapperRef = useRef<HTMLDivElement>(null)
   const flowContentRef = useRef<HTMLDivElement>(null)
   const editButtonRef = useRef<HTMLButtonElement>(null)
+
+  const isPercentWidth = (): boolean => {
+    if (!attrs.width) return true
+    if (typeof attrs.width === 'string' && attrs.width.endsWith('%')) {
+      return true
+    }
+    return false
+  }
+
+  const getCurrentWidthPercent = (): string => {
+    if (isPercentWidth()) {
+      if (!attrs.width) return '100'
+      if (typeof attrs.width === 'string' && attrs.width.endsWith('%')) {
+        return attrs.width.replace('%', '')
+      }
+      return '100'
+    }
+    return 'pixel'
+  }
 
   const getCurrentDisplayWidth = (): number => {
     if (flowWrapperRef.current) {
@@ -60,17 +81,6 @@ const FlowViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
     return containerSize * (defaultPercent / 100)
   }
 
-  // 将像素值转换回字符串格式
-  const formatValue = (pixels: number, original: string | number | undefined): string | number => {
-    if (typeof original === 'string' && original.endsWith('%')) {
-      // 如果原来是百分比，保持百分比格式
-      const containerWidth = flowWrapperRef.current?.parentElement?.clientWidth || 800
-      const percent = Math.round((pixels / containerWidth) * 100)
-      return `${percent}%`
-    }
-    return `${Math.round(pixels)}px`
-  }
-
   const handleMouseDown = (e: React.MouseEvent, corner: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right') => {
     e.preventDefault()
     e.stopPropagation()
@@ -92,11 +102,13 @@ const FlowViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
     }
 
     newWidth = Math.max(200, Math.min(1920, newWidth))
+    // 手动调整宽度时，改为固定宽度（像素值）
     updateAttributes({
-      width: formatValue(newWidth, attrs.width),
+      width: Math.round(newWidth),
       code: attrs.code,
+      align: attrs.align,
     })
-  }, [isDragging, dragCorner, attrs.width, updateAttributes])
+  }, [isDragging, dragCorner, attrs.code, updateAttributes])
 
   const handleMouseUp = useCallback(() => {
     setIsDragging(false)
@@ -141,6 +153,7 @@ const FlowViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
         ref={flowContentRef}
         sx={{
           position: 'relative',
+          textAlign: attrs.align || undefined,
         }}
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
@@ -150,10 +163,17 @@ const FlowViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
           sx={{
             position: 'relative',
             border: '2px solid',
+            display: 'inline-block',
             borderColor: (isHovering || isDragging) ? alpha(theme.palette.primary.main, 0.3) : 'transparent',
             borderRadius: 'var(--mui-shape-borderRadius)',
             bgcolor: 'background.paper',
-            width: attrs.width || '100%',
+            width: typeof attrs.width === 'string' && attrs.width.endsWith('%')
+              ? attrs.width
+              : typeof attrs.width === 'number'
+                ? `${attrs.width}px`
+                : typeof attrs.width === 'string' && attrs.width && !isNaN(parseFloat(attrs.width))
+                  ? `${attrs.width}px`
+                  : attrs.width || '100%',
             height: 'auto',
             transition: 'border-color 0.2s ease',
           }}
@@ -174,6 +194,65 @@ const FlowViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
                   icon={<EditLineIcon sx={{ fontSize: '1rem' }} />}
                   tip="编辑流程图"
                   onClick={handleShowPopover}
+                />
+                <Divider
+                  orientation="vertical"
+                  flexItem
+                  sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'divider' }}
+                />
+                <ToolbarItem
+                  icon={<AlignLeftIcon sx={{ fontSize: '1rem' }} />}
+                  tip="左侧对齐"
+                  className={attrs.align === 'left' ? 'tool-active' : ''}
+                  onClick={() => updateAttributes({ align: attrs.align === 'left' ? null : 'left', code: attrs.code, width: attrs.width })}
+                />
+                <ToolbarItem
+                  icon={<AlignCenterIcon sx={{ fontSize: '1rem' }} />}
+                  tip="居中对齐"
+                  className={attrs.align === 'center' ? 'tool-active' : ''}
+                  onClick={() => updateAttributes({ align: attrs.align === 'center' ? null : 'center', code: attrs.code, width: attrs.width })}
+                />
+                <ToolbarItem
+                  icon={<AlignRightIcon sx={{ fontSize: '1rem' }} />}
+                  tip="右侧对齐"
+                  className={attrs.align === 'right' ? 'tool-active' : ''}
+                  onClick={() => updateAttributes({ align: attrs.align === 'right' ? null : 'right', code: attrs.code, width: attrs.width })}
+                />
+                <Divider
+                  orientation="vertical"
+                  flexItem
+                  sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'divider' }}
+                />
+                <ActionDropdown
+                  id='flow-width-dropdown'
+                  selected={getCurrentWidthPercent()}
+                  defaultDisplay={
+                    !isPercentWidth() ? {
+                      label: '固定宽度',
+                    } : undefined
+                  }
+                  list={[
+                    {
+                      key: '50',
+                      label: '自适应宽度（50%）',
+                      onClick: () => updateAttributes({ width: '50%' }),
+                    },
+                    {
+                      key: '75',
+                      label: '自适应宽度（75%）',
+                      onClick: () => updateAttributes({ width: '75%' }),
+                    },
+                    {
+                      key: '100',
+                      label: '自适应宽度（100%）',
+                      onClick: () => updateAttributes({ width: '100%' }),
+                    },
+                  ]}
+                />
+                <Divider
+                  orientation="vertical"
+                  flexItem
+                  sx={{ height: '1rem', mx: 0.5, alignSelf: 'center', borderColor: 'divider' }}
                 />
                 <ToolbarItem
                   icon={<DeleteLineIcon sx={{ fontSize: '1rem' }} />}
@@ -298,56 +377,6 @@ const FlowViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
         />
       )}
     </NodeViewWrapper>
-  )
-}
-
-interface FlowDiagramProps {
-  code: string
-  onError?: (error: Error) => void
-}
-
-const FlowDiagram: React.FC<FlowDiagramProps> = ({ code, onError }) => {
-  const { svgContent, error, loading } = useMermaidRender({
-    code,
-    onError,
-    showLoading: true,
-    idPrefix: 'mermaid',
-  })
-
-  return (
-    <Box
-      sx={{
-        width: '100%',
-        minHeight: loading ? '100px' : 'auto',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        '& svg': {
-          maxWidth: '100%',
-          height: 'auto',
-        }
-      }}
-    >
-      {loading && !error && (
-        <Box sx={{ color: 'text.secondary', fontSize: '14px' }}>正在渲染...</Box>
-      )}
-      {error && (
-        <Box sx={{ color: 'error.main', padding: '20px', textAlign: 'center', fontSize: '14px' }}>
-          {error}
-        </Box>
-      )}
-      {svgContent && !error && (
-        <Box
-          dangerouslySetInnerHTML={{ __html: svgContent }}
-          sx={{
-            width: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        />
-      )}
-    </Box>
   )
 }
 

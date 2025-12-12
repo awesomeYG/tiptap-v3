@@ -69,12 +69,12 @@ export const useMermaidRender = ({
           setError(null)
           setLoading(false)
         } else {
-          throw new Error('渲染结果为空，请检查流程图代码是否正确')
+          throw new Error('Mermaid 流程图渲染结果为空，请检查流程图代码是否正确')
         }
       } catch (err) {
         if (isCancelled) return
 
-        const errorMessage = (err as Error).message || '流程图渲染失败'
+        const errorMessage = (err as Error).message || 'Mermaid 流程图渲染失败'
         setError(errorMessage)
         setLoading(false)
         setSvgContent('')

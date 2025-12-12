@@ -3,6 +3,7 @@ import { Editor, Extension } from '@tiptap/core';
 import { TableOfContentsOptions } from '@tiptap/extension-table-of-contents';
 import { YoutubeOptions } from '@tiptap/extension-youtube';
 import { UseEditorOptions } from '@tiptap/react';
+import { MermaidConfig } from 'mermaid';
 
 export type { Editor } from '@tiptap/react';
 
@@ -114,6 +115,7 @@ export type MentionExtensionProps = {
 }
 
 export type NodeOrMetaOrSuggestionOrExtensionOptions = {
+  mermaidOptions?: Partial<MermaidConfig>
   youtubeOptions?: Partial<YoutubeOptions>
   tableOfContentsOptions?: Partial<TableOfContentsOptions>
 }
