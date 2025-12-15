@@ -48,7 +48,6 @@ export const Tooltip = Mark.create<TooltipOptions>({
 
           return {
             'data-tooltip': attributes.tooltip,
-            'class': 'tooltip-mark',
           }
         },
       },
@@ -105,9 +104,8 @@ export const Tooltip = Mark.create<TooltipOptions>({
                 if (tooltip) {
                   decorations.push(
                     Decoration.inline(pos, pos + node.nodeSize, {
-                      class: 'tooltip-mark',
                       'data-tooltip': tooltip,
-                    })
+                    }),
                   )
                 }
               }
@@ -120,26 +118,39 @@ export const Tooltip = Mark.create<TooltipOptions>({
     ]
   },
 
+  /**
+   * 下面是 Markdown 支持：
+   * - 解析：<span data-tooltip="提示">文本</span>
+   * - 导出：同样输出 <span data-tooltip="提示">文本</span>
+   */
   markdownTokenName: 'tooltip',
 
   markdownTokenizer: {
     name: 'tooltip',
     level: 'inline',
-    start: (src: string) => src.indexOf('{'),
+    start: (src: string) => src.indexOf('<span'),
     tokenize(src: string, _tokens: any, helpers: any) {
-      const match = /^\{([^}]+)\}\(([^)]+)\)/.exec(src)
+      // 匹配形如：<span data-tooltip="提示">文本</span>
+      const match = /^<span\s+([^>]*?)>([\s\S]+?)<\/span>/.exec(src)
       if (!match) {
         return
       }
 
-      const text = match[1]
-      const tooltip = match[2]
+      const attrs = match[1] || ''
+      const text = match[2] || ''
+
+      const tooltipMatch = /data-tooltip=["']([^"']+)["']/.exec(attrs)
+      if (!tooltipMatch) {
+        return
+      }
+
+      const tooltip = tooltipMatch[1]
 
       return {
         type: 'tooltip',
         raw: match[0],
-        text: text,
-        tooltip: tooltip,
+        text,
+        tooltip,
         tokens: helpers.inlineTokens(text),
       }
     },
@@ -162,7 +173,7 @@ export const Tooltip = Mark.create<TooltipOptions>({
     if (!tooltip) {
       return content
     }
-    return `{${content}}(${tooltip})`
+    return `<span data-tooltip="${tooltip}">${content}</span>`
   },
 })
 
