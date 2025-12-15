@@ -6,7 +6,7 @@ import DragHandle from '@tiptap/extension-drag-handle-react';
 import { Fragment, Node, Slice } from '@tiptap/pm/model';
 import { NodeSelection } from '@tiptap/pm/state';
 import { Editor } from '@tiptap/react';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { convertNodeAt, downloadFiles, FileInfo, filterResourcesByType, getAllResources, getShortcutKeyText, hasMarksInBlock } from '../../util';
 import Menu from '../Menu';
 import { ToolbarItem } from '../Toolbar';
@@ -174,6 +174,50 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
       }
     }
   }, [current.pos, current.node])
+
+  useEffect(() => {
+    if (!editor) return
+
+    const handleUpdate = () => {
+      const { state } = editor
+      const { selection } = state
+
+      // 获取当前光标位置的节点
+      let pos = selection.$head.pos
+      let node = null
+
+      // 向上查找最近的块级节点
+      for (let depth = selection.$head.depth; depth >= 0; depth--) {
+        const currentNode = selection.$head.node(depth)
+        if (currentNode && currentNode.isBlock) {
+          node = currentNode
+          pos = selection.$head.before(depth + 1)
+          break
+        }
+      }
+
+      // 如果没找到块级节点，使用根节点
+      if (!node) {
+        node = state.doc.firstChild
+        pos = 0
+      }
+
+      // 更新状态
+      if (node) {
+        updateNodeChange({
+          editor,
+          node,
+          pos
+        })
+      }
+    }
+
+    editor.on('update', handleUpdate)
+
+    return () => {
+      editor.off('update', handleUpdate)
+    }
+  }, [editor, updateNodeChange])
 
   return <DragHandle
     editor={editor}
