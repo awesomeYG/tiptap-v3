@@ -140,6 +140,7 @@ export { TableViewIcon } from './table-view-icon';
 export { TextIcon } from './text-icon';
 export { TextWrapIcon } from './text-wrap-icon';
 export { TitleIcon } from './title-icon';
+export { TooltipLineIcon } from './tooltip-line-icon';
 export { UnderlineIcon } from './underline-icon';
 export { UploadCloud2LineIcon } from './upload-cloud-2-line-icon';
 export { UploadIcon } from './upload-icon';
