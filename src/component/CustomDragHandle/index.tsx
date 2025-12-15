@@ -267,14 +267,17 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
                   const textContent = current.node.textContent;
                   const htmlContent = editor.view.serializeForClipboard(content).dom.innerHTML
                   try {
-                    if (htmlContent && navigator.clipboard && "write" in navigator.clipboard) {
-                      const blob = new Blob([htmlContent], { type: "text/html" })
-                      const clipboardItem = new ClipboardItem({ "text/html": blob })
-                      await navigator.clipboard.write([clipboardItem])
-                      onTip?.('success', '复制成功')
+                    try {
+                      if (htmlContent && navigator.clipboard && "write" in navigator.clipboard) {
+                        const blob = new Blob([htmlContent], { type: "text/html" })
+                        const clipboardItem = new ClipboardItem({ "text/html": blob })
+                        await navigator.clipboard.write([clipboardItem])
+                      }
+                    } catch {
+                      await navigator.clipboard.writeText(textContent)
                     }
                   } catch {
-                    await navigator.clipboard.writeText(textContent)
+                    onTip?.('error', '复制失败')
                   }
                 }
               }}
@@ -730,7 +733,7 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
               ]
             }
           ] : []),
-          ...(currentNode?.download && (current.node?.attrs.src || current.node?.attrs.src) ? [
+          ...(currentNode?.download && (current.node?.attrs.src || current.node?.attrs.url) ? [
             {
               label: `下载${currentNode?.label}`,
               key: 'download',
@@ -743,10 +746,11 @@ const CustomDragHandle = ({ editor, more, onTip }: { editor: Editor, more?: Menu
                     NodeTypeEnum.BlockAttachment
                   ].includes(current.node?.type.name as NodeTypeEnum)) {
                     const node = current.node
-                    const nodeFile = await fetch(node.attrs.src || node.attrs.url)
+                    const srcUrl = node.attrs.src || node.attrs.url
+                    const nodeFile = await fetch(srcUrl)
                     const nodeBlob = await nodeFile.blob() as Blob
                     const nodeUrl = URL.createObjectURL(nodeBlob)
-                    const nodeName = node.attrs.title || `${node.type.name}.${node.attrs.src.split('.').pop()}`
+                    const nodeName = node.attrs.title || `${node.type.name}.${srcUrl.split('.').pop()}`
                     const a = document.createElement('a')
                     a.href = nodeUrl
                     a.download = nodeName
