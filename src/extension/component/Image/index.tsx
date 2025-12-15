@@ -94,8 +94,16 @@ const ImageViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
   const [editTitle, setEditTitle] = useState(attrs.title || '')
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
   const imageContentRef = useRef<HTMLSpanElement>(null)
-  const handleShowPopover = () => setAnchorEl(imageContentRef.current)
-  const handleClosePopover = () => setAnchorEl(null)
+  const editButtonRef = useRef<HTMLButtonElement>(null)
+  const [keepHoverPopoverOpen, setKeepHoverPopoverOpen] = useState(false)
+  const handleShowPopover = () => {
+    setKeepHoverPopoverOpen(true)
+    setAnchorEl(editButtonRef.current)
+  }
+  const handleClosePopover = () => {
+    setAnchorEl(null)
+    setKeepHoverPopoverOpen(false)
+  }
 
   // 获取当前实际显示的图片宽度
   const getCurrentDisplayWidth = (): number => {
@@ -279,6 +287,9 @@ const ImageViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
       {...({ 'data-drag-handle': false } as any)}
     >
       <HoverPopover
+        keepOpen={keepHoverPopoverOpen}
+        placement="top"
+        offset={4}
         actions={
           <Stack
             direction={'row'}
@@ -286,6 +297,7 @@ const ImageViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
             sx={{ p: 0.5 }}
           >
             <ToolbarItem
+              ref={editButtonRef}
               icon={<EditLineIcon sx={{ fontSize: '1rem' }} />}
               tip="编辑图片"
               onClick={handleShowPopover}
@@ -333,8 +345,6 @@ const ImageViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
             />
           </Stack>
         }
-        placement="top"
-        offset={4}
       >
         <Box
           component={'span'}
@@ -462,7 +472,7 @@ const ImageViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
         open={Boolean(anchorEl)}
         anchorEl={anchorEl}
         onClose={handleClosePopover}
-        placement="top"
+        placement="bottom"
       >
         <Stack sx={{ p: 2, width: 350 }}>
           <Box sx={{ fontSize: '0.75rem', color: 'text.secondary', lineHeight: '1.5', mb: 1 }}>图片地址</Box>
