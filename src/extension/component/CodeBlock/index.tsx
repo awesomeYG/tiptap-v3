@@ -1,5 +1,6 @@
 import {
   ArrowDownSLineIcon,
+  CheckboxCircleLineIcon,
   FileCopyLineIcon
 } from '@ctzhian/tiptap/component/Icons';
 import { languages } from '@ctzhian/tiptap/contants/highlight';
@@ -129,7 +130,8 @@ const CodeBlockView: React.FC<NodeViewProps> = (props) => {
             right: 0,
             height: '1.25rem',
             lineHeight: '1.25rem',
-            px: 2.5,
+            pl: 2.5,
+            pr: 1,
             py: 2,
             zIndex: 1,
             color: 'text.tertiary',
@@ -309,8 +311,9 @@ const CodeBlockView: React.FC<NodeViewProps> = (props) => {
                 bgcolor: 'inherit',
                 color: 'inherit',
               }}>
-              <FileCopyLineIcon sx={{ fontSize: '0.75rem', color: 'inherit' }} />
-              <Box sx={{ lineHeight: 1 }}>
+              {copyText === '复制成功' ? <CheckboxCircleLineIcon sx={{ fontSize: '0.75rem', color: 'success.main' }} /> :
+                <FileCopyLineIcon sx={{ fontSize: '0.75rem', color: 'inherit' }} />}
+              <Box sx={{ lineHeight: 1, ...(copyText === '复制成功' ? { color: 'success.main' } : {}) }}>
                 {copyText}
               </Box>
             </Stack>
