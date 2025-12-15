@@ -87,11 +87,11 @@ const ImageViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
   const [isDragging, setIsDragging] = useState(false)
   const [isHovering, setIsHovering] = useState(false)
   const [isCropping, setIsCropping] = useState(false)
-  const [editSrc, setEditSrc] = useState(attrs.src)
+  const [editSrc, setEditSrc] = useState(attrs.src || '')
+  const [editTitle, setEditTitle] = useState(attrs.title || '')
   const [dragCorner, setDragCorner] = useState<'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | null>(null)
   const dragStartXRef = useRef(0)
   const dragStartWidthRef = useRef(0)
-  const [editTitle, setEditTitle] = useState(attrs.title || '')
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
   const imageContentRef = useRef<HTMLSpanElement>(null)
   const editButtonRef = useRef<HTMLButtonElement>(null)
@@ -120,44 +120,6 @@ const ImageViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
 
     return attrs.width
   }
-
-  useEffect(() => {
-    if (attrs.src && (!attrs.width || attrs.width <= 0)) {
-      getImageDimensions(attrs.src)
-        .then(dimensions => {
-          try {
-            const pos = typeof getPos === 'function' ? getPos() : null
-            if (pos === null || pos === undefined) return
-
-            const currentNode = editor.state.doc.nodeAt(pos)
-            if (!currentNode || currentNode.type.name !== 'image') return
-
-            updateAttributes({
-              src: attrs.src,
-              width: dimensions.width
-            })
-          } catch (error) {
-            // console.warn('Failed to update image dimensions:', error)
-          }
-        })
-        .catch(error => {
-          try {
-            const pos = typeof getPos === 'function' ? getPos() : null
-            if (pos === null || pos === undefined) return
-
-            const currentNode = editor.state.doc.nodeAt(pos)
-            if (!currentNode || currentNode.type.name !== 'image') return
-
-            updateAttributes({
-              src: attrs.src,
-              width: 400
-            })
-          } catch (updateError) {
-            // console.warn('Failed to update image attributes with fallback width:', updateError)
-          }
-        })
-    }
-  }, [attrs.src, attrs.width, updateAttributes, getPos, editor])
 
   const handleMouseDown = (e: React.MouseEvent, corner: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right') => {
     e.preventDefault()
@@ -242,6 +204,49 @@ const ImageViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
     }
     chain.toggleTextAlign(align).run()
   }
+
+  useEffect(() => {
+    if (attrs.src && (!attrs.width || attrs.width <= 0)) {
+      getImageDimensions(attrs.src)
+        .then(dimensions => {
+          try {
+            const pos = typeof getPos === 'function' ? getPos() : null
+            if (pos === null || pos === undefined) return
+
+            const currentNode = editor.state.doc.nodeAt(pos)
+            if (!currentNode || currentNode.type.name !== 'image') return
+
+            updateAttributes({
+              src: attrs.src,
+              title: attrs.title || '',
+              width: dimensions.width
+            })
+          } catch (error) {
+          }
+        })
+        .catch(() => {
+          try {
+            const pos = typeof getPos === 'function' ? getPos() : null
+            if (pos === null || pos === undefined) return
+
+            const currentNode = editor.state.doc.nodeAt(pos)
+            if (!currentNode || currentNode.type.name !== 'image') return
+
+            updateAttributes({
+              src: attrs.src,
+              title: attrs.title || '',
+              width: 400
+            })
+          } catch (updateError) {
+          }
+        })
+    }
+  }, [attrs, updateAttributes, getPos, editor])
+
+  useEffect(() => {
+    setEditSrc(attrs.src || '')
+    setEditTitle(attrs.title || '')
+  }, [attrs.src, attrs.title])
 
   useEffect(() => {
     if (isDragging) {
@@ -483,7 +488,7 @@ const ImageViewWrapper: React.FC<NodeViewProps & EditorFnProps> = ({
             onChange={(e) => setEditSrc(e.target.value)}
             placeholder="输入图片的 URL"
           />
-          <Box sx={{ fontSize: '0.75rem', color: 'text.secondary', lineHeight: '1.5', mb: 1 }}>图片描述</Box>
+          <Box sx={{ fontSize: '0.75rem', color: 'text.secondary', lineHeight: '1.5', my: 1 }}>图片描述</Box>
           <TextField
             fullWidth
             size="small"
