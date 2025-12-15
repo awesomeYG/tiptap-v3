@@ -10,6 +10,7 @@ import { PLACEHOLDER } from '../contants/placeholder';
 import { GetExtensionsProps } from '../type';
 import { AiWritingExtension, ImeComposition, SlashCommands, StructuredDiffExtension } from './extension';
 import { CodeExtension } from './mark/Code';
+import Tooltip from './mark/Tooltip';
 import {
   AlertExtension,
   AudioExtension,
@@ -84,6 +85,7 @@ export const getExtensions = ({
     YamlFormat,
     TextStyleKit,
     CodeExtension,
+    Tooltip,
     ListExtension,
     EmojiExtension,
     AlertExtension,

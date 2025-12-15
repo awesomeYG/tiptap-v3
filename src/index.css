@@ -549,7 +549,7 @@
   display: none;
 }
 
-.text-ellipsis {
+.tiptap.ProseMirror .text-ellipsis {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
