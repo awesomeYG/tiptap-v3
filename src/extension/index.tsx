@@ -84,21 +84,21 @@ export const getExtensions = ({
     YamlFormat,
     TextStyleKit,
     CodeExtension,
-    FlowExtension({ mermaidOptions }),
     ListExtension,
     EmojiExtension,
     AlertExtension,
     CustomSubscript,
     DetailsExtension,
     CustomSuperscript,
+    FlipGridExtension,
     DetailsContentExtension,
     DetailsSummaryExtension,
     CodeBlockLowlightExtension,
     InlineUploadProgressExtension,
     CustomHorizontalRule,
-    ...TableExtension({ editable }),
     FlipGridColumnExtension,
-    FlipGridExtension,
+    ...TableExtension({ editable }),
+    FlowExtension({ mermaidOptions }),
     CustomBlockMathExtension({ onError }),
     CustomInlineMathExtension({ onError }),
     TableOfContents({ onTocUpdate, tableOfContentsOptions }),
@@ -198,10 +198,6 @@ export const getExtensions = ({
   if (!exclude?.includes('youtube')) {
     const Youtube = YoutubeExtension(youtubeOptions)
     defaultExtensions.push(Youtube)
-  }
-
-  if (!exclude?.includes('flow')) {
-    defaultExtensions.push(FlowExtension({ onError }))
   }
 
   if (extensionsProps && extensionsProps.length > 0) {

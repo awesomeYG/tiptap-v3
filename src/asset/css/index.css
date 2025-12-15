@@ -115,7 +115,10 @@
 .tiptap.ProseMirror .react-renderer.node-codeBlock,
 .tiptap.ProseMirror .react-renderer.node-blockLink,
 .tiptap.ProseMirror .react-renderer.node-flipGrid,
+.tiptap.ProseMirror .react-renderer.node-audio,
+.tiptap.ProseMirror .react-renderer.node-video,
 .tiptap.ProseMirror .react-renderer.node-flow,
+.tiptap.ProseMirror .react-renderer.node-blockMath,
 .tiptap.ProseMirror .react-renderer.node-blockAttachment {
   display: block;
   margin: 1rem 0;
@@ -126,25 +129,26 @@
   margin-left: 0;
 }
 
-.tiptap.ProseMirror .audio-wrapper,
-.tiptap.ProseMirror .video-wrapper,
-.tiptap.ProseMirror .image-wrapper {
-  line-height: 0;
-}
-
 .tiptap.ProseMirror .react-renderer.node-iframe,
-.tiptap.ProseMirror .video-wrapper,
-.tiptap.ProseMirror .image-wrapper {
+.tiptap.ProseMirror .react-renderer.node-image,
+.tiptap.ProseMirror .react-renderer.node-audio,
+.tiptap.ProseMirror .react-renderer.node-video,
+.tiptap.ProseMirror .react-renderer.node-blockAttachment,
+.tiptap.ProseMirror .react-renderer.node-inlineAttachment,
+.tiptap.ProseMirror .react-renderer.node-blockLink,
+.tiptap.ProseMirror .react-renderer.node-inlineLink,
+.tiptap.ProseMirror .react-renderer.node-blockMath,
+.tiptap.ProseMirror .react-renderer.node-inlineMath {
   box-sizing: border-box;
   line-height: 1;
 }
 
-.tiptap.ProseMirror .image-wrapper {
-  display: inline-block;
-}
-
 .tiptap.ProseMirror .image-wrapper img {
   line-height: 0;
+}
+
+.tiptap.ProseMirror .image-wrapper {
+  display: inline-block;
 }
 
 .tiptap.ProseMirror .codeblock-wrapper.ProseMirror-selectednode>pre,

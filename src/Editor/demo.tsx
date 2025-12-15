@@ -159,7 +159,7 @@ const Reader = () => {
   }
   const { editor } = useTiptap({
     editable: EDITABLE,
-    content: '<div data-type=\"flow\" data-code=\"mindmap\n  root((mindmap))\n    Origins\n      Long history\n      ::icon(fa fa-book)\n      Popularisation\n        British popular psychology author Tony Buzan\n    Research\n      On effectiveness&lt;br/&gt;and features\n      On Automatic creation\n        Uses\n            Creative techniques\n            Strategic planning\n            Argument mapping\n    Tools\n      Pen and paper\n      Mermaid\" data-width=\"600\" data-align=\"center\" class=\"flow-wrapper\"></div><p></p>',
+    content,
     contentType: DEFAULT_CONTENT_TYPE,
     exclude: ['invisibleCharacters'],
     onError: handleError,
