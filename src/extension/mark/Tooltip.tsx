@@ -118,11 +118,6 @@ export const Tooltip = Mark.create<TooltipOptions>({
     ]
   },
 
-  /**
-   * 下面是 Markdown 支持：
-   * - 解析：<span data-tooltip="提示">文本</span>
-   * - 导出：同样输出 <span data-tooltip="提示">文本</span>
-   */
   markdownTokenName: 'tooltip',
 
   markdownTokenizer: {
@@ -130,7 +125,6 @@ export const Tooltip = Mark.create<TooltipOptions>({
     level: 'inline',
     start: (src: string) => src.indexOf('<span'),
     tokenize(src: string, _tokens: any, helpers: any) {
-      // 匹配形如：<span data-tooltip="提示">文本</span>
       const match = /^<span\s+([^>]*?)>([\s\S]+?)<\/span>/.exec(src)
       if (!match) {
         return

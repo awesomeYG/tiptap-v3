@@ -122,7 +122,7 @@ const InsertLink = ({ updateAttributes, deleteNode, attrs, editor }: InsertLinkP
         </Stack>
         {!isMarkdown && <>
           <FormControl component="fieldset">
-            <Stack direction={'row'} gap={2} alignItems={'flex-start'} sx={{
+            <Stack direction={'row'} gap={2} alignItems={'center'} sx={{
               '.MuiFormControlLabel-label': {
                 fontSize: '0.875rem'
               }
@@ -152,7 +152,7 @@ const InsertLink = ({ updateAttributes, deleteNode, attrs, editor }: InsertLinkP
             </Stack>
           </FormControl>
           <FormControl component="fieldset">
-            <Stack direction={'row'} gap={2} alignItems={'flex-start'} sx={{
+            <Stack direction={'row'} gap={2} alignItems={'center'} sx={{
               '.MuiFormControlLabel-label': {
                 fontSize: '0.875rem'
               }

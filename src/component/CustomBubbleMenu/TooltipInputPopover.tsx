@@ -1,7 +1,7 @@
 import { FloatingPopover } from "@ctzhian/tiptap/component/FloatingPopover"
-import { Box, Button, Stack, TextField } from "@mui/material"
+import { Button, Stack, TextField } from "@mui/material"
 import { Editor } from "@tiptap/react"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 
 interface TooltipInputPopoverProps {
   open: boolean
@@ -19,6 +19,12 @@ const TooltipInputPopover: React.FC<TooltipInputPopoverProps> = ({
   currentTooltip = ''
 }) => {
   const [tooltipText, setTooltipText] = useState(currentTooltip)
+
+  useEffect(() => {
+    if (open) {
+      setTooltipText(currentTooltip)
+    }
+  }, [open, currentTooltip])
 
   const handleConfirm = () => {
     if (tooltipText.trim()) {
@@ -59,22 +65,24 @@ const TooltipInputPopover: React.FC<TooltipInputPopoverProps> = ({
           onChange={(e) => setTooltipText(e.target.value)}
           placeholder="输入鼠标悬停时显示的提示文本"
           required
+          onKeyDown={handleKeyDown}
           error={tooltipText.length > 0 && !tooltipText.trim()}
           helperText={tooltipText.length > 0 && !tooltipText.trim() ? "请输入有效的提示文本" : ""}
         />
-        <Box sx={{ display: 'flex', gap: 1, justifyContent: 'flex-end' }}>
-          <Button size="small" onClick={handleCancel}>
+        <Stack direction={'row'} gap={1}>
+          <Button size="small" variant="outlined" fullWidth onClick={handleCancel}>
             取消
           </Button>
           <Button
             size="small"
             variant="contained"
+            fullWidth
             onClick={handleConfirm}
             disabled={!tooltipText.trim() && !currentTooltip}
           >
             {tooltipText.trim() ? '应用' : '移除'}
           </Button>
-        </Box>
+        </Stack>
       </Stack>
     </FloatingPopover>
   )
