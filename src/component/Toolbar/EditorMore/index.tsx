@@ -43,7 +43,7 @@ const EditorMore = ({ more = [] }: EditorMoreProps) => {
       renderValue={() => {
         return <ToolbarItem
           tip={'更多'}
-          icon={<Stack direction={'row'} alignItems={'center'} justifyContent='center' sx={{ mr: 0.5 }}>
+          icon={<Stack direction={'row'} alignItems={'center'} justifyContent='center'>
             <MoreLineIcon sx={{ fontSize: '1rem' }} />
           </Stack>}
         />;

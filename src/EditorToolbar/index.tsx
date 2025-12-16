@@ -114,7 +114,7 @@ const EditorToolbar = ({
         sx={{
           minHeight: '44px',
           overflowX: isSimpleMode ? 'auto' : 'visible',
-          columnGap: 0.5,
+          columnGap: '1px',
           '.MuiSelect-root': {
             minWidth: '36px',
             bgcolor: 'background.paper',
@@ -158,7 +158,7 @@ const EditorToolbar = ({
             <Divider
               orientation="vertical"
               flexItem
-              sx={{ mx: 0.5, height: 20, alignSelf: 'center' }}
+              sx={{ mx: 0.25, height: 20, alignSelf: 'center' }}
             />
           </>
         )}
@@ -185,14 +185,18 @@ const EditorToolbar = ({
         <Divider
           orientation="vertical"
           flexItem
-          sx={{ mx: 0.5, height: 20, alignSelf: 'center' }}
+          sx={{ mx: 0.25, height: 20, alignSelf: 'center' }}
         />
         <EditorHeading editor={editor} />
-        {!isSimpleMode && <EditorFontSize editor={editor} />}
+        {!isSimpleMode && <>
+          <EditorFontSize editor={editor} />
+          <EditorFontColor editor={editor} />
+          <EditorFontBgColor editor={editor} />
+        </>}
         <Divider
           orientation="vertical"
           flexItem
-          sx={{ mx: 0.5, height: 20, alignSelf: 'center' }}
+          sx={{ mx: 0.25, height: 20, alignSelf: 'center' }}
         />
         <ToolbarItem
           tip={'加粗'}
@@ -249,12 +253,10 @@ const EditorToolbar = ({
               onClick={() => editor.chain().focus().toggleSubscript().run()}
               className={isSubscript ? 'tool-active' : ''}
             />
-            <EditorFontColor editor={editor} />
-            <EditorFontBgColor editor={editor} />
             <Divider
               orientation="vertical"
               flexItem
-              sx={{ mx: 0.5, height: 20, alignSelf: 'center' }}
+              sx={{ mx: 0.25, height: 20, alignSelf: 'center' }}
             />
           </>
         )}
@@ -290,7 +292,7 @@ const EditorToolbar = ({
             <Divider
               orientation="vertical"
               flexItem
-              sx={{ mx: 0.5, height: 20, alignSelf: 'center' }}
+              sx={{ mx: 0.25, height: 20, alignSelf: 'center' }}
             />
             <EditorMore more={menuInToolbarMore} />
           </>

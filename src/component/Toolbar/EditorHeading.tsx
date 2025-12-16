@@ -54,7 +54,7 @@ const EditorHeading = ({ editor }: EditorHeadingProps) => {
         <ArrowDownSLineIcon
           sx={{
             position: 'absolute',
-            right: -6,
+            right: -2,
             top: '50%',
             transform: 'translateY(-50%)',
             flexSelf: 'center',

@@ -73,7 +73,7 @@ const ToolbarItem = React.forwardRef<HTMLButtonElement, ToolbarItemProps>(({
           <Stack
             direction={'row'}
             alignItems={'center'}
-            gap={1}
+            gap={0.5}
             sx={{ lineHeight: 1, flexShrink: 0 }}
           >
             {icon}
