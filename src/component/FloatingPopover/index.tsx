@@ -123,6 +123,7 @@ export const FloatingPopover: React.FC<FloatingPopoverProps> = ({
           zIndex: 1300,
           boxShadow: 'var(--mui-shadows-1)',
           borderRadius: 'var(--mui-shape-borderRadius)',
+          opacity: (position.x === 0 && position.y === 0) ? 0 : 1,
           ...style
         }}
         elevation={8}

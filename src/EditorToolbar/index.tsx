@@ -16,6 +16,7 @@ import {
   StrikethroughIcon,
   SubscriptIcon,
   SuperscriptIcon,
+  TooltipLineIcon,
   UnderlineIcon,
 } from '../component/Icons';
 import {
@@ -85,6 +86,7 @@ const EditorToolbar = ({
     isAiWriting,
     isHighlight,
     isCodeBlock,
+    isTooltip,
   } = useEditorState({
     editor,
     selector: (ctx) => ({
@@ -101,6 +103,7 @@ const EditorToolbar = ({
       isHighlight: ctx.editor.isActive('highlight'),
       isAiWriting: !!ctx.editor.storage?.aiWriting?.enabled,
       isCodeBlock: ctx.editor.isActive('codeBlock'),
+      isTooltip: ctx.editor.isActive('tooltip'),
     }),
   });
 
@@ -228,16 +231,24 @@ const EditorToolbar = ({
               onClick={() => editor.chain().focus().toggleUnderline().run()}
               className={isUnderline ? 'tool-active' : ''}
             />
-          </>
-        )}
-        {!isSimpleMode && (
-          <>
             <ToolbarItem
               tip={'高亮'}
               shortcutKey={['ctrl', 'shift', 'H']}
               icon={<MarkPenLineIcon sx={{ fontSize: '1rem' }} />}
               onClick={() => editor.chain().focus().toggleHighlight().run()}
               className={isHighlight ? 'tool-active' : ''}
+            />
+            <ToolbarItem
+              tip={'文本提示'}
+              icon={<TooltipLineIcon sx={{ fontSize: '1rem' }} />}
+              onClick={() => {
+                if (isTooltip) {
+                  editor.chain().focus().unsetTooltip().run()
+                } else {
+                  editor.chain().focus().toggleTooltip().run()
+                }
+              }}
+              className={isTooltip ? 'tool-active' : ''}
             />
             <ToolbarItem
               tip={'上标'}

@@ -42,12 +42,8 @@ export const Tooltip = Mark.create<TooltipOptions>({
         default: null,
         parseHTML: element => element.getAttribute('data-tooltip'),
         renderHTML: attributes => {
-          if (!attributes.tooltip) {
-            return {}
-          }
-
           return {
-            'data-tooltip': attributes.tooltip,
+            'data-tooltip': attributes.tooltip || '',
           }
         },
       },
@@ -68,21 +64,15 @@ export const Tooltip = Mark.create<TooltipOptions>({
 
   addCommands() {
     return {
-      setTooltip:
-        (tooltip: string) =>
-          ({ commands }) => {
-            return commands.setMark(this.name, { tooltip })
-          },
-      toggleTooltip:
-        (tooltip?: string) =>
-          ({ commands }) => {
-            return commands.toggleMark(this.name, { tooltip })
-          },
-      unsetTooltip:
-        () =>
-          ({ commands }) => {
-            return commands.unsetMark(this.name)
-          },
+      setTooltip: (tooltip: string) => ({ commands }) => {
+        return commands.setMark(this.name, { tooltip })
+      },
+      toggleTooltip: () => ({ commands }) => {
+        return commands.toggleMark(this.name, { tooltip: '' })
+      },
+      unsetTooltip: () => ({ commands }) => {
+        return commands.unsetMark(this.name)
+      },
     }
   },
 
