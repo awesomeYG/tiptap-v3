@@ -112,17 +112,6 @@ const EditPopover = ({
     onClose()
   }
 
-  const handleKeyDown = (event: React.KeyboardEvent) => {
-    if (event.key === 'Enter') {
-      event.preventDefault()
-      onConfirm(tooltipText.trim())
-    } else if (event.key === 'Escape') {
-      event.preventDefault()
-      setTooltipText(text || '')
-      onClose()
-    }
-  }
-
   useEffect(() => {
     if (isEditable) setTooltipText(text || '')
   }, [text])
@@ -141,12 +130,13 @@ const EditPopover = ({
       <TextField
         fullWidth
         size="small"
+        multiline
+        rows={4}
         value={tooltipText}
         onChange={(e) => setTooltipText(e.target.value)}
         placeholder="输入鼠标悬停时显示的提示文本"
         required
         autoFocus
-        onKeyDown={handleKeyDown}
         error={tooltipText.length > 0 && !tooltipText.trim()}
         helperText={tooltipText.length > 0 && !tooltipText.trim() ? "请输入有效的提示文本" : ""}
       />

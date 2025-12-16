@@ -1,11 +1,12 @@
-import { EditLineIcon } from "@ctzhian/tiptap/component/Icons"
-import { Box, Stack, Tooltip } from "@mui/material"
-import { MarkViewContent, MarkViewProps } from "@tiptap/react"
-import React, { useEffect, useRef, useState } from "react"
-import EditPopover from "./EditPopover"
+import { EditLineIcon } from "@ctzhian/tiptap/component/Icons";
+import { Box, Stack, Tooltip } from "@mui/material";
+import { MarkViewContent, MarkViewProps } from "@tiptap/react";
+import DOMPurify from 'isomorphic-dompurify';
+import React, { useEffect, useRef, useState } from "react";
+import EditPopover from "./EditPopover";
 
 const TooltipView: React.FC<MarkViewProps> = ({ mark, editor }) => {
-  const tooltip = mark.attrs.tooltip
+  const tooltip = DOMPurify.sanitize(mark.attrs.tooltip || '').trim()
   const isEditable = editor.isEditable
   const [open, setOpen] = useState(false)
   const [tooltipOpen, setTooltipOpen] = useState(false)
@@ -65,14 +66,25 @@ const TooltipView: React.FC<MarkViewProps> = ({ mark, editor }) => {
       placement="top"
       title={
         isMobileReadonly
-          ? <Box component='span' sx={{ maxWidth: 300 }}>{tooltip}</Box>
+          ? <Box
+            component='span'
+            sx={{
+              maxWidth: 300,
+              whiteSpace: 'pre-wrap',
+            }}
+            dangerouslySetInnerHTML={{ __html: tooltip }}
+          ></Box>
           : <Stack
             direction='row'
             alignItems='center'
             gap={0.5}
             maxWidth={300}
           >
-            <Box component='span'>{tooltip}</Box>
+            <Box
+              component='span'
+              sx={{ whiteSpace: 'pre-wrap' }}
+              dangerouslySetInnerHTML={{ __html: tooltip }}
+            ></Box>
             {isEditable && <EditLineIcon sx={{ fontSize: '0.75rem', cursor: 'pointer' }} onClick={handleEditClick} />}
           </Stack>
       }
